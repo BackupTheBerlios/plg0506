@@ -10,13 +10,13 @@ public class TablaSimbolos {
   
   public TablaSimbolos(){
 
-  	tabla = new Hashtable();
+  	this.tabla = new Hashtable();
 
   }
 
   public void aadeID(String nombre, int dir){
 
-      tabla.put(nombre, new Integer(dir));
+      this.tabla.put(nombre, new Integer(dir));
 
   }
 

@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 public class Lexico {
 	
 	//Referencia a la Tabla de Simbolos.	
-	private Hashtable TablaSimbolos;
+	private TablaSimbolos TS;
 	//Buffer de entrada.
 	private BufferedReader entrada;
 	//Variable que guarda el numero de linea en estudio.
@@ -179,9 +179,9 @@ public class Lexico {
 	public Lexico(String fuente, Hashtable ht) throws Exception {
 
 		//Guardamos referencia a la Tabla de Simbolos.
-		TablaSimbolos = ht;
+		TS.setTabla(ht);
 		//Iniciamos la Tabla de Simbolos con la palabra reservada "int"
-		TablaSimbolos.put("int", new Integer(Tipos.TIPO));
+		TS.put("int", new Integer(Tipos.TIPO));
 		//Creamos el buffer de lectura para el archivo fuente.
 		try {
 			entrada = new BufferedReader(new FileReader(fuente));
