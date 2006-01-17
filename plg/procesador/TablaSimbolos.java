@@ -56,7 +56,7 @@ public class TablaSimbolos {
 	}
 	
 	/*
-	 * Un identificador id' de tipo 't' existe en la tabla
+	 * Un identificador 'id' de tipo 't' existe en la tabla
 	 * solo si existe el tipo 't' en las claves, 
 	 * existe el identificador 'id' en los valores
 	 * y la clave en la tabla hash de 'id' es 't'. 
@@ -77,8 +77,41 @@ public class TablaSimbolos {
 			System.out.println("Id no es de tipo t");
 			return false;
 		}
-		/*
-		 * contaisValue(id) no funciona como queremos
-		 */
 	}
+	
+	/*
+	 * Un identificador 'id' de tipo 't' se agnade a la tabla
+	 * si el tipo 't' es valido y no estba agnadido antes
+	 */
+	public boolean agnadeID(String id, String t){
+		if (!this.tabla.containsKey(t)){
+			System.out.println("No existe el tipo");
+			return false;
+		}
+		if ((this.tabla.contains(id)) && (this.tabla.get(t)==id)){
+			System.out.println("Ya esta agnadido");
+			return false;
+		}
+		this.tabla.put(t,id);
+		return true;	
+		
+	}
+
+	/*
+	 * Un identificador id' de tipo 't' se elimina a la tabla
+	 * si existe en la tabla un identificador 'id' de tipo 't'
+	 */
+	public boolean eliminaID(String id, String t){
+		if ((!this.tabla.contains(id)) && (!(this.tabla.get(t)==id))){
+			System.out.println("No esta agnadido");
+			return false;
+		}	
+		return true;	
+		/*
+		 * No se eliminar valores de una clave 
+		 * sin eliminarlos todos
+		 */	
+	}
+	
+	
 }

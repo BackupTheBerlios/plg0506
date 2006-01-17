@@ -1,6 +1,6 @@
 package procesador;
 
-import java.util.Hashtable;
+//import java.util.Hashtable;
 //import java.util.Vector;
 
 /*
@@ -11,7 +11,7 @@ import java.util.Hashtable;
 public class TablaSimbolos2 {
 	 
   
-  public void agnadeID(){
+  /*public void agnadeID(){
 
       this.tabla.put(nombre, new Integer(dir));
 
@@ -24,7 +24,7 @@ public class TablaSimbolos2 {
     // devuelve null
     return (simbolo)tabla.get(nombre);
   }
-*/
+
   
   public int dirID(String id){
 
@@ -44,14 +44,14 @@ public class TablaSimbolos2 {
 
   	// Al crear la tabla de smbolos aadimos directamente las palabras
     // reservadas: true, false, real y bool
-/*
+
   	tabla.put("true", new simbolo(new Integer(BOOLEANO),0,new Integer(1)));
     tabla.put("false", new simbolo(new Integer(BOOLEANO),0,new Integer(0)));
     tabla.put("real", new simbolo(new Integer(TIPO),0,null));
     tabla.put("bool", new simbolo(new Integer(TIPO),0,null));
-*/
+
   }
-  
+  */ 
 }
 
 

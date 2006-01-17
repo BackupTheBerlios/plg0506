@@ -9,8 +9,8 @@ public class prueba {
 		// TODO Auto-generated method stub
 		TablaSimbolos ts = new TablaSimbolos();
 		ts.agnadeTipo("int");
-		ts.getTabla().put("int","a");
-		ts.getTabla().put("int","b");
+		ts.agnadeID("int","a");
+		ts.agnadeID("int","b");
 		boolean b = ts.getTabla().containsKey("int");
 		System.out.println(b);
 		b = ts.getTabla().containsKey("bool");
