@@ -66,7 +66,7 @@ public class TablaSimbolos {
 			System.out.println("No existe el tipo");
 			return false;
 		}
-		if (!this.tabla.containsValue(id)){
+		if (!this.tabla.contains(id)){
 			System.out.println("No existe el identificador");
 			return false;
 		}
