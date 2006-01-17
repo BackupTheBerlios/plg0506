@@ -1,61 +1,84 @@
 package procesador;
 
 import java.util.Hashtable;
-//import java.util.Vector;
+
 
 public class TablaSimbolos {
+	Hashtable tabla;
 
-  private Hashtable tabla;
+	/*
+	 * Cosntructores
+	 */
+	public TablaSimbolos() {
+		super();
+		this.tabla = new Hashtable();
+	}
 
-  
-  public TablaSimbolos(){
+	public TablaSimbolos(Hashtable tabla) {
+		super();
+		this.tabla = new Hashtable(tabla);
+	}
 
-  	this.tabla = new Hashtable();
+	/*
+	 * Accesores y mutadores
+	 */
+	public Hashtable getTabla() {
+		return tabla;
+	}
 
-  }
-
-  public void aadeID(String nombre, int dir){
-
-      this.tabla.put(nombre, new Integer(dir));
-
-  }
-
-  /*
-  public simbolo dameID(String nombre){
-    // Devuelve el simbolo correspondiente a la variable nombre
-    // tal como est hecho, si no existe tal variable
-    // devuelve null
-    return (simbolo)tabla.get(nombre);
-  }
-*/
-  
-  public int dirID(String id){
-
-  	Integer n = (Integer)tabla.get(id);
-  	
-  	return n.intValue();
-  	
-  }
-
-  public boolean existeID(String id){
-
-	return tabla.contains(id);
-
-  }
-  
-  public void creaTS(){
-
-  	// Al crear la tabla de smbolos aadimos directamente las palabras
-    // reservadas: true, false, real y bool
-/*
-  	tabla.put("true", new simbolo(new Integer(BOOLEANO),0,new Integer(1)));
-    tabla.put("false", new simbolo(new Integer(BOOLEANO),0,new Integer(0)));
-    tabla.put("real", new simbolo(new Integer(TIPO),0,null));
-    tabla.put("bool", new simbolo(new Integer(TIPO),0,null));
-*/
-  }
-  
+	public void setTabla(Hashtable tabla) {
+		this.tabla = tabla;
+	}
+	
+	
+	/*
+	 * Metodos para la gestion de tipos,
+	 * controlan que no se repitan tipos.
+	 */
+	public void agnadeTipo (String s) {
+		if (this.tabla.containsKey(s)){
+			System.out.println("No se pudo agnadir el tipo, ya existe.");
+		}
+		else{
+			this.tabla.put(s,"");
+		}
+			
+	}
+	
+	public void eliminaTipo (String s) {
+		if (!this.tabla.containsKey(s)){
+			System.out.println("No se pudo agnadir el tipo, no existe.");
+		}
+		else{
+			this.tabla.remove(s);
+		}
+			
+	}
+	
+	/*
+	 * Un identificador id' de tipo 't' existe en la tabla
+	 * solo si existe el tipo 't' en las claves, 
+	 * existe el identificador 'id' en los valores
+	 * y la clave en la tabla hash de 'id' es 't'. 
+	 */
+	public boolean existeID(String id, String t){
+		if (!this.tabla.containsKey(t)){
+			System.out.println("No existe el tipo");
+			return false;
+		}
+		if (!this.tabla.containsValue(id)){
+			System.out.println("No existe el identificador");
+			return false;
+		}
+		if (this.tabla.get(t)==id){
+			return true;	
+		}
+		else{
+			System.out.println("Id no es de tipo t");
+			return false;
+		}
+		/*
+		 * contaisValue(id) no funciona como queremos
+		 */
+	}
 }
-
-
-
