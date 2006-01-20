@@ -41,7 +41,7 @@ public class Lexico {
 	/*
 	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
 	 * Parametros de salida: Token identificado.
-	 * Execpciones: IOException, que propagamos de la funcion read() de los BufferedReader de java y
+	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 *  
@@ -384,10 +384,16 @@ public class Lexico {
 	}
 	
 	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres, String donde lleva almacenado lo 
+	 * que ya ha leido.
+	 * Parametros de salida: String con el numero que ha reconocido.
+	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
+	 * 
 	 * Si leemos un 0, detectamos error porque no se puede tener '+0' ni '-0'.
 	 * Sino, vamos leyendo mientras sean digitos hasta terminar de leer el numero.
 	 */
-	public String leerNumero(String aux, BufferedReader fuente) throws Exception{
+	public String leerNumero(String aux, BufferedReader fuente) throws Exception,IOException{
 		char a;
 		int i = 0;
 		a = (char)fuente.read();
@@ -410,12 +416,18 @@ public class Lexico {
 	}
 	
 	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres, String donde lleva almacenado lo 
+	 * que ya ha leido.
+	 * Parametros de salida: String con todos los caracteres del identificador que ha reconocido.
+	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
+	 * 
 	 * Cuando llamamos a este metedo ya hemos leido al menos una letra asi que solo tenemos que controlar que se
 	 * lean letras, digitos o '_'.
 	 * Vamos leyendo mientras sean caracteres validos hasta terminar de leer el identificador.
 	 */
 	
-	public String leerCaracter(String aux, BufferedReader fuente) throws Exception{
+	public String leerCaracter(String aux, BufferedReader fuente) throws Exception, IOException{
 		char a;
 		a = (char)fuente.read();
 		while ((a = (char)fuente.read()) != -1){
@@ -430,6 +442,11 @@ public class Lexico {
 	}
 	
 	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de salida: Token que ha reconocido.
+	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * 				Exception, que propagamos de la funcion getToken().
+	 * 
 	 *  Devuelve el siguiente token para que podamos realizar el preanálisis
 	 */
 	public Token getNextToken(BufferedReader fuente) throws IOException, Exception{
@@ -437,6 +454,11 @@ public class Lexico {
 	}
 	
 	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de salida: Token que ha reconocido.
+	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * 				Exception, que propagamos de la funcion getNextToken().
+	 * 
 	 * Devuelve el proximo token si la categoría lexica es la del token que recibe.
 	 * Si no, devuelve un token vacío.
 	 */

@@ -31,6 +31,9 @@ public class TablaSimbolos {
 	}
 	
 	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de salida: Token que ha reconocido.
+	 * 
 	 * Un identificador 'id' de tipo 't' existe en la tabla
 	 * solo si existe el tipo 't' en las claves, 
 	 * existe el identificador 'id' en los valores
