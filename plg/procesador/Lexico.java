@@ -5,10 +5,39 @@ import java.io.BufferedReader;
 public class Lexico {
 	
 	/*
-	 * linea sirve para controlar en que linea de codigo detectamos el error
+	 * linea sirve para controlar en que linea de codigo detectamos el error.
+	 * lookahead sirve para almacenar el caracteres de preanalisis.
 	 */
 	int linea;
+	Token lookahead;
 	
+	/*
+	 * Constructor.
+	 */
+	public Lexico() {
+		linea = 0;
+		lookahead = new Token();
+	}
+	
+	/*
+	 * Accesores y mutadores para los atributos del analizador lexico.
+	 */
+	public int getLinea() {
+		return linea;
+	}
+
+	public void setLinea(int linea) {
+		this.linea = linea;
+	}
+
+	public Token getLookahead() {
+		return lookahead;
+	}
+
+	public void setLookahead(Token lookahead) {
+		this.lookahead = lookahead;
+	}
+
 	/*
 	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
 	 * Parametros de salida: Token identificado.
@@ -398,5 +427,26 @@ public class Lexico {
 			}
 		}	
 		return aux;	
+	}
+	
+	/*
+	 *  Devuelve el siguiente token para que podamos realizar el preanálisis
+	 */
+	public Token getNextToken(BufferedReader fuente) throws IOException, Exception{
+		return getToken(fuente);	
+	}
+	
+	/*
+	 * Devuelve el proximo token si la categoría lexica es la del token que recibe.
+	 * Si no, devuelve un token vacío.
+	 */
+	public Token lexer(Token TK, BufferedReader fuente) throws IOException, Exception{
+		lookahead = getNextToken(fuente);
+		if (TK.getCategoriaLexica() == lookahead.getCategoriaLexica()){
+			return lookahead;
+		}
+		else{
+			return new Token(); 
+		}
 	}
 }
