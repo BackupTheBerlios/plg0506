@@ -1,5 +1,8 @@
 package procesador;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Hashtable;
+import tablaSimbolos.TablaSimbolos;
 
 public class Procesador {
 	
@@ -10,14 +13,16 @@ public class Procesador {
 			System.out.println("ERROR: Debe indicar fichero fuente como parametro.");
 		}
 		else {	
-			//Por ahora vamos a usar una tabla hash 
-			//como Tabla de Simbolos.
-			Hashtable ht = new Hashtable();	
-			Token s;
-			boolean error = false;
+			try {
+				BufferedReader entrada = new BufferedReader(new FileReader(args[0]));
+			} 
+			catch (java.io.FileNotFoundException e) {
+				throw new Exception("ERROR: Archivo no encontrado: " + args[0]);	
+			}
+			TablaSimbolos TS = new TablaSimbolos();	
 			Sintactico sintactico;
 			try {		
-				sintactico = new Sintactico(args[0], ht);
+				sintactico = new Sintactico(args[0], TS);
 				System.out.println("Inicio del analisis\n");
 				sintactico.startParsing();
 				System.out.println("Fin del analisis");				
