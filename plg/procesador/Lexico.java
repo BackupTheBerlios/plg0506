@@ -1,250 +1,402 @@
 package procesador;
-import java.util.Hashtable;
-import java.io.FileReader;
+import java.io.IOException;
 import java.io.BufferedReader;
 
 public class Lexico {
 	
-	//Referencia a la Tabla de Simbolos.	
-	private TablaSimbolos TS;
-	//Buffer de entrada.
-	private BufferedReader entrada;
-	//Variable que guarda el numero de linea en estudio.
-	private int numeroLinea;
-	//Variable que controla que no se lea otro caracter del buffer de entrada.
-	private boolean noLeerCaracter;
-	//Variable que almacena el entero leido por ultima vez del buffer de entrada.
-	private int enteroLeido;
-	//Variable que almacena la categoria lexica del ultimo lexema leido.
-	private int categoriaLexica;	
-	// Almacena el caracter de preanalisis
-	private Token lookahead;
+	/*
+	 * linea sirve para controlar en que linea de codigo detectamos el error
+	 */
+	int linea;
 	
-	
-	public Token getToken() throws Exception {
-		//Variable que almacena el estado del AFD.
-		int estado = 1;
-		char aux;
+	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de salida: Token identificado.
+	 * Execpciones: IOException, que propagamos de la funcion read() de los BufferedReader de java y
+	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
+	 * 
+	 *  
+	 *  Va leyendo caracteres del flujo hasta que identifica un token y lo devuleve,
+	 *  o detecta un error y genera una excepcion.
+	 */
+	public Token getToken (BufferedReader fuente) throws IOException, Exception{
+		char a;
 		
-		//Buffer en el que almacenaremos los caracteres lexicos de un identificador.
-		StringBuffer buffer = new StringBuffer(1);
+		/*
+		 * La funcion read() saca un caracter del flujo de entrada
+		 */
+		while ((a = (char)fuente.read())!= -1){
+			switch (a){
 			
-		//Mientras tengamos que leer un caracter y no se acabe el archivo...
-		//Usando noLeerCaracter controlamos que no se tenga que leer un nuevo caracter del archivo
-		//de entrada: sirve para aquellos estados en los que hay que distinguir segun el caracter siguiente.
-		//Cuando noLeerCaracter es true, no se evalua la siguiente expresion, y por tanto, no se lee caracter.
-		while ((noLeerCaracter)||((enteroLeido = entrada.read()) != -1)) {
-			//Para el caso en el que esta variable estatica true, hay que ponerla a false de nuevo.
-			noLeerCaracter = false;
-			//Convertimos el entero leido a caracter.
-			aux = (char)enteroLeido;
-			
-			//...distinguimos segn el estado del AFD.
-			switch (estado) {
-			case 1:		
-				switch (aux) {
-				//Distinguimos segun el caracter a estudiar:
-				//Ante un espacio o una tabulacion, no hacemos nada.
-						case ' ': break;
-						case '\t': 	break;
-						//Ante salto de linea, avanzamos el contador de lineas.
-						case '\n':	numeroLinea++; 
-									break;
-						case ';':	return new Token(";", Tipos.TKPYCOMA); 	
-						case '/':	return new Token("/", Tipos.TKMUL);	
-						case '*':	return new Token("*", Tipos.TKMUL);	
-						case ':': 	estado = 5; 	
-									break;	
-						case '(':	return new Token("(", Tipos.PARAP);	
-						case ')':	return new Token(")", Tipos.PARCIE);	
-						case '+':	aux = (char)(enteroLeido = entrada.read());
-								//Tras leer el signo '+', tenemos que distinguir segun la siguiente
-								//cifra si es el signo positivo de un numero o el operador de suma.
-									if ((aux >= '0') && (aux <= '9')) {
-										//Si el siguiente caracter es una cifra, creamos el buffer para
-										//almacenar el nmero y pasamos al estado 3.
-										buffer = new StringBuffer();
-										buffer.append("+"+aux);
-										estado = 3;
-									} 
-									else {
-										//Si el siguiente caracter no es una cifra, evitamos que se lea
-										//un nuevo caracter y devolvemos que es el operador suma.
-										noLeerCaracter = true;
-										return new Token("+", Tipos.TKSUM);
-									} 
-									break;							
-						case '-':	aux = (char)(enteroLeido = entrada.read());
-								//Tras leer el signo '-', tenemos que distinguir segun la siguiente
-								//cifra si es el signo negativo de un numero o el operador de resta.
-								if ((aux >= '0') && (aux <= '9')) {
-									//Si el siguiente caracter es una cifra, creamos el buffer para
-									//almacenar el nmero y pasamos al estado 3.
-									buffer = new StringBuffer();
-									buffer.append("-"+aux);
-									estado = 3;
-								} 
-								else {
-									//Si el siguiente caracter no es una cifra, evitamos que se lea
-									//un nuevo caracter y devolvemos que es el operador resta.
-									noLeerCaracter = true;
-									return new Token("-", Tipos.TKSUM);
-								} 
-								break;
-						case '0':	buffer = new StringBuffer();
-									aux = (char)(enteroLeido = entrada.read());
-									//Comprobamos si es una cifra lo que viene a continuaci???.
-									if ((aux >= '0') && (aux <= '9')){
-										throw new Exception("ERROR en linea "+numeroLinea+": No se admiten ceros a la izquierda.");
-									}	
-									else {
-										//En caso de que no sea una cifra, hay que devolver el cero
-										//encontrado y activar que no se lea un nuevo caracter.
-										noLeerCaracter = true;
-										return new Token("0", Tipos.TKNUM);
-									}												
-						default:	//Si el caracter a estudiar es una letra...
-								if (((aux >= 'a') && (aux <= 'z')) || ((aux >= 'A') && (aux <= 'Z'))) {
-									estado = 4;
-									//Creamos un nuevo buffer para ir almacenando los caracteres del
-									//identificador a leer.
-									buffer = new StringBuffer();
-									buffer.append(aux);
-									break;
-								} 
-								else{
-									//Si es una cifra...
-									if ((aux >= '1') && (aux <= '9')) {
-										//Creamos un nuevo buffer para ir almacenando las cifras del numero
-										//que vamos a leer.
-										buffer = new StringBuffer();
-										buffer.append(aux);
-										//Pasamos al estado 3.
-										estado = 3;	
-									} 
-									else{
-										throw new Exception("ERROR en linea "+numeroLinea+": Caracter "+aux+" no valido.");
-									}
-								}	
-								break;
-				}		
-			case 3:		if ((aux >= '0') && (aux <= '9')){
-						//Si es una nueva cifra, la a???dimos al buffer que tenemos.
-							buffer.append(aux);
-						}
-						else {
-							//Si no es una nueva cifra ni un punto, evitamos que se lea otro caracter...
-							noLeerCaracter = true;
-							//...y devolvemos que se ha leido un nmero.
-							return new Token(buffer.toString(), Tipos.TKNUM);
-						} 
+			/*
+			 * En primer lugar identificamos todos los caracteres especiales.
+			 */
+			case '\n':	linea ++;
 						break;
-			case 4:		if ( ((aux >= 'a') && (aux <= 'z')) || ((aux >= 'A') && (aux <= 'Z')) || 
-							((aux >= '0') && (aux <= '9')) || (aux == '_')){
-								//Si el caracter es una letra o un digito lo anadimos al buffer.
-								buffer.append(aux);	
-						} 
-						else {
-							//Si el caracter leido no es un digito o una letra, tenemos que evitar
-							//que se lea un nuevo caracter de la entrada.
-							noLeerCaracter = true;
-							//Buscamos si la secuencia de caracteres leida hasta
-							//entonces esta en la Tabla de Simbolos.
-							String secuencia = buffer.toString();
-							return new Token(secuencia, Tipos.TKIDEN);
-						}
-					break;
-			case 5:	if (aux == '=') {
-						return new Token(":=", Tipos.ASIGN);
-					} 
-					else{ 
-						throw new Exception("ERROR en linea "+numeroLinea+": Se esperaba := y no :" + aux);		
-					}
-			}			
-			//Si llegamos a este punto del codigo, es que no quedan caracteres en el fichero
-			//(read() ha devuelto -1), asique devolvemos el token final de fichero: TKFF
-			//Antes cerramos el buffer de entrada.
-			cierraEntrada();
-		}	
-		return new Token("", Tipos.TKFF);
-	}
-
-	
-	public Token getNextToken() throws Exception{
-		
-		return getToken();
-		
-	}
-
-	public Lexico(String fuente, Hashtable ht) throws Exception {
-
-		//Guardamos referencia a la Tabla de Simbolos.
-		TS.setTabla(ht);
-		//Iniciamos la Tabla de Simbolos con la palabra reservada "int"
-		TS.put("int", new Integer(Tipos.TIPO));
-		//Creamos el buffer de lectura para el archivo fuente.
-		try {
-			entrada = new BufferedReader(new FileReader(fuente));
-		} catch (java.io.FileNotFoundException e) {
-			throw new Exception("ERROR: Archivo no encontrado: " + fuente);	
-		}
-		
-		//Inicializamos los atributos del analizador.
-		numeroLinea = 1;
-		noLeerCaracter = false;
-		enteroLeido = 0;
-		categoriaLexica = -1;
-		
-		// Leemos el primer simbolo
-		lookahead = new Token();
-		lookahead = getNextToken();
-	}
-	
-	
-	public static Hashtable creaTS(){
-		//Por ahora vamos a usar una tabla hash como Tabla de Simbolos.
-		Hashtable ht = new Hashtable();	
-		return ht;
-	}
-	
-	private void cierraEntrada() throws Exception {
-		try {
-			entrada.close();
-		} catch (java.io.IOException e) {
-			throw new Exception("ERROR con entrada y salida al cerrar BufferedReader del Analizador Lexico.");	
-		}
-	}
-
-	public int getTokenPreanalisis(){
-		
-		return lookahead.getCategoriaLexica();
-
-	}
-	
-	public String getLexemaPreanalisis(){
-		
-		return lookahead.getLexema();
-
-	}
-
-	public String reconoce(int tk) throws Exception{
-		
-		String lexema;
-
-		if (tk == lookahead.getCategoriaLexica()){
+			case '\t':	break;
+			case ' ':	break;
+			case '0':	return new Token("0",Tipos.TKNUM);
+			case '(':	return new Token("(",Tipos.TKPAP);
+			case ')':	return new Token(")",Tipos.TKPCI);
+			case '*':	return new Token("*",Tipos.TKMULT);
+			case '/':	return new Token("/",Tipos.TKDIV);
+			case ';':	return new Token(";",Tipos.TKPYCOMA);
+			case '=':	return new Token("=",Tipos.TKIG);
 			
+			/*
+			 * Si detectamos ':' hay que discernir si es el operador de asignacion o un error.
+			 * Si es un error lanzamos una excepcion. 
+			 */
+			case ':':	a = (char)fuente.read();
+						if (a == '='){
+							return new Token(":=",Tipos.TKASIGN);
+						}	
+						else{
+							throw new Exception("ERROR en linea "+linea+": ':' debe ir seguido de '='");
+						}
+			
+			/*
+			 * Si detectamos '<' hay que discernir si es el operador 'menor que' o 'menor o igual que'
+			 * 
+			 * La funcion mark(int), marca el flujo de entrada y conserva la marca hasta que se leen int
+			 * caracteres, nos permite identificar una posicion del flujo.
+			 * 
+			 * La funcion skip(int), devuelve int caracteres al flujo de entrada.
+			 */
+			case '<':	fuente.mark(1);
+						a = (char)fuente.read();
+						if (a == '='){
+							return new Token("<=",Tipos.TKMENIG);
+						}	
+						else{
+							fuente.skip(1);
+							return new Token ("<",Tipos.TKMEN);
+						}
+			
+			/*
+			 * Si detectamos '>' hay que discernir si es el operador 'mayor que' o 'mayor o igual que' 
+			 */
+			case '>':	fuente.mark(1);
+						a = (char)fuente.read();
+						if (a == '='){
+							return new Token(">=",Tipos.TKMAYIG);
+						}	
+						else{
+							fuente.skip(1);
+							return new Token (">",Tipos.TKMAYIG);
+						}
+						
+			/*
+			 * Si detectamos '+' hay que discernir si es el operador '+' o es un numero positivo.
+			 * Para leer secuencias de digitos, usamos leerNumero.  
+			 */
+			case '+':	fuente.mark(1);
+						a = (char)fuente.read();
+						if ((a >= '1') || (a<='9')){
+							fuente.skip(1);
+							String aux;
+							aux = leerNumero("+",fuente);
+							return new Token (aux,Tipos.TKNUM);
+						}	
+						else{
+							fuente.skip(1);
+							return new Token ("+",Tipos.TKSUMA);
+						}
+						
+			/*
+			 * Si detectamos '-' hay que discernir si es el operador '-' o es un numero negativo.
+			 * Para leer secuencias de digitos, usamos leerNumero.  
+			 */
+			case '-':	fuente.mark(1);
+						a = (char)fuente.read();
+						if ((a >= '1') || (a<='9')){
+							String aux;
+							aux = leerNumero("-",fuente);
+							return new Token (aux,Tipos.TKNUM);
+						}	
+						else{
+							fuente.skip(1);
+							return new Token ("-",Tipos.TKRESTA);
+						}
+						
+			/*
+			 * Si detectamos 'a' hay que discernir si es el operador 'and' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'a':	fuente.mark(3);
+						a = (char)fuente.read();
+						if (a =='n'){
+							a = (char)fuente.read();
+							if (a =='d'){
+								return new Token ("and",Tipos.TKAND);
+							}	
+							else{
+								fuente.skip(1);	
+								String aux;
+								aux = leerCaracter("an",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}	
+						}	
+						else{	
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("a",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			
+			/*
+			 * Si detectamos 'n' hay que discernir si es el operador 'not' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'n':	fuente.mark(3);
+						a = (char)fuente.read();
+						if (a =='o'){
+							a = (char)fuente.read();
+							if (a =='t'){
+								return new Token ("not",Tipos.TKNOT);
+							}	
+							else{
+								fuente.skip(1);	
+								String aux;
+								aux = leerCaracter("no",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}	
+						}	
+						else{							
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("n",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			
+			/*
+			 * Si detectamos 'o' hay que discernir si es el operador 'or' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'o':	fuente.mark(2);
+						a = (char)fuente.read();
+						if (a =='r'){
+							return new Token ("or",Tipos.TKOR);
+						}	
+						else{
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("o",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+						
+			/*
+			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 't':	fuente.mark(4);
+						a = (char)fuente.read();
+						if (a =='r'){
+							a = (char)fuente.read();
+							if (a =='u'){
+								a = (char)fuente.read();
+								if (a =='e'){
+									return new Token ("true",Tipos.TKTRUE);
+								}	
+								else{
+									fuente.skip(1);	
+									String aux;
+									aux = leerCaracter("tru",fuente);
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}	
+							else{
+								fuente.skip(1);	
+								String aux;
+								aux = leerCaracter("tr",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}
+						}
+						else{							
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("t",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			
+			/*
+			 * Si detectamos 'f' hay que discernir si es el valor booleano 'false' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'f':	fuente.mark(5);
+						a = (char)fuente.read();
+						if (a =='a'){
+							a = (char)fuente.read();
+							if (a =='l'){
+								a = (char)fuente.read();
+								if (a =='s'){
+									a = (char)fuente.read();
+									if (a =='e'){
+										return new Token ("false",Tipos.TKFALSE);
+									}	
+									else{
+										fuente.skip(1);	
+										String aux;
+										aux = leerCaracter("fals",fuente);
+										return new Token (aux,Tipos.TKIDEN);
+										}
+								}	
+								else{
+									fuente.skip(1);	
+									String aux;
+									aux = leerCaracter("fal",fuente);
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}	
+							else{
+								fuente.skip(1);	
+								String aux;
+								aux = leerCaracter("fa",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}
+						}
+						else{							
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("f",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+						
+			/*
+			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'i':	fuente.mark(3);
+						a = (char)fuente.read();
+						if (a =='n'){
+							a = (char)fuente.read();
+							if (a =='t'){
+								return new Token ("int",Tipos.TKINT);
+							}	
+							else{
+								fuente.skip(1);	
+								String aux;
+								aux = leerCaracter("in",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}	
+						}	
+						else{							
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("i",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+
+			/*
+			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'b':	fuente.mark(3);
+						a = (char)fuente.read();
+						if (a =='o'){
+							a = (char)fuente.read();
+								if (a =='o'){
+								a = (char)fuente.read();
+								if (a =='l'){
+									return new Token ("bool",Tipos.TKBOOL);
+								}
+								else{
+									fuente.skip(1);	
+									String aux;
+									aux = leerCaracter("boo",fuente);
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}
+							else{
+								fuente.skip(1);	
+								String aux;
+								aux = leerCaracter("bo",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}	
+						}	
+						else{							
+							fuente.skip(1);	
+							String aux;
+							aux = leerCaracter("b",fuente);
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			/*
+			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
+			 * Si es un digito, llamamos a leerNumero.
+			 * Si es una letra, llamamos a leerCaracter. Tiene que ser una letra porque los identificadores
+			 * comienzan por letra y luego pueden llevar digitos o letras o '_'.
+			 * Sino, hemos detectado un error y lanzamos una excepcion. 
+			 */
+			default:	fuente.mark(1);
+						if ((a>='1') && (a<='9')){
+							fuente.skip(1);
+							String aux;
+							aux = leerNumero("",fuente);
+							return new Token (aux,Tipos.TKNUM);
+						}
+						else{
+							if ((a>='A') && (a<='Z')){
+								fuente.skip(1);
+								String aux;
+								aux = leerCaracter("",fuente);
+								return new Token (aux,Tipos.TKIDEN);
+							}
+							else{
+								throw new Exception("ERROR en linea "+linea+": No existe ese identificador");
+							}
+						}			
+			}
+		}	
+		
+		/*
+		 * Si se sale del while es que read detecto un error y lanzamos una excepcion de entrada/salida. 
+		 */
+		throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
+	}
+	
+	/*
+	 * Si leemos un 0, detectamos error porque no se puede tener '+0' ni '-0'.
+	 * Sino, vamos leyendo mientras sean digitos hasta terminar de leer el numero.
+	 */
+	public String leerNumero(String aux, BufferedReader fuente) throws Exception{
+		char a;
+		int i = 0;
+		a = (char)fuente.read();
+		if (a == '0'){
+			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
 		}
 		else{
-			/*
-			String mensajeDeError = "Error Sintactico: Se esperaba un ";
-			mensajeDeError = mensajeDeError + "Identificador";
-			throw new Exception("hola");	
-			*/
+			aux = aux.concat(new Character(a).toString());
+			while (((a = (char)fuente.read()) != -1) && (i <= 8)){
+				if ((a>='0') && (a<'9')){
+					aux = aux.concat(new Character(a).toString());			
+				}
+				else{
+					fuente.skip(1);
+				}
+				i ++;
+			}	
+			return aux;
 		}	
-		
-		lexema = lookahead.getLexema();
-		lookahead = getToken();
-		return lexema;
-		
+	}
+	
+	/*
+	 * Cuando llamamos a este metedo ya hemos leido al menos una letra asi que solo tenemos que controlar que se
+	 * lean letras, digitos o '_'.
+	 * Vamos leyendo mientras sean caracteres validos hasta terminar de leer el identificador.
+	 */
+	
+	public String leerCaracter(String aux, BufferedReader fuente) throws Exception{
+		char a;
+		a = (char)fuente.read();
+		while ((a = (char)fuente.read()) != -1){
+			if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+				aux = aux.concat(new Character(a).toString());			
+			}
+			else{
+				fuente.skip(1);
+			}
+		}	
+		return aux;	
 	}
 }

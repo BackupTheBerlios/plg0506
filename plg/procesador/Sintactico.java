@@ -3,6 +3,8 @@ package procesador;
 
 import java.util.Hashtable;
 
+import tablaSimbolos.TablaSimbolos;
+
 //import procesador.procesador.info.token.token;
 
 public class Sintactico{
