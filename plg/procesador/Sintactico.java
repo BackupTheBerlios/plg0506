@@ -10,12 +10,14 @@ public class Sintactico{
 	Codigo codigo;
 	Lexico lexico;
 	TablaSimbolos TS;
+	int dir;
 	
 	public Sintactico(BufferedReader fuente, TablaSimbolos T) throws Exception{
 		
 		codigo = new Codigo(); 
 		lexico = new Lexico(fuente);		
 		TS = T;
+		dir = 0;
 	}
 
 	public void startParsing() throws Exception{
@@ -73,7 +75,7 @@ public class Sintactico{
 			lexDeIden = tk.getLexema();
 			tipoDeIden = "bool";
 			errDeDec = TS.existeID(lexDeIden,tipoDeIden);
-			TS.agnadeID(lexDeIden,tipoDeIden);
+			TS.agnadeID(lexDeIden,tipoDeIden);	
 		}
 		else{
 			tk = lexico.lexer(Tipos.TKINT);
@@ -85,6 +87,7 @@ public class Sintactico{
 				TS.agnadeID(lexDeIden,tipoDeIden);
 			}
 		}
+		dir ++;
 		return errDeDec;
 	}
 	
@@ -122,7 +125,11 @@ public class Sintactico{
 		boolean errDeIAsig = false; 
 		boolean errDeExp = false;
 		String lexDeIden;
-		lexDeIden = lexico.reconoce(Tipos.TKIDEN);
+		Token tk;
+		tk = lexico.lexer(Tipos.TKIDEN);
+		TS.existeID()
+		codigo.genIns("desapila_dir", TS.dirID(lexDeIden, ));
+		codigo.genIns("desapila_dir", ts.dirID(lexDeIden));
 		lexico.reconoce(Tipos.ASIGN);
 		errDeExp = Exp();
 		errDeIAsig = errDeExp || (!ts.existeID(lexDeIden));
@@ -253,11 +260,23 @@ public class Sintactico{
 			codigo.genIns("divide");
 		
 	}
-	
-	public int valorDe(String num){
-		
-		return (new Integer(num)).intValue();
+
+	public void genOpAnd(){
+
+		codigo.genIns("and");
 		
 	}
-	
+
+	public void genOpOr(){
+
+		codigo.genIns("or");
+		
+	}
+
+	public void genOpNot(){
+
+		codigo.genIns("not");
+		
+	}
+
 }

@@ -1,6 +1,7 @@
 package tablaSimbolos;
 
 import java.util.Hashtable;
+import java.util.Enumeration;
 
 
 public class TablaSimbolos {
@@ -121,6 +122,20 @@ public class TablaSimbolos {
 	public void muestra(){
 		String aux = this.tabla.toString();
 		System.out.println(aux);
+	}
+
+	public int dirID(String id, String tipo){
+		String aux = id.concat("#");
+		aux = aux.concat(tipo);
+		int i = 0;
+		for (Enumeration e = this.tabla.keys(); e.hasMoreElements();){
+			String s = (String)e.nextElement();
+			if(s.equals(aux)){
+				return i;
+			}
+			i ++;
+	     }
+		return i;
 	}
 	
 	
