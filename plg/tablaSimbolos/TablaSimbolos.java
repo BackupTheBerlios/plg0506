@@ -4,23 +4,34 @@ import java.util.Hashtable;
 
 
 public class TablaSimbolos {
+	
+	/*
+	 * Usaremos del API de java una tabla Hash como tabla de simbolos. El valor 
+	 * que almacenamos sera un par con el nombre del identificador y el tipo del 
+	 * mismo. No se podran almacenar datos repetidos.
+	 */
 	Hashtable tabla;
 
 	/*
-	 * Cosntructores
+	 * Cosntructor sin parametros que inicializa la tabla de simbolos con una tabla
+	 * vacia.
 	 */
 	public TablaSimbolos() {
 		super();
 		this.tabla = new Hashtable();
 	}
 
+	/*
+	 * Constructor que recibe una tabla de simbolos por parametro y la inicializamos 
+	 * con esa.
+	 */
 	public TablaSimbolos(Hashtable tabla) {
 		super();
 		this.tabla = new Hashtable(tabla);
 	}
 
 	/*
-	 * Accesores y mutadores
+	 * Accesores y mutadores de la tabla de simbolos
 	 */
 	public Hashtable getTabla() {
 		return tabla;
@@ -31,13 +42,12 @@ public class TablaSimbolos {
 	}
 	
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
-	 * Parametros de salida: Token que ha reconocido.
+	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
+	 * 					y el tipo del identificador.
+	 * Parametros de salida: Boleano que inidica la existencia o no.
 	 * 
-	 * Un identificador 'id' de tipo 't' existe en la tabla
-	 * solo si existe el tipo 't' en las claves, 
-	 * existe el identificador 'id' en los valores
-	 * y la clave en la tabla hash de 'id' es 't'. 
+	 * Un identificador 'id' de tipo 't' existe en la tabla solo si existe su clave, 
+	 * la clave de cada identificador de un tipo es unica, no habra repeticiones. 
 	 */
 	public boolean existeID(String id, String t){
 		String aux = id.concat("#");
@@ -52,8 +62,14 @@ public class TablaSimbolos {
 	}
 	
 	/*
-	 * Un identificador 'id' de tipo 't' se agnade a la tabla
-	 * si el tipo 't' es valido y no estba agnadido antes
+	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
+	 * 					y el tipo del identificador.
+	 * Parametros de salida: Boleano que inidica si la operacion se realizo bien.
+	 * 
+	 * Un identificador 'id' de tipo 't' se agnade a la tabla si no existe ningun identificador
+	 * de ese tipo. El valor de la clave en la tabla hash es unico, ya que concatenamos el nombre
+	 * del identificador con el tipo usando entre medias un caracter de separacion '#'. Como valor
+	 * para la tabla introducimos un par, que son el nombre del id y el tipo.
 	 */
 	public boolean agnadeID(String id, String t){
 		String aux = id.concat("#");
@@ -70,8 +86,12 @@ public class TablaSimbolos {
 	}
 
 	/*
-	 * Un identificador id' de tipo 't' se elimina a la tabla
-	 * si existe en la tabla un identificador 'id' de tipo 't'
+	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
+	 * 					y el tipo del identificador.
+	 * Parametros de salida: Boleano que inidica si la operacion se realizo bien.
+	 * 
+	 * Un identificador id' de tipo 't' se elimina a la tabla si existe en la tabla un 
+	 * identificador 'id' de tipo 't'. Sino se mostrara un error por pantalla.
 	 */
 	public boolean eliminaID(String id, String t){
 		String aux = id.concat("#");
@@ -86,6 +106,12 @@ public class TablaSimbolos {
 		}	
 	}
 	
+	/*
+	 * Parametros de entrada: 
+	 * Parametros de salida: 
+	 * 
+	 * Metodo para mostar por pantalla la tabla de simbolos actual.
+	 */
 	public void muestra(){
 		String aux = this.tabla.toString();
 		System.out.println(aux);
