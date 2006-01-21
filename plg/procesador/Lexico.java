@@ -7,7 +7,6 @@ public class Lexico {
 	/*
 	 * linea sirve para controlar en que linea de codigo detectamos el error.
 	 * lookahead sirve para almacenar el caracteres de preanalisis.
-	 * fuente es el flujo de entrada para leer desde el fichero a compilar.
 	 */
 	int linea;
 	Token lookahead;
@@ -466,7 +465,7 @@ public class Lexico {
 	}
 	
 	/*
-	 * Parametros de entrada:
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
 	 * Parametros de salida: Token que ha reconocido.
 	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que propagamos de la funcion getNextToken().
@@ -475,7 +474,6 @@ public class Lexico {
 	 * Si no, devuelve un token vacío.
 	 */
 	public Token lexer(int TK) throws IOException, Exception{
-		lookahead = getNextToken();
 		if (TK == lookahead.getCategoriaLexica()){
 			return lookahead;
 		}
