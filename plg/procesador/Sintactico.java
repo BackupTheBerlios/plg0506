@@ -7,14 +7,15 @@ import tablaSimbolos.TablaSimbolos;
 
 public class Sintactico{
 	
-	int dir;
 	Codigo codigo;
 	Lexico lexico;
+	TablaSimbolos TS;
 	
-	public Sintactico(BufferedReader fuente, TablaSimbolos TS) throws Exception{
+	public Sintactico(BufferedReader fuente, TablaSimbolos T) throws Exception{
 		
 		codigo = new Codigo(); 
 		lexico = new Lexico(fuente);		
+		TS = T;
 	}
 
 	public void startParsing() throws Exception{
@@ -28,7 +29,6 @@ public class Sintactico{
 		boolean errDeProg;
 		boolean errDeDecs;
 		boolean errDeIs;	
-		this.dir = 0;
 		errDeDecs = Decs();
 		codigo.inicializaCodigo();
 		lexico.reconoce(Tipos.TKPYCOMA);
@@ -44,42 +44,68 @@ public class Sintactico{
 		boolean errDeDec;
 		errDeDec = Dec();
 		Token tk;
+		Token aux = new Token();
 		tk = lexico.lexer(Tipos.TKPYCOMA);
-		if (tk.equals())
-			errDeDecs1 = Decs();
-			errDeDecs = errDeDec || errDeDecs1;
-		}
-		else{
+		/*
+		 * Si no he reconocido ';' es que hay que aplicar Decs::=Dec.
+		 * Sino, aplico Decs = Decs;Dec.
+		 */
+		if (tk.equals(aux)){
 			errDeDecs = errDeDec;
 		}
+		else{
+			errDeDecs1 = Decs();
+			errDeDecs = errDeDecs1 || errDeDec;
+		}
 		return errDeDecs;
-		
 	}
 	
 	public boolean Dec() throws Exception{
 		
 		boolean errDeDec = false;
 		String lexDeIden;
-		lexDeIden = lexico.reconoce(Tipos.TKIDEN);
-		errDeDec = ts.existeID(lexDeIden);
-		ts.aadeID(lexDeIden, this.dir);
-		this.dir ++;
+		String tipoDeIden;
+		Token tk;
+		Token aux = new Token();
+		tk = lexico.lexer(Tipos.TKBOOL);
+		if (!tk.equals(aux)){
+			tk = lexico.lexer(Tipos.TKIDEN);
+			lexDeIden = tk.getLexema();
+			tipoDeIden = "bool";
+			errDeDec = TS.existeID(lexDeIden,tipoDeIden);
+			TS.agnadeID(lexDeIden,tipoDeIden);
+		}
+		else{
+			tk = lexico.lexer(Tipos.TKINT);
+			if (!tk.equals(aux)){
+				tk = lexico.lexer(Tipos.TKIDEN);
+				lexDeIden = tk.getLexema();
+				tipoDeIden = "int";
+				errDeDec = TS.existeID(lexDeIden,tipoDeIden);
+				TS.agnadeID(lexDeIden,tipoDeIden);
+			}
+		}
 		return errDeDec;
-		
 	}
 	
 	public boolean Is() throws Exception{
-		boolean errDeIs = false; 
-		boolean errDeI = false;
-		boolean errDeIs1 = false;
+		boolean errDeIs;
+		boolean errDeIs1;
+		boolean errDeI;
 		errDeI = I();
-		if (lexico.getTokenPreanalisis() == Tipos.TKPYCOMA){
-			lexico.reconoce(Tipos.TKPYCOMA);
-			errDeIs1 = Is();
-			errDeIs = errDeI || errDeIs1;
+		Token tk;
+		Token aux = new Token();
+		tk = lexico.lexer(Tipos.TKPYCOMA);
+		/*
+		 * Si no he reconocido ';' es que hay que aplicar Decs::=Dec.
+		 * Sino, aplico Decs = Decs;Dec.
+		 */
+		if (tk.equals(aux)){
+			errDeIs = errDeI;
 		}
 		else{
-			errDeIs = errDeI;
+			errDeIs1 = Is();
+			errDeIs = errDeIs1 || errDeI;
 		}
 		return errDeIs;
 	}
