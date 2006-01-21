@@ -6,15 +6,16 @@ import tablaSimbolos.TablaSimbolos;
 
 public class Procesador {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		
+		BufferedReader fuente;
 		//Si no hemos recibido por parametro el archivo fuente, avisamos del error.
 		if (args.length == 0){
 			System.out.println("ERROR: Debe indicar fichero fuente como parametro.");
 		}
 		else {	
 			try {
-				BufferedReader fuente = new BufferedReader(new FileReader(args[0]));
+				fuente = new BufferedReader(new FileReader(args[0]));
 			} 
 			catch (java.io.FileNotFoundException e) {
 				throw new Exception("ERROR: Archivo no encontrado: " + args[0]);	
