@@ -32,4 +32,21 @@ public class Token {
 		this.lexema = lexema;
 	}
 	
+	public boolean equals(Token tk){
+		boolean b = true;
+		if (this.categoriaLexica == tk.getCategoriaLexica()){
+			b = b && true;
+		}
+		else{
+			b = b && false;
+		}
+		if (this.getLexema() == tk.getLexema()){
+			b = b && true;
+		}
+		else{
+			b = b && false;
+		}
+		return b;
+	}
+	
 }

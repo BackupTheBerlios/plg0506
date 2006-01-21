@@ -43,9 +43,9 @@ public class Sintactico{
 		boolean errDeDecs1;
 		boolean errDeDec;
 		errDeDec = Dec();
-	
-		lexico.lexer(Tipos.TKPYCOMA);
-			lexico.reconoce(Tipos.TKPYCOMA);
+		Token tk;
+		tk = lexico.lexer(Tipos.TKPYCOMA);
+		if (tk.equals())
 			errDeDecs1 = Decs();
 			errDeDecs = errDeDec || errDeDecs1;
 		}
