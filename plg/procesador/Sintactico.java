@@ -1,8 +1,6 @@
 package procesador;
 
-
-import java.util.Hashtable;
-
+import java.io.BufferedReader;
 import tablaSimbolos.TablaSimbolos;
 
 //import procesador.procesador.info.token.token;
@@ -10,18 +8,13 @@ import tablaSimbolos.TablaSimbolos;
 public class Sintactico{
 	
 	int dir;
-	TablaSimbolos ts;
 	Codigo codigo;
 	Lexico lexico;
 	
-	public Sintactico(String fuente, Hashtable ht) throws Exception{
+	public Sintactico(BufferedReader fuente, TablaSimbolos TS) throws Exception{
 		
-		ts = new TablaSimbolos();
 		codigo = new Codigo(); 
-		//Creamos el Analizador Lexico y le pasamos la referencia de 
-		//la Tabla de Simbolos y
-		//el nombre del fichero fuente.
-		lexico = new Lexico(fuente, ht);		
+		lexico = new Lexico();		
 	}
 
 	public void startParsing() throws Exception{
