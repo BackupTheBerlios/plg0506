@@ -13,6 +13,9 @@ public class TablaSimbolos {
 	Hashtable tabla;
 
 	/*
+	 * Parametros de entrada: 
+	 * Parametros de salida: 
+	 * 
 	 * Cosntructor sin parametros que inicializa la tabla de simbolos con una tabla
 	 * vacia.
 	 */
@@ -22,6 +25,9 @@ public class TablaSimbolos {
 	}
 
 	/*
+	 * Parametros de entrada: recibe por parametro la tabla con la que inicializamos.
+	 * Parametros de salida: 
+	 * 
 	 * Constructor que recibe una tabla de simbolos por parametro y la inicializamos 
 	 * con esa.
 	 */

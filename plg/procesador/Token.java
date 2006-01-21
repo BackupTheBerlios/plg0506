@@ -56,6 +56,13 @@ public class Token {
 		this.lexema = lexema;
 	}
 	
+	/*
+	 * Parametros de entrada: Token con el que se quiere comparar si son iguales. 
+	 * Parametros de salida: Boleano que nos indica la igualdad o no de los dos Tokens.
+	 * 
+	 * Compara un Token que recibe por parametro con sigo mismo. Para que sean iguales han de tener
+	 * la misma categoria lexica y el mismo lexema.
+	 */
 	public boolean equals(Token tk){
 		boolean b = true;
 		if (this.categoriaLexica == tk.getCategoriaLexica()){
