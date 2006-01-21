@@ -14,7 +14,7 @@ public class Procesador {
 		}
 		else {	
 			try {
-				BufferedReader entrada = new BufferedReader(new FileReader(args[0]));
+				BufferedReader fuente = new BufferedReader(new FileReader(args[0]));
 			} 
 			catch (java.io.FileNotFoundException e) {
 				throw new Exception("ERROR: Archivo no encontrado: " + args[0]);	
@@ -22,7 +22,7 @@ public class Procesador {
 			TablaSimbolos TS = new TablaSimbolos();	
 			Sintactico sintactico;
 			try {		
-				sintactico = new Sintactico(args[0], TS);
+				sintactico = new Sintactico(fuente, TS);
 				System.out.println("Inicio del analisis\n");
 				sintactico.startParsing();
 				System.out.println("Fin del analisis");				
