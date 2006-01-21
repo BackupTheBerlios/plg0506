@@ -14,7 +14,7 @@ public class Sintactico{
 	public Sintactico(BufferedReader fuente, TablaSimbolos TS) throws Exception{
 		
 		codigo = new Codigo(); 
-		lexico = new Lexico();		
+		lexico = new Lexico(fuente);		
 	}
 
 	public void startParsing() throws Exception{

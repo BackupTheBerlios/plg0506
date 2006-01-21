@@ -1,7 +1,6 @@
 package procesador;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Hashtable;
 import tablaSimbolos.TablaSimbolos;
 
 public class Procesador {

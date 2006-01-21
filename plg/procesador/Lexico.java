@@ -483,9 +483,9 @@ public class Lexico {
 		}
 	}
 	
-	public boolean reconoce(Token TK){
+	public boolean reconoce(int tk){
 		boolean aux = true;
-		if (TK.getCategoriaLexica() == lookahead.getCategoriaLexica()){
+		if (tk == lookahead.getCategoriaLexica()){
 			aux = true;
 		}	
 		else{ 
