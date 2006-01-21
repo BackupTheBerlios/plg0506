@@ -80,4 +80,19 @@ public class Token {
 		return b;
 	}
 	
+	/*
+	 * Parametros de entrada:
+	 * Parametros de salida: String para poder mostrar el contenido de Token.
+	 * 
+	 * Pasamos Token a un String para poder mostrarlo por pantalla
+	 */
+	public String muestraToken(){
+		String aux= "(";
+		aux= aux.concat(lexema);
+		String aux2= (new Integer(categoriaLexica)).toString();
+		aux= aux.concat(" , ");
+		aux= aux.concat(aux2);
+		aux= aux.concat(")");
+		return aux;
+	}
 }

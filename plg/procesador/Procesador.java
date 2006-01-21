@@ -4,7 +4,15 @@ import java.io.FileReader;
 import tablaSimbolos.TablaSimbolos;
 
 public class Procesador {
-	
+
+	/*
+	 * Parametros de entrada: 
+	 * Parametros de salida: 
+	 * Execpciones: Exception, que lanzamos si no hemos podido abrir el fichero.
+	 * 
+	 * Menu principal del procesador de lenguaje. Lanza una excepcion si el archivo no 
+	 * se encuentra.
+	 */
 	public static void main(String[] args) throws Exception{
 		
 		BufferedReader fuente;

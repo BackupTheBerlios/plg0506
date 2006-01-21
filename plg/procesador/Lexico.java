@@ -7,12 +7,15 @@ public class Lexico {
 	/*
 	 * linea sirve para controlar en que linea de codigo detectamos el error.
 	 * lookahead sirve para almacenar el caracteres de preanalisis.
+	 * fuente es el flujo de entrada para leer desde el fichero a compilar.
 	 */
 	int linea;
 	Token lookahead;
 	BufferedReader fuente;
 	
 	/*
+	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * 
 	 * Constructor.
 	 */
 	public Lexico(BufferedReader f) {
@@ -49,7 +52,7 @@ public class Lexico {
 	}
 
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de entrada: 
 	 * Parametros de salida: Token identificado.
 	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
@@ -394,8 +397,7 @@ public class Lexico {
 	}
 	
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres, String donde lleva almacenado lo 
-	 * que ya ha leido.
+	 * Parametros de entrada: String donde lleva almacenado lo que ya ha leido.
 	 * Parametros de salida: String con el numero que ha reconocido.
 	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
@@ -426,8 +428,7 @@ public class Lexico {
 	}
 	
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres, String donde lleva almacenado lo 
-	 * que ya ha leido.
+	 * Parametros de entrada: String donde lleva almacenado lo que ya ha leido.
 	 * Parametros de salida: String con todos los caracteres del identificador que ha reconocido.
 	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
@@ -452,7 +453,7 @@ public class Lexico {
 	}
 	
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de entrada: 
 	 * Parametros de salida: Token que ha reconocido.
 	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que propagamos de la funcion getToken().
@@ -465,7 +466,7 @@ public class Lexico {
 	}
 	
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de entrada:
 	 * Parametros de salida: Token que ha reconocido.
 	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
 	 * 				Exception, que propagamos de la funcion getNextToken().
@@ -483,6 +484,12 @@ public class Lexico {
 		}
 	}
 	
+	/*
+	 * Parametros de entrada: Entero que indica una categoria lexica 
+	 * Parametros de salida: booleano que nos dira si son iguales las categorias lexicas.
+	 * 
+	 *  Dada una categoria lexica se nos indica si es igual o no a la categoria lexica del Token.
+	 */
 	public boolean reconoce(int tk){
 		boolean aux = true;
 		if (tk == lookahead.getCategoriaLexica()){

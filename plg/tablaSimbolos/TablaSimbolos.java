@@ -54,7 +54,7 @@ public class TablaSimbolos {
 	 * Parametros de salida: Boleano que inidica la existencia o no.
 	 * 
 	 * Un identificador 'id' de tipo 't' existe en la tabla solo si existe su clave, 
-	 * la clave de cada identificador de un tipo es unica, no habra repeticiones. 
+	 * la clave de cada identificador de un tipo es unica, no habra repeticiones.  
 	 */
 	public boolean existeID(String id, String t){
 		String aux = id.concat("#");
@@ -76,7 +76,8 @@ public class TablaSimbolos {
 	 * Un identificador 'id' de tipo 't' se agnade a la tabla si no existe ningun identificador
 	 * de ese tipo. El valor de la clave en la tabla hash es unico, ya que concatenamos el nombre
 	 * del identificador con el tipo usando entre medias un caracter de separacion '#'. Como valor
-	 * para la tabla introducimos un par, que son el nombre del id y el tipo.
+	 * para la tabla introducimos un par, que son el nombre del id y el tipo. Sino es posible agnadir
+	 * porque ya exista entonces se lanzara una excepcion.
 	 */
 	public boolean agnadeID(String id, String t){
 		String aux = id.concat("#");
@@ -98,7 +99,7 @@ public class TablaSimbolos {
 	 * Parametros de salida: Boleano que inidica si la operacion se realizo bien.
 	 * 
 	 * Un identificador id' de tipo 't' se elimina a la tabla si existe en la tabla un 
-	 * identificador 'id' de tipo 't'. Sino se mostrara un error por pantalla.
+	 * identificador 'id' de tipo 't'. Sino lanzara una excepcion.
 	 */
 	public boolean eliminaID(String id, String t){
 		String aux = id.concat("#");
@@ -124,6 +125,15 @@ public class TablaSimbolos {
 		System.out.println(aux);
 	}
 
+	/*
+	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
+	 * 					y el tipo del identificador.
+	 * Parametros de salida: Entero que nos indica la posicion del identificador en memoria.
+	 *  
+	 * Obtenemos por parametro un identificador y el tipo del mismo el entero que nos indica la 
+	 * posicion de memoria de ese identificador. Para saber cuando generemos el codigo de donde 
+	 * tomamos los valores. 
+	 */
 	public int dirID(String id, String tipo){
 		String aux = id.concat("#");
 		aux = aux.concat(tipo);
