@@ -25,14 +25,13 @@ public class Sintactico{
 		
 	public boolean Prog() throws Exception{
 		
-		boolean errDeProg = false;
-		boolean errDeDecs = false;
-		boolean errDeIs = false;	
-		ts.creaTS();
+		boolean errDeProg;
+		boolean errDeDecs;
+		boolean errDeIs;	
 		this.dir = 0;
 		errDeDecs = Decs();
-		lexico.reconoce(Tipos.TKPYCOMA);
 		codigo.inicializaCodigo();
+		lexico.reconoce(Tipos.TKPYCOMA);
 		errDeIs = Is();
 		errDeProg = errDeDecs || errDeIs;
 		return errDeProg;

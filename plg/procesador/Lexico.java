@@ -10,13 +10,15 @@ public class Lexico {
 	 */
 	int linea;
 	Token lookahead;
+	BufferedReader fuente;
 	
 	/*
 	 * Constructor.
 	 */
-	public Lexico() {
+	public Lexico(BufferedReader f) {
 		linea = 0;
 		lookahead = new Token();
+		fuente = f;
 	}
 	
 	/*
@@ -37,6 +39,14 @@ public class Lexico {
 	public void setLookahead(Token lookahead) {
 		this.lookahead = lookahead;
 	}
+	
+	public BufferedReader getFuente() {
+		return fuente;
+	}
+
+	public void setFuente(BufferedReader fuente) {
+		this.fuente = fuente;
+	}
 
 	/*
 	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
@@ -48,7 +58,7 @@ public class Lexico {
 	 *  Va leyendo caracteres del flujo hasta que identifica un token y lo devuleve,
 	 *  o detecta un error y genera una excepcion.
 	 */
-	public Token getToken (BufferedReader fuente) throws IOException, Exception{
+	public Token getToken () throws IOException, Exception{
 		char a;
 		
 		/*
@@ -124,7 +134,7 @@ public class Lexico {
 						if ((a >= '1') || (a<='9')){
 							fuente.skip(1);
 							String aux;
-							aux = leerNumero("+",fuente);
+							aux = leerNumero("+");
 							return new Token (aux,Tipos.TKNUM);
 						}	
 						else{
@@ -140,7 +150,7 @@ public class Lexico {
 						a = (char)fuente.read();
 						if ((a >= '1') || (a<='9')){
 							String aux;
-							aux = leerNumero("-",fuente);
+							aux = leerNumero("-");
 							return new Token (aux,Tipos.TKNUM);
 						}	
 						else{
@@ -162,14 +172,14 @@ public class Lexico {
 							else{
 								fuente.skip(1);	
 								String aux;
-								aux = leerCaracter("an",fuente);
+								aux = leerCaracter("an");
 								return new Token (aux,Tipos.TKIDEN);
 							}	
 						}	
 						else{	
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("a",fuente);
+							aux = leerCaracter("a");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 			
@@ -187,14 +197,14 @@ public class Lexico {
 							else{
 								fuente.skip(1);	
 								String aux;
-								aux = leerCaracter("no",fuente);
+								aux = leerCaracter("no");
 								return new Token (aux,Tipos.TKIDEN);
 							}	
 						}	
 						else{							
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("n",fuente);
+							aux = leerCaracter("n");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 			
@@ -210,7 +220,7 @@ public class Lexico {
 						else{
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("o",fuente);
+							aux = leerCaracter("o");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 						
@@ -230,21 +240,21 @@ public class Lexico {
 								else{
 									fuente.skip(1);	
 									String aux;
-									aux = leerCaracter("tru",fuente);
+									aux = leerCaracter("tru");
 									return new Token (aux,Tipos.TKIDEN);
 								}
 							}	
 							else{
 								fuente.skip(1);	
 								String aux;
-								aux = leerCaracter("tr",fuente);
+								aux = leerCaracter("tr");
 								return new Token (aux,Tipos.TKIDEN);
 							}
 						}
 						else{							
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("t",fuente);
+							aux = leerCaracter("t");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 			
@@ -266,28 +276,28 @@ public class Lexico {
 									else{
 										fuente.skip(1);	
 										String aux;
-										aux = leerCaracter("fals",fuente);
+										aux = leerCaracter("fals");
 										return new Token (aux,Tipos.TKIDEN);
 										}
 								}	
 								else{
 									fuente.skip(1);	
 									String aux;
-									aux = leerCaracter("fal",fuente);
+									aux = leerCaracter("fal");
 									return new Token (aux,Tipos.TKIDEN);
 								}
 							}	
 							else{
 								fuente.skip(1);	
 								String aux;
-								aux = leerCaracter("fa",fuente);
+								aux = leerCaracter("fa");
 								return new Token (aux,Tipos.TKIDEN);
 							}
 						}
 						else{							
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("f",fuente);
+							aux = leerCaracter("f");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 						
@@ -305,14 +315,14 @@ public class Lexico {
 							else{
 								fuente.skip(1);	
 								String aux;
-								aux = leerCaracter("in",fuente);
+								aux = leerCaracter("in");
 								return new Token (aux,Tipos.TKIDEN);
 							}	
 						}	
 						else{							
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("i",fuente);
+							aux = leerCaracter("i");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 
@@ -332,21 +342,21 @@ public class Lexico {
 								else{
 									fuente.skip(1);	
 									String aux;
-									aux = leerCaracter("boo",fuente);
+									aux = leerCaracter("boo");
 									return new Token (aux,Tipos.TKIDEN);
 								}
 							}
 							else{
 								fuente.skip(1);	
 								String aux;
-								aux = leerCaracter("bo",fuente);
+								aux = leerCaracter("bo");
 								return new Token (aux,Tipos.TKIDEN);
 							}	
 						}	
 						else{							
 							fuente.skip(1);	
 							String aux;
-							aux = leerCaracter("b",fuente);
+							aux = leerCaracter("b");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 			/*
@@ -360,14 +370,14 @@ public class Lexico {
 						if ((a>='1') && (a<='9')){
 							fuente.skip(1);
 							String aux;
-							aux = leerNumero("",fuente);
+							aux = leerNumero("");
 							return new Token (aux,Tipos.TKNUM);
 						}
 						else{
 							if ((a>='A') && (a<='Z')){
 								fuente.skip(1);
 								String aux;
-								aux = leerCaracter("",fuente);
+								aux = leerCaracter("");
 								return new Token (aux,Tipos.TKIDEN);
 							}
 							else{
@@ -393,7 +403,7 @@ public class Lexico {
 	 * Si leemos un 0, detectamos error porque no se puede tener '+0' ni '-0'.
 	 * Sino, vamos leyendo mientras sean digitos hasta terminar de leer el numero.
 	 */
-	public String leerNumero(String aux, BufferedReader fuente) throws Exception,IOException{
+	public String leerNumero(String aux) throws Exception,IOException{
 		char a;
 		int i = 0;
 		a = (char)fuente.read();
@@ -427,7 +437,7 @@ public class Lexico {
 	 * Vamos leyendo mientras sean caracteres validos hasta terminar de leer el identificador.
 	 */
 	
-	public String leerCaracter(String aux, BufferedReader fuente) throws Exception, IOException{
+	public String leerCaracter(String aux) throws Exception, IOException{
 		char a;
 		a = (char)fuente.read();
 		while ((a = (char)fuente.read()) != -1){
@@ -449,8 +459,9 @@ public class Lexico {
 	 * 
 	 *  Devuelve el siguiente token para que podamos realizar el preanálisis
 	 */
-	public Token getNextToken(BufferedReader fuente) throws IOException, Exception{
-		return getToken(fuente);	
+	public Token getNextToken() throws IOException, Exception{
+		lookahead = getToken();
+		return lookahead;	
 	}
 	
 	/*
@@ -462,13 +473,24 @@ public class Lexico {
 	 * Devuelve el proximo token si la categoría lexica es la del token que recibe.
 	 * Si no, devuelve un token vacío.
 	 */
-	public Token lexer(Token TK, BufferedReader fuente) throws IOException, Exception{
-		lookahead = getNextToken(fuente);
+	public Token lexer(Token TK) throws IOException, Exception{
+		lookahead = getNextToken();
 		if (TK.getCategoriaLexica() == lookahead.getCategoriaLexica()){
 			return lookahead;
 		}
 		else{
 			return new Token(); 
 		}
+	}
+	
+	public boolean reconoce(Token TK){
+		boolean aux = true;
+		if (TK.getCategoriaLexica() == lookahead.getCategoriaLexica()){
+			aux = true;
+		}	
+		else{ 
+			aux = false;	
+		}
+		return aux;
 	}
 }
