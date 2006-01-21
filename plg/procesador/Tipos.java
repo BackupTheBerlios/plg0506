@@ -88,42 +88,42 @@ public class Tipos {
 	public static final int TKIG			= 16;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el operador 'and'.
 	 */
 	public static final int TKAND		= 17;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el operador 'or'.
 	 */
 	public static final int TKOR			= 18;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el operador 'not'.
 	 */
 	public static final int TKNOT		= 19;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el valor boleano 'true'.
 	 */
 	public static final int TKTRUE		= 20;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el valor boleano 'false'.
 	 */
 	public static final int TKFALSE		= 21;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el tipo int.
 	 */
 	public static final int TKINT		= 22;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el tipo bool.
 	 */
 	public static final int TKBOOL		= 23;
 	
 	/*
-	 * El valor para reconocer numeros enteros.
+	 * El valor para reconocer el final del fichero.
 	 */
 	public static final int TKFF			= 24; 
 
