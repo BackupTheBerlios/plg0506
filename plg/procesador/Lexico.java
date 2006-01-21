@@ -473,9 +473,9 @@ public class Lexico {
 	 * Devuelve el proximo token si la categoría lexica es la del token que recibe.
 	 * Si no, devuelve un token vacío.
 	 */
-	public Token lexer(Token TK) throws IOException, Exception{
+	public Token lexer(int TK) throws IOException, Exception{
 		lookahead = getNextToken();
-		if (TK.getCategoriaLexica() == lookahead.getCategoriaLexica()){
+		if (TK == lookahead.getCategoriaLexica()){
 			return lookahead;
 		}
 		else{

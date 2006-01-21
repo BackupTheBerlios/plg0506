@@ -39,11 +39,12 @@ public class Sintactico{
 	
 	public boolean Decs() throws Exception{
 		
-		boolean errDeDecs = false;
-		boolean errDeDecs1 = false;
-		boolean errDeDec = false;
+		boolean errDeDecs;
+		boolean errDeDecs1;
+		boolean errDeDec;
 		errDeDec = Dec();
-		if (lexico.getTokenPreanalisis() == Tipos.TKPYCOMA){
+	
+		lexico.lexer(Tipos.TKPYCOMA);
 			lexico.reconoce(Tipos.TKPYCOMA);
 			errDeDecs1 = Decs();
 			errDeDecs = errDeDec || errDeDecs1;
