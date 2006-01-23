@@ -1,6 +1,6 @@
 package procesador;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.RandomAccessFile;
+import java.io.File;
 import tablaSimbolos.TablaSimbolos;
 
 public class Procesador {
@@ -13,14 +13,14 @@ public class Procesador {
 	 */
 	public static void main(String[] args){
 		
-		BufferedReader fuente;
+		RandomAccessFile fuente;
 		//Si no hemos recibido por parametro el archivo fuente, avisamos del error.
 		if (args.length == 0){
 			System.out.println("ERROR: Debe indicar fichero fuente como parametro.");
 		}
 		else {	
 			try {
-				fuente = new BufferedReader(new FileReader(args[0]));
+				fuente = new RandomAccessFile(new File(args[0]),"r");
 				TablaSimbolos TS = new TablaSimbolos();	
 				Sintactico sintactico;		
 				sintactico = new Sintactico(fuente, TS);

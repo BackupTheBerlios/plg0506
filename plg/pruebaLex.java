@@ -1,5 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.RandomAccessFile;
+import java.io.File;
 import procesador.*;
 
 public class pruebaLex {
@@ -10,22 +10,38 @@ public class pruebaLex {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 			
-		BufferedReader fuente;
+		RandomAccessFile fuente;
 		Token tk;
 		Lexico lex;
+		String s;
 		
 		try {
-			fuente = new BufferedReader(new FileReader(args[0]));
+			System.out.println("Hola, voy abrir el archivo");
+			fuente = new RandomAccessFile(new File("prueba"), "r");
+			System.out.println("Creo un nuevo Lexico");
 			lex= new Lexico(fuente);
 			try{
-				tk= lex.getNextToken();
-				tk.muestraToken();
+				System.out.println("Voy a reconocer un Token");
+				 tk= lex.getNextToken();
+				 System.out.println("Voy a mostrar un Token");
+				 s = tk.muestraToken();
+				 System.out.println(s);
+                 tk= lex.getNextToken();
+                 tk.muestraToken();
+                 s = tk.muestraToken();
+				 System.out.println(s);
+                 tk= lex.getNextToken();
+                 tk.muestraToken();
+                 s = tk.muestraToken();
+				 System.out.println(s);
+                 tk= lex.getNextToken();
+                 tk.muestraToken();
 			}
 			catch (java.io.IOException ex) {
-				System.out.println("El fichero no ha sido encontrado");
+				System.out.println(ex.getMessage());
 			}
 			catch (Exception exc) {
-				System.out.println("El fichero no ha sido encontrado");
+				System.out.println(exc.getMessage());
 			}
 		} 
 		catch (java.io.FileNotFoundException e) {

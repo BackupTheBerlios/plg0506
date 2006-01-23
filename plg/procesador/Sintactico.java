@@ -1,6 +1,6 @@
 package procesador;
 
-import java.io.BufferedReader;
+import java.io.RandomAccessFile;
 import tablaSimbolos.TablaSimbolos;
 
 //import procesador.procesador.info.token.token;
@@ -12,7 +12,7 @@ public class Sintactico{
 	TablaSimbolos TS;
 	int dir;
 	
-	public Sintactico(BufferedReader fuente, TablaSimbolos T) throws Exception{
+	public Sintactico(RandomAccessFile fuente, TablaSimbolos T) throws Exception{
 		
 		codigo = new Codigo(); 
 		lexico = new Lexico(fuente);		
