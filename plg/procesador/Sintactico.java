@@ -28,102 +28,117 @@ public class Sintactico{
 		
 	public boolean Prog() throws Exception{
 		
-		boolean errDeProg;
-		boolean errDeDecs;
-		boolean errDeIs;	
-		errDeDecs = Decs();
+		boolean errDeProg = true;
+		Atributos atrDecs;
+		Atributos atrIs;	
+		atrDecs = Decs();
 		codigo.inicializaCodigo();
-		lexico.reconoce(Tipos.TKPYCOMA);
-		errDeIs = Is();
-		errDeProg = errDeDecs || errDeIs;
+		Token tk;
+		Token aux = new Token();
+		tk = lexico.getNextToken();
+		tk = lexico.lexer(Tipos.TKPYCOMA);
+		if (tk.equals(aux)){
+			atrIs = Is();
+			errDeProg = atrDecs.getErr() || atrIs.getErr();
+		}
 		return errDeProg;
 	}
 	
-	public boolean Decs() throws Exception{
+	public Atributos Decs() throws Exception{
 		
-		boolean errDeDecs;
-		boolean errDeDecs1;
-		boolean errDeDec;
-		errDeDec = Dec();
+		Atributos a = new Atributos();
+		boolean errDeDecs = false; 
+		Atributos atrDecs = new Atributos();
+		Atributos atrDec = new Atributos();
+		atrDec = Dec();
 		Token tk;
 		Token aux = new Token();
 		tk = lexico.lexer(Tipos.TKPYCOMA);
-		/*
-		 * Si no he reconocido ';' es que hay que aplicar Decs::=Dec.
-		 * Sino, aplico Decs = Decs;Dec.
-		 */
 		if (tk.equals(aux)){
-			errDeDecs = errDeDec;
+			errDeDecs = atrDec.getErr();
 		}
 		else{
-			errDeDecs1 = Decs();
-			errDeDecs = errDeDecs1 || errDeDec;
+			atrDecs = Is();
+			errDeDecs = atrDecs.getErr() || atrDec.getErr();
 		}
-		return errDeDecs;
+		a.setErr(errDeDecs);
+		a.setTipo(atrDec.getTipo());
+		return a;
 	}
-	
-	public boolean Dec() throws Exception{
-		
-		boolean errDeDec = false;
-		String lexDeIden;
-		String tipoDeIden;
+
+	public Atributos Dec() throws Exception{
+
+		Atributos a = new Atributos();
+		boolean errDeDec = true; 
+		String tipo = "";
 		Token tk;
 		Token aux = new Token();
+		tk = lexico.getNextToken();
 		tk = lexico.lexer(Tipos.TKBOOL);
 		if (!tk.equals(aux)){
+			tipo = tk.getLexema();
+			tk = lexico.getNextToken();
 			tk = lexico.lexer(Tipos.TKIDEN);
-			lexDeIden = tk.getLexema();
-			tipoDeIden = "bool";
-			errDeDec = TS.existeID(lexDeIden,tipoDeIden);
-			TS.agnadeID(lexDeIden,tipoDeIden);	
+			errDeDec = TS.existeID(tk.getLexema(),tipo);
+			if (!errDeDec){
+				TS.agnadeID(tk.getLexema(),tipo);
+			}
 		}
 		else{
 			tk = lexico.lexer(Tipos.TKINT);
 			if (!tk.equals(aux)){
+				tipo = tk.getLexema();
+				tk = lexico.getNextToken();
 				tk = lexico.lexer(Tipos.TKIDEN);
-				lexDeIden = tk.getLexema();
-				tipoDeIden = "int";
-				errDeDec = TS.existeID(lexDeIden,tipoDeIden);
-				TS.agnadeID(lexDeIden,tipoDeIden);
+				errDeDec = TS.existeID(tk.getLexema(),tipo);
+				if (!errDeDec){
+					TS.agnadeID(tk.getLexema(),tipo);
+				}
 			}
 		}
-		dir ++;
-		return errDeDec;
-	}
+		a.setErr(errDeDec);
+		a.setTipo(tipo);
+		return a;
+	}	
 	
-	public boolean Is() throws Exception{
-		boolean errDeIs;
-		boolean errDeIs1;
-		boolean errDeI;
-		errDeI = I();
+	public Atributos Is() throws Exception{
+		
+		Atributos a = new Atributos();
+		boolean errDeIs = true; 
+		Atributos atrIs = new Atributos();
+		Atributos atrI = new Atributos();
+		atrI = I();
 		Token tk;
 		Token aux = new Token();
 		tk = lexico.lexer(Tipos.TKPYCOMA);
-		/*
-		 * Si no he reconocido ';' es que hay que aplicar Decs::=Dec.
-		 * Sino, aplico Decs = Decs;Dec.
-		 */
 		if (tk.equals(aux)){
-			errDeIs = errDeI;
+			errDeIs = atrI.getErr();
 		}
 		else{
-			errDeIs1 = Is();
-			errDeIs = errDeIs1 || errDeI;
+			atrIs = Is();
+			errDeIs = atrIs.getErr() || atrI.getErr();
 		}
-		return errDeIs;
+		a.setErr(errDeIs);
+		a.setTipo(atrI.getTipo());
+		return a;
 	}
 
-	public boolean I() throws Exception{
+	public Atributos I() throws Exception{
 
-		boolean errDeI;
-		errDeI = IAsig();
-		return errDeI;
+		Atributos a = new Atributos();
+		boolean errDeI = true; 
+		Atributos atrIAsig = new Atributos();
+		atrIAsig = IAsig();
+		errDeI = atrIAsig.getErr();
+		a.setErr(errDeI);
+		a.setTipo(atrIAsig.getTipo());
+		return a;
 	}
 	
 	public Atributos IAsig() throws Exception{
 		
 		Atributos a = new Atributos();
-		boolean errDeIAsig = false; 
+		boolean errDeIAsig = true; 
 		Atributos atrExp = new Atributos();
 		String lex;
 		Token tk;
@@ -146,7 +161,7 @@ public class Sintactico{
 	public Atributos Exp() throws Exception{
 		
 		Atributos a = new Atributos();
-		boolean errDeExp = false;
+		boolean errDeExp = true;
 		String tipoExp = "";
 		Atributos atrTerm;
 		Atributos atrRExp;
@@ -164,7 +179,7 @@ public class Sintactico{
 		
 	public Atributos RExp() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeRExp = false;
+		boolean errDeRExp = true;
 		String tipoRExp = "";
 		Atributos atrTerm;
 		Atributos atrRExp;
@@ -210,7 +225,7 @@ public class Sintactico{
 	
 	public Atributos Term() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeTerm = false;
+		boolean errDeTerm = true;
 		String tipoTerm = "";
 		Atributos atrFact;
 		Atributos atrRTerm;
@@ -225,7 +240,7 @@ public class Sintactico{
 	
 	public Atributos RTerm() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeRTerm = false;
+		boolean errDeRTerm = true;
 		String tipoRTerm = "";
 		Atributos atrFact;
 		Atributos atrRTerm;
@@ -264,7 +279,7 @@ public class Sintactico{
 	
 	public Atributos TermB() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeTermB = false;
+		boolean errDeTermB = true;
 		String tipoTermB = "";
 		Atributos atrNega;
 		Atributos atrRTermB;
@@ -279,7 +294,7 @@ public class Sintactico{
 	
 	public Atributos RTermB() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeRTermB = false;
+		boolean errDeRTermB = true;
 		String tipoRTermB = "";
 		Atributos atrNega;
 		Atributos atrRTermB;
@@ -305,7 +320,7 @@ public class Sintactico{
 	
 	public Atributos Fact() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeFact = false;
+		boolean errDeFact = true;
 		String tipoFact = "";
 		Atributos atrExp;
 		Token tk;
@@ -342,7 +357,7 @@ public class Sintactico{
 	
 	public Atributos Nega() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeNega = false;
+		boolean errDeNega = true;
 		String tipoNega = "";
 		Atributos atrClausula;
 		Token tk;
@@ -367,7 +382,7 @@ public class Sintactico{
 	
 	public Atributos Clausula() throws Exception{
 		Atributos a = new Atributos();
-		boolean errDeClausula = false;
+		boolean errDeClausula = true;
 		String tipoClausula = "";
 		Atributos atrExp;
 		Token tk;
