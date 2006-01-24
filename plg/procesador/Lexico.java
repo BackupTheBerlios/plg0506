@@ -97,6 +97,8 @@ public class Lexico {
 			case '/':	return new Token("/",Tipos.TKDIV);
 			case ';':	return new Token(";",Tipos.TKPYCOMA);
 			case '=':	return new Token("=",Tipos.TKIG);
+			case '#':	return new Token("#",Tipos.TKCUA);
+			
 			
 			/*
 			 * Si detectamos ':' hay que discernir si es el operador de asignacion o un error.
@@ -361,6 +363,7 @@ public class Lexico {
 							}	
 						}	
 						else{							
+							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -441,7 +444,7 @@ public class Lexico {
 		if (error != -1)
 			throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
 		else {
-			return null;
+			return new Token ("eof",Tipos.TKFF);
 		}
 	}
 	
@@ -470,6 +473,7 @@ public class Lexico {
 					aux = aux.concat(new Character(a).toString());			
 				}
 				else{
+					//fuente.skip(1);
 					posicion --;
 					fuente.seek(posicion);
 					return aux;
@@ -503,6 +507,7 @@ public class Lexico {
 				aux = aux.concat(new Character(a).toString());			
 			}
 			else{
+				//fuente.skip(1);
 				posicion --;
 				fuente.seek(posicion);
 				return aux;
@@ -521,6 +526,10 @@ public class Lexico {
 	 */
 	public Token getNextToken() throws IOException, Exception{
 		lookahead = getToken();
+		/*char a;
+		a = (char)fuente.read();
+		System.out.println(a);
+		fuente.seek(posicion);*/
 		return lookahead;	
 	}
 	

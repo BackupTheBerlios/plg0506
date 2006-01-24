@@ -17,7 +17,7 @@ public class pruebaLex {
 		
 		try {
 			System.out.println("Hola, voy abrir el archivo");
-			fuente = new RandomAccessFile(new File("prueba"), "r");
+			fuente = new RandomAccessFile(new File("petete.txt"), "r");
 			System.out.println("Creo un nuevo Lexico");
 			lex= new Lexico(fuente);
 			try{

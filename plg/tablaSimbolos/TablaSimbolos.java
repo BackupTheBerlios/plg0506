@@ -60,7 +60,6 @@ public class TablaSimbolos {
 		String aux = id.concat("#");
 		aux = aux.concat(t);
 		if (!this.tabla.containsKey(aux)){
-			System.out.println("No existe el identificador");
 			return false;
 		}
 		else{
@@ -87,6 +86,7 @@ public class TablaSimbolos {
 			return false;
 		}
 		else{
+			System.out.println("Añadido");
 			Par p = new Par(id,t);
 			this.tabla.put(aux,p);
 			return true;	

@@ -3,7 +3,7 @@ package procesador;
 import java.io.RandomAccessFile;
 import tablaSimbolos.TablaSimbolos;
 
-//import procesador.procesador.info.token.token;
+
 
 public class Sintactico{
 	
@@ -13,7 +13,6 @@ public class Sintactico{
 	int dir;
 	
 	public Sintactico(RandomAccessFile fuente, TablaSimbolos T) throws Exception{
-		
 		codigo = new Codigo(); 
 		lexico = new Lexico(fuente);		
 		TS = T;
@@ -22,12 +21,14 @@ public class Sintactico{
 
 	public void startParsing() throws Exception{
 		Prog();
+		System.out.println("Start");
 		codigo.muestraCodigo();
 	}
 
 		
 	public boolean Prog() throws Exception{
 		
+		System.out.println("Prog");
 		boolean errDeProg = true;
 		Atributos atrDecs;
 		Atributos atrIs;	
@@ -35,8 +36,7 @@ public class Sintactico{
 		codigo.inicializaCodigo();
 		Token tk;
 		Token aux = new Token();
-		tk = lexico.getNextToken();
-		tk = lexico.lexer(Tipos.TKPYCOMA);
+		tk = lexico.lexer(Tipos.TKCUA);
 		if (tk.equals(aux)){
 			atrIs = Is();
 			errDeProg = atrDecs.getErr() || atrIs.getErr();
@@ -46,6 +46,7 @@ public class Sintactico{
 	
 	public Atributos Decs() throws Exception{
 		
+		System.out.println("Decs");
 		Atributos a = new Atributos();
 		boolean errDeDecs = false; 
 		Atributos atrDecs = new Atributos();
@@ -53,14 +54,26 @@ public class Sintactico{
 		atrDec = Dec();
 		Token tk;
 		Token aux = new Token();
+		tk = lexico.getNextToken();
+		String s = tk.muestraToken();
+		System.out.println(s);
 		tk = lexico.lexer(Tipos.TKPYCOMA);
-		if (tk.equals(aux)){
-			errDeDecs = atrDec.getErr();
-		}
-		else{
-			atrDecs = Is();
+		if (!tk.equals(aux)){
+			atrDecs = Decs();
 			errDeDecs = atrDecs.getErr() || atrDec.getErr();
 		}
+		else{
+			/*tk = lexico.lexer(Tipos.TKCUA);
+			if (!tk.equals(aux)){
+				a.setErr(errDeDecs);
+				a.setTipo(atrDec.getTipo());
+				return a;
+			}
+			else {
+				errDeDecs = true;
+			}*/
+		}
+		System.out.println("Salgo de Decs");
 		a.setErr(errDeDecs);
 		a.setTipo(atrDec.getTipo());
 		return a;
@@ -68,19 +81,25 @@ public class Sintactico{
 
 	public Atributos Dec() throws Exception{
 
+		System.out.println("Dec");
 		Atributos a = new Atributos();
 		boolean errDeDec = true; 
 		String tipo = "";
 		Token tk;
 		Token aux = new Token();
 		tk = lexico.getNextToken();
+		String s = tk.muestraToken();
+		System.out.println(s);
 		tk = lexico.lexer(Tipos.TKBOOL);
 		if (!tk.equals(aux)){
 			tipo = tk.getLexema();
 			tk = lexico.getNextToken();
+			s = tk.muestraToken();
+			System.out.println(s);
 			tk = lexico.lexer(Tipos.TKIDEN);
 			errDeDec = TS.existeID(tk.getLexema(),tipo);
 			if (!errDeDec){
+				System.out.println("Voy a añadir un bool");
 				TS.agnadeID(tk.getLexema(),tipo);
 			}
 		}
@@ -89,13 +108,17 @@ public class Sintactico{
 			if (!tk.equals(aux)){
 				tipo = tk.getLexema();
 				tk = lexico.getNextToken();
+				s = tk.muestraToken();
+				System.out.println(s);
 				tk = lexico.lexer(Tipos.TKIDEN);
 				errDeDec = TS.existeID(tk.getLexema(),tipo);
 				if (!errDeDec){
+					System.out.println("Voy a añadir un int");
 					TS.agnadeID(tk.getLexema(),tipo);
 				}
 			}
 		}
+		System.out.println("Salgo de Dec");
 		a.setErr(errDeDec);
 		a.setTipo(tipo);
 		return a;
@@ -103,6 +126,7 @@ public class Sintactico{
 	
 	public Atributos Is() throws Exception{
 		
+		System.out.println("Is");
 		Atributos a = new Atributos();
 		boolean errDeIs = true; 
 		Atributos atrIs = new Atributos();
@@ -111,12 +135,20 @@ public class Sintactico{
 		Token tk;
 		Token aux = new Token();
 		tk = lexico.lexer(Tipos.TKPYCOMA);
-		if (tk.equals(aux)){
-			errDeIs = atrI.getErr();
-		}
-		else{
+		if (!tk.equals(aux)){
 			atrIs = Is();
 			errDeIs = atrIs.getErr() || atrI.getErr();
+		}
+		else{
+			tk = lexico.lexer(Tipos.TKFF);
+			if (!tk.equals(aux)){
+				a.setErr(errDeIs);
+				a.setTipo(atrI.getTipo());
+				return a;
+			}
+			else{
+				errDeIs = true;	
+			}	
 		}
 		a.setErr(errDeIs);
 		a.setTipo(atrI.getTipo());
@@ -125,6 +157,7 @@ public class Sintactico{
 
 	public Atributos I() throws Exception{
 
+		System.out.println("I");
 		Atributos a = new Atributos();
 		boolean errDeI = true; 
 		Atributos atrIAsig = new Atributos();
@@ -137,6 +170,7 @@ public class Sintactico{
 	
 	public Atributos IAsig() throws Exception{
 		
+		System.out.println("IAsig");
 		Atributos a = new Atributos();
 		boolean errDeIAsig = true; 
 		Atributos atrExp = new Atributos();
@@ -144,14 +178,22 @@ public class Sintactico{
 		Token tk;
 		Token aux = new Token();
 		tk = lexico.getNextToken();
+		String s = tk.muestraToken();
+		System.out.println(s);
 		tk = lexico.lexer(Tipos.TKIDEN);
+		s = tk.muestraToken();
+		System.out.println(s);
 		lex = tk.getLexema();
 		if (!tk.equals(aux)){
+			System.out.println("Tengo un iden");
 			tk = lexico.getNextToken();
 			tk = lexico.lexer(Tipos.TKASIGN);
-			atrExp = Exp();
-			errDeIAsig = atrExp.getErr() || !TS.existeID(lex,atrExp.getTipo()); 
-			codigo.genIns("desapila-dir", TS.dirID(lex,atrExp.getTipo()));
+			if (!tk.equals(aux)){
+				System.out.println("Voy a exp");
+				atrExp = Exp();
+				errDeIAsig = atrExp.getErr() || !TS.existeID(lex,atrExp.getTipo()); 
+				codigo.genIns("desapila-dir", TS.dirID(lex,atrExp.getTipo()));
+			}
 		}
 		a.setErr(errDeIAsig);
 		a.setTipo(atrExp.getTipo());
@@ -160,6 +202,7 @@ public class Sintactico{
 	
 	public Atributos Exp() throws Exception{
 		
+		System.out.println("Exp");
 		Atributos a = new Atributos();
 		boolean errDeExp = true;
 		String tipoExp = "";
@@ -178,6 +221,7 @@ public class Sintactico{
 	}
 		
 	public Atributos RExp() throws Exception{
+		System.out.println("RExp");
 		Atributos a = new Atributos();
 		boolean errDeRExp = true;
 		String tipoRExp = "";
@@ -224,6 +268,8 @@ public class Sintactico{
 	}
 	
 	public Atributos Term() throws Exception{
+		
+		System.out.println("Term");
 		Atributos a = new Atributos();
 		boolean errDeTerm = true;
 		String tipoTerm = "";
@@ -239,6 +285,8 @@ public class Sintactico{
 	}
 	
 	public Atributos RTerm() throws Exception{
+		
+		System.out.println("RTerm");
 		Atributos a = new Atributos();
 		boolean errDeRTerm = true;
 		String tipoRTerm = "";
@@ -278,6 +326,8 @@ public class Sintactico{
 
 	
 	public Atributos TermB() throws Exception{
+		
+		System.out.println("TermB");
 		Atributos a = new Atributos();
 		boolean errDeTermB = true;
 		String tipoTermB = "";
@@ -293,6 +343,8 @@ public class Sintactico{
 	}
 	
 	public Atributos RTermB() throws Exception{
+		
+		System.out.println("RTermB");
 		Atributos a = new Atributos();
 		boolean errDeRTermB = true;
 		String tipoRTermB = "";
@@ -319,6 +371,8 @@ public class Sintactico{
 	}
 	
 	public Atributos Fact() throws Exception{
+		
+		System.out.println("Fact");
 		Atributos a = new Atributos();
 		boolean errDeFact = true;
 		String tipoFact = "";
@@ -356,6 +410,8 @@ public class Sintactico{
 	}
 	
 	public Atributos Nega() throws Exception{
+		
+		System.out.println("Nega");
 		Atributos a = new Atributos();
 		boolean errDeNega = true;
 		String tipoNega = "";
@@ -381,6 +437,8 @@ public class Sintactico{
 	}
 	
 	public Atributos Clausula() throws Exception{
+		
+		System.out.println("Clausula");
 		Atributos a = new Atributos();
 		boolean errDeClausula = true;
 		String tipoClausula = "";
