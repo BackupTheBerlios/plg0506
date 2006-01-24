@@ -17,12 +17,13 @@ public class pruebaLex {
 		
 		try {
 			System.out.println("Hola, voy abrir el archivo");
-			fuente = new RandomAccessFile(new File("petete"), "r");
+			fuente = new RandomAccessFile(new File("prueba"), "r");
 			System.out.println("Creo un nuevo Lexico");
 			lex= new Lexico(fuente);
 			try{
-				for (int i=0; i<24; i++){
-					System.out.println("Voy a reconocer un Token");
+				while (fuente.read()!=-1){
+					 fuente.seek(fuente.getFilePointer()-1);
+					 System.out.println("Voy a reconocer un Token");
 					 tk= lex.getNextToken();
 					 System.out.println("Voy a mostrar un Token");
 					 s = tk.muestraToken();
