@@ -64,7 +64,7 @@ public class Lexico {
 	/*
 	 * Parametros de entrada: 
 	 * Parametros de salida: Token identificado.
-	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 *  
@@ -72,6 +72,7 @@ public class Lexico {
 	 *  o detecta un error y genera una excepcion.
 	 */
 	public Token getToken () throws IOException, Exception{
+		
 		char a;
 		int error;
 		/*
@@ -103,32 +104,25 @@ public class Lexico {
 			 */
 			case ':':	a = (char)fuente.read();
 						posicion ++;
-						System.out.println("He reconocido los ':' ");
 						if (a == '='){
-							System.out.println("Devuelvo token de asignacion");
 							return new Token(":=",Tipos.TKASIGN);
 						}	
 						else{
-							System.out.println("No reconozco el '=' ");
 							throw new Exception("ERROR en linea "+linea+": ':' debe ir seguido de '='");
 						}
 			
 			/*
 			 * Si detectamos '<' hay que discernir si es el operador 'menor que' o 'menor o igual que'
 			 * 
-			 * La funcion mark(int), marca el flujo de entrada y conserva la marca hasta que se leen int
-			 * caracteres, nos permite identificar una posicion del flujo.
-			 * 
-			 * La funcion skip(int), devuelve int caracteres al flujo de entrada.
+			 * La funcion seek(int), mueve el puntero de lectura a donde nos marca el entero. Asi podemos
+			 * modificar la posicion del flujo.
 			 */
-			case '<':	//fuente.mark(1);
-						a = (char)fuente.read();
+			case '<':	a = (char)fuente.read();
 						posicion ++;
 						if (a == '='){
 							return new Token("<=",Tipos.TKMENIG);
 						}	
 						else{
-							//fuente.skip(1);
 							posicion --;
 							fuente.seek(posicion);
 							return new Token ("<",Tipos.TKMEN);
@@ -137,14 +131,12 @@ public class Lexico {
 			/*
 			 * Si detectamos '>' hay que discernir si es el operador 'mayor que' o 'mayor o igual que' 
 			 */
-			case '>':	//fuente.mark(1);
-						a = (char)fuente.read();
+			case '>':	a = (char)fuente.read();
 						posicion ++;
 						if (a == '='){
 							return new Token(">=",Tipos.TKMAYIG);
 						}	
 						else{
-							//fuente.skip(1);
 							posicion --;
 							fuente.seek(posicion);
 							return new Token (">",Tipos.TKMAYIG);
@@ -154,11 +146,9 @@ public class Lexico {
 			 * Si detectamos '+' hay que discernir si es el operador '+' o es un numero positivo.
 			 * Para leer secuencias de digitos, usamos leerNumero.  
 			 */
-			case '+':	//fuente.mark(1);
-						a = (char)fuente.read();
+			case '+':	a = (char)fuente.read();
 						posicion ++;
 						if ((a >= '1') || (a<='9')){
-							//fuente.skip(1);
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -166,7 +156,6 @@ public class Lexico {
 							return new Token (aux,Tipos.TKNUM);
 						}	
 						else{
-							//fuente.skip(1);
 							posicion --;
 							fuente.seek(posicion);
 							return new Token ("+",Tipos.TKSUMA);
@@ -176,8 +165,7 @@ public class Lexico {
 			 * Si detectamos '-' hay que discernir si es el operador '-' o es un numero negativo.
 			 * Para leer secuencias de digitos, usamos leerNumero.  
 			 */
-			case '-':	//fuente.mark(1);
-						a = (char)fuente.read();
+			case '-':	a = (char)fuente.read();
 						posicion ++;
 						if ((a >= '1') || (a<='9')){
 							String aux;
@@ -185,7 +173,6 @@ public class Lexico {
 							return new Token (aux,Tipos.TKNUM);
 						}	
 						else{
-							//fuente.skip(1);
 							posicion --;
 							fuente.seek(posicion);
 							return new Token ("-",Tipos.TKRESTA);
@@ -195,8 +182,7 @@ public class Lexico {
 			 * Si detectamos 'a' hay que discernir si es el operador 'and' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'a':	//fuente.mark(3);
-						a = (char)fuente.read();
+			case 'a':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='n'){
 							a = (char)fuente.read();
@@ -205,7 +191,6 @@ public class Lexico {
 								return new Token ("and",Tipos.TKAND);
 							}	
 							else{
-								//fuente.skip(1);	
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -214,7 +199,6 @@ public class Lexico {
 							}	
 						}	
 						else{	
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -226,8 +210,7 @@ public class Lexico {
 			 * Si detectamos 'n' hay que discernir si es el operador 'not' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'n':	//fuente.mark(3);
-						a = (char)fuente.read();
+			case 'n':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='o'){
 							a = (char)fuente.read();
@@ -236,7 +219,6 @@ public class Lexico {
 								return new Token ("not",Tipos.TKNOT);
 							}	
 							else{
-								//fuente.skip(1);	
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -245,7 +227,6 @@ public class Lexico {
 							}	
 						}	
 						else{							
-							//fuente.skip(1);
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -257,14 +238,12 @@ public class Lexico {
 			 * Si detectamos 'o' hay que discernir si es el operador 'or' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'o':	//fuente.mark(2);
-						a = (char)fuente.read();
+			case 'o':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='r'){
 							return new Token ("or",Tipos.TKOR);
 						}	
 						else{
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -276,8 +255,7 @@ public class Lexico {
 			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 't':	//fuente.mark(4);
-						a = (char)fuente.read();
+			case 't':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='r'){
 							a = (char)fuente.read();
@@ -289,7 +267,6 @@ public class Lexico {
 									return new Token ("true",Tipos.TKTRUE);
 								}	
 								else{
-									//fuente.skip(1);	
 									posicion --;
 									fuente.seek(posicion);
 									String aux;
@@ -298,7 +275,6 @@ public class Lexico {
 								}
 							}	
 							else{
-								//fuente.skip(1);	
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -307,7 +283,6 @@ public class Lexico {
 							}
 						}
 						else{							
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -319,8 +294,7 @@ public class Lexico {
 			 * Si detectamos 'f' hay que discernir si es el valor booleano 'false' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'f':	//fuente.mark(5);
-						a = (char)fuente.read();
+			case 'f':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='a'){
 							a = (char)fuente.read();
@@ -335,7 +309,6 @@ public class Lexico {
 										return new Token ("false",Tipos.TKFALSE);
 									}	
 									else{
-										//fuente.skip(1);	
 										posicion --;
 										fuente.seek(posicion);
 										String aux;
@@ -344,7 +317,6 @@ public class Lexico {
 										}
 								}	
 								else{
-									//fuente.skip(1);	
 									posicion --;
 									fuente.seek(posicion);
 									String aux;
@@ -353,7 +325,6 @@ public class Lexico {
 								}
 							}	
 							else{
-								//fuente.skip(1);	
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -362,7 +333,6 @@ public class Lexico {
 							}
 						}
 						else{							
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -374,10 +344,8 @@ public class Lexico {
 			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'i':	//fuente.mark(3);
-						a = (char)fuente.read();
+			case 'i':	a = (char)fuente.read();
 						posicion ++;
-						System.out.println("He reconocido i");
 						if (a =='n'){
 							a = (char)fuente.read();
 							posicion ++;
@@ -385,7 +353,6 @@ public class Lexico {
 								return new Token ("int",Tipos.TKINT);
 							}	
 							else{
-								//fuente.skip(1);	
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -394,13 +361,10 @@ public class Lexico {
 							}	
 						}	
 						else{							
-							System.out.println("He reconocido i y es un iden");
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
 							aux = leerCaracter("i");
-							System.out.println("Salgo de leerCaracter");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 
@@ -408,8 +372,7 @@ public class Lexico {
 			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'b':	//fuente.mark(3);
-						a = (char)fuente.read();
+			case 'b':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='o'){
 							a = (char)fuente.read();
@@ -421,7 +384,6 @@ public class Lexico {
 									return new Token ("bool",Tipos.TKBOOL);
 								}
 								else{
-									//fuente.skip(1);	
 									posicion --;
 									fuente.seek(posicion);
 									String aux;
@@ -430,7 +392,6 @@ public class Lexico {
 								}
 							}
 							else{
-								//fuente.skip(1);	
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -439,7 +400,6 @@ public class Lexico {
 							}	
 						}	
 						else{							
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -453,22 +413,15 @@ public class Lexico {
 			 * comienzan por letra y luego pueden llevar digitos o letras o '_'.
 			 * Sino, hemos detectado un error y lanzamos una excepcion. 
 			 */
-			default:		//fuente.mark(1);
-						//posicion ++;
-						if ((a>='1') && (a<='9')){
-							//fuente.skip(1);
-							//posicion --;
+			default:		if ((a>='1') && (a<='9')){
 							posicion --;
 							fuente.seek(posicion);
-							System.out.print("Antes de ir a Leer numero.He reconocido un numero:  ");
-							System.out.println(a);
 							String aux;
 							aux = leerNumero("");
 							return new Token (aux,Tipos.TKNUM);
 						}
 						else{
 							if ((a>='A') && (a<='z')){
-								//fuente.skip(1);
 								posicion --;
 								fuente.seek(posicion);
 								String aux;
@@ -476,7 +429,7 @@ public class Lexico {
 								return new Token (aux,Tipos.TKIDEN);
 							}
 							else{
-								throw new Exception("1 ERROR en linea "+linea+": No existe ese identificador");
+								throw new Exception("ERROR en linea "+linea+": No existe ese identificador");
 							}
 						}			
 			}
@@ -486,9 +439,8 @@ public class Lexico {
 		 * Si se sale del while es que read detecto un error y lanzamos una excepcion de entrada/salida. 
 		 */
 		if (error != -1)
-			throw new Exception("Hemos terminado de leer el archivo" /*ERROR en linea "+linea+": Error de entrada/salida"*/);
+			throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
 		else {
-			System.out.println("202 OK");
 			return null;
 		}
 	}
@@ -496,7 +448,7 @@ public class Lexico {
 	/*
 	 * Parametros de entrada: String donde lleva almacenado lo que ya ha leido.
 	 * Parametros de salida: String con el numero que ha reconocido.
-	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 * Si leemos un 0, detectamos error porque no se puede tener '+0' ni '-0'.
@@ -507,23 +459,17 @@ public class Lexico {
 		int i = 0;
 		a = (char)fuente.read();
 		posicion ++;
-		System.out.print("El numero que tengo leido es: ");
-		System.out.println(a);
 		if (a == '0'){
 			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
 		}
 		else{
 			aux = aux.concat(new Character(a).toString());
-			System.out.print("Lo que tengo leido es: ");
-			System.out.println(aux);
 			while (((a = (char)fuente.read()) != -1) && (i <= 8)){
 				posicion ++;
 				if ((a>='0') && (a<'9')){
 					aux = aux.concat(new Character(a).toString());			
 				}
 				else{
-					System.out.println(aux);
-					//fuente.skip(1);
 					posicion --;
 					fuente.seek(posicion);
 					return aux;
@@ -541,7 +487,7 @@ public class Lexico {
 	/*
 	 * Parametros de entrada: String donde lleva almacenado lo que ya ha leido.
 	 * Parametros de salida: String con todos los caracteres del identificador que ha reconocido.
-	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 * Cuando llamamos a este metedo ya hemos leido al menos una letra asi que solo tenemos que controlar que se
@@ -551,21 +497,16 @@ public class Lexico {
 	
 	public String leerCaracter(String aux) throws Exception, IOException{
 		char a;
-		System.out.println("Principio de leerCaracter");
 		while ((a = (char)fuente.read()) != -1){
 			posicion ++;
 			if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-				System.out.println("Estoy reconociendo el resto de un iden");
 				aux = aux.concat(new Character(a).toString());			
 			}
 			else{
-				System.out.println("El iden acabo");
-				//fuente.skip(1);
 				posicion --;
 				fuente.seek(posicion);
 				return aux;
 			}
-			//System.out.println(i);
 		}	
 		return aux;	
 	}
@@ -573,30 +514,24 @@ public class Lexico {
 	/*
 	 * Parametros de entrada: 
 	 * Parametros de salida: Token que ha reconocido.
-	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que propagamos de la funcion getToken().
 	 * 
-	 *  Devuelve el siguiente token para que podamos realizar el preanálisis
+	 *  Devuelve el siguiente token para que podamos realizar el preanalisis
 	 */
 	public Token getNextToken() throws IOException, Exception{
-		System.out.println("Estoy en getNextToken, voy al Token");
 		lookahead = getToken();
-		System.out.println("He salido voy a devolver el Token");
-		/*char a;
-		a = (char)fuente.read();
-		System.out.println(a);
-		fuente.seek(posicion);*/
 		return lookahead;	
 	}
 	
 	/*
 	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
 	 * Parametros de salida: Token que ha reconocido.
-	 * Execpciones: IOException, que propagamos de las funciones de los BufferedReader de java y
+	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que propagamos de la funcion getNextToken().
 	 * 
-	 * Devuelve el proximo token si la categoría lexica es la del token que recibe.
-	 * Si no, devuelve un token vacío.
+	 * Devuelve el proximo token si la categoria lexica es la del token que recibe.
+	 * Si no, devuelve un token vacio.
 	 */
 	public Token lexer(int TK) throws IOException, Exception{
 		if (TK == lookahead.getCategoriaLexica()){
