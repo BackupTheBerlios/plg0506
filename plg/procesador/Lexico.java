@@ -544,8 +544,6 @@ public class Lexico {
 	public String leerCaracter(String aux) throws Exception, IOException{
 		char a;
 		int i=0;
-		a = (char)fuente.read();
-		posicion ++;
 		System.out.println("Principio de leerCaracter");
 		while ((a = (char)fuente.read()) != -1){
 			posicion ++;
