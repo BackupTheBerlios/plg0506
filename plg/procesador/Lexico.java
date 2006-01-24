@@ -73,11 +73,12 @@ public class Lexico {
 	 */
 	public Token getToken () throws IOException, Exception{
 		char a;
-		
+		int error;
 		/*
 		 * La funcion read() saca un caracter del flujo de entrada
 		 */
-		while ((a =(char)fuente.read())!=-1){
+		while ((error = fuente.read())!=-1){
+			a = (char) error;
 			posicion ++;
 			switch (a){
 			
@@ -475,7 +476,7 @@ public class Lexico {
 								return new Token (aux,Tipos.TKIDEN);
 							}
 							else{
-								throw new Exception("ERROR en linea "+linea+": No existe ese identificador");
+								throw new Exception("1 ERROR en linea "+linea+": No existe ese identificador");
 							}
 						}			
 			}
@@ -484,7 +485,12 @@ public class Lexico {
 		/*
 		 * Si se sale del while es que read detecto un error y lanzamos una excepcion de entrada/salida. 
 		 */
-		throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
+		if (error != -1)
+			throw new Exception("Hemos terminado de leer el archivo" /*ERROR en linea "+linea+": Error de entrada/salida"*/);
+		else {
+			System.out.println("202 OK");
+			return null;
+		}
 	}
 	
 	/*
