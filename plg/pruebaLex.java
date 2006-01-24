@@ -17,25 +17,17 @@ public class pruebaLex {
 		
 		try {
 			System.out.println("Hola, voy abrir el archivo");
-			fuente = new RandomAccessFile(new File("prueba"), "r");
+			fuente = new RandomAccessFile(new File("petete"), "r");
 			System.out.println("Creo un nuevo Lexico");
 			lex= new Lexico(fuente);
 			try{
-				System.out.println("Voy a reconocer un Token");
-				 tk= lex.getNextToken();
-				 System.out.println("Voy a mostrar un Token");
-				 s = tk.muestraToken();
-				 System.out.println(s);
-                 tk= lex.getNextToken();
-                 tk.muestraToken();
-                 s = tk.muestraToken();
-				 System.out.println(s);
-                 tk= lex.getNextToken();
-                 tk.muestraToken();
-                 s = tk.muestraToken();
-				 System.out.println(s);
-                 tk= lex.getNextToken();
-                 tk.muestraToken();
+				for (int i=0; i<24; i++){
+					System.out.println("Voy a reconocer un Token");
+					 tk= lex.getNextToken();
+					 System.out.println("Voy a mostrar un Token");
+					 s = tk.muestraToken();
+					 System.out.println(s);
+				}
 			}
 			catch (java.io.IOException ex) {
 				System.out.println(ex.getMessage());

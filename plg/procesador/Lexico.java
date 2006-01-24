@@ -452,29 +452,21 @@ public class Lexico {
 			 * comienzan por letra y luego pueden llevar digitos o letras o '_'.
 			 * Sino, hemos detectado un error y lanzamos una excepcion. 
 			 */
-			default://fuente.mark(1);
-					//Character ai = new Character (a);
-					//boolean b;
-					//b= Character.isDefined(':');
-					//char c;
-					//c = ':';
-					//System.out.println(Character.getNumericValue(c));
-					//System.out.println(Character.getNumericValue(a));
-					//System.out.println(b);
-					//b = Character.isDefined(a);
-					//System.out.println(b);
-					//System.out.println(a);
-						posicion ++;
+			default:		//fuente.mark(1);
+						//posicion ++;
 						if ((a>='1') && (a<='9')){
 							//fuente.skip(1);
+							//posicion --;
 							posicion --;
 							fuente.seek(posicion);
+							System.out.print("Antes de ir a Leer numero.He reconocido un numero:  ");
+							System.out.println(a);
 							String aux;
 							aux = leerNumero("");
 							return new Token (aux,Tipos.TKNUM);
 						}
 						else{
-							if ((a>='A') && (a<='Z')){
+							if ((a>='A') && (a<='z')){
 								//fuente.skip(1);
 								posicion --;
 								fuente.seek(posicion);
@@ -509,23 +501,33 @@ public class Lexico {
 		int i = 0;
 		a = (char)fuente.read();
 		posicion ++;
+		System.out.print("El numero que tengo leido es: ");
+		System.out.println(a);
 		if (a == '0'){
 			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
 		}
 		else{
 			aux = aux.concat(new Character(a).toString());
+			System.out.print("Lo que tengo leido es: ");
+			System.out.println(aux);
 			while (((a = (char)fuente.read()) != -1) && (i <= 8)){
 				posicion ++;
 				if ((a>='0') && (a<'9')){
 					aux = aux.concat(new Character(a).toString());			
 				}
 				else{
+					System.out.println(aux);
 					//fuente.skip(1);
 					posicion --;
 					fuente.seek(posicion);
+					return aux;
 				}
 				i ++;
-			}	
+			}
+			if (i<=8){
+				posicion --;
+				fuente.seek(posicion);
+			}
 			return aux;
 		}	
 	}
@@ -543,7 +545,6 @@ public class Lexico {
 	
 	public String leerCaracter(String aux) throws Exception, IOException{
 		char a;
-		int i=0;
 		System.out.println("Principio de leerCaracter");
 		while ((a = (char)fuente.read()) != -1){
 			posicion ++;
@@ -558,8 +559,7 @@ public class Lexico {
 				fuente.seek(posicion);
 				return aux;
 			}
-			i++;
-			System.out.println(i);
+			//System.out.println(i);
 		}	
 		return aux;	
 	}
@@ -576,6 +576,10 @@ public class Lexico {
 		System.out.println("Estoy en getNextToken, voy al Token");
 		lookahead = getToken();
 		System.out.println("He salido voy a devolver el Token");
+		/*char a;
+		a = (char)fuente.read();
+		System.out.println(a);
+		fuente.seek(posicion);*/
 		return lookahead;	
 	}
 	
