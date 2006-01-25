@@ -99,6 +99,14 @@ public class Lexico {
 			case '=':	return new Token("=",Tipos.TKIG);
 			case '#':	return new Token("#",Tipos.TKCUA);
 			
+			case '!':	a = (char)fuente.read();
+						posicion ++;
+						if (a == '='){
+							return new Token("!=",Tipos.TKDIF);
+						}	
+						else{
+							throw new Exception("ERROR en linea "+linea+": ':' debe ir seguido de '='");
+						}
 			
 			/*
 			 * Si detectamos ':' hay que discernir si es el operador de asignacion o un error.
@@ -526,10 +534,6 @@ public class Lexico {
 	 */
 	public Token getNextToken() throws IOException, Exception{
 		lookahead = getToken();
-		/*char a;
-		a = (char)fuente.read();
-		System.out.println(a);
-		fuente.seek(posicion);*/
 		return lookahead;	
 	}
 	
@@ -542,13 +546,9 @@ public class Lexico {
 	 * Devuelve el proximo token si la categoria lexica es la del token que recibe.
 	 * Si no, devuelve un token vacio.
 	 */
-	public Token lexer(int TK) throws IOException, Exception{
-		if (TK == lookahead.getCategoriaLexica()){
+	public Token lexer() throws IOException, Exception{
+			lookahead = getNextToken();
 			return lookahead;
-		}
-		else{
-			return new Token(); 
-		}
 	}
 	
 	/*

@@ -123,10 +123,12 @@ public class Tipos {
 	public static final int TKBOOL		= 23;
 	
 	public static final int TKCUA		= 24;
+	public static final int TKDIF		= 25;
 	
 	/*
 	 * El valor para reconocer el final del fichero.
 	 */
-	public static final int TKFF			= 25; 
+	public static final int TKFF			= 26; 
+	
 
 }
