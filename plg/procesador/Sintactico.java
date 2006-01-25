@@ -20,8 +20,8 @@ public class Sintactico{
 	}
 
 	public void startParsing() throws Exception{
-		Prog();
 		System.out.println("Start");
+		Prog();
 		codigo.muestraCodigo();
 	}
 
@@ -37,7 +37,8 @@ public class Sintactico{
 		Token tk;
 		Token aux = new Token();
 		tk = lexico.lexer(Tipos.TKCUA);
-		if (tk.equals(aux)){
+		if (!tk.equals(aux)){
+			System.out.println(".....Y Prog encuentra el #, empiezan las Is");
 			atrIs = Is();
 			errDeProg = atrDecs.getErr() || atrIs.getErr();
 		}
@@ -54,24 +55,26 @@ public class Sintactico{
 		atrDec = Dec();
 		Token tk;
 		Token aux = new Token();
-		tk = lexico.getNextToken();
-		String s = tk.muestraToken();
-		System.out.println(s);
+		//tk = lexico.getNextToken();
+		//String s = tk.muestraToken();
+		//System.out.println(s);
+		//PRUEBA!!!!!!!!!!!!
 		tk = lexico.lexer(Tipos.TKPYCOMA);
 		if (!tk.equals(aux)){
 			atrDecs = Decs();
 			errDeDecs = atrDecs.getErr() || atrDec.getErr();
 		}
 		else{
-			/*tk = lexico.lexer(Tipos.TKCUA);
+			tk = lexico.lexer(Tipos.TKCUA);
 			if (!tk.equals(aux)){
+				System.out.println("... Y propago #, con errDeDecs = " + errDeDecs);
 				a.setErr(errDeDecs);
 				a.setTipo(atrDec.getTipo());
 				return a;
 			}
 			else {
 				errDeDecs = true;
-			}*/
+			}
 		}
 		System.out.println("Salgo de Decs");
 		a.setErr(errDeDecs);
@@ -118,6 +121,20 @@ public class Sintactico{
 				}
 			}
 		}
+		// PRUEBA!!!!
+		if (!errDeDec){
+			lexico.getNextToken();
+			tk = lexico.lexer(Tipos.TKPYCOMA);
+			if (tk.equals(aux))
+				errDeDec = true;
+		} else {
+			tk = lexico.lexer(Tipos.TKCUA);
+			if (!tk.equals(aux)){
+				System.out.println("Encuentro #");
+				errDeDec = false;
+			}
+		}
+		//
 		System.out.println("Salgo de Dec");
 		a.setErr(errDeDec);
 		a.setTipo(tipo);
