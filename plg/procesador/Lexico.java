@@ -203,7 +203,20 @@ public class Lexico {
 							a = (char)fuente.read();
 							posicion ++;
 							if (a =='d'){
-								return new Token ("and",Tipos.TKAND);
+								a = (char)fuente.read();
+								posicion ++;
+								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("and");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									return new Token ("and",Tipos.TKAND);
+								}
 							}	
 							else{
 								posicion --;
@@ -231,7 +244,20 @@ public class Lexico {
 							a = (char)fuente.read();
 							posicion ++;
 							if (a =='t'){
-								return new Token ("not",Tipos.TKNOT);
+								a = (char)fuente.read();
+								posicion ++;
+								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("not");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									return new Token ("not",Tipos.TKNOT);
+								}
 							}	
 							else{
 								posicion --;
@@ -256,7 +282,20 @@ public class Lexico {
 			case 'o':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='r'){
-							return new Token ("or",Tipos.TKOR);
+							a = (char)fuente.read();
+							posicion ++;
+							if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("or");
+								return new Token (aux,Tipos.TKIDEN);
+							}
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								return new Token ("or",Tipos.TKOR);
+							}
 						}	
 						else{
 							posicion --;
@@ -279,7 +318,20 @@ public class Lexico {
 								a = (char)fuente.read();
 								posicion ++;
 								if (a =='e'){
-									return new Token ("true",Tipos.TKTRUE);
+									a = (char)fuente.read();
+									posicion ++;
+									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("true");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										return new Token ("true",Tipos.TKTRUE);
+									}
 								}	
 								else{
 									posicion --;
@@ -321,7 +373,20 @@ public class Lexico {
 									a = (char)fuente.read();
 									posicion ++;
 									if (a =='e'){
-										return new Token ("false",Tipos.TKFALSE);
+										a = (char)fuente.read();
+										posicion ++;
+										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("false");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											return new Token ("false",Tipos.TKFALSE);
+										}
 									}	
 									else{
 										posicion --;
@@ -365,7 +430,20 @@ public class Lexico {
 							a = (char)fuente.read();
 							posicion ++;
 							if (a =='t'){
-								return new Token ("int",Tipos.TKINT);
+								a = (char)fuente.read();
+								posicion ++;
+								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("int");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									return new Token ("int",Tipos.TKINT);
+								}
 							}	
 							else{
 								posicion --;
@@ -396,7 +474,20 @@ public class Lexico {
 								a = (char)fuente.read();
 								posicion ++;
 								if (a =='l'){
-									return new Token ("bool",Tipos.TKBOOL);
+									a = (char)fuente.read();
+									posicion ++;
+									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("bool");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										return new Token ("bool",Tipos.TKBOOL);
+									}
 								}
 								else{
 									posicion --;
