@@ -5,8 +5,13 @@ import java.io.RandomAccessFile;
 public class Lexico {
 	
 	/*
+	 * Los Atributos:
+	 * 
 	 * linea sirve para controlar en que linea de codigo detectamos el error.
 	 * lookahead sirve para almacenar el caracteres de preanalisis.
+	 * fuente se utiliza para leer del fichero que contiene el codigo a analizar.
+	 * posicion entero que marca la posicion dentro de una linea por donde se esta
+	 * leyendo.
 	 */
 	int linea;
 	Token lookahead;
@@ -371,7 +376,6 @@ public class Lexico {
 							}	
 						}	
 						else{							
-							//fuente.skip(1);	
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -481,7 +485,6 @@ public class Lexico {
 					aux = aux.concat(new Character(a).toString());			
 				}
 				else{
-					//fuente.skip(1);
 					posicion --;
 					fuente.seek(posicion);
 					return aux;
@@ -515,7 +518,6 @@ public class Lexico {
 				aux = aux.concat(new Character(a).toString());			
 			}
 			else{
-				//fuente.skip(1);
 				posicion --;
 				fuente.seek(posicion);
 				return aux;
@@ -530,7 +532,8 @@ public class Lexico {
 	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que propagamos de la funcion getToken().
 	 * 
-	 *  Devuelve el siguiente token para que podamos realizar el preanalisis
+	 *  Devuelve el siguiente Token para que podamos realizar el preanalisis, actualizando tambien
+	 *  lookahead de Lexico con ese Token.
 	 */
 	public Token getNextToken() throws IOException, Exception{
 		lookahead = getToken();
@@ -538,13 +541,13 @@ public class Lexico {
 	}
 	
 	/*
-	 * Parametros de entrada: Buffer de entrada del que lee caracteres.
+	 * Parametros de entrada: 
 	 * Parametros de salida: Token que ha reconocido.
 	 * Execpciones: IOException, que propagamos de las funciones de los RandomAccessFile de java y
 	 * 				Exception, que propagamos de la funcion getNextToken().
 	 * 
-	 * Devuelve el proximo token si la categoria lexica es la del token que recibe.
-	 * Si no, devuelve un token vacio.
+	 * Actualiza el lexico con el nuevo Token del preanalisis. El nuevo Token se obtiene 
+	 * llamando a getNextToken.
 	 */
 	public Token lexer() throws IOException, Exception{
 			lookahead = getNextToken();

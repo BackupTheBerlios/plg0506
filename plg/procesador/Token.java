@@ -4,13 +4,12 @@ package procesador;
 public class Token {
 	
 	/*
-	 * Este atributo nos indica a que categoria Lexica pertenece el Token
+	 * Atributos de la clase:
+	 * 
+	 * categoria lexica nos indica a que categoria Lexica pertenece el Token,
+	 * lexema es un string que nos da una representacion de lex del Token.
 	 */
 	private int categoriaLexica;
-	
-	/*
-	 * Este atributo es una representacion de lex del Token.
-	 */
 	private String lexema;
 	
 	/*

@@ -3,13 +3,12 @@ package tablaSimbolos;
 public class Par {
 	
 	/*
-	 * Este atributo almacena el nombre del identificador.
+	 * Atributos de la clase:
+	 * 
+	 * id almacena el nombre del identificador,
+	 * tipo es un string que almacena el tipo del identificador.
 	 */
 	String id;
-	
-	/*
-	 * Este atributo almacena el tipo del identificador. 
-	 */
 	String tipo;
 	
 	/*

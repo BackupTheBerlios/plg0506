@@ -7,6 +7,8 @@ import java.util.Enumeration;
 public class TablaSimbolos {
 	
 	/*
+	 * Atributos de la clase:
+	 * 
 	 * Usaremos del API de java una tabla Hash como tabla de simbolos. El valor 
 	 * que almacenamos sera un par con el nombre del identificador y el tipo del 
 	 * mismo. No se podran almacenar datos repetidos.

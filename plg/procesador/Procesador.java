@@ -13,13 +13,23 @@ public class Procesador {
 	 */
 	public static void main(String[] args){
 		
+		/*
+		 * Declaramos el buffer que usaremos para leer de fichero.
+		 */
 		RandomAccessFile fuente;
-		//Si no hemos recibido por parametro el archivo fuente, avisamos del error.
+		
+		/*
+		 * Si no hemos recibido por parametro el archivo fuente, avisamos del error.
+		 */
 		if (args.length == 0){
 			System.out.println("ERROR: Debe indicar fichero fuente como parametro.");
 		}
 		else {	
 			try {
+				/*
+				 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
+				 * se recoge mas abajo.
+				 */
 				fuente = new RandomAccessFile(new File(args[0]),"r");
 				TablaSimbolos TS = new TablaSimbolos();	
 				Sintactico sintactico;		

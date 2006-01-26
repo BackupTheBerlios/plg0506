@@ -5,6 +5,8 @@ import java.lang.String;
 public class Codigo {
 	
 	/*
+	 * Atributos de la clase:
+	 * 
 	 *  Este String guarda el codigo del lenguaje objeto, que es el codigo de la maquina P que 
 	 *  no existe asique de momento se mostrara por pantalla.
 	 */
