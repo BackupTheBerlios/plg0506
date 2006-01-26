@@ -488,7 +488,7 @@ public class Sintactico{
 			else{
 				if (lexico.reconoce(Tipos.TKPAP)){
 					atrDeExpC = ExpC();
-					Token tk2 = lexico.lexer();
+					Token tk2 = lexico.getLookahead();
 					System.out.println(tk2.muestraToken());
 					if (lexico.reconoce(Tipos.TKPCI)){
 						errDeClausula = atrDeExpC.getErr() || !atrDeExpC.getTipo().equals("bool");
