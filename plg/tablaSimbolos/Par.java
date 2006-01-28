@@ -1,5 +1,13 @@
 package tablaSimbolos;
-
+/**
+ * La clase <B>Par</B> define los atributos y métodos relacionados con los identificadores reconocidos. Los elementos de esta clase serán almacenados en la tabla de símbolos
+ * <P>Los atributos que tiene esta clase son los siguientes:
+ * <UL><LI><CODE>id:</CODE> String que almacena el nombre del identificador</LI>
+ * <LI><CODE>tipo:</CODE> String que almacena el tipo del identificador.</LI></UL></P>
+ * 
+ * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ *
+ */
 public class Par {
 	
 	/*
@@ -11,9 +19,7 @@ public class Par {
 	String id;
 	String tipo;
 	
-	/*
-	 * Parametros de entrada: 
-	 * Parametros de salida:
+	/**
 	 * 
 	 * Constructor sin parametros.
 	 */
@@ -21,11 +27,12 @@ public class Par {
 		super();
 	}
 
-	/*
-	 * Parametros de entrada: 
-	 * Parametros de salida:
+	/**
+	 * Constructor de la clase Par con valores de inicialización recibidos por parámetro
 	 * 
-	 *  Constructor para inicializar con los valores que se reciben por parametro.
+	 * @param id String con el nombre del identificador
+	 * @param tipo String con el tipo del identificador
+	 *  
 	 */
 	public Par(String id, String tipo) {
 		super();
@@ -33,30 +40,38 @@ public class Par {
 		this.tipo = tipo;
 	}
 
-	/*
-	 * Accesores y mutadores de los atributos de Par.
+	/**
+	 * Accesor para id.
+	 * @return id
 	 */
 	public String getId() {
 		return id;
 	}
-
+	/**
+	 * Mutador para id.
+	 * @param id
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	/**
+	 * Accesor para tipo.
+	 * @return tipo
+	 */
 	public String getTipo() {
 		return tipo;
 	}
-
+	/**
+	 * Mutador para tipo.
+	 * @param tipo
+	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 	
-	/*
-	 * Parametros de entrada: 
-	 * Parametros de salida:
+	/**
+	 * El método toString pasa a String la clase Par para poder mostrarla por pantalla.
 	 * 
-	 * Metodo para pasar a String la clase y poderla mostrar por pantalla.
 	 */
 	public String toString(){
 		String aux = "(";

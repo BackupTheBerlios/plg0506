@@ -1,15 +1,23 @@
 package procesador;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.File;
 import tablaSimbolos.TablaSimbolos;
-
+/**
+ * La clase <B>Procesador</B> implementa la función del menú principal del procesador del lenguaje
+ * <P>No tiene atributos</P>
+ * 
+ * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ *
+ */
 public class Procesador {
 
-	/*
-	 * Parametros de entrada: ruta del fichero a procesar
-	 * Parametros de salida: 
+	/**
+	 * El método main de esta clase implementa el menú principal del procesador del lenguaje y captura una excepción
+	 * IOException procedente de la función de RandomAccessFile de JAVA si no se encuentra el fichero de entrada.
 	 * 
-	 * Menu principal del procesador de lenguaje. 
+	 * @param ruta del fichero a procesar.
+	 * 
 	 */
 	public static void main(String[] args){
 		

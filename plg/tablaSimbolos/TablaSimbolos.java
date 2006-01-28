@@ -1,4 +1,13 @@
 package tablaSimbolos;
+/**
+ * La clase <B>TablaSimbolos</B> define los atributos y métodos relacionados con la tabla de símbolos.
+ * <P>Esta clase cuenta con el siguiente atributo:
+ * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de símbolos. el valor que almacenamos será un par con el nombre del identificador y el tipo del mismo. 
+ * No se podrán almacenar datos repetidos.</LI></UL></P>
+ * 
+ * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ *
+ */
 
 import java.util.Hashtable;
 import java.util.Enumeration;
@@ -15,48 +24,50 @@ public class TablaSimbolos {
 	 */
 	Hashtable tabla;
 
-	/*
-	 * Parametros de entrada: 
-	 * Parametros de salida: 
+	/**
+	 * Constructor sin parámetros que inicializa la tabla de símbolos con una tabla vacía.
 	 * 
-	 * Cosntructor sin parametros que inicializa la tabla de simbolos con una tabla
-	 * vacia.
+	 * 
 	 */
 	public TablaSimbolos() {
 		super();
 		this.tabla = new Hashtable();
 	}
 
-	/*
-	 * Parametros de entrada: recibe por parametro la tabla con la que inicializamos.
-	 * Parametros de salida: 
+	/**
+	 * Constructor que recibe una tabla de símbolos por parametro y la usa para inicializar la tabla de símbolos creada.
 	 * 
-	 * Constructor que recibe una tabla de simbolos por parametro y la inicializamos 
-	 * con esa.
+	 * @param tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
+	 * 
+	 * 
 	 */
 	public TablaSimbolos(Hashtable tabla) {
 		super();
 		this.tabla = new Hashtable(tabla);
 	}
 
-	/*
-	 * Accesores y mutadores de la tabla de simbolos
+	/**
+	 * Accesor para tabla.
+	 * @return tabla
 	 */
 	public Hashtable getTabla() {
 		return tabla;
 	}
-
+	/**
+	 * Mutador para tabla.
+	 * @param tabla
+	 */
 	public void setTabla(Hashtable tabla) {
 		this.tabla = tabla;
 	}
 	
-	/*
-	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
-	 * 					y el tipo del identificador.
-	 * Parametros de salida: Boleano que inidica la existencia o no.
-	 * 
-	 * Un identificador 'id' de tipo 't' existe en la tabla solo si existe su clave, 
-	 * la clave de cada identificador de un tipo es unica, no habra repeticiones.  
+	/**
+	 * El método existeID discrimina si un identificador 'id' de tipo 't' existe en la tabla de símbolos, solo si existe su clave. La clave de cada identificador de un tipo es única, no habrá repeticiones.
+	 *
+	 * @param id String que almacena el nombre del identificador 
+	 * @param tipo String que almacena el tipo del identificador
+	 * @return valor Booleano que indica la existencia o no de estos valores en la tabla.
+ 
 	 */
 	public boolean existeID(String id, String t){
 		String aux = id.concat("#");
@@ -69,16 +80,17 @@ public class TablaSimbolos {
 		}
 	}
 	
-	/*
-	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
-	 * 					y el tipo del identificador.
-	 * Parametros de salida: Boleano que inidica si la operacion se realizo bien.
+	/**
+	 * El método agnadeID añade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador de ese tipo. El valor de la clave en la tabla hash es único, ya que concatenamos el nombre
+	 * del identificador con el tipo usando entre medias un carácter de separacion: '#'. Como valor
+	 * para la tabla introducimos un par, que son el nombre del id y el tipo. Si ya existe el par entonces no es posible
+	 * añadir y lanzamos una excepción
 	 * 
-	 * Un identificador 'id' de tipo 't' se agnade a la tabla si no existe ningun identificador
-	 * de ese tipo. El valor de la clave en la tabla hash es unico, ya que concatenamos el nombre
-	 * del identificador con el tipo usando entre medias un caracter de separacion '#'. Como valor
-	 * para la tabla introducimos un par, que son el nombre del id y el tipo. Sino es posible agnadir
-	 * porque ya exista entonces se lanzara una excepcion.
+	 * @param id String que tienen almacenado el nombre del identificador
+	 * @param tipo String que tienen almacenado el tipo del identificador
+	 * @return valor Booleano que indica si la operación se realizo bien.
+	 * @exception porque no se puede duplicar un identificador
+	 * 
 	 */
 	public boolean agnadeID(String id, String t){
 		String aux = id.concat("#");
@@ -95,13 +107,15 @@ public class TablaSimbolos {
 		}	
 	}
 
-	/*
-	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
-	 * 					y el tipo del identificador.
-	 * Parametros de salida: Boleano que inidica si la operacion se realizo bien.
-	 * 
-	 * Un identificador id' de tipo 't' se elimina a la tabla si existe en la tabla un 
+	/**
+	 * El método eliminaID elimina un identificador 'id' de tipo 't' de la tabla si existe en ella existe un 
 	 * identificador 'id' de tipo 't'. Sino lanzara una excepcion.
+	 * 
+	 * @param id String que tienen almacenado el nombre del identificador
+	 * @param tipo String que tienen almacenado el tipo del identificador
+	 * @return valor Booleano que indica si la operación se realizo bien.
+	 * @exception porque no se encuentra el par a eliminar
+	 * 
 	 */
 	public boolean eliminaID(String id, String t){
 		String aux = id.concat("#");
@@ -116,25 +130,23 @@ public class TablaSimbolos {
 		}	
 	}
 	
-	/*
-	 * Parametros de entrada: 
-	 * Parametros de salida: 
-	 * 
-	 * Metodo para mostar por pantalla la tabla de simbolos actual.
+	/**
+	 * El método muestra se usa para mostrar por pantalla la tabla de símbolos actual.
 	 */
 	public void muestra(){
 		String aux = this.tabla.toString();
 		System.out.println(aux);
 	}
 
-	/*
-	 * Parametros de entrada: Strings que tienen almacenado el nombre del identificador y
-	 * 					y el tipo del identificador.
-	 * Parametros de salida: Entero que nos indica la posicion del identificador en memoria.
+	/**
+	 * El método dirID obtiene la posición de memoria del par (ide y tipo) dado por parámetro al método.
+	 * Es necesario para saber cuando generemos el código de dónde tomar los valores necesarios.
 	 *  
-	 * Obtenemos por parametro un identificador y el tipo del mismo el entero que nos indica la 
-	 * posicion de memoria de ese identificador. Para saber cuando generemos el codigo de donde 
-	 * tomamos los valores. 
+     * @param id String que tienen almacenado el nombre del identificador
+	 * @param tipo String que tienen almacenado el tipo del identificador
+	 * @return i Entero que nos indica la posición en memoria del identificador que indica si la operación se realizo bien.
+	 * 
+	 *  
 	 */
 	public int dirID(String id, String tipo){
 		String aux = id.concat("#");
