@@ -1,5 +1,4 @@
 package procesador;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.File;
 import tablaSimbolos.TablaSimbolos;
@@ -16,7 +15,7 @@ public class Procesador {
 	 * El método main de esta clase implementa el menú principal del procesador del lenguaje y captura una excepción
 	 * IOException procedente de la función de RandomAccessFile de JAVA si no se encuentra el fichero de entrada.
 	 * 
-	 * @param ruta del fichero a procesar.
+	 * @param args Que contendra la ruta del fichero a procesar.
 	 * 
 	 */
 	public static void main(String[] args){
@@ -55,4 +54,3 @@ public class Procesador {
 		}
 	}
 }
-

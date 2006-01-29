@@ -38,7 +38,6 @@ public class Codigo {
 	 * 
 	 * @param instr String con la instruccion que ha codificado.
 	 * @param num Entero indica el numero de línea.
-	 * @return Esta función no devuelve nada
 	 * 
 	 */
 	public void genIns(String instr, int num){

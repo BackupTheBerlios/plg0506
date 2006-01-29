@@ -29,7 +29,7 @@ public class Atributos {
 	/**
 	 * Constructor que inicializa los atributos de Atributos con los valores que recibe por parámetro.
 	 * 
-	 * @param err Booleano que nos indica si ha sucedido un error y,
+	 * @param err Booleano que nos indica si ha sucedido un error.
 	 * @param tipo String con el tipo del identificador, expresion o valor.
 	 * 
 	 */

@@ -1,18 +1,20 @@
 package procesador;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+
 /**
  * La clase <B>Léxico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepción en caso de que esto no sea posible
  * <P>La clase Lexico cuenta con los siguientes atributos:
- * <UL><LI><CODE>linea:</CODE> Entero que controla la línea del código donde se detecta el error</LI>
- * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanálisis</LI>
- * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar</LI>
- * <LI><CODE>posicion:</CODE> Entero que marca la posición en la que se está leyendo dentro de una línea</LI>
+ * <UL><LI><CODE>linea:</CODE> Entero que controla la línea del código donde se detecta el error.</LI>
+ * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanálisis.</LI>
+ * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar.</LI>
+ * <LI><CODE>posicion:</CODE> Entero que marca la posición en la que se está leyendo dentro de una línea.</LI>
  * </UL></P>
  * 
  * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
  *
  */
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 public class Lexico {
 	
@@ -32,7 +34,7 @@ public class Lexico {
 	
 	/**
 	 * El constructor de Lexico sólo tiene f como parámetro de entrada.
-	 * @param RandomAccessFile Buffer de entrada del que se leen caracteres.
+	 * @param f Buffer de entrada del que se leen caracteres. Que es del tipo RandomAccessFile.
 	 * 
 	 */
 	public Lexico(RandomAccessFile f) {
@@ -104,7 +106,8 @@ public class Lexico {
 	 * La función getToken lee caracteres del flujo hasta que identifica un token y lo devuelve, o detecta un error y genera una excepción.
 	 * 
 	 * @return Token identificado.
-	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA y	Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
+	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
+	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 */
 	public Token getToken () throws IOException, Exception{
@@ -589,7 +592,8 @@ public class Lexico {
 	 * 
 	 * @param aux String que almacena la parte leída del entero.
 	 * @return aux String que almacena el entero reconocido.
-	 * @exception ERROR IOException, que propagamos de las funciones de los RandomAccessFile de JAVA y Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
+	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
+	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 */
 	public String leerNumero(String aux) throws Exception,IOException{
 		char a;
@@ -627,7 +631,8 @@ public class Lexico {
 	 * 
 	 * @param aux String que almacena la parte ya leída del identificador.
 	 * @return aux String que almacena el identificador ya reconocido.
-	 * @exception IOException, que propagamos de las funciones de los RandomAccessFile de JAVA y Exception, que generamos cuando detectamos una secuencia de caracteres incorrecta.
+	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
+	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 */
 	
@@ -651,7 +656,8 @@ public class Lexico {
 	 * El método getNextToken devuelve el siguiente Token para poder realizar el preanálisis. También acutualiza el lookahead de Lexico.
 	 * 
 	 * @return lookahead Token que ha reconocido.
-	 * @exception IOException, que propagamos de las funciones de los RandomAccessFile de JAVA y Exception, que propagamos de la funcion getToken().
+	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
+	 * @exception Exception que propagamos de la funcion getToken().
 	 */
 	public Token getNextToken() throws IOException, Exception{
 		lookahead = getToken();
@@ -662,7 +668,8 @@ public class Lexico {
 	 * El método lexer actualiza el léxico con el nuevo Token del preanálisis. El nuevo Token se obtiene llamando a getNextToken.
 	 * 
 	 * @return lookahead Token que ha reconocido.
-	 * @exception IOException, que propagamos de las funciones de los RandomAccessFile de JAVA y Exception, que propagamos de la funcion getNextToken().
+	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
+	 * @exception Exception que propagamos de la funcion getNextToken().
 	 */
 	public Token lexer() throws IOException, Exception{
 			lookahead = getNextToken();

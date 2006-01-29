@@ -1,4 +1,8 @@
 package tablaSimbolos;
+
+import java.util.Hashtable;
+import java.util.Enumeration;
+
 /**
  * La clase <B>TablaSimbolos</B> define los atributos y métodos relacionados con la tabla de símbolos.
  * <P>Esta clase cuenta con el siguiente atributo:
@@ -8,11 +12,6 @@ package tablaSimbolos;
  * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
  *
  */
-
-import java.util.Hashtable;
-import java.util.Enumeration;
-
-
 public class TablaSimbolos {
 	
 	/*
@@ -62,10 +61,11 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El método existeID discrimina si un identificador 'id' de tipo 't' existe en la tabla de símbolos, solo si existe su clave. La clave de cada identificador de un tipo es única, no habrá repeticiones.
+	 * El método existeID discrimina si un identificador 'id' de tipo 't' existe en la tabla de símbolos, 
+	 * solo si existe su clave. La clave de cada identificador de un tipo es única, no habrá repeticiones.
 	 *
 	 * @param id String que almacena el nombre del identificador 
-	 * @param tipo String que almacena el tipo del identificador
+	 * @param t String que almacena el tipo del identificador
 	 * @return valor Booleano que indica la existencia o no de estos valores en la tabla.
  
 	 */
@@ -81,23 +81,23 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El método agnadeID añade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador de ese tipo. El valor de la clave en la tabla hash es único, ya que concatenamos el nombre
-	 * del identificador con el tipo usando entre medias un carácter de separacion: '#'. Como valor
-	 * para la tabla introducimos un par, que son el nombre del id y el tipo. Si ya existe el par entonces no es posible
-	 * añadir y lanzamos una excepción
+	 * El método agnadeID añade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador de ese tipo. 
+	 * El valor de la clave en la tabla hash es único, ya que concatenamos el nombre del identificador con el tipo usando 
+	 * entre medias un carácter de separacion: '#'. Como valor para la tabla introducimos un par, que son el nombre del id 
+	 * y el tipo. Si ya existe el par entonces no es posible añadir y lanzamos una excepción
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
-	 * @param tipo String que tienen almacenado el tipo del identificador
+	 * @param t String que tienen almacenado el tipo del identificador
 	 * @return valor Booleano que indica si la operación se realizo bien.
-	 * @exception porque no se puede duplicar un identificador
+	 * @exception Excepcion Porque no se puede duplicar un identificador
 	 * 
 	 */
-	public boolean agnadeID(String id, String t){
+	public boolean agnadeID(String id, String t) throws Exception{
 		String aux = id.concat("#");
 		aux = aux.concat(t);
 		if (this.tabla.containsKey(aux)){
-			System.out.println("No se puede duplicar el identificador");
-			return false;
+			throw new Exception ("No se puede duplicar el identificador");
+			//return false;
 		}
 		else{
 			System.out.println("AÃ±adido");
@@ -112,17 +112,17 @@ public class TablaSimbolos {
 	 * identificador 'id' de tipo 't'. Sino lanzara una excepcion.
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
-	 * @param tipo String que tienen almacenado el tipo del identificador
+	 * @param t String que tienen almacenado el tipo del identificador
 	 * @return valor Booleano que indica si la operación se realizo bien.
-	 * @exception porque no se encuentra el par a eliminar
+	 * @exception  Excepcion Porque no se encuentra el par a eliminar
 	 * 
 	 */
-	public boolean eliminaID(String id, String t){
+	public boolean eliminaID(String id, String t) throws Exception{
 		String aux = id.concat("#");
 		aux = aux.concat(t);
 		if (!this.tabla.containsKey(aux)){
-			System.out.println("No se puede eliminar el identificador, no existe");
-			return false;
+			throw new Exception("No se puede eliminar el identificador, no existe");
+			//return false;
 		}
 		else{
 			this.tabla.remove(aux);
@@ -160,7 +160,5 @@ public class TablaSimbolos {
 			i ++;
 	     }
 		return i;
-	}
-	
-	
+	}	
 }

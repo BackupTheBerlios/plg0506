@@ -32,8 +32,8 @@ public class Token {
 	/**
 	 * Constructor que inicializa Token con los valores que se reciben por parametro.
 	 * 
-	 * @param lex String que almacena el lex del Token
-	 * @param tipo entero con el tipo del Token
+	 * @param lex String que almacena el lex del Token.
+	 * @param tipo entero con el tipo del Token.
 	 *  
 	 */
 	public Token(String lex, int tipo) {

@@ -3,15 +3,41 @@ package procesador;
 import java.io.RandomAccessFile;
 import tablaSimbolos.TablaSimbolos;
 
-
+/**
+ * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
+ * <P>La clase Sintactico cuenta con los siguientes atributos:
+ * <UL><LI><CODE>codigo:</CODE> Se encarga de almacenar el código generado por las instrucciones del lenguaje. De tipo String.</LI>
+ * <LI><CODE>lexico:</CODE> Analiza el fichero de entrada para reconocer tokens. De tipo Lexico.</LI>
+ * <LI><CODE>TS:</CODE> Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos. De tipo TablaSimbolos.</LI>
+ * <LI><CODE>dir:</CODE> Entero que marca la posición de la pila con la que estamos trabajando. De tipo Entero.</LI>
+ * </UL></P>
+ * 
+ * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ *
+ */
 
 public class Sintactico{
 	
+	/*
+	 * Atributos de la clase:
+	 * 
+	 * codigo: Se encarga de almacenar el código generado por las instrucciones del lenguaje.
+	 * lexico: Analiza el fichero de entrada para reconocer tokens.
+ 	 * TS: Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
+ 	 * dir: Entero que marca la posición de la pila con la que estamos trabajando.
+	 */
 	Codigo codigo;
 	Lexico lexico;
 	TablaSimbolos TS;
 	int dir;
 	
+	/**
+	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
+	 * 
+	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar.
+	 * @param T Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
+	 */
 	public Sintactico(RandomAccessFile fuente, TablaSimbolos T) throws Exception{
 		codigo = new Codigo(); 
 		lexico = new Lexico(fuente);		
@@ -19,13 +45,21 @@ public class Sintactico{
 		dir = 0;
 	}
 
+	/**
+	 * Comienza el analisis sintactico del fichero que queremos analizar. Cuando acaba muestra el codigo que ha reconocido.
+	 * @throws Exception Si sucede algun error este metodo propaga la Excepcion.
+	 */
 	public void startParsing() throws Exception{
 		System.out.println("Start");
 		Prog();
 		codigo.muestraCodigo();
 	}
 
-		
+	/**
+	 * 
+	 * @return 
+	 * @throws Exception
+	 */	
 	public boolean Prog() throws Exception{
 		
 		System.out.println("Prog");
@@ -39,6 +73,11 @@ public class Sintactico{
 	
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Decs() throws Exception{
 		
 		System.out.println("Decs");
@@ -71,6 +110,11 @@ public class Sintactico{
 		return a;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Dec() throws Exception{
 
 		System.out.println("Dec");
@@ -103,6 +147,11 @@ public class Sintactico{
 		return a;
 	}	
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Is() throws Exception{
 		
 		System.out.println("Is");
@@ -131,6 +180,11 @@ public class Sintactico{
 		return a;	
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos I() throws Exception{
 
 		System.out.println("I");
@@ -142,6 +196,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos IAsig() throws Exception{
 		
 		System.out.println("IAsig");
@@ -173,6 +232,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos ExpC() throws Exception{
 		
 		System.out.println("ExpC");
@@ -189,6 +253,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos RExpC() throws Exception{
 		
 		System.out.println("RExpC");
@@ -221,6 +290,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Exp() throws Exception{
 		
 		System.out.println("Exp");
@@ -253,7 +327,12 @@ public class Sintactico{
 		a.setTipo(atrDeTerm.getTipo());
 		return a;
 	}
-		
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos RExp() throws Exception{
 		System.out.println("RExp");
 		Atributos atrDeTerm = new Atributos();
@@ -293,6 +372,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Term() throws Exception{
 		
 		System.out.println("Term");
@@ -311,7 +395,11 @@ public class Sintactico{
 		a.setTipo("int");
 		return a;
 	}
-	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos RTerm() throws Exception{
 		
 		System.out.println("RTerm");
@@ -351,7 +439,11 @@ public class Sintactico{
 		return a;
 	}
 
-	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos TermB() throws Exception{
 		
 		System.out.println("TermB");
@@ -367,6 +459,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos RTermB() throws Exception{
 		
 		System.out.println("RTermB");
@@ -392,6 +489,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Fact() throws Exception{
 		
 		System.out.println("Fact");
@@ -432,6 +534,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Nega() throws Exception{
 		
 		System.out.println("Nega");
@@ -459,6 +566,11 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Clausula() throws Exception{
 		
 		System.out.println("Clausula");
@@ -509,6 +621,10 @@ public class Sintactico{
 		return a;
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpAd
+	 */
 	public void genOpAd(String opDeOpAd){
 		
 		if (opDeOpAd == "+")
@@ -517,6 +633,10 @@ public class Sintactico{
 			codigo.genIns("resta");	
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpMul
+	 */
 	public void genOpMul(String opDeOpMul){
 		
 		if (opDeOpMul == "*")
@@ -526,6 +646,10 @@ public class Sintactico{
 		
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpComp
+	 */
 	public void genOpComp(String opDeOpComp){
 		
 		if (opDeOpComp == "<="){
@@ -548,22 +672,33 @@ public class Sintactico{
 		}
 	}
 
+	/**
+	 * 
+	 *
+	 */
 	public void genOpAnd(){
 
 		codigo.genIns("and");
 		
 	}
 
+	/**
+	 * 
+	 *
+	 */
 	public void genOpOr(){
 
 		codigo.genIns("or");
 		
 	}
 
+	/**
+	 * 
+	 *
+	 */
 	public void genOpNot(){
 
 		codigo.genIns("not");
 		
 	}
-
 }
