@@ -1,26 +1,28 @@
 package procesador;
 /**
- * La clase <B>Atributos</B> almacena los atributos err y tipo de las gramáticas
+ * La clase <B>Atributos</B> almacena los atributos err y tipo de las gramáticas.
+ * 
  * <P>Los atributos que tiene esta clase son los siguientes:
  * <UL><LI><CODE>err:</CODE> booleano que nos indica si hubo un error o no.</LI>
  * <LI><CODE>tipo:</CODE> string donde se almacena el tipo: int o bool.</LI></UL></P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
- *
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín.
+ * 
  */
 public class Atributos {
 
-	/*
-	 * Atributos de la clase:
-	 * 
-	 * err boleano que nos indica si exitio un error o no.
-	 * tipo, string donde se almacena el tipo: int o bool
+	/**
+	 * err Boleano que nos indica si exitio un error o no.
 	 */
 	boolean err;
+	
+	/**
+	 * tipo String donde se almacena el tipo: int o bool
+	 */
 	String tipo;
 	
 	/**
-	 * Constructor sin parametros.
+	 * Constructor de la clase sin parametros. Inicializa llamando al constructor superior.
 	 */
 	public Atributos() {
 		super();
@@ -40,28 +42,28 @@ public class Atributos {
 	}
 	
 	/**
-	 * Accesor para err.
+	 * Accesor para el atributo de la clase err.
 	 * @return err Booleano que nos indica si ha sucedido un error.
 	 */
 	public boolean getErr() {
 		return err;
 	}
 	/**
-	 * Mutador para err. 
+	 * Mutador para el atributo de la clase err. 
 	 * @param err Booleano que nos indica si ha sucedido un error.
 	 */
 	public void setErr(boolean err) {
 		this.err = err;
 	}
 	/**
-	 * Accesor para tipo. 
-	 * @return tipo String con el tipo del identificador, expresion o valor
+	 * Accesor para el atributo de la clase tipo. 
+	 * @return tipo String con el tipo del identificador, expresion o valor.
 	 */
 	public String getTipo() {
 		return tipo;
 	}
 	/**
-	 * Mutador para tipo. 
+	 * Mutador para  el atributo de la clase tipo. 
 	 * @param tipo String con el tipo del identificador, expresion o valor
 	 */
 	public void setTipo(String tipo) {

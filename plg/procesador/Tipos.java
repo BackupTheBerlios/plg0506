@@ -1,9 +1,9 @@
 package procesador;
 /**
- * La clase <B>Tipos</B> declara las categorías léxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero
- * <P>No tiene atributos, sólo las constantes de los tipos</P>
+ * La clase <B>Tipos</B> declara las categorías léxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
+ * <P>No tiene atributos, sólo las constantes de los tipos.</P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 public class Tipos {

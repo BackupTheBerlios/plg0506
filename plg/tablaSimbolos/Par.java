@@ -5,7 +5,7 @@ package tablaSimbolos;
  * <UL><LI><CODE>id:</CODE> String que almacena el nombre del identificador</LI>
  * <LI><CODE>tipo:</CODE> String que almacena el tipo del identificador.</LI></UL></P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 public class Par {
@@ -21,7 +21,7 @@ public class Par {
 	
 	/**
 	 * 
-	 * Constructor sin parametros.
+	 * Constructor de la clase sin parametros.
 	 */
 	public Par() {
 		super();
@@ -41,28 +41,28 @@ public class Par {
 	}
 
 	/**
-	 * Accesor para id.
-	 * @return id String con el nombre del identificador.
+	 * Accesor el atributo de la clase id.
+	 * @return String con el nombre del identificador.
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * Mutador para id.
+	 * Mutador el atributo de la clase id.
 	 * @param id String con el nombre del identificador.
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * Accesor para tipo.
-	 * @return tipo String con el tipo del identificador.
+	 * Accesor el atributo de la clase tipo.
+	 * @return String con el tipo del identificador.
 	 */
 	public String getTipo() {
 		return tipo;
 	}
 	/**
-	 * Mutador para tipo.
+	 * Mutador el atributo de la clase tipo.
 	 * @param tipo String con el tipo del identificador.
 	 */
 	public void setTipo(String tipo) {
@@ -71,7 +71,7 @@ public class Par {
 	
 	/**
 	 * El método toString pasa a String la clase Par para poder mostrarla por pantalla.
-	 * 
+	 * @return String que contiene un par para poderlo mostrar por pantalla.
 	 */
 	public String toString(){
 		String aux = "(";

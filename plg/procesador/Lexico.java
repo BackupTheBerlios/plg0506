@@ -4,7 +4,8 @@ import java.io.RandomAccessFile;
 
 
 /**
- * La clase <B>Léxico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepción en caso de que esto no sea posible
+ * La clase <B>Lexico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepción en caso de que esto no sea posible. Puede suceder
+ * que el token sea erroneo o que ocurra algun problema con el fichero de lectura.
  * <P>La clase Lexico cuenta con los siguientes atributos:
  * <UL><LI><CODE>linea:</CODE> Entero que controla la línea del código donde se detecta el error.</LI>
  * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanálisis.</LI>
@@ -12,7 +13,7 @@ import java.io.RandomAccessFile;
  * <LI><CODE>posicion:</CODE> Entero que marca la posición en la que se está leyendo dentro de una línea.</LI>
  * </UL></P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 
@@ -33,7 +34,7 @@ public class Lexico {
 	int posicion;
 	
 	/**
-	 * El constructor de Lexico sólo tiene f como parámetro de entrada.
+	 * El constructor de la clase Lexico que sólo tiene el buffer de lectura del fichero como parámetro de entrada.
 	 * @param f Buffer de entrada del que se leen caracteres. Que es del tipo RandomAccessFile.
 	 * 
 	 */
@@ -45,57 +46,57 @@ public class Lexico {
 	}
 	
 	/**
-	 * Accesor para linea. 
-	 * @return linea int que controla la línea del código donde se detecta el error.
+	 * Accesor para el atributo de la clase linea. 
+	 * @return Entero que controla la línea del código donde se detecta el error.
 	 */
 	public int getLinea() {
 		return linea;
 	}
 	/**
-	 * Mutador para linea. 
-	 * @param linea int que controla la línea del código donde se detecta el error.
+	 * Mutador para el atributo de la clase linea. 
+	 * @param linea Entero que controla la línea del código donde se detecta el error.
 	 */
 	public void setLinea(int linea) {
 		this.linea = linea;
 	}
 	/**
-	 * Accesor para posicion. 
-	 * @return posicion int que marca la posición en la que se está leyendo dentro de una línea.
+	 * Accesor para el atributo de la clase posicion. 
+	 * @return Entero que marca la posición en la que se está leyendo dentro de una línea.
 	 */
 	public int getPosicion() {
 		return posicion;
 	}
 	/**
-	 * Mutador para posicion. 
-	 * @param posicion int que marca la posición en la que se está leyendo dentro de una línea.
+	 * Mutador para el atributo de la clase posicion. 
+	 * @param posicion Entero que marcara la posición en la que se está leyendo dentro de una línea.
 	 */
 	public void setPosicion(int posicion) {
 		this.posicion = posicion;
 	}
 
 	/**
-	 * Accesor para lookahead. 
-	 * @return lookahead Token que almacena los caracteres de preanálisis.
+	 * Accesor para el atributo de la clase lookahead. 
+	 * @return Token actual que almacena los caracteres de preanálisis.
 	 */
 	public Token getLookahead() {
 		return lookahead;
 	}
 	/**
-	 * Mutador para lookahead. 
-	 * @param lookahead Token que almacena los caracteres de preanálisis.
+	 * Mutador para el atributo de la clase lookahead. 
+	 * @param lookahead Token para modificar el token actual que almacena los caracteres de preanálisis.
 	 */
 	public void setLookahead(Token lookahead) {
 		this.lookahead = lookahead;
 	}
 	/**
-	 * Accesor para fuente. 
-	 * @return fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar
+	 * Accesor para el atributo de la clase fuente. 
+	 * @return RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar
 	 */
 	public RandomAccessFile getFuente() {
 		return fuente;
 	}
 	/**
-	 * Mutador para fuente. 
+	 * Mutador para el atributo de la clase fuente. 
 	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar
 	 */
 	public void setFuente(RandomAccessFile fuente) {
@@ -103,9 +104,12 @@ public class Lexico {
 	}
 
 	/**
-	 * La función getToken lee caracteres del flujo hasta que identifica un token y lo devuelve, o detecta un error y genera una excepción.
+	 * El método getToken lee caracteres del flujo hasta que identifica un token y lo devuelve, o detecta un error y genera una excepción.
+	 * Utiliza las funciones que ofrece RandomAccessFile para manejar el flujo que lee de fichero.
 	 * 
-	 * @return Token identificado.
+	 * @see java.io.RandomAccessFile#read() 
+	 * @see java.io.RandomAccessFile#seek(long) 
+	 * @return Token que hemos identificado.
 	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
 	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
@@ -586,7 +590,7 @@ public class Lexico {
 	}
 	
 	/**
-	 * La función leerNumero se encarga de leer un entero completo del fichero fuente. 
+	 * El método leerNumero se encarga de leer un entero completo del fichero fuente. 
 	 * Como la definición de nuestro lenguaje no permite la representación del 0 como '+0' ni '-0', si detectamos un 0
 	 * lanzamos una excepción. Sino, vamos leyendo mientras sean dígitos hasta terminar de leer el entero.
 	 * 
@@ -630,7 +634,7 @@ public class Lexico {
 	 * Es decir, leemos mientras sean caracteres válidos según nuestra especificación y hasta terminar de leer el identificador.
 	 * 
 	 * @param aux String que almacena la parte ya leída del identificador.
-	 * @return aux String que almacena el identificador ya reconocido.
+	 * @return String que almacena el identificador ya reconocido.
 	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
 	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
@@ -653,9 +657,10 @@ public class Lexico {
 	}
 	
 	/**
-	 * El método getNextToken devuelve el siguiente Token para poder realizar el preanálisis. También acutualiza el lookahead de Lexico.
+	 * El método getNextToken devuelve el siguiente Token para poder realizar el preanálisis. Llama a getToken(). También acutualiza el lookahead de Lexico.
 	 * 
-	 * @return lookahead Token que ha reconocido.
+	 * @see procesador.Lexico#getToken()
+	 * @return Token actual que ha reconocido.
 	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
 	 * @exception Exception que propagamos de la funcion getToken().
 	 */
@@ -667,7 +672,7 @@ public class Lexico {
 	/**
 	 * El método lexer actualiza el léxico con el nuevo Token del preanálisis. El nuevo Token se obtiene llamando a getNextToken.
 	 * 
-	 * @return lookahead Token que ha reconocido.
+	 * @return Token actual que ha reconocido.
 	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
 	 * @exception Exception que propagamos de la funcion getNextToken().
 	 */
@@ -679,7 +684,7 @@ public class Lexico {
 	/**
 	 * El método reconoce indica si una categoría léixca dada es igual o no a la categoría léxica del Token
 	 * @param tk Entero que indica una categoría léxica. 
-	 * @return aux Booleano que nos dirá si son iguales las categorías léxicas.
+	 * @return Booleano que nos dirá si son iguales las categorías léxicas.
 	 * 
 	 */
 	public boolean reconoce(int tk){

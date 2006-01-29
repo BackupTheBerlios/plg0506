@@ -9,7 +9,7 @@ import java.util.Enumeration;
  * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de símbolos. El valor que almacenamos será un par con el nombre del identificador y el tipo del mismo. 
  * No se podrán almacenar datos repetidos.</LI></UL></P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 public class TablaSimbolos {
@@ -24,9 +24,7 @@ public class TablaSimbolos {
 	Hashtable tabla;
 
 	/**
-	 * Constructor sin parámetros que inicializa la tabla de símbolos con una tabla vacía.
-	 * 
-	 * 
+	 * Constructor de la clase sin parámetros que inicializa la tabla de símbolos con una tabla vacía.
 	 */
 	public TablaSimbolos() {
 		super();
@@ -34,11 +32,9 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * Constructor que recibe una tabla de símbolos por parametro y la usa para inicializar la tabla de símbolos creada.
+	 * Constructor de la clase que recibe una tabla de símbolos por parametro y la usa para inicializar la tabla de símbolos creada.
 	 * 
 	 * @param tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
-	 * 
-	 * 
 	 */
 	public TablaSimbolos(Hashtable tabla) {
 		super();
@@ -46,14 +42,14 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * Accesor para tabla.
-	 * @return tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
+	 * Accesor para el atributo de la clase tabla.
+	 * @return Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public Hashtable getTabla() {
 		return tabla;
 	}
 	/**
-	 * Mutador para tabla.
+	 * Mutador para el atributo de la clase tabla.
 	 * @param tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public void setTabla(Hashtable tabla) {
@@ -66,8 +62,7 @@ public class TablaSimbolos {
 	 *
 	 * @param id String que almacena el nombre del identificador 
 	 * @param t String que almacena el tipo del identificador
-	 * @return valor Booleano que indica la existencia o no de estos valores en la tabla.
- 
+	 * @return Booleano que indica la existencia o no de estos valores en la tabla.
 	 */
 	public boolean existeID(String id, String t){
 		String aux = id.concat("#");
@@ -88,8 +83,8 @@ public class TablaSimbolos {
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
 	 * @param t String que tienen almacenado el tipo del identificador
-	 * @return valor Booleano que indica si la operación se realizo bien.
-	 * @exception Excepcion Porque no se puede duplicar un identificador
+	 * @return Booleano que indica si la operación se realizo bien.
+	 * @exception Exception Porque no se puede duplicar un identificador
 	 * 
 	 */
 	public boolean agnadeID(String id, String t) throws Exception{
@@ -97,7 +92,6 @@ public class TablaSimbolos {
 		aux = aux.concat(t);
 		if (this.tabla.containsKey(aux)){
 			throw new Exception ("No se puede duplicar el identificador");
-			//return false;
 		}
 		else{
 			System.out.println("AÃ±adido");
@@ -113,8 +107,8 @@ public class TablaSimbolos {
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
 	 * @param t String que tienen almacenado el tipo del identificador
-	 * @return valor Booleano que indica si la operación se realizo bien.
-	 * @exception  Excepcion Porque no se encuentra el par a eliminar
+	 * @return Booleano que indica si la operación se realizo bien.
+	 * @exception  Exception Porque no se encuentra el par a eliminar
 	 * 
 	 */
 	public boolean eliminaID(String id, String t) throws Exception{
@@ -122,7 +116,6 @@ public class TablaSimbolos {
 		aux = aux.concat(t);
 		if (!this.tabla.containsKey(aux)){
 			throw new Exception("No se puede eliminar el identificador, no existe");
-			//return false;
 		}
 		else{
 			this.tabla.remove(aux);
@@ -144,9 +137,7 @@ public class TablaSimbolos {
 	 *  
      * @param id String que tienen almacenado el nombre del identificador
 	 * @param tipo String que tienen almacenado el tipo del identificador
-	 * @return i int que nos indica la posición en memoria del identificador que indica si la operación se realizo bien.
-	 * 
-	 *  
+	 * @return Entero que nos indica la posición en memoria del identificador que indica si la operación se realizo bien. 
 	 */
 	public int dirID(String id, String tipo){
 		String aux = id.concat("#");

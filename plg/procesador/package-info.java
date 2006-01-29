@@ -5,6 +5,6 @@
  * Las categorias lexicas estan definidas en la clase Tipos. Durante el analisis almacenamos el posible error y el tipo en un elemento llamado 
  * Atributos y que también podemos obtener mas informacion en la propia clase.
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  */
 package procesador;

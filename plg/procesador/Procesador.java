@@ -4,10 +4,10 @@ import java.io.File;
 import tablaSimbolos.TablaSimbolos;
 
 /**
- * La clase <B>Procesador</B> implementa la función del menú principal del procesador del lenguaje
+ * La clase <B>Procesador</B> implementa la función del menú principal del procesador del lenguaje.
  * <P>No tiene atributos</P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 public class Procesador {
