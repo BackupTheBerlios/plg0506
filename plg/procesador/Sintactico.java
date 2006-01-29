@@ -47,7 +47,7 @@ public class Sintactico{
 
 	/**
 	 * Comienza el analisis sintactico del fichero que queremos analizar. Cuando acaba muestra el codigo que ha reconocido.
-	 * @throws Exception Si sucede algun error este metodo propaga la Excepcion.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public void startParsing() throws Exception{
 		System.out.println("Start");
@@ -57,8 +57,9 @@ public class Sintactico{
 
 	/**
 	 * 
-	 * @return 
-	 * @throws Exception
+	 * 
+	 * @return errDeProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	public boolean Prog() throws Exception{
 		
@@ -75,8 +76,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Decs() throws Exception{
 		
@@ -112,8 +113,8 @@ public class Sintactico{
 
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Dec() throws Exception{
 
@@ -149,8 +150,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Is() throws Exception{
 		
@@ -182,8 +183,8 @@ public class Sintactico{
 
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos I() throws Exception{
 
@@ -198,8 +199,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos IAsig() throws Exception{
 		
@@ -234,8 +235,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos ExpC() throws Exception{
 		
@@ -255,8 +256,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RExpC() throws Exception{
 		
@@ -292,8 +293,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Exp() throws Exception{
 		
@@ -330,8 +331,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RExp() throws Exception{
 		System.out.println("RExp");
@@ -374,8 +375,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Term() throws Exception{
 		
@@ -395,10 +396,11 @@ public class Sintactico{
 		a.setTipo("int");
 		return a;
 	}
+	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RTerm() throws Exception{
 		
@@ -441,8 +443,8 @@ public class Sintactico{
 
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos TermB() throws Exception{
 		
@@ -461,8 +463,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RTermB() throws Exception{
 		
@@ -491,8 +493,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Fact() throws Exception{
 		
@@ -536,8 +538,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Nega() throws Exception{
 		
@@ -568,8 +570,8 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Clausula() throws Exception{
 		
