@@ -4,12 +4,12 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 
 /**
- * La clase <B>TablaSimbolos</B> define los atributos y métodos relacionados con la tabla de símbolos.
+ * La clase <B>TablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
  * <P>Esta clase cuenta con el siguiente atributo:
- * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de símbolos. El valor que almacenamos será un par con el nombre del identificador y el tipo del mismo. 
- * No se podrán almacenar datos repetidos.</LI></UL></P>
+ * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de smbolos. El valor que almacenamos ser un par con el nombre del identificador y el tipo del mismo. 
+ * No se podrn almacenar datos repetidos.</LI></UL></P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
  *
  */
 public class TablaSimbolos {
@@ -24,7 +24,7 @@ public class TablaSimbolos {
 	Hashtable tabla;
 
 	/**
-	 * Constructor de la clase sin parámetros que inicializa la tabla de símbolos con una tabla vacía.
+	 * Constructor de la clase sin parmetros que inicializa la tabla de smbolos con una tabla vaca.
 	 */
 	public TablaSimbolos() {
 		super();
@@ -32,9 +32,9 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * Constructor de la clase que recibe una tabla de símbolos por parametro y la usa para inicializar la tabla de símbolos creada.
+	 * Constructor de la clase que recibe una tabla de smbolos por parametro y la usa para inicializar la tabla de smbolos creada.
 	 * 
-	 * @param tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
+	 * @param tabla Hashtable recibida por parmetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public TablaSimbolos(Hashtable tabla) {
 		super();
@@ -43,22 +43,22 @@ public class TablaSimbolos {
 
 	/**
 	 * Accesor para el atributo de la clase tabla.
-	 * @return Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
+	 * @return Hashtable recibida por parmetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public Hashtable getTabla() {
 		return tabla;
 	}
 	/**
 	 * Mutador para el atributo de la clase tabla.
-	 * @param tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
+	 * @param tabla Hashtable recibida por parmetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public void setTabla(Hashtable tabla) {
 		this.tabla = tabla;
 	}
 	
 	/**
-	 * El método existeID discrimina si un identificador 'id' de tipo 't' existe en la tabla de símbolos, 
-	 * solo si existe su clave. La clave de cada identificador de un tipo es única, no habrá repeticiones.
+	 * El mtodo existeID discrimina si un identificador 'id' de tipo 't' existe en la tabla de smbolos, 
+	 * solo si existe su clave. La clave de cada identificador de un tipo es nica, no habr repeticiones.
 	 *
 	 * @param id String que almacena el nombre del identificador 
 	 * @param t String que almacena el tipo del identificador
@@ -76,14 +76,14 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El método agnadeID añade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador de ese tipo. 
-	 * El valor de la clave en la tabla hash es único, ya que concatenamos el nombre del identificador con el tipo usando 
-	 * entre medias un carácter de separacion: '#'. Como valor para la tabla introducimos un par, que son el nombre del id 
-	 * y el tipo. Si ya existe el par entonces no es posible añadir y lanzamos una excepción
+	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador de ese tipo. 
+	 * El valor de la clave en la tabla hash es nico, ya que concatenamos el nombre del identificador con el tipo usando 
+	 * entre medias un carcter de separacion: '#'. Como valor para la tabla introducimos un par, que son el nombre del id 
+	 * y el tipo. Si ya existe el par entonces no es posible aadir y lanzamos una excepcin
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
 	 * @param t String que tienen almacenado el tipo del identificador
-	 * @return Booleano que indica si la operación se realizo bien.
+	 * @return Booleano que indica si la operacin se realizo bien.
 	 * @exception Exception Porque no se puede duplicar un identificador
 	 * 
 	 */
@@ -102,12 +102,12 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * El método eliminaID elimina un identificador 'id' de tipo 't' de la tabla si existe en ella existe un 
+	 * El mÃ©todo eliminaID elimina un identificador 'id' de tipo 't' de la tabla si existe en ella existe un 
 	 * identificador 'id' de tipo 't'. Sino lanzara una excepcion.
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
 	 * @param t String que tienen almacenado el tipo del identificador
-	 * @return Booleano que indica si la operación se realizo bien.
+	 * @return Booleano que indica si la operacin se realizo bien.
 	 * @exception  Exception Porque no se encuentra el par a eliminar
 	 * 
 	 */
@@ -124,7 +124,7 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El método muestra se usa para mostrar por pantalla la tabla de símbolos actual.
+	 * El mÃ©todo muestra se usa para mostrar por pantalla la tabla de smbolos actual.
 	 */
 	public void muestra(){
 		String aux = this.tabla.toString();
@@ -132,12 +132,14 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * El método dirID obtiene la posición de memoria del par (ide y tipo) dado por parámetro al método.
-	 * Es necesario para saber cuando generemos el código de dónde tomar los valores necesarios.
+	 * El mÃ©todo dirI obtiene la posicin de memoria del par (ide y tipo) dado por parmetro al mtodo.
+	 * Es necesario para saber cuando generemos el cdigo de dnde tomar los valores necesarios.
 	 *  
      * @param id String que tienen almacenado el nombre del identificador
 	 * @param tipo String que tienen almacenado el tipo del identificador
-	 * @return Entero que nos indica la posición en memoria del identificador que indica si la operación se realizo bien. 
+	 * @return i int que nos indica la posicin en memoria del identificador que indica si la operacin se realizo bien.
+	 * 
+	 *  
 	 */
 	public int dirID(String id, String tipo){
 		String aux = id.concat("#");
