@@ -197,7 +197,7 @@ public class Lexico {
 			 */
 			case '+':	a = (char)fuente.read();
 						posicion ++;
-						if ((a >= '1') || (a<='9')){
+						if ((a >= '1') && (a<='9')){
 							posicion --;
 							fuente.seek(posicion);
 							String aux;
@@ -216,7 +216,7 @@ public class Lexico {
 			 */
 			case '-':	a = (char)fuente.read();
 						posicion ++;
-						if ((a >= '1') || (a<='9')){
+						if ((a >= '1') && (a<='9')){
 							String aux;
 							aux = leerNumero("-");
 							return new Token (aux,Tipos.TKNUM);

@@ -282,7 +282,10 @@ public class Sintactico{
 				a.setTipo(atrDeExp.getTipo());
 				return a;
 			}
-			else{
+			else if (true){  // RECONOCE PAP, llamamos a ExpC
+				//PON
+			}
+				else{
 				errDeRExpC = false;
 			}
 		}
@@ -346,7 +349,7 @@ public class Sintactico{
 				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
 				lexico.reconoce(Tipos.TKPCI))){
 			Token tk;
-			tk = lexico.lexer();
+			tk = lexico.getLookahead();  //lexico.lexer();
 			System.out.println(tk.muestraToken());
 			if (lexico.reconoce(Tipos.TKSUMA) || lexico.reconoce(Tipos.TKRESTA)){
 				atrDeTerm = Term();
@@ -424,7 +427,8 @@ public class Sintactico{
 						lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
 						lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
 						lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
-						lexico.reconoce(Tipos.TKPCI)){
+						lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKSUMA) ||
+						lexico.reconoce(Tipos.TKRESTA)){
 					errDeRTerm = false;
 					a.setErr(errDeRTerm);
 					a.setTipo("");
