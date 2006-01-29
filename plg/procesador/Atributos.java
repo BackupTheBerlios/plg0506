@@ -41,28 +41,28 @@ public class Atributos {
 	
 	/**
 	 * Accesor para err.
-	 * @return err
+	 * @return err Booleano que nos indica si ha sucedido un error.
 	 */
 	public boolean getErr() {
 		return err;
 	}
 	/**
 	 * Mutador para err. 
-	 * @param err
+	 * @param err Booleano que nos indica si ha sucedido un error.
 	 */
 	public void setErr(boolean err) {
 		this.err = err;
 	}
 	/**
 	 * Accesor para tipo. 
-	 * @return tipo
+	 * @return tipo String con el tipo del identificador, expresion o valor
 	 */
 	public String getTipo() {
 		return tipo;
 	}
 	/**
 	 * Mutador para tipo. 
-	 * @param tipo
+	 * @param tipo String con el tipo del identificador, expresion o valor
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;

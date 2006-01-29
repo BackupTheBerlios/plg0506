@@ -6,7 +6,7 @@ import java.util.Enumeration;
 /**
  * La clase <B>TablaSimbolos</B> define los atributos y métodos relacionados con la tabla de símbolos.
  * <P>Esta clase cuenta con el siguiente atributo:
- * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de símbolos. el valor que almacenamos será un par con el nombre del identificador y el tipo del mismo. 
+ * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de símbolos. El valor que almacenamos será un par con el nombre del identificador y el tipo del mismo. 
  * No se podrán almacenar datos repetidos.</LI></UL></P>
  * 
  * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
@@ -47,14 +47,14 @@ public class TablaSimbolos {
 
 	/**
 	 * Accesor para tabla.
-	 * @return tabla
+	 * @return tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public Hashtable getTabla() {
 		return tabla;
 	}
 	/**
 	 * Mutador para tabla.
-	 * @param tabla
+	 * @param tabla Hashtable recibida por parámetro y a la que se inicializa la nueva tabla creada.
 	 */
 	public void setTabla(Hashtable tabla) {
 		this.tabla = tabla;
@@ -144,7 +144,7 @@ public class TablaSimbolos {
 	 *  
      * @param id String que tienen almacenado el nombre del identificador
 	 * @param tipo String que tienen almacenado el tipo del identificador
-	 * @return i Entero que nos indica la posición en memoria del identificador que indica si la operación se realizo bien.
+	 * @return i int que nos indica la posición en memoria del identificador que indica si la operación se realizo bien.
 	 * 
 	 *  
 	 */

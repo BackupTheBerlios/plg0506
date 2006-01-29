@@ -30,8 +30,8 @@ public class Par {
 	/**
 	 * Constructor de la clase Par con valores de inicialización recibidos por parámetro
 	 * 
-	 * @param id String con el nombre del identificador
-	 * @param tipo String con el tipo del identificador
+	 * @param id String con el nombre del identificador.
+	 * @param tipo String con el tipo del identificador.
 	 *  
 	 */
 	public Par(String id, String tipo) {
@@ -42,28 +42,28 @@ public class Par {
 
 	/**
 	 * Accesor para id.
-	 * @return id
+	 * @return id String con el nombre del identificador.
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
 	 * Mutador para id.
-	 * @param id
+	 * @param id String con el nombre del identificador.
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
 	 * Accesor para tipo.
-	 * @return tipo
+	 * @return tipo String con el tipo del identificador.
 	 */
 	public String getTipo() {
 		return tipo;
 	}
 	/**
 	 * Mutador para tipo.
-	 * @param tipo
+	 * @param tipo String con el tipo del identificador.
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;

@@ -46,28 +46,28 @@ public class Lexico {
 	
 	/**
 	 * Accesor para linea. 
-	 * @return linea
+	 * @return linea int que controla la línea del código donde se detecta el error.
 	 */
 	public int getLinea() {
 		return linea;
 	}
 	/**
 	 * Mutador para linea. 
-	 * @param linea
+	 * @param linea int que controla la línea del código donde se detecta el error.
 	 */
 	public void setLinea(int linea) {
 		this.linea = linea;
 	}
 	/**
 	 * Accesor para posicion. 
-	 * @return posicion
+	 * @return posicion int que marca la posición en la que se está leyendo dentro de una línea.
 	 */
 	public int getPosicion() {
 		return posicion;
 	}
 	/**
 	 * Mutador para posicion. 
-	 * @param posicion
+	 * @param posicion int que marca la posición en la que se está leyendo dentro de una línea.
 	 */
 	public void setPosicion(int posicion) {
 		this.posicion = posicion;
@@ -75,28 +75,28 @@ public class Lexico {
 
 	/**
 	 * Accesor para lookahead. 
-	 * @return lookahead
+	 * @return lookahead Token que almacena los caracteres de preanálisis.
 	 */
 	public Token getLookahead() {
 		return lookahead;
 	}
 	/**
 	 * Mutador para lookahead. 
-	 * @param lookahead
+	 * @param lookahead Token que almacena los caracteres de preanálisis.
 	 */
 	public void setLookahead(Token lookahead) {
 		this.lookahead = lookahead;
 	}
 	/**
 	 * Accesor para fuente. 
-	 * @return fuente
+	 * @return fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar
 	 */
 	public RandomAccessFile getFuente() {
 		return fuente;
 	}
 	/**
 	 * Mutador para fuente. 
-	 * @param fuente
+	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar
 	 */
 	public void setFuente(RandomAccessFile fuente) {
 		this.fuente = fuente;

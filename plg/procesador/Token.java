@@ -43,28 +43,28 @@ public class Token {
 
 	/**
 	 * Accesor para categoriaLexica.
-	 * @return categoriaLexica
+	 * @return categoriaLexica int que indica a que categoría léxica pertenece el token.
 	 */
 	public int getCategoriaLexica() {
 		return categoriaLexica;
 	}
 	/**
 	 * Mutador para categoriaLexica.
-	 * @param categoriaLexica
+	 * @param categoriaLexica int que indica a que categoría léxica pertenece el token.
 	 */
 	public void setCategoriaLexica(int categoriaLexica) {
 		this.categoriaLexica = categoriaLexica;
 	}
 	/**
 	 * Accesor para lexema.
-	 * @return lexema
+	 * @return lexema String que representa la parte lex del Token.
 	 */
 	public String getLexema() {
 		return lexema;
 	}
 	/**
 	 * Mutador para lexema.
-	 * @param lexema
+	 * @param lexema String que representa la parte lex del Token.
 	 */
 	public void setLexema(String lexema) {
 		this.lexema = lexema;
