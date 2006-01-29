@@ -303,7 +303,7 @@ public class Sintactico{
 		Atributos atrDeRExp;
 		Atributos a = new Atributos();
 		boolean errDeExp = false;
-		atrDeTerm = Term();
+		atrDeTerm = Term(); 
 		if (!atrDeTerm.getErr()){
 			//System.out.println("Es un Term, de integer");
 			atrDeRExp = RExp();
@@ -436,7 +436,6 @@ public class Sintactico{
 				genOpMul(tk.getLexema());
 				atrDeRTerm = RTerm();
 				errDeRTerm = atrDeFact.getErr() || atrDeRTerm.getErr() || ((!atrDeRTerm.getTipo().equals("int")) && (!atrDeRTerm.getTipo().equals("")));
-				atrDeFact.setTipo(atrDeFact.getTipo());
 			}
 			else{
 				errDeRTerm = true;
@@ -475,7 +474,7 @@ public class Sintactico{
 		boolean errDeTermB;
 		errDeTermB = atrDeNega.getErr() || atrDeRTermB.getErr();
 		a.setErr(errDeTermB);
-		a.setTipo("int");
+		a.setTipo("bool");
 		return a;
 	}
 	
@@ -491,21 +490,37 @@ public class Sintactico{
 		Atributos atrDeRTermB;
 		Atributos a = new Atributos();
 		boolean errDeRTermB = false;
-		if (!lexico.reconoce(Tipos.TKPYCOMA)){
-			Token tk = lexico.lexer();
+		Token tk;
+		tk = lexico.lexer();
+		System.out.println(tk.muestraToken());
+		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
+				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
+				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
+				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
+				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKOR))){
 			System.out.println(tk.muestraToken());
 			if (lexico.reconoce(Tipos.TKAND)){
 				atrDeNega = Nega();
-				genOpAnd();
+				genOpMul(tk.getLexema());
 				atrDeRTermB = RTermB();
-				errDeRTermB = atrDeNega.getErr() || atrDeRTermB.getErr() || ((!atrDeRTermB.getTipo().equals("bool")) && (!atrDeRTermB.getTipo().equals(""))); 
+				errDeRTermB = atrDeNega.getErr() || atrDeRTermB.getErr() || ((!atrDeRTermB.getTipo().equals("bool")) && (!atrDeRTermB.getTipo().equals("")));
 			}
 			else{
-				errDeRTermB = false;
+				errDeRTermB = true;
+				a.setErr(errDeRTermB);
+				a.setTipo("");
+				return a;
 			}
 		}
+		else{
+			errDeRTermB = false;
+			atrDeNega.setTipo("");
+		}
+		System.out.println("Rama else");
 		a.setErr(errDeRTermB);
 		a.setTipo(atrDeNega.getTipo());
+		System.out.println("Error " + errDeRTermB);
+		System.out.println("Tipo " + a.getTipo());
 		return a;
 	}
 	
@@ -565,22 +580,30 @@ public class Sintactico{
 		Atributos atrDeClausula = new Atributos();
 		Atributos a = new Atributos();
 		boolean errDeNega;
-		//Token tk = lexico.lexer();
-		//System.out.println(tk.muestraToken());
-		if (lexico.reconoce(Tipos.TKNOT)){
-			System.out.println("Es una Nega ::= OpNega Clausula");
-			Token tk = lexico.lexer();
+		Token tk;
+		tk = lexico.lexer();
+		System.out.println(tk.muestraToken());
+		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
+				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
+				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
+				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
+				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKAND))){
 			System.out.println(tk.muestraToken());
-			 atrDeClausula = Clausula();
-			 genOpNot();
-			 errDeNega = atrDeClausula.getErr(); 
+			if (lexico.reconoce(Tipos.TKNOT)){
+				atrDeClausula = Clausula();
+				genOpMul(tk.getLexema());
+				errDeNega = atrDeClausula.getErr() || ((!atrDeClausula.getTipo().equals("bool")) && (!atrDeClausula.getTipo().equals("")));
+			}
+			else{
+				atrDeClausula = Clausula();
+				errDeNega = atrDeClausula.getErr() || ((!atrDeClausula.getTipo().equals("bool")) && (!atrDeClausula.getTipo().equals("")));
+			}
 		}
 		else{
-			System.out.println("Es una Nega ::= Clausula");
-			atrDeClausula = Clausula();
-			System.out.println("El err de Clausula: " + atrDeClausula.getErr());
-			errDeNega = atrDeClausula.getErr();
+			errDeNega = false;
+			atrDeClausula.setTipo("");
 		}
+		System.out.println("Rama else");
 		a.setErr(errDeNega);
 		a.setTipo(atrDeClausula.getTipo());
 		return a;
@@ -601,15 +624,20 @@ public class Sintactico{
 		tk = lexico.getLookahead();
 		//tk = lexico.lexer();
 		System.out.println(tk.muestraToken());
+		if (lexico.reconoce(Tipos.TKNOT)){
+			tk = lexico.lexer();
+		}
 		if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
 			System.out.println("Es un true/false");
 			errDeClausula = false;
 			int cod;
 			// Revisar el intValue de true y false
-			if (tk.getLexema().equals("false"))
+			if (tk.getLexema().equals("false")){
 				cod = 0;
-			else
+			}	
+			else{
 				cod = 1;
+			}	
 			codigo.genIns("apila", cod);
 		}
 		else {
