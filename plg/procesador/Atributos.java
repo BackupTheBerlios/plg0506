@@ -26,6 +26,7 @@ public class Atributos {
 	 */
 	public Atributos() {
 		super();
+		tipo = "";
 	}
 	
 	/**

@@ -61,23 +61,16 @@ public class TablaSimbolos {
 	 * solo si existe su clave. La clave de cada identificador de un tipo es nica, no habr repeticiones.
 	 *
 	 * @param id String que almacena el nombre del identificador 
-	 * @param t String que almacena el tipo del identificador
-	 * @return Booleano que indica la existencia o no de estos valores en la tabla.
+	 * @return Booleano que indica la existencia o no de este valor en la tabla.
 	 */
-	public boolean existeID(String id, String t){
-		String aux = id.concat("#");
-		aux = aux.concat(t);
-		if (!this.tabla.containsKey(aux)){
-			return false;
-		}
-		else{
-			return true;	
-		}
+	public boolean existeID(String id){
+		
+		return this.tabla.containsKey(id);
 	}
 	
 	/**
-	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador de ese tipo. 
-	 * El valor de la clave en la tabla hash es nico, ya que concatenamos el nombre del identificador con el tipo usando 
+	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador con ese nombre 
+	 * El valor de la clave en la tabla hash es �nico, ya que concatenamos el nombre del identificador con el tipo usando 
 	 * entre medias un carcter de separacion: '#'. Como valor para la tabla introducimos un par, que son el nombre del id 
 	 * y el tipo. Si ya existe el par entonces no es posible aadir y lanzamos una excepcin
 	 * 
@@ -88,37 +81,31 @@ public class TablaSimbolos {
 	 * 
 	 */
 	public boolean agnadeID(String id, String t) throws Exception{
-		String aux = id.concat("#");
-		aux = aux.concat(t);
-		if (this.tabla.containsKey(aux)){
+		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			System.out.println("Añadido");
 			Par p = new Par(id,t);
-			this.tabla.put(aux,p);
+			this.tabla.put(id,p);
 			return true;	
 		}	
 	}
 
 	/**
-	 * El método eliminaID elimina un identificador 'id' de tipo 't' de la tabla si existe en ella existe un 
-	 * identificador 'id' de tipo 't'. Sino lanzara una excepcion.
+	 * El método eliminaID elimina un identificador 'id' de la tabla si existe. 
+	 * Si no, lanzara una excepcion.
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
-	 * @param t String que tienen almacenado el tipo del identificador
 	 * @return Booleano que indica si la operacin se realizo bien.
 	 * @exception  Exception Porque no se encuentra el par a eliminar
 	 * 
 	 */
-	public boolean eliminaID(String id, String t) throws Exception{
-		String aux = id.concat("#");
-		aux = aux.concat(t);
-		if (!this.tabla.containsKey(aux)){
-			throw new Exception("No se puede eliminar el identificador, no existe");
+	public boolean eliminaID(String id) throws Exception{
+		if (!this.tabla.containsKey(id)){
+			throw new Exception("No se puede eliminar el identificador: no existe");
 		}
 		else{
-			this.tabla.remove(aux);
+			this.tabla.remove(id);
 			return true;	
 		}	
 	}
@@ -132,22 +119,19 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * El método dirI obtiene la posicin de memoria del par (ide y tipo) dado por parmetro al mtodo.
-	 * Es necesario para saber cuando generemos el cdigo de dnde tomar los valores necesarios.
+	 * El método dirI obtiene la posicin de memoria del identificador "id" proporcionado como parametro.
+	 * Es necesario para saber, cuando generemos el cdigo, de dnde tomar los valores necesarios.
 	 *  
      * @param id String que tienen almacenado el nombre del identificador
-	 * @param tipo String que tienen almacenado el tipo del identificador
 	 * @return i int que nos indica la posicin en memoria del identificador que indica si la operacin se realizo bien.
 	 * 
 	 *  
 	 */
-	public int dirID(String id, String tipo){
-		String aux = id.concat("#");
-		aux = aux.concat(tipo);
+	public int dirID(String id){
 		int i = 0;
 		for (Enumeration e = this.tabla.keys(); e.hasMoreElements();){
 			String s = (String)e.nextElement();
-			if(s.equals(aux)){
+			if(s.equals(id)){
 				return i;
 			}
 			i ++;

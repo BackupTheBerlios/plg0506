@@ -2,6 +2,7 @@ package procesador;
 
 import java.io.RandomAccessFile;
 import tablaSimbolos.TablaSimbolos;
+import tablaSimbolos.Par;
 
 /**
  * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
@@ -12,7 +13,7 @@ import tablaSimbolos.TablaSimbolos;
  * <LI><CODE>dir:</CODE> Entero que marca la posicin de la pila con la que estamos trabajando. De tipo Entero.</LI>
  * </UL></P>
  * 
- * @author Paloma de la Fuente, Jons Andradas, Leticia Garca y Silvia Martn
+ * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
  *
  */
 
@@ -50,20 +51,21 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public void startParsing() throws Exception{
-		System.out.println("Start");
+		//System.out.println("Start");
 		Prog();
 		codigo.muestraCodigo();
 	}
 
 	/**
-	 * 
+	 * Evalúa el programa.  Primero lee las declaraciones de variables (identificadores), que se encuentran
+	 * separados del conjunto de instrucciones "Is" mediante un "#".  Acto seguido, procesa cada instrucción de Is.
 	 * 
 	 * @return errDeProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	public boolean Prog() throws Exception{
 		
-		System.out.println("Prog");
+		//System.out.println("Prog");
 		boolean errDeProg = true;
 		Atributos atrDeDecs;
 		Atributos atrDeIs;
@@ -74,13 +76,16 @@ public class Sintactico{
 	}
 	
 	/**
+	 * Recorre el conjunto de declaraciones (Dec) una por una.  Si tras una declaración encontramos
+	 * un punto y coma (";"), procesamos otra más.  Si en cambio lo que encontramos es una almohadilla
+	 * ("#"), dejamos de leer Decs.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Decs() throws Exception{
 		
-		System.out.println("Decs");
+		//System.out.println("Decs");
 		Atributos atrDeDecs;
 		Atributos atrDeDec;
 		Atributos a = new Atributos();
@@ -111,36 +116,42 @@ public class Sintactico{
 	}
 
 	/**
+	 * Procesa una declaración de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
+	 * y su nombre, de la forma: 
+	 * 			tipo identificador;
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Dec() throws Exception{
 
-		System.out.println("Dec");
+		//System.out.println("Dec");
 		boolean errDeDec;
 		Atributos a = new Atributos();
 		String t = "";
 		Token tk;
 		tk = lexico.lexer();
-		//System.out.println(tk.muestraToken());
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
 			t = tk.getLexema();
 			tk = lexico.lexer();
-			//System.out.println(tk.muestraToken());
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				String i = tk.getLexema();
-				errDeDec = TS.existeID(i,t);
+				errDeDec = TS.existeID(i);
 				if (!errDeDec){
 					TS.agnadeID(i,t);
+				}
+				else {
+					throw new Exception("ERROR: Identificador duplicado.  Cada identificador solo se puede declarar una vez");
 				}
 			}
 			else{
 				errDeDec = true;
+				throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
 			}
 		}
 		else{
 			errDeDec = true;
+			throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
 		}
 		a.setErr(errDeDec);
 		a.setTipo(t);
@@ -148,13 +159,16 @@ public class Sintactico{
 	}	
 	
 	/**
+	 * Recorre el conjunto de Instrucciones del programa.  Cada instruccion I se separa del conjunto de 
+	 * instrucciones restantes (Is) mediante un punto y coma (";").  Si encontramos el token Fin de Fichero,
+	 * hemos terminado de leer instrucciones. 
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Is() throws Exception{
 		
-		System.out.println("Is");
+		//System.out.println("Is");
 		Atributos atrDeIs;
 		Atributos atrDeI;
 		Atributos a = new Atributos();
@@ -173,6 +187,7 @@ public class Sintactico{
 			}
 			else{
 				errDeIs = true;
+				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
 		}
 		a.setErr(errDeIs);
@@ -181,13 +196,14 @@ public class Sintactico{
 	}
 
 	/**
+	 * Procesa cada instrucción el conjunto de instrucciones del Programa.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos I() throws Exception{
 
-		System.out.println("I");
+		//System.out.println("I");
 		Atributos a = new Atributos();
 		Atributos atrDeIAsig;
 		atrDeIAsig = IAsig();
@@ -197,35 +213,57 @@ public class Sintactico{
 	}
 	
 	/**
+	 * Procesa una instrucción de asignación, de la forma:
+	 * 
+	 * 		identificador := Expresión.
+	 * 
+	 * Si hay un error en el formato de la instrucción de asignación, o si 
+	 * el tipo del identificador usado no coincide con el de la expresión, 
+	 * se lanza una Excepción.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos IAsig() throws Exception{
 		
-		System.out.println("IAsig");
+		//System.out.println("IAsig");
 		Atributos  atrDeExpC = new Atributos();
 		Atributos a = new Atributos();
 		boolean errDeIAsig; 
 		Token tk;
 		String lex = "";
 		tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			tk = lexico.lexer();
-			System.out.println(tk.muestraToken());
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
-				errDeIAsig = atrDeExpC.getErr() || !(TS.existeID(lex,atrDeExpC.getTipo()));
-				codigo.genIns("desapila-dir",TS.dirID(lex,atrDeExpC.getTipo()));
+				errDeIAsig = atrDeExpC.getErr() || !(TS.existeID(lex));
+				if (!(TS.existeID(lex))){
+					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
+				}
+				else{
+					if (atrDeExpC.getTipo().equals(((Par)TS.getTabla().get(lex)).getTipo())){
+						codigo.genIns("desapila-dir",TS.dirID(lex));
+					}
+					else{
+						throw new Exception("ERROR: El Tipo de la Expresion no coincide con el del Identificador.");
+					}
+				}
 			}
 			else{
 				errDeIAsig = true;
+				throw new Exception("ERROR: Asignación Incorrecta. El formato correcto es \"identificador := Expresion;\".");
 			}
 		}
 		else{
-			errDeIAsig = true;
+			if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){
+				errDeIAsig = true;
+				throw new Exception("ERROR: Asignación Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+			} 
+			else {
+				errDeIAsig = false;
+			}
 		}
 		a.setErr(errDeIAsig);
 		a.setTipo(atrDeExpC.getTipo());
@@ -233,13 +271,15 @@ public class Sintactico{
 	}
 	
 	/**
+	 * Procesa y desarrolla una Expresión de Comparación, ExpC, llamando a Exp y a RExpC, 
+	 * para empezar a desarrollar el árbol sintáctico que reconocerá la Expresión. 
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos ExpC() throws Exception{
 		
-		System.out.println("ExpC");
+		//System.out.println("ExpC");
 		
 		Atributos atrDeExp;
 		Atributos atrDeRExpC;
@@ -247,37 +287,39 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		boolean errDeExpC;
 		atrDeRExpC = RExpC();
-		errDeExpC = atrDeExp.getErr() || atrDeRExpC.getErr() || !atrDeExp.getTipo().equals(atrDeRExpC.getTipo()) || !atrDeRExpC.getTipo().equals("");
+		errDeExpC = atrDeExp.getErr() || atrDeRExpC.getErr() || (!atrDeExp.getTipo().equals(atrDeRExpC.getTipo()) && !atrDeRExpC.getTipo().equals(""));
 		a.setErr(errDeExpC);
-		a.setTipo(atrDeExp.getTipo());
+		if (atrDeRExpC.equals("")){
+			a.setTipo(atrDeExp.getTipo());
+		}
+		else{
+			a.setTipo("bool");
+		}
 		return a;
 	}
 	
 	/**
+	 * Reconoce la segunda mitad de una Expresión de Comparación de la forma:
+	 * 
+	 *       OpComp Exp RExpC | landa
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RExpC() throws Exception{
 		
-		System.out.println("RExpC");
+		//System.out.println("RExpC");
 		Atributos atrDeExp;
 		Atributos atrDeRExpC;
 		Atributos a = new Atributos();
 		boolean errDeRExpC = false;
 		if (!lexico.reconoce(Tipos.TKPYCOMA)){
-			//System.out.println("Y el token es: " + tk.muestraToken());
 			if (lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKMAYIG) || lexico.reconoce(Tipos.TKMEN) || lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) || lexico.reconoce(Tipos.TKDIF)){
-				//System.out.println("Entramos a procesarlo");
 				Token tk = lexico.getLookahead();
-				genOpComp(tk.getLexema());
 				atrDeExp = Exp();
-				//Token tk;
-				//tk = lexico.getLookahead();//lexico.lexer();
-				//System.out.println(tk.muestraToken());
-				System.out.println("Entro a RExpC");
+				genOpComp(tk.getLexema());				
 				atrDeRExpC = RExpC();
-				errDeRExpC = atrDeExp.getErr() || atrDeRExpC.getErr() || !(atrDeRExpC.getTipo() == atrDeExp.getTipo());
+				errDeRExpC = atrDeExp.getErr() || atrDeRExpC.getErr() || (!(atrDeRExpC.getTipo() == atrDeExp.getTipo()) && !atrDeRExpC.getTipo().equals(""));
 				a.setErr(errDeRExpC);
 				a.setTipo(atrDeExp.getTipo());	
 				return a;
@@ -292,56 +334,55 @@ public class Sintactico{
 	}
 	
 	/**
-	 * 
+	 * Reconoce una Expresión, tanto aritmética como lógica (booleana).
+	 *  
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Exp() throws Exception{
 		
-		System.out.println("Exp");
+		//System.out.println("Exp");
 		Atributos atrDeTerm;
 		Atributos atrDeRExp;
 		Atributos a = new Atributos();
 		boolean errDeExp = false;
-		atrDeTerm = Term(); 
+		long posFuente = lexico.getFuente().getFilePointer();
+		int posLex = lexico.getPosicion();
+		atrDeTerm = Term();
 		if (!atrDeTerm.getErr()){
-			//System.out.println("Es un Term, de integer");
 			atrDeRExp = RExp();
-			if (atrDeRExp.getTipo() == null){
+			if ((atrDeRExp.getTipo() == null)||(atrDeRExp.getTipo().equals(""))){
 				atrDeRExp.setTipo("int");
 			}	
-			System.out.println("Era un term int");
-			System.out.println(errDeExp);
 			errDeExp = atrDeTerm.getErr() || atrDeRExp.getErr() || ((!atrDeRExp.getTipo().equals("int")) && (!atrDeRExp.getTipo().equals("")));
 		}
 		else{
-			//System.out.println("Es un TermB, de bool");
+			lexico.getFuente().seek(posFuente);
+			lexico.setPosicion(posLex);
+			lexico.lexer();
 			atrDeTerm = TermB();
 			if (!atrDeTerm.getErr()){
-				System.out.println("Era un termB bool");
-				atrDeRExp = RExp();
-				if (atrDeRExp.getTipo() == null){
-					atrDeRExp.setTipo("bool");
-				}	
+				atrDeRExp = RExp();					
+				atrDeRExp.setTipo("bool");	
 				errDeExp = atrDeTerm.getErr() || atrDeRExp.getErr() || ((!atrDeRExp.getTipo().equals("bool")) && (!atrDeRExp.getTipo().equals("")));
 			}
 			else{
 				errDeExp = true;
 			}
 		}	
-		System.out.println("Salgo de Exp");
 		a.setErr(errDeExp);
 		a.setTipo(atrDeTerm.getTipo());
 		return a;
 	}
 	
 	/**
+	 * Reconoce la segunda mitad (con el operador) de la descomposición de una Expresión booleana o aritmética.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RExp() throws Exception{
-		System.out.println("RExp");
+		//System.out.println("RExp");
 		Atributos atrDeTerm = new Atributos();
 		Atributos atrDeRExp;
 		Atributos a = new Atributos();
@@ -352,17 +393,16 @@ public class Sintactico{
 				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
 				lexico.reconoce(Tipos.TKPCI))){
 			Token tk;
-			tk = lexico.getLookahead();  //lexico.lexer();
-			System.out.println(tk.muestraToken());
+			tk = lexico.getLookahead(); 
 			if (lexico.reconoce(Tipos.TKSUMA) || lexico.reconoce(Tipos.TKRESTA)){
 				atrDeTerm = Term();
 				genOpAd(tk.getLexema());
-				System.out.println("Estoy donde debo");
 				atrDeRExp = RExp();
 				errDeRExp = atrDeTerm.getErr() || atrDeRExp.getErr() || ((!atrDeRExp.getTipo().equals("int")) && (!atrDeRExp.getTipo().equals(""))); 
 			}
 			else{
 				if (lexico.reconoce(Tipos.TKOR)){
+					tk = lexico.lexer();
 					atrDeTerm = TermB();
 					genOpOr();
 					atrDeRExp = RExp();
@@ -374,7 +414,6 @@ public class Sintactico{
 			}
 		} 
 		else {
-			System.out.println("He leido un ; o algo de eso");
 			atrDeTerm.setTipo("");
 		}
 		a.setErr(errDeRExp);
@@ -383,66 +422,58 @@ public class Sintactico{
 	}
 	
 	/**
-	 * 
+	 * Reconoce un Término, compuesto de un Factor y un Término Recursivo:
+	 *  
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Term() throws Exception{
 		
-		System.out.println("Term");
+		//System.out.println("Term");
 		Atributos atrDeFact;
 		Atributos atrDeRTerm;
 		Atributos a = new Atributos();
 		atrDeFact = Fact();
-		//if (!atrDeFact.getErr()){
-			//System.out.println("Term es Fact RTerm");
-			atrDeRTerm = RTerm();
-		//}	
-		//else{
-			//atrDeRTerm = new Atributos(true, "");
-		//}	
+		atrDeRTerm = RTerm();	
 		boolean errDeTerm;
 		errDeTerm = atrDeFact.getErr() || atrDeRTerm.getErr();
 		a.setErr(errDeTerm);
-		//System.out.println("El error de TERM: " + errDeTerm);
 		a.setTipo("int");
 		return a;
 	}
 	
 	/**
-	 * 
+	 * Reconoce un Término Aritmético recursivo.
+	 *  
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RTerm() throws Exception{
 		
-		System.out.println("RTerm");
+		//System.out.println("RTerm");
 		Atributos atrDeFact = new Atributos();
 		Atributos atrDeRTerm;
 		Atributos a = new Atributos();
 		boolean errDeRTerm = false;
 		Token tk;
 		tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
 		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
 				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
 				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
 				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
 				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKSUMA) ||
 				lexico.reconoce(Tipos.TKRESTA))){
-			System.out.println(tk.muestraToken());
 			if (lexico.reconoce(Tipos.TKMULT) || lexico.reconoce(Tipos.TKDIV)){
 				atrDeFact = Fact();
 				genOpMul(tk.getLexema());
 				atrDeRTerm = RTerm();
 				errDeRTerm = atrDeFact.getErr() || atrDeRTerm.getErr() || ((!atrDeRTerm.getTipo().equals("int")) && (!atrDeRTerm.getTipo().equals("")));
+				atrDeFact.setTipo(atrDeFact.getTipo());
 			}
 			else{
 				errDeRTerm = true;
 				a.setErr(errDeRTerm);
 				a.setTipo("");
-				System.out.println("Error " + errDeRTerm);
-				System.out.println("Tipo " + a.getTipo());
 				return a;
 			}
 		}
@@ -450,22 +481,20 @@ public class Sintactico{
 			errDeRTerm = false;
 			atrDeFact.setTipo("");
 		}
-		System.out.println("Rama else");
 		a.setErr(errDeRTerm);
 		a.setTipo(atrDeFact.getTipo());
-		System.out.println("Error " + errDeRTerm);
-		System.out.println("Tipo " + a.getTipo());
 		return a;
 	}
 
 	/**
+	 * Reconoce un Término Booleano.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos TermB() throws Exception{
 		
-		System.out.println("TermB");
+		//System.out.println("TermB");
 		Atributos atrDeNega;
 		Atributos atrDeRTermB;
 		Atributos a = new Atributos();
@@ -479,79 +508,68 @@ public class Sintactico{
 	}
 	
 	/**
+	 * Reconoce un Término Booleano Recursivo.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos RTermB() throws Exception{
 		
-		System.out.println("RTermB");
+		//System.out.println("RTermB");
 		Atributos atrDeNega = new Atributos();
 		Atributos atrDeRTermB;
 		Atributos a = new Atributos();
 		boolean errDeRTermB = false;
-		Token tk;
-		tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
-		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
-				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
-				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
-				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
-				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKOR))){
-			System.out.println(tk.muestraToken());
+		if (!lexico.reconoce(Tipos.TKPYCOMA)){
+			lexico.getLookahead();
 			if (lexico.reconoce(Tipos.TKAND)){
+				lexico.lexer();
 				atrDeNega = Nega();
-				genOpMul(tk.getLexema());
+				genOpAnd();
 				atrDeRTermB = RTermB();
-				errDeRTermB = atrDeNega.getErr() || atrDeRTermB.getErr() || ((!atrDeRTermB.getTipo().equals("bool")) && (!atrDeRTermB.getTipo().equals("")));
+				errDeRTermB = atrDeNega.getErr() || atrDeRTermB.getErr() || ((!atrDeRTermB.getTipo().equals("bool")) && (!atrDeRTermB.getTipo().equals(""))); 
 			}
 			else{
-				errDeRTermB = true;
-				a.setErr(errDeRTermB);
-				a.setTipo("");
-				return a;
+				errDeRTermB = false;
+				atrDeNega.setTipo("");
 			}
 		}
-		else{
-			errDeRTermB = false;
-			atrDeNega.setTipo("");
+		else {
+			
 		}
-		System.out.println("Rama else");
 		a.setErr(errDeRTermB);
 		a.setTipo(atrDeNega.getTipo());
-		System.out.println("Error " + errDeRTermB);
-		System.out.println("Tipo " + a.getTipo());
 		return a;
 	}
 	
 	/**
+	 * Reconoce un Factor.  Un Factor puede ser un entero, un identificador o una Expresión aritmética
+	 * entre paréntesis.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Fact() throws Exception{
 		
-		System.out.println("Fact");
+		//System.out.println("Fact");
 		Atributos a = new Atributos();
 		boolean errDeFact = true;
 		Atributos atrDeExp;
 		Token tk;
 		tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
 		if (lexico.reconoce(Tipos.TKNUM)){
 			errDeFact = false;
 			codigo. genIns("apila", Integer.decode(tk.getLexema()).intValue());
 		}
 		else {
 			if (lexico.reconoce(Tipos.TKIDEN)){
-				errDeFact = !TS.existeID(tk.getLexema(), "int");
-				codigo.genIns("apila-dir",TS.dirID(tk.getLexema(),"int"));
+				errDeFact = !TS.existeID(tk.getLexema());
+				codigo.genIns("apila-dir",TS.dirID(tk.getLexema()));
 			}
 			else{
 				if (lexico.reconoce(Tipos.TKPAP)){
 					atrDeExp = Exp();
 					if (lexico.reconoce(Tipos.TKPCI)){
-						System.out.println("Reconozco pci");
 						errDeFact = atrDeExp.getErr() || (!atrDeExp.getTipo().equals("int") && !atrDeExp.getTipo().equals(""));
 					}
 					else{
@@ -565,91 +583,71 @@ public class Sintactico{
 		}
 		a.setErr(errDeFact);
 		a.setTipo("int");
-		System.out.println("Error fact " + errDeFact);
 		return a;
 	}
 	
 	/**
+	 * Reconoce la negación (o no) de un componente booleano.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Nega() throws Exception{
 		
-		System.out.println("Nega");
+		//System.out.println("Nega");
 		Atributos atrDeClausula = new Atributos();
 		Atributos a = new Atributos();
 		boolean errDeNega;
-		Token tk;
-		tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
-		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
-				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
-				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
-				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
-				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKAND))){
-			System.out.println(tk.muestraToken());
-			if (lexico.reconoce(Tipos.TKNOT)){
-				atrDeClausula = Clausula();
-				genOpMul(tk.getLexema());
-				errDeNega = atrDeClausula.getErr() || ((!atrDeClausula.getTipo().equals("bool")) && (!atrDeClausula.getTipo().equals("")));
-			}
-			else{
-				atrDeClausula = Clausula();
-				errDeNega = atrDeClausula.getErr() || ((!atrDeClausula.getTipo().equals("bool")) && (!atrDeClausula.getTipo().equals("")));
-			}
+		if (lexico.reconoce(Tipos.TKNOT)){
+			lexico.lexer();
+			 atrDeClausula = Clausula();
+			 genOpNot();
+			 errDeNega = atrDeClausula.getErr(); 
 		}
 		else{
-			errDeNega = false;
-			atrDeClausula.setTipo("");
+			atrDeClausula = Clausula();
+			errDeNega = atrDeClausula.getErr();
 		}
-		System.out.println("Rama else");
 		a.setErr(errDeNega);
 		a.setTipo(atrDeClausula.getTipo());
 		return a;
 	}
 	
 	/**
+	 * Reconoce una Clausula de tipo booleano.  Una Clausula puede ser el valor "true" o 
+	 * el valor "false", un identificador (de tipo booleano), o una Expresión booleana entre
+	 * paréntesis.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Clausula() throws Exception{
 		
-		System.out.println("Clausula");
+		//System.out.println("Clausula");
 		Atributos a = new Atributos();
 		boolean errDeClausula = true;
 		Atributos atrDeExpC;
 		Token tk;
 		tk = lexico.getLookahead();
-		//tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
-		if (lexico.reconoce(Tipos.TKNOT)){
-			tk = lexico.lexer();
-		}
 		if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
-			System.out.println("Es un true/false");
 			errDeClausula = false;
 			int cod;
 			// Revisar el intValue de true y false
-			if (tk.getLexema().equals("false")){
+			if (tk.getLexema().equals("false"))
 				cod = 0;
-			}	
-			else{
+			else
 				cod = 1;
-			}	
 			codigo.genIns("apila", cod);
 		}
 		else {
 			if (lexico.reconoce(Tipos.TKIDEN)){
-				errDeClausula = !TS.existeID(tk.getLexema(), "bool");
-				codigo.genIns("apila-dir",TS.dirID(tk.getLexema(),"bool"));
+				errDeClausula = !TS.existeID(tk.getLexema());
+				codigo.genIns("apila-dir",TS.dirID(tk.getLexema()));
 			}
 			else{
 				if (lexico.reconoce(Tipos.TKPAP)){
 					atrDeExpC = ExpC();
-					Token tk2 = lexico.getLookahead();
-					System.out.println(tk2.muestraToken());
+					lexico.getLookahead();
 					if (lexico.reconoce(Tipos.TKPCI)){
 						errDeClausula = atrDeExpC.getErr() || !atrDeExpC.getTipo().equals("bool");
 					}
@@ -662,14 +660,14 @@ public class Sintactico{
 				}
 			}
 		}
-		tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
+		lexico.lexer();
 		a.setErr(errDeClausula);
 		a.setTipo("bool");
 		return a;
 	}
 	
 	/**
+	 * Genera el código de la operación de suma o resta.
 	 * 
 	 * @param opDeOpAd
 	 */
@@ -682,6 +680,7 @@ public class Sintactico{
 	}
 	
 	/**
+	 * Genera el código de la operación de multiplicación o división.
 	 * 
 	 * @param opDeOpMul
 	 */
@@ -695,7 +694,7 @@ public class Sintactico{
 	}
 	
 	/**
-	 * 
+	 * Genera el código de la operación de comparación
 	 * @param opDeOpComp
 	 */
 	public void genOpComp(String opDeOpComp){
@@ -721,7 +720,7 @@ public class Sintactico{
 	}
 
 	/**
-	 * 
+	 * Genera el código de la operación booleana "and".
 	 *
 	 */
 	public void genOpAnd(){
@@ -731,7 +730,7 @@ public class Sintactico{
 	}
 
 	/**
-	 * 
+	 * Genera el código de la operación booleana "or".
 	 *
 	 */
 	public void genOpOr(){
@@ -741,7 +740,7 @@ public class Sintactico{
 	}
 
 	/**
-	 * 
+	 * Genera el código de la negación booleana "not".
 	 *
 	 */
 	public void genOpNot(){
