@@ -2,7 +2,7 @@ package procesador;
 
 import java.io.RandomAccessFile;
 import tablaSimbolos.TablaSimbolos;
-import tablaSimbolos.Par;
+//import tablaSimbolos.Par;
 
 /**
  * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
@@ -243,12 +243,12 @@ public class Sintactico{
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
-					if (atrDeExpC.getTipo().equals(((Par)TS.getTabla().get(lex)).getTipo())){
+					//if (atrDeExpC.getTipo().equals(((Par)TS.getTabla().get(lex)).getTipo())){
 						codigo.genIns("desapila-dir",TS.dirID(lex));
-					}
-					else{
-						throw new Exception("ERROR: El Tipo de la Expresion no coincide con el del Identificador.");
-					}
+					//}
+					//else{
+					//	throw new Exception("ERROR: El Tipo de la Expresion no coincide con el del Identificador.");
+					//}
 				}
 			}
 			else{
