@@ -35,12 +35,19 @@ public class MenuPrincipal {
 				 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 				 * se recoge mas abajo.
 				 */
-				fuente = new RandomAccessFile(new File(args[0]),"r");
-				Procesador p=new Procesador();
-				Vector prog = p.procesa(fuente);
-				MaquinaP maquina= new MaquinaP(prog);
-				maquina.ejecuta();
-				maquina.resultadoMem();
+				String f = args[0];
+				if (f.endsWith("txt")){
+					fuente = new RandomAccessFile(new File(f),"r");
+					Procesador p=new Procesador();
+					p.procesa(fuente, f);
+					MaquinaP maquina= new MaquinaP(f);
+					maquina.ejecuta();
+					maquina.resultadoMem();
+				}
+				else{
+					System.out.println("ERROR: Debe indicar fichero fuente como parametro.\n\n"
+							+"Acabado en extension \".txt\"");
+				}
 			} 
 			catch (java.io.FileNotFoundException e) {
 				System.out.println("ERROR: Archivo no encontrado: " + args[0]);	

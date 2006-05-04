@@ -3,6 +3,9 @@
  */
 package maquinaP;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -42,20 +45,31 @@ public class MaquinaP {
 	private int ST;
 	private Vector Prog;
 	private Vector Mem;
-	
+	private FileInputStream fichero;
 	/**
 	 * 
 	 * @param prog
 	 */	
-	public MaquinaP(Vector prog) {
+	public MaquinaP(String f) {
 		super();
 		// TODO Auto-generated constructor stub
-		Prog = prog;
+		//Prog = prog;
 		pila = new Stack();
 		PC = 0;
 		H = 0;
 		ST = -1;
 		Mem= new Vector();
+		int i= f.length();
+		String fcod = new String(f.substring( 0,i-3));
+		fcod = fcod.concat("obj");
+		File fich= new File(fcod);
+		try{
+			fichero = new FileInputStream(fich);
+		}
+		catch(java.io.FileNotFoundException e) {
+			System.out.println("ERROR: Archivo no encontrado: " + fcod);	
+		}
+		Prog = damePrograma(fichero);
 	}
 	
 	/**
@@ -152,6 +166,12 @@ public class MaquinaP {
 	 */
 	public void setST(int st) {
 		ST = st;
+	}
+	
+	public Vector damePrograma(FileInputStream f){
+		Vector v=new Vector();
+		
+		return v;
 	}
 	
 	/**

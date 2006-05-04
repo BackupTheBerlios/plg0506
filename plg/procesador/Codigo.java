@@ -1,5 +1,7 @@
 package procesador;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.String;
 import java.util.Vector;
 
@@ -20,12 +22,24 @@ public class Codigo {
 	 *  no existe asique de momento se mostrara por pantalla.
 	 */
 	Vector cod;
+	FileOutputStream fichero;
 	
 	/**
 	 * El constructor de la clase Codigo no tiene parámetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vacía.
 	 */
-	public Codigo(){		
+	public Codigo(String f){		
 		cod = new Vector();
+		String fcod;
+		int i= f.length();
+		fcod = new String(f.substring( 0,i-3));
+		fcod = fcod.concat("obj");
+		File fich= new File(fcod);
+		try{
+			fichero = new FileOutputStream(fich, false);
+		}
+		catch(java.io.FileNotFoundException e) {
+			System.out.println("ERROR: Archivo no encontrado: " + fcod);	
+		}
 	}
 	
 	/**
@@ -53,6 +67,13 @@ public class Codigo {
 	public void genIns(String instr, int num){
 		String i =instr + " " + num;
 		cod.add(i);
+		i= i.concat("\n");
+		try{
+			fichero.write(i.getBytes());
+		}
+		catch(java.io.IOException e){
+			System.out.println("ERROR: No he podido escribir en el fichero.");
+		}
 	}
 	
 	/**
@@ -64,6 +85,13 @@ public class Codigo {
 	public void genIns(String instr){
 		String i= instr;
 		cod.add(i);
+		i= i.concat("\n");
+		try{
+			fichero.write(i.getBytes());
+		}
+		catch(java.io.IOException e){
+			System.out.println("ERROR: No he podido escribir en el fichero.");
+		}
 	}
 	
 	/**
@@ -73,6 +101,12 @@ public class Codigo {
 	public void muestraCodigo(){		
 		for (int i=0;i<cod.size();i++){
 			System.out.println(cod.elementAt(i));
+		}
+		try{
+			fichero.close();
+		}
+		catch(java.io.IOException e){
+			System.out.println("ERROR: No he podido cerrar en el fichero.");
 		}
 	}
 }

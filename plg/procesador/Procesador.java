@@ -20,7 +20,7 @@ public class Procesador {
 	 * @param fuente Que contendrá la ruta del fichero a procesar.
 	 * 
 	 */
-	public Vector procesa(RandomAccessFile fuente){
+	public void procesa(RandomAccessFile fuente, String f){
 		
 			try {
 				/*
@@ -29,15 +29,15 @@ public class Procesador {
 				 */
 				TablaSimbolos TS = new TablaSimbolos();	
 				Sintactico sintactico;		
-				sintactico = new Sintactico(fuente, TS);
+				sintactico = new Sintactico(fuente, TS, f);
 				System.out.println("Inicio del analisis\n");
 				sintactico.startParsing();
 				System.out.println("Fin del analisis");
-				return sintactico.getCodigo().getCod();
+				//return sintactico.getCodigo().getCod();
 			} 
 			catch (Exception e) {
 				System.out.println(e.getMessage());
-				return null;
+				//return null;
 			}
 		
 	}

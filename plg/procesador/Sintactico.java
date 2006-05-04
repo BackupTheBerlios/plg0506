@@ -39,8 +39,8 @@ public class Sintactico{
 	 * @param T Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
-	public Sintactico(RandomAccessFile fuente, TablaSimbolos T) throws Exception{
-		codigo = new Codigo(); 
+	public Sintactico(RandomAccessFile fuente, TablaSimbolos T, String f) throws Exception{
+		codigo = new Codigo(f);
 		lexico = new Lexico(fuente);		
 		TS = T;
 		dir = 0;
