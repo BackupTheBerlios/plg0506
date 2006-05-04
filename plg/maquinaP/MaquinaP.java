@@ -178,88 +178,102 @@ public class MaquinaP {
 				i= (String)Prog.get(j);
 				linea = i.split(" ");
 				if (linea[0].compareTo("apila")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					apila((new Integer(Integer.parseInt(linea[1]))).intValue());
 					j++;
 				}
 				else if (linea[0].compareTo("desapila-dir")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 					j++;
 				}
 				else if (linea[0].compareTo("apila-dir")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 					j++;
 				}
 				else if (linea[0].compareTo("suma")==0){
-					System.out.println(linea[0]);
+					System.out.print(linea[0]+"  ");
 					suma();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("resta")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					resta();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("multiplica")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					multiplica();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("divide")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					divide();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("and")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+ "  ");
 					and();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("or")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					or();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("not")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					not();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("neg")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					neg();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("menor")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					menor();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("menor_o_igual")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					menorIgual();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("mayor")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					mayor();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("mayor_o_igual")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					mayorIgual();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("igual")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					igual();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("distinto")==0){
-					System.out.println(linea[0]);
+					System.out.println(linea[0]+"  ");
 					distinto();
+					System.out.println(pila.peek());
 					j++;
 				}
 				else{
@@ -284,7 +298,7 @@ public class MaquinaP {
 	
 	/**
 	 * (R1) suma:
-	 * Pila[ST-1] <-- Pila[ST] + Pila[ST-1]
+	 * Pila[ST-1] <-- Pila[ST-1] + Pila[ST]
 	 * ST <-- ST -1 
 	 * PC <-- PC + 1
 	 */
@@ -292,7 +306,7 @@ public class MaquinaP {
 	public void suma(){
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
-		Integer s = new Integer(s1.intValue()+s2.intValue());
+		Integer s = new Integer(s2.intValue()+s1.intValue());
 		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
@@ -300,14 +314,14 @@ public class MaquinaP {
 	
 	/**
 	 * (R2) resta:
-	 *	Pila[ST-1] <-- Pila[ST] - Pila[ST-1]
+	 *	Pila[ST-1] <-- Pila[ST-1] - Pila[ST]
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 */
 	public void resta(){
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
-		Integer s = new Integer(s1.intValue()-s2.intValue());
+		Integer s = new Integer(s2.intValue()-s1.intValue());
 		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
@@ -315,14 +329,14 @@ public class MaquinaP {
 	
 	/**
 	 * (R3) multiplica:
-	 *	Pila[ST-1] <-- Pila[ST] * Pila[ST-1]  
+	 *	Pila[ST-1] <-- Pila[ST-1] * Pila[ST]  
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 */
 	public void multiplica(){
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
-		Integer s = new Integer(s1.intValue()*s2.intValue());
+		Integer s = new Integer(s2.intValue()*s1.intValue());
 		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
@@ -330,14 +344,14 @@ public class MaquinaP {
 	
 	/**
 	 * (R4) divide:
-	 *	Pila[ST-1] <-- Pila[ST] / Pila[ST-1]  
+	 *	Pila[ST-1] <-- Pila[ST-1] / Pila[ST]  
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 */
 	public void divide(){
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
-		Integer s = new Integer(s1.intValue()/s2.intValue());
+		Integer s = new Integer(s2.intValue()/s1.intValue());
 		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
@@ -385,12 +399,13 @@ public class MaquinaP {
 		//Sino lo es aumentamos el tamaño del vector.
 		if (d>=Mem.size()){
 			aumentoMem(d);
-			Mem.set(d,pila.elementAt(ST));
+			Mem.set(d,pila.pop());
 			System.out.println(Mem.elementAt(d)+" "+d);
 		}
 		else{
-			Mem.set(d,pila.elementAt(ST));
-			System.out.println(Mem.elementAt(d)+" "+d);
+			System.out.println("La cima de la Pila es:  "+pila.peek());
+			Mem.set(d,pila.pop());
+			System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
 			//Mem.insertElementAt(pila.elementAt(ST),d);
 		}
 		ST = ST -1;
@@ -445,7 +460,7 @@ public class MaquinaP {
 			pila.push(new Integer(0));
 		}
 		else{
-			pila.add(ST,new Integer(1));
+			pila.push(new Integer(1));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -480,14 +495,14 @@ public class MaquinaP {
 	
 	/**
 	 * (R17) Menor:
-	 *	Pila[ST ? 1] <-- "true" si Pila[ST ? 1] < Pila[ST]
+	 *	Pila[ST ? 1] <-- "true" si Pila[ST - 1] < Pila[ST]
 	 *					"false" en c.o.c
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
 	public void menor(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (c1<((Integer)pila.pop()).intValue()){
+		if (((Integer)pila.pop()).intValue()<c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -506,7 +521,7 @@ public class MaquinaP {
 	 */
 	public void menorIgual(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (c1<=((Integer)pila.pop()).intValue()){
+		if (((Integer)pila.pop()).intValue()<=c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -525,7 +540,7 @@ public class MaquinaP {
 	 */
 	public void mayor(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (c1>((Integer)pila.pop()).intValue()){
+		if (((Integer)pila.pop()).intValue()>c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -544,7 +559,7 @@ public class MaquinaP {
 	 */
 	public void mayorIgual(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (c1>=((Integer)pila.pop()).intValue()){
+		if (((Integer)pila.pop()).intValue()>=c1){
 			pila.push(new Integer(1));
 		}
 		else{
