@@ -1,6 +1,8 @@
 package procesador;
 
 import java.lang.String;
+import java.util.Vector;
+
 /**
  * La clase <B>Codigo</B> se encarga de manejar el código generado por las instrucciones del lenguaje.
  * <P>Tiene un sólo atributo:
@@ -17,20 +19,28 @@ public class Codigo {
 	 *  Este String guarda el codigo del lenguaje objeto, que es el codigo de la maquina P que 
 	 *  no existe asique de momento se mostrara por pantalla.
 	 */
-	String cod;
+	Vector cod;
 	
 	/**
 	 * El constructor de la clase Codigo no tiene parámetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vacía.
 	 */
 	public Codigo(){		
-		cod = "";
+		cod = new Vector();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public Vector getCod() {
+		return cod;
+	}
+
 	/**
 	 * Este método inicializa el atributo cod con la cadena vacía. No cuenta con parámetros de entrada ni de salida. No devuelve nada.
 	 */
 	public void inicializaCodigo(){
-		cod = "";
+		cod = new Vector();
 	}
 	
 	/**
@@ -41,7 +51,8 @@ public class Codigo {
 	 * 
 	 */
 	public void genIns(String instr, int num){
-		cod = cod + instr + " " + num + "\n";
+		String i =instr + " " + num;
+		cod.add(i);
 	}
 	
 	/**
@@ -51,7 +62,8 @@ public class Codigo {
 	 * 
 	 */
 	public void genIns(String instr){
-		cod = cod + instr + "\n";
+		String i= instr;
+		cod.add(i);
 	}
 	
 	/**
@@ -59,6 +71,8 @@ public class Codigo {
 	 * 
 	 */
 	public void muestraCodigo(){		
-		System.out.println(cod);
+		for (int i=0;i<cod.size();i++){
+			System.out.println(cod.elementAt(i));
+		}
 	}
 }

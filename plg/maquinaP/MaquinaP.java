@@ -1,8 +1,9 @@
 /**
  * 
  */
-package procesador;
+package maquinaP;
 
+import java.util.Stack;
 import java.util.Vector;
 
 /**
@@ -35,22 +36,22 @@ public class MaquinaP {
 	 * código del programa.
 	 * Mem: Memoria de datos.
 	 */
-	private Vector pila;
+	private Stack pila;
 	private int PC;
 	private int H;
 	private int ST;
-	private String Prog;
+	private Vector Prog;
 	private Vector Mem;
 	
 	/**
 	 * 
 	 * @param prog
 	 */	
-	public MaquinaP(String prog) {
+	public MaquinaP(Vector prog) {
 		super();
 		// TODO Auto-generated constructor stub
 		Prog = prog;
-		pila = new Vector();
+		pila = new Stack();
 		PC = 0;
 		H = 0;
 		ST = -1;
@@ -109,7 +110,7 @@ public class MaquinaP {
 	 * 
 	 * @return
 	 */
-	public Vector getPila() {
+	public Stack getPila() {
 		return pila;
 	}
 	
@@ -117,7 +118,7 @@ public class MaquinaP {
 	 * 
 	 * @param pila
 	 */
-	public void setPila(Vector pila) {
+	public void setPila(Stack pila) {
 		this.pila = pila;
 	}
 	
@@ -125,7 +126,7 @@ public class MaquinaP {
 	 * 
 	 * @return
 	 */
-	public String getProg() {
+	public Vector getProg() {
 		return Prog;
 	}
 	
@@ -133,7 +134,7 @@ public class MaquinaP {
 	 * 
 	 * @param prog
 	 */
-	public void setProg(String prog) {
+	public void setProg(Vector prog) {
 		Prog = prog;
 	}
 	
@@ -154,6 +155,134 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * 
+	 * @param tam
+	 */
+	public void aumentoMem(int tam){
+		for(int i = Mem.size();i<tam+1;i++){
+			Mem.add(i,null);
+		}
+	}
+	
+	/**
+	 * 
+	 *
+	 */
+	public void ejecuta(){
+		String i;
+		String[] linea;
+		int j= 0;
+		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
+		while (H==0){
+			if(j<Prog.size()){
+				i= (String)Prog.get(j);
+				linea = i.split(" ");
+				if (linea[0].compareTo("apila")==0){
+					System.out.println(linea[0]);
+					apila((new Integer(Integer.parseInt(linea[1]))).intValue());
+					j++;
+				}
+				else if (linea[0].compareTo("desapila-dir")==0){
+					System.out.println(linea[0]);
+					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
+					j++;
+				}
+				else if (linea[0].compareTo("apila-dir")==0){
+					System.out.println(linea[0]);
+					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
+					j++;
+				}
+				else if (linea[0].compareTo("suma")==0){
+					System.out.println(linea[0]);
+					suma();
+					j++;
+				}
+				else if (linea[0].compareTo("resta")==0){
+					System.out.println(linea[0]);
+					resta();
+					j++;
+				}
+				else if (linea[0].compareTo("multiplica")==0){
+					System.out.println(linea[0]);
+					multiplica();
+					j++;
+				}
+				else if (linea[0].compareTo("divide")==0){
+					System.out.println(linea[0]);
+					divide();
+					j++;
+				}
+				else if (linea[0].compareTo("and")==0){
+					System.out.println(linea[0]);
+					and();
+					j++;
+				}
+				else if (linea[0].compareTo("or")==0){
+					System.out.println(linea[0]);
+					or();
+					j++;
+				}
+				else if (linea[0].compareTo("not")==0){
+					System.out.println(linea[0]);
+					not();
+					j++;
+				}
+				else if (linea[0].compareTo("neg")==0){
+					System.out.println(linea[0]);
+					neg();
+					j++;
+				}
+				else if (linea[0].compareTo("menor")==0){
+					System.out.println(linea[0]);
+					menor();
+					j++;
+				}
+				else if (linea[0].compareTo("menor_o_igual")==0){
+					System.out.println(linea[0]);
+					menorIgual();
+					j++;
+				}
+				else if (linea[0].compareTo("mayor")==0){
+					System.out.println(linea[0]);
+					mayor();
+					j++;
+				}
+				else if (linea[0].compareTo("mayor_o_igual")==0){
+					System.out.println(linea[0]);
+					mayorIgual();
+					j++;
+				}
+				else if (linea[0].compareTo("igual")==0){
+					System.out.println(linea[0]);
+					igual();
+					j++;
+				}
+				else if (linea[0].compareTo("distinto")==0){
+					System.out.println(linea[0]);
+					distinto();
+					j++;
+				}
+				else{
+					error();
+					j++;
+				}
+			}
+			else{
+				eof();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void resultadoMem(){
+		for (int i=0;i<Mem.size();i++){
+			System.out.println(Mem.elementAt(i));
+		}
+	}
+	
+	/**
 	 * (R1) suma:
 	 * Pila[ST-1] <-- Pila[ST] + Pila[ST-1]
 	 * ST <-- ST -1 
@@ -161,10 +290,10 @@ public class MaquinaP {
 	 */
 
 	public void suma(){
-		Integer s1 = (Integer)pila.remove(ST);
-		Integer s2 = (Integer)pila.remove(ST-1);
+		Integer s1 = (Integer)pila.pop();
+		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s1.intValue()+s2.intValue());
-		pila.add(ST-1,s);
+		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -176,10 +305,10 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void resta(){
-		Integer s1 = (Integer)pila.remove(ST);
-		Integer s2 = (Integer)pila.remove(ST-1);
+		Integer s1 = (Integer)pila.pop();
+		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s1.intValue()-s2.intValue());
-		pila.add(ST-1,s);
+		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -191,10 +320,10 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void multiplica(){
-		Integer s1 = (Integer)pila.remove(ST);
-		Integer s2 = (Integer)pila.remove(ST-1);
+		Integer s1 = (Integer)pila.pop();
+		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s1.intValue()*s2.intValue());
-		pila.add(ST-1,s);
+		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -206,10 +335,10 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void divide(){
-		Integer s1 = (Integer)pila.remove(ST);
-		Integer s2 = (Integer)pila.remove(ST-1);
+		Integer s1 = (Integer)pila.pop();
+		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s1.intValue()/s2.intValue());
-		pila.add(ST-1,s);
+		pila.push(s);
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -223,8 +352,8 @@ public class MaquinaP {
 	 */
 	public void apila (int n){
 		ST=ST+1;
-		Integer n1= new Integer (n);
-		pila.add(ST,n1);
+		pila.push(new Integer (n));
+		System.out.println(pila.peek());
 		PC=PC+1;
 	}
 	
@@ -238,7 +367,8 @@ public class MaquinaP {
 	 */
 	public void apila_dir (int d){
 		ST = ST + 1; 
-		pila.add(ST,Mem.elementAt(d));  
+		System.out.println(Mem.elementAt(d));
+		pila.push(Mem.elementAt(d));  
 		PC = PC + 1;
 	}
 	
@@ -251,7 +381,18 @@ public class MaquinaP {
 	 * @param d
 	 */
 	public void desapila_dir(int d){
-		Mem.add(d,pila.elementAt(ST));
+		//Primero comprobamos que la memoria sea suficiente.
+		//Sino lo es aumentamos el tamaño del vector.
+		if (d>=Mem.size()){
+			aumentoMem(d);
+			Mem.set(d,pila.elementAt(ST));
+			System.out.println(Mem.elementAt(d)+" "+d);
+		}
+		else{
+			Mem.set(d,pila.elementAt(ST));
+			System.out.println(Mem.elementAt(d)+" "+d);
+			//Mem.insertElementAt(pila.elementAt(ST),d);
+		}
 		ST = ST -1;
 		PC = PC + 1;
 	}
@@ -280,11 +421,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1 
 	 */
 	public void and(){
-		if ((((Integer)pila.remove(ST)).intValue()!=0)&&(((Integer)pila.remove(ST-1)).intValue()!=0)){
-			pila.add(ST,new Integer(1));
+		int a1= ((Integer)pila.pop()).intValue();
+		if ((a1!=0)&&(((Integer)pila.pop()).intValue()!=0)){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -298,8 +440,9 @@ public class MaquinaP {
 	 *	PC <-- PC + 1 
 	 */
 	public void or(){
-		if ((((Integer)pila.remove(ST)).intValue()!=0)&&(((Integer)pila.remove(ST-1)).intValue()!=0)){
-			pila.add(ST,new Integer(0));
+		int o1= ((Integer)pila.pop()).intValue();
+		if ((o1==0)&&(((Integer)pila.pop()).intValue()==0)){
+			pila.push(new Integer(0));
 		}
 		else{
 			pila.add(ST,new Integer(1));
@@ -315,11 +458,11 @@ public class MaquinaP {
 	 *	PC <-- PC + 1 
 	 */
 	public void not(){
-		if (((Integer)pila.remove(ST)).intValue()==0){
-			pila.add(ST,new Integer(1));
+		if (((Integer)pila.pop()).intValue()==0){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		PC = PC + 1;
 	}
@@ -330,8 +473,8 @@ public class MaquinaP {
 	 *	PC <-- PC + 1 
 	 */
 	public void neg(){
-		Integer n= (Integer)pila.remove(ST);
-		pila.add(ST,new Integer(-(n.intValue())));
+		Integer n= (Integer)pila.pop();
+		pila.push(new Integer(-(n.intValue())));
 		PC = PC + 1;
 	}
 	
@@ -343,11 +486,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void menor(){
-		if (((Integer)pila.remove(ST-1)).intValue()<((Integer)pila.remove(ST)).intValue()){
-			pila.add(ST,new Integer(1));
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1<((Integer)pila.pop()).intValue()){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -361,11 +505,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void menorIgual(){
-		if (((Integer)pila.remove(ST-1)).intValue()<=((Integer)pila.remove(ST)).intValue()){
-			pila.add(ST,new Integer(1));
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1<=((Integer)pila.pop()).intValue()){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -379,11 +524,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void mayor(){
-		if (((Integer)pila.remove(ST-1)).intValue()>((Integer)pila.remove(ST)).intValue()){
-			pila.add(ST,new Integer(1));
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1>((Integer)pila.pop()).intValue()){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -397,11 +543,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void mayorIgual(){
-		if (((Integer)pila.remove(ST-1)).intValue()>=((Integer)pila.remove(ST)).intValue()){
-			pila.add(ST,new Integer(1));
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1>=((Integer)pila.pop()).intValue()){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -415,11 +562,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void igual(){
-		if (((Integer)pila.remove(ST-1)).intValue()==((Integer)pila.remove(ST)).intValue()){
-			pila.add(ST,new Integer(1));
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1==((Integer)pila.pop()).intValue()){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -433,11 +581,12 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void distinto(){
-		if (((Integer)pila.remove(ST-1)).intValue()!=((Integer)pila.remove(ST)).intValue()){
-			pila.add(ST,new Integer(1));
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1!=((Integer)pila.pop()).intValue()){
+			pila.push(new Integer(1));
 		}
 		else{
-			pila.add(ST,new Integer(0));
+			pila.push(new Integer(0));
 		}
 		ST = ST -1;
 		PC = PC + 1;

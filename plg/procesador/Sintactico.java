@@ -47,6 +47,22 @@ public class Sintactico{
 	}
 
 	/**
+	 * 
+	 * @return
+	 */
+	public Codigo getCodigo() {
+		return codigo;
+	}
+
+	/**
+	 * 
+	 * @param codigo
+	 */
+	public void setCodigo(Codigo codigo) {
+		this.codigo = codigo;
+	}
+
+	/**
 	 * Comienza el analisis sintactico del fichero que queremos analizar. Cuando acaba muestra el codigo que ha reconocido.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
@@ -700,13 +716,13 @@ public class Sintactico{
 	public void genOpComp(String opDeOpComp){
 		
 		if (opDeOpComp == "<="){
-			codigo.genIns("menor o igual");
+			codigo.genIns("menor_o_igual");
 		}	
 		if (opDeOpComp == "<"){
 				codigo.genIns("menor");
 		}
 		if (opDeOpComp == ">="){
-			codigo.genIns("mayor o igual");
+			codigo.genIns("mayor_o_igual");
 		}	
 		if (opDeOpComp == ">"){
 				codigo.genIns("mayor");
