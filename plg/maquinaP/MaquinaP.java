@@ -3,9 +3,11 @@
  */
 package maquinaP;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -45,7 +47,7 @@ public class MaquinaP {
 	private int ST;
 	private Vector Prog;
 	private Vector Mem;
-	private FileInputStream fichero;
+	private FileReader fichero;
 	/**
 	 * 
 	 * @param prog
@@ -53,7 +55,6 @@ public class MaquinaP {
 	public MaquinaP(String f) {
 		super();
 		// TODO Auto-generated constructor stub
-		//Prog = prog;
 		pila = new Stack();
 		PC = 0;
 		H = 0;
@@ -64,7 +65,7 @@ public class MaquinaP {
 		fcod = fcod.concat("obj");
 		File fich= new File(fcod);
 		try{
-			fichero = new FileInputStream(fich);
+			fichero = new FileReader(fich);
 		}
 		catch(java.io.FileNotFoundException e) {
 			System.out.println("ERROR: Archivo no encontrado: " + fcod);	
@@ -168,9 +169,28 @@ public class MaquinaP {
 		ST = st;
 	}
 	
-	public Vector damePrograma(FileInputStream f){
+	/**
+	 * 
+	 * @param f
+	 * @return
+	 */
+	public Vector damePrograma(FileReader f){
 		Vector v=new Vector();
-		
+		BufferedReader entrada = null;
+	    try {
+	      entrada = new BufferedReader(f);
+	      String linea = null;
+	      //int i=0;
+	      while ((linea = entrada.readLine()) != null){
+	    	  v.add(linea.trim());
+	      }
+	    }
+	    catch (FileNotFoundException ex) {
+		      ex.printStackTrace();
+		}
+		catch (IOException ex){
+		      ex.printStackTrace();
+		}
 		return v;
 	}
 	

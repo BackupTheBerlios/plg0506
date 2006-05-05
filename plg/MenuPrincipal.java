@@ -1,6 +1,6 @@
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.Vector;
+//import java.util.Vector;
 
 import procesador.Procesador;
 import maquinaP.MaquinaP;

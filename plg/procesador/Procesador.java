@@ -1,6 +1,6 @@
 package procesador;
 import java.io.RandomAccessFile;
-import java.util.Vector;
+//import java.util.Vector;
 
 import tablaSimbolos.TablaSimbolos;
 
