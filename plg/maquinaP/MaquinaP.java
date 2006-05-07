@@ -646,4 +646,30 @@ public class MaquinaP {
 		ST = ST -1;
 		PC = PC + 1;
 	}
+	
+	/**
+	 * (R20) ir-a(s):
+	 * PC <-- s
+	 */
+	public void ir_a(int s){
+		if (s<Prog.size()){
+			PC = s;
+		}
+	}
+	
+	/**
+	 * (R21) ir-f(s):
+	 *	si Pila[ST] = 0 PC <-- s
+	 *	sino PC <--PC+1 fsi
+	 *	ST <-- ST ? 1	
+	 */
+	public void ir_f(int s){
+		if (((Integer)pila.pop()).intValue()==0){
+			PC = s;
+		}
+		else{
+			PC = PC + 1;
+		}
+		ST = ST -1;
+	}
 }

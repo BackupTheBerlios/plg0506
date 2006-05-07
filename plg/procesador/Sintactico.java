@@ -1,6 +1,8 @@
 package procesador;
 
 import java.io.RandomAccessFile;
+
+import maquinaP.Codigo;
 import tablaSimbolos.TablaSimbolos;
 //import tablaSimbolos.Par;
 

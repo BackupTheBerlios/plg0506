@@ -1,4 +1,4 @@
-package procesador;
+package maquinaP;
 
 import java.io.File;
 import java.io.FileOutputStream;
