@@ -48,6 +48,8 @@ public class MaquinaP {
 	private Vector Prog;
 	private Vector Mem;
 	private FileReader fichero;
+	private String pasos;
+	
 	/**
 	 * 
 	 * @param prog
@@ -71,8 +73,17 @@ public class MaquinaP {
 			System.out.println("ERROR: Archivo no encontrado: " + fcod);	
 		}
 		Prog = damePrograma(fichero);
+		pasos="";
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getPasos() {
+		return pasos;
+	}
+
 	/**
 	 * 
 	 * @return
@@ -219,39 +230,53 @@ public class MaquinaP {
 				linea = i.split(" ");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
 					apila((new Integer(Integer.parseInt(linea[1]))).intValue());
 					j++;
 				}
 				else if (linea[0].compareTo("desapila-dir")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 					j++;
 				}
 				else if (linea[0].compareTo("apila-dir")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 					j++;
 				}
 				else if (linea[0].compareTo("suma")==0){
 					System.out.print(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					suma();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("resta")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					resta();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("multiplica")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					multiplica();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("divide")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					divide();
 					System.out.println(pila.peek());
 					j++;
@@ -264,55 +289,89 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("or")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					or();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("not")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					not();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("neg")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					neg();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("menor")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					menor();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("menor_o_igual")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					menorIgual();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("mayor")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					mayor();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("mayor_o_igual")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					mayorIgual();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("igual")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					igual();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("distinto")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					distinto();
+					System.out.println(pila.peek());
+					j++;
+				}
+				else if (linea[0].compareTo("ir-a")==0){
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
+					System.out.println(pila.peek());
+					j++;
+				}
+				else if (linea[0].compareTo("ir-f")==0){
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
 					System.out.println(pila.peek());
 					j++;
 				}
