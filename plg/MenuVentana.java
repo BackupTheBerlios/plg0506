@@ -133,38 +133,34 @@ public class MenuVentana extends JFrame{
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
 						 */
-						if(compilar!=null){
-							if(compilar.getName().compareTo("")!=0){
-								if (compilar.getName().endsWith("txt")){
-									fuente = new RandomAccessFile(compilar,"r");
-									Procesador p=new Procesador();
-									p.procesa(fuente, compilar.getName());
-									System.out.println("he compilado...");
-									compilado=true;
-									int i= compilar.getName().length();
-									String fcod = new String(compilar.getName().substring( 0,i-3));
-									fcod = fcod.concat("obj");
-									ejecutar= new File(fcod);
-									jTextPaneC.setText(mostrarFichero(ejecutar));
-									System.out.println("he tratado de mostrar...");
-								}
-								else{
-									JDialog error = new JDialog();
-									error.setTitle("Error");
-									error.setVisible(true);
-									error.setSize(new Dimension(341,170));
-									error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
-											+"Acabado en extension \".txt\"", error.getSize()));
-								}
+						
+						//POR JONAS
+						String rutacompilar = jTextFieldC.getText();
+						//POR JONAS
+						if(rutacompilar != null){
+							//if(compilar.getName().compareTo("")!=0){
+							if (rutacompilar.endsWith("txt")){
+								//if (compilar.getName().endsWith("txt")){
+								compilar = new File(rutacompilar);
+								fuente = new RandomAccessFile(compilar,"r");
+								Procesador p=new Procesador();
+								p.procesa(fuente, compilar.getName());
+								System.out.println("he compilado...");
+								compilado=true;
+								int i= compilar.getName().length();
+								String fcod = new String(compilar.getName().substring( 0,i-3));
+								fcod = fcod.concat("obj");
+								ejecutar= new File(fcod);
+								jTextPaneC.setText(mostrarFichero(ejecutar));
+								System.out.println("he tratado de mostrar...");
 							}
 							else{
 								JDialog error = new JDialog();
 								error.setTitle("Error");
 								error.setVisible(true);
 								error.setSize(new Dimension(341,170));
-								error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
-										+"Escribalo en el recuadro indicado.\n\n "+
-										"Acabado en extension \".txt\"", error.getSize()));
+								error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
+										+"Acabado en extension \".txt\"", error.getSize()));
 							}
 						}
 						else{
@@ -176,6 +172,16 @@ public class MenuVentana extends JFrame{
 									+"Escribalo en el recuadro indicado.\n\n "+
 									"Acabado en extension \".txt\"", error.getSize()));
 						}
+					
+					/*	else{
+							JDialog error = new JDialog();
+							error.setTitle("Error");
+							error.setVisible(true);
+							error.setSize(new Dimension(341,170));
+							error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
+									+"Escribalo en el recuadro indicado.\n\n "+
+									"Acabado en extension \".txt\"", error.getSize()));
+						}*/
 					} 
 					catch (java.io.FileNotFoundException e1) {
 						JDialog error = new JDialog();
@@ -295,7 +301,7 @@ public class MenuVentana extends JFrame{
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecución");
+			jLabelE.setText("Resultado de la Ejecuci?n");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -432,7 +438,7 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilación");
+			jLabelC.setText("          Resultado de la Compilaci?n");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
