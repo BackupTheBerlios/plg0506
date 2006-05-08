@@ -68,9 +68,16 @@ public class TablaSimbolos {
 		return this.tabla.containsKey(id);
 	}
 	
+	public String getTipo(String id){
+		if (this.tabla.containsKey(id))
+			return ((Par)this.tabla.get(id)).getTipo();// Devolver el tipo...
+		else
+			return null;
+	}
+	
 	/**
 	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador con ese nombre 
-	 * El valor de la clave en la tabla hash es �nico, ya que concatenamos el nombre del identificador con el tipo usando 
+	 * El valor de la clave en la tabla hash es znico, ya que concatenamos el nombre del identificador con el tipo usando 
 	 * entre medias un carcter de separacion: '#'. Como valor para la tabla introducimos un par, que son el nombre del id 
 	 * y el tipo. Si ya existe el par entonces no es posible aadir y lanzamos una excepcin
 	 * 
@@ -92,7 +99,7 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * El método eliminaID elimina un identificador 'id' de la tabla si existe. 
+	 * El mC)todo eliminaID elimina un identificador 'id' de la tabla si existe. 
 	 * Si no, lanzara una excepcion.
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
@@ -111,7 +118,7 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El método muestra se usa para mostrar por pantalla la tabla de smbolos actual.
+	 * El mC)todo muestra se usa para mostrar por pantalla la tabla de smbolos actual.
 	 */
 	public void muestra(){
 		String aux = this.tabla.toString();
@@ -119,7 +126,7 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * El método dirI obtiene la posicin de memoria del identificador "id" proporcionado como parametro.
+	 * El mC)todo dirI obtiene la posicin de memoria del identificador "id" proporcionado como parametro.
 	 * Es necesario para saber, cuando generemos el cdigo, de dnde tomar los valores necesarios.
 	 *  
      * @param id String que tienen almacenado el nombre del identificador
