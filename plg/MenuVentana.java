@@ -133,14 +133,9 @@ public class MenuVentana extends JFrame{
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
 						 */
-						
-						//POR JONAS
 						String rutacompilar = jTextFieldC.getText();
-						//POR JONAS
 						if(rutacompilar != null){
-							//if(compilar.getName().compareTo("")!=0){
 							if (rutacompilar.endsWith("txt")){
-								//if (compilar.getName().endsWith("txt")){
 								compilar = new File(rutacompilar);
 								fuente = new RandomAccessFile(compilar,"r");
 								Procesador p=new Procesador();
@@ -173,16 +168,6 @@ public class MenuVentana extends JFrame{
 									+"Escribalo en el recuadro indicado.\n\n "+
 									"Acabado en extension \".txt\"", error.getSize()));
 						}
-					
-					/*	else{
-							JDialog error = new JDialog();
-							error.setTitle("Error");
-							error.setVisible(true);
-							error.setSize(new Dimension(341,170));
-							error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
-									+"Escribalo en el recuadro indicado.\n\n "+
-									"Acabado en extension \".txt\"", error.getSize()));
-						}*/
 					} 
 					catch (java.io.FileNotFoundException e1) {
 						JDialog error = new JDialog();
@@ -342,23 +327,31 @@ public class MenuVentana extends JFrame{
 						/*
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
-						 */
-					if(ejecutar!=null){
-						if(ejecutar.getName().compareTo("")!=0){
-							if (ejecutar.getName().endsWith("obj")){
-								MaquinaP maquina= new MaquinaP(ejecutar.getName());
-								maquina.ejecuta();
-								String resultado = maquina.resultadoMem();
+						 * 
+						 * String rutacompilar = jTextFieldC.getText();
+						if(rutacompilar != null){
+							if (rutacompilar.endsWith("txt")){
+								compilar = new File(rutacompilar);
+								fuente = new RandomAccessFile(compilar,"r");
+								Procesador p=new Procesador();
+								p.procesa(fuente, compilar.getName());
+								System.out.println("he compilado...");
 								compilado=true;
-								jTextPaneE.setText(resultado);
+								int i= compilar.getName().length();
+								String fcod = new String(compilar.getName().substring( 0,i-3));
+								fcod = fcod.concat("obj");
+								ejecutar= new File(fcod);
+								jTextPaneC.setText(mostrarFichero(ejecutar));
+								jTextFieldE.setText(fcod);
+								System.out.println("he tratado de mostrar...");
 							}
 							else{
 								JDialog error = new JDialog();
 								error.setTitle("Error");
 								error.setVisible(true);
 								error.setSize(new Dimension(341,170));
-								error.add(getJTextPaneError("ERROR: Debe indicar fichero objeto.\n\n"
-										+"Acabado en extension \".obj\"", error.getSize()));
+								error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
+										+"Acabado en extension \".txt\"", error.getSize()));
 							}
 						}
 						else{
@@ -366,19 +359,46 @@ public class MenuVentana extends JFrame{
 							error.setTitle("Error");
 							error.setVisible(true);
 							error.setSize(new Dimension(341,170));
-							error.add(getJTextPaneError("ERROR: Debe indicar un fichero objeto como parametro.\n\n"
+							error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
 									+"Escribalo en el recuadro indicado.\n\n "+
-									"Acabado en extension \".obj\"", error.getSize()));
+									"Acabado en extension \".txt\"", error.getSize()));
 						}
-					} 
-						
-					//} 
-					/*catch (java.io.FileNotFoundException e1) {
+						 */
+					String rutaejecutar=jTextFieldE.getText();
+					if(rutaejecutar!=null){
+						if (ejecutar==null){
+							ejecutar= new File(rutaejecutar);
+						}
+						else{
+							if(rutaejecutar.compareTo(ejecutar.getName())!=0){
+								ejecutar= new File(rutaejecutar);
+							}
+						}
+						if (ejecutar.getName().endsWith("obj")){
+							MaquinaP maquina= new MaquinaP(ejecutar.getName());
+							maquina.ejecuta();
+							String resultado = maquina.resultadoMem();
+							ejecutado=true;
+							jTextPaneE.setText(resultado);
+						}
+						else{
+							JDialog error = new JDialog();
+							error.setTitle("Error");
+							error.setVisible(true);
+							error.setSize(new Dimension(341,170));
+							error.add(getJTextPaneError("ERROR: Debe indicar fichero objeto.\n\n"
+									+"Acabado en extension \".obj\"", error.getSize()));
+						}
+					}
+					else{
 						JDialog error = new JDialog();
 						error.setTitle("Error");
 						error.setVisible(true);
-						error.add(getJTextPaneError("ERROR: Archivo no encontrado: " + compilar.getName(), error.getSize()));	
-					}*/
+						error.setSize(new Dimension(341,170));
+						error.add(getJTextPaneError("ERROR: Debe indicar un fichero objeto como parametro.\n\n"
+								+"Escribalo en el recuadro indicado.\n\n "+
+								"Acabado en extension \".obj\"", error.getSize()));
+					}
 					System.out.println("actionPerformed()      Ejecutar"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
@@ -629,12 +649,16 @@ public class MenuVentana extends JFrame{
 			jButtonEC.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//JDialog jDialogEC=new JDialog();
-					JFileChooser examina= getJFileChooser();
+					JFileChooser examina=new JFileChooser();
+					examina.setDialogTitle("Examinar");
+					examina.setVisible(true);
+					//examina.setSize(380,160);
+					//JFileChooser examina= getJFileChooser();
 					//jDialogEC.setTitle("Examinar archivo");
 					//jDialogEC.setVisible(true);
 					//jDialogEC.setSize(380,160); 
 					//jDialogEC.add(examina);
-					examina.setVisible(true);
+					//examina.setVisible(true);
 					/*if (examina.getSelectedFile()==null){
 						compilar=null;
 					}
