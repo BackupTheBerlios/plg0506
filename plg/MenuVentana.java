@@ -81,7 +81,8 @@ public class MenuVentana extends JFrame{
         this.setContentPane(getJPanel());
         this.compilado=false;
         this.ejecutado=false;
-        
+        this.compilar=null;
+        this.ejecutar=null;
 	}
 
 	/**
@@ -132,30 +133,45 @@ public class MenuVentana extends JFrame{
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
 						 */
-						if(compilar.getName()!=null){
-							if (compilar.getName().endsWith("txt")){
-								fuente = new RandomAccessFile(compilar,"r");
-								Procesador p=new Procesador();
-								p.procesa(fuente, compilar.getName());
-								compilado=true;
-								jTextPaneC.setText(mostrarFichero(compilar));
-								int i= compilar.getName().length();
-								String fcod = new String(compilar.getName().substring( 0,i-3));
-								fcod = fcod.concat("obj");
-								ejecutar= new File(fcod);
+						if(compilar!=null){
+							if(compilar.getName().compareTo("")!=0){
+								if (compilar.getName().endsWith("txt")){
+									fuente = new RandomAccessFile(compilar,"r");
+									Procesador p=new Procesador();
+									p.procesa(fuente, compilar.getName());
+									System.out.println("he compilado...");
+									compilado=true;
+									int i= compilar.getName().length();
+									String fcod = new String(compilar.getName().substring( 0,i-3));
+									fcod = fcod.concat("obj");
+									ejecutar= new File(fcod);
+									jTextPaneC.setText(mostrarFichero(ejecutar));
+									System.out.println("he tratado de mostrar...");
+								}
+								else{
+									JDialog error = new JDialog();
+									error.setTitle("Error");
+									error.setVisible(true);
+									error.setSize(new Dimension(341,170));
+									error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
+											+"Acabado en extension \".txt\"", error.getSize()));
+								}
 							}
 							else{
 								JDialog error = new JDialog();
 								error.setTitle("Error");
 								error.setVisible(true);
-								error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
-										+"Acabado en extension \".txt\"", error.getSize()));
+								error.setSize(new Dimension(341,170));
+								error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
+										+"Escribalo en el recuadro indicado.\n\n "+
+										"Acabado en extension \".txt\"", error.getSize()));
 							}
 						}
 						else{
 							JDialog error = new JDialog();
 							error.setTitle("Error");
 							error.setVisible(true);
+							error.setSize(new Dimension(341,170));
 							error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
 									+"Escribalo en el recuadro indicado.\n\n "+
 									"Acabado en extension \".txt\"", error.getSize()));
@@ -165,6 +181,7 @@ public class MenuVentana extends JFrame{
 						JDialog error = new JDialog();
 						error.setTitle("Error");
 						error.setVisible(true);
+						error.setSize(new Dimension(341,170));
 						error.add(getJTextPaneError("ERROR: Archivo no encontrado: " + compilar.getName(), error.getSize()));	
 					}
 					
@@ -319,30 +336,35 @@ public class MenuVentana extends JFrame{
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
 						 */
-					if(ejecutar.getName()!=null){
-						if (ejecutar.getName().endsWith("obj")){
-							MaquinaP maquina= new MaquinaP(ejecutar.getName());
-							maquina.ejecuta();
-							maquina.resultadoMem();
-							compilado=true;
-							jTextPaneE.setText(mostrarFichero(ejecutar));
+					if(ejecutar!=null){
+						if(ejecutar.getName().compareTo("")!=0){
+							if (ejecutar.getName().endsWith("obj")){
+								MaquinaP maquina= new MaquinaP(ejecutar.getName());
+								maquina.ejecuta();
+								String resultado = maquina.resultadoMem();
+								compilado=true;
+								jTextPaneE.setText(resultado);
+							}
+							else{
+								JDialog error = new JDialog();
+								error.setTitle("Error");
+								error.setVisible(true);
+								error.setSize(new Dimension(341,170));
+								error.add(getJTextPaneError("ERROR: Debe indicar fichero objeto.\n\n"
+										+"Acabado en extension \".obj\"", error.getSize()));
+							}
 						}
 						else{
 							JDialog error = new JDialog();
 							error.setTitle("Error");
 							error.setVisible(true);
-							error.add(getJTextPaneError("ERROR: Debe indicar fichero objeto.\n\n"
-									+"Acabado en extension \".obj\"", error.getSize()));
+							error.setSize(new Dimension(341,170));
+							error.add(getJTextPaneError("ERROR: Debe indicar un fichero objeto como parametro.\n\n"
+									+"Escribalo en el recuadro indicado.\n\n "+
+									"Acabado en extension \".obj\"", error.getSize()));
 						}
-					}
-					else{
-						JDialog error = new JDialog();
-						error.setTitle("Error");
-						error.setVisible(true);
-						error.add(getJTextPaneError("ERROR: Debe indicar un fichero objeto.\n\n"
-								+"En el recuadro que arriba se indica.\n\n "+
-								"Acabado en extension \".obj\"", error.getSize()));
-					}
+					} 
+						
 					//} 
 					/*catch (java.io.FileNotFoundException e1) {
 						JDialog error = new JDialog();
@@ -552,18 +574,28 @@ public class MenuVentana extends JFrame{
 	private JTextField getJTextFieldC() {
 		if (jTextFieldC == null) {
 			jTextFieldC = new JTextField();
-			jTextFieldC.setToolTipText("Escriba la ruta del fichero a compilar...");
+			jTextFieldC.setToolTipText("Escriba la ruta del fichero a compilar...y pulse Enter");
 			int h = this.jPanel11a.getHeight();
 			int w = (this.jPanel11a.getWidth()/3)*2;
 			Dimension d = new Dimension(w,h);
 			jTextFieldC.setSize(d);
 			jTextFieldC.setPreferredSize(new java.awt.Dimension(341,28));
-			if (compilar != null && jTextFieldC.getText()== null){
-				jTextFieldC.setText(compilar.getAbsolutePath());
-			}
-			else if(compilar != null && jTextFieldC.getText()!= null){
-				compilar = new File(jTextFieldC.getText());
-			}
+			jTextFieldC.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (compilar != null && jTextFieldC.getText()== null){
+						System.out.println("Cambiando archivo");
+						jTextFieldC.setText(compilar.getAbsolutePath());
+						
+					}
+					else if(compilar == null && jTextFieldC.getText()!= null){
+						System.out.println("Cambiando archivo");
+						compilar = new File(jTextFieldC.getText());
+					}
+					System.out.println(compilar.getAbsolutePath());
+					System.out.println("actionPerformed()FieldC"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			
 		}
 		return jTextFieldC;
 	}
@@ -620,12 +652,21 @@ public class MenuVentana extends JFrame{
 			Dimension d = new Dimension(w,h);
 			jTextFieldE.setSize(d);
 			jTextFieldE.setPreferredSize(new java.awt.Dimension(341,28));
-			if (ejecutar != null&& jTextFieldE.getText()== null){
-				jTextFieldE.setText(ejecutar.getAbsolutePath());
-			}
-			else if(ejecutar != null && jTextFieldE.getText()!= null){
-				ejecutar = new File(jTextFieldE.getText());
-			}
+			jTextFieldE.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (ejecutar != null && jTextFieldE.getText()== null){
+						System.out.println("Cambiando archivo");
+						jTextFieldE.setText(ejecutar.getAbsolutePath());
+						
+					}
+					else if(ejecutar == null && jTextFieldE.getText()!= null){
+						System.out.println("Cambiando archivo");
+						ejecutar = new File(jTextFieldE.getText());
+					}
+					System.out.println(ejecutar.getAbsolutePath());
+					System.out.println("actionPerformed()FieldE"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return jTextFieldE;
 	}
@@ -780,7 +821,7 @@ public class MenuVentana extends JFrame{
 			entrada = new BufferedReader(f1);
 			String linea = null;
 			while ((linea = entrada.readLine()) != null){
-				s= s.concat(linea);
+				s= s.concat(linea.concat(" \n"));
 			}
 			
 	    }

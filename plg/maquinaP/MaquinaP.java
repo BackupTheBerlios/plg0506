@@ -330,10 +330,16 @@ public class MaquinaP {
 	/**
 	 * 
 	 */
-	public void resultadoMem(){
+	public String resultadoMem(){
+		String s="";
 		for (int i=0;i<Mem.size();i++){
 			System.out.println(Mem.elementAt(i));
+			if(Mem.elementAt(i)!=null){
+				s= s.concat(((Integer)Mem.elementAt(i)).toString());
+				s=s.concat(" \n");
+			}
 		}
+		return s;
 	}
 	
 	/**
