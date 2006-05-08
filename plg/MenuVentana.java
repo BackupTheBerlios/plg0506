@@ -42,8 +42,8 @@ public class MenuVentana extends JFrame{
 	private JPanel jPanel32 = null;
 	private JPanel jPanel11 = null;
 	private JSplitPane jSplitPane = null;
-	private JFileChooser jFileChooserE=null;
-	private JFileChooser jFileChooserC=null;
+	//private JFileChooser jFileChooserE=null;
+	//private JFileChooser jFileChooserC=null;
 	private JPanel jPanel11a = null;
 	private JPanel jPanel11b = null;
 	private JTextField jTextFieldC = null;
@@ -152,6 +152,7 @@ public class MenuVentana extends JFrame{
 								fcod = fcod.concat("obj");
 								ejecutar= new File(fcod);
 								jTextPaneC.setText(mostrarFichero(ejecutar));
+								jTextFieldE.setText(fcod);
 								System.out.println("he tratado de mostrar...");
 							}
 							else{
@@ -550,12 +551,14 @@ public class MenuVentana extends JFrame{
 	 * 
 	 * @return
 	 */
-	private JFileChooser getJFileChooserC(){
-		if (jFileChooserC==null){
-			jFileChooserC=new JFileChooser();
+	private JFileChooser getJFileChooser(){
+		//JFileChooser jFileChooser= new
+		//if (jFileChooserC==null){
+			JFileChooser jFileChooserC=new JFileChooser();
 			jFileChooserC.setDialogTitle("Examinar");
-			jFileChooserC.setVisible(false);
-		}
+			jFileChooserC.setVisible(true);
+			jFileChooserC.setSize(380,160);
+		//}
 		return jFileChooserC;
 	}
 	
@@ -563,14 +566,14 @@ public class MenuVentana extends JFrame{
 	 * 
 	 * @return
 	 */
-	private JFileChooser getJFileChooserE(){
-		if (jFileChooserE==null){
-			jFileChooserE=new JFileChooser();
+	/*private JFileChooser getJFileChooserE(){
+		//if (jFileChooserE==null){
+			JFileChooser jFileChooserE=new JFileChooser();
 			jFileChooserE.setDialogTitle("Examinar");
 			jFileChooserE.setVisible(false);
-		}
+	//	}
 		return jFileChooserE;
-	}
+	}*/
 	
 	/**
 	 * This method initializes jTextField	
@@ -625,10 +628,14 @@ public class MenuVentana extends JFrame{
 			jButtonEC.setPreferredSize(new java.awt.Dimension(171,28));
 			jButtonEC.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					
-					JFileChooser examina= getJFileChooserC();
+					//JDialog jDialogEC=new JDialog();
+					JFileChooser examina= getJFileChooser();
+					//jDialogEC.setTitle("Examinar archivo");
+					//jDialogEC.setVisible(true);
+					//jDialogEC.setSize(380,160); 
+					//jDialogEC.add(examina);
 					examina.setVisible(true);
-					if (examina.getSelectedFile()==null){
+					/*if (examina.getSelectedFile()==null){
 						compilar=null;
 					}
 					else{
@@ -636,7 +643,7 @@ public class MenuVentana extends JFrame{
 					}
 					if (examina.accept(ejecutar)){
 						examina.setVisible(false);
-					}
+					}*/
 					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
@@ -696,7 +703,7 @@ public class MenuVentana extends JFrame{
 			jButtonEE.setPreferredSize(new java.awt.Dimension(171,28));
 			jButtonEE.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JFileChooser examina= getJFileChooserE();
+					JFileChooser examina= getJFileChooser();
 					examina.setVisible(true);
 					if (examina.getSelectedFile()==null){
 						ejecutar=null;
