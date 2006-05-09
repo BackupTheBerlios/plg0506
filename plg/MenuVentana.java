@@ -18,15 +18,18 @@ import java.awt.Dimension;
 import java.awt.Color;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+//import javax.swing.filechooser.FileFilter;
 
 
 public class MenuVentana extends JFrame{
-	
+	 //TODO Cambiar los JDialog por JOptionPanes.  
+	// TODO Que cuando se haga click en Compilar o Ejecutar sin ning?n archivo, se abra el JFileChooser para hcaerlo.
 	static final long serialVersionUID=1;
 	private JPanel jPanel = null;
 	private JButton jButton = null;
@@ -42,8 +45,6 @@ public class MenuVentana extends JFrame{
 	private JPanel jPanel32 = null;
 	private JPanel jPanel11 = null;
 	private JSplitPane jSplitPane = null;
-	//private JFileChooser jFileChooserE=null;
-	//private JFileChooser jFileChooserC=null;
 	private JPanel jPanel11a = null;
 	private JPanel jPanel11b = null;
 	private JTextField jTextFieldC = null;
@@ -206,7 +207,6 @@ public class MenuVentana extends JFrame{
 			jLabelEE = new JLabel();
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new BorderLayout());
-			//Dimension d= new Dimension()
 			jPanel1.setSize(new Dimension(this.jPanel.getWidth(),this.getHeight()/4));
 			jPanel1.setPreferredSize(new Dimension(this.getWidth(),this.jPanel.getHeight()/4));
 			jLabelEC.setSize(new Dimension(this.jPanel.getWidth()/2,this.jPanel.getHeight()/4));
@@ -287,7 +287,7 @@ public class MenuVentana extends JFrame{
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecución");
+			jLabelE.setText("Resultado de la Ejecuci?n");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -327,42 +327,6 @@ public class MenuVentana extends JFrame{
 						/*
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
-						 * 
-						 * String rutacompilar = jTextFieldC.getText();
-						if(rutacompilar != null){
-							if (rutacompilar.endsWith("txt")){
-								compilar = new File(rutacompilar);
-								fuente = new RandomAccessFile(compilar,"r");
-								Procesador p=new Procesador();
-								p.procesa(fuente, compilar.getName());
-								System.out.println("he compilado...");
-								compilado=true;
-								int i= compilar.getName().length();
-								String fcod = new String(compilar.getName().substring( 0,i-3));
-								fcod = fcod.concat("obj");
-								ejecutar= new File(fcod);
-								jTextPaneC.setText(mostrarFichero(ejecutar));
-								jTextFieldE.setText(fcod);
-								System.out.println("he tratado de mostrar...");
-							}
-							else{
-								JDialog error = new JDialog();
-								error.setTitle("Error");
-								error.setVisible(true);
-								error.setSize(new Dimension(341,170));
-								error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
-										+"Acabado en extension \".txt\"", error.getSize()));
-							}
-						}
-						else{
-							JDialog error = new JDialog();
-							error.setTitle("Error");
-							error.setVisible(true);
-							error.setSize(new Dimension(341,170));
-							error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
-									+"Escribalo en el recuadro indicado.\n\n "+
-									"Acabado en extension \".txt\"", error.getSize()));
-						}
 						 */
 					String rutaejecutar=jTextFieldE.getText();
 					if(rutaejecutar!=null){
@@ -382,22 +346,11 @@ public class MenuVentana extends JFrame{
 							jTextPaneE.setText(resultado);
 						}
 						else{
-							JDialog error = new JDialog();
-							error.setTitle("Error");
-							error.setVisible(true);
-							error.setSize(new Dimension(341,170));
-							error.add(getJTextPaneError("ERROR: Debe indicar fichero objeto.\n\n"
-									+"Acabado en extension \".obj\"", error.getSize()));
+							JOptionPane.showMessageDialog(null,"Debe indicar el fichero objeto, con extensi?n .obj","Error",JOptionPane.ERROR_MESSAGE);
 						}
 					}
 					else{
-						JDialog error = new JDialog();
-						error.setTitle("Error");
-						error.setVisible(true);
-						error.setSize(new Dimension(341,170));
-						error.add(getJTextPaneError("ERROR: Debe indicar un fichero objeto como parametro.\n\n"
-								+"Escribalo en el recuadro indicado.\n\n "+
-								"Acabado en extension \".obj\"", error.getSize()));
+						JOptionPane.showMessageDialog(null,"Debe indicar un fichero objeto a ejecutar como par?metro.","Error",JOptionPane.ERROR_MESSAGE);
 					}
 					System.out.println("actionPerformed()      Ejecutar"); // TODO Auto-generated Event stub actionPerformed()
 				}
@@ -459,7 +412,7 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilación");
+			jLabelC.setText("          Resultado de la Compilaci?n");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
@@ -649,9 +602,7 @@ public class MenuVentana extends JFrame{
 			jButtonEC.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//JDialog jDialogEC=new JDialog();
-					JFileChooser examina=new JFileChooser();
-					examina.setDialogTitle("Examinar");
-					examina.setVisible(true);
+					cargaFichero(jTextFieldC, "Compilar");
 					//examina.setSize(380,160);
 					//JFileChooser examina= getJFileChooser();
 					//jDialogEC.setTitle("Examinar archivo");
@@ -727,18 +678,7 @@ public class MenuVentana extends JFrame{
 			jButtonEE.setPreferredSize(new java.awt.Dimension(171,28));
 			jButtonEE.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JFileChooser examina= getJFileChooser();
-					examina.setVisible(true);
-					if (examina.getSelectedFile()==null){
-						ejecutar=null;
-					}
-					else{
-						ejecutar = examina.getSelectedFile();
-					}
-					if (examina.accept(ejecutar)){
-						examina.setVisible(false);
-					}
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					cargaFichero(jTextFieldE, "Ejecutar");
 				}
 			});
 			
@@ -885,5 +825,14 @@ public class MenuVentana extends JFrame{
 			jPanel4.setPreferredSize(d);
 		}
 		return jPanel4;
+	}
+	
+	private void cargaFichero(JTextField campo, String objetivo){
+		JFileChooser examina=new JFileChooser();
+		examina.setDialogTitle("Cargar fichero para" + objetivo.toLowerCase() );
+		if (examina.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+			String ruta = examina.getSelectedFile().getAbsolutePath();
+			campo.setText(ruta);
+		}
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
