@@ -287,7 +287,7 @@ public class MenuVentana extends JFrame{
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecuci?n");
+			jLabelE.setText("Resultado de la Ejecución");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -459,7 +459,7 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilaci?n");
+			jLabelC.setText("          Resultado de la Compilación");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
