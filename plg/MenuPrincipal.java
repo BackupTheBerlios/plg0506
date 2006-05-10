@@ -15,11 +15,7 @@ public class MenuPrincipal{
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		/*
-		 * Declaramos el buffer que usaremos para leer de fichero.
-		 */
-		//RandomAccessFile fuente;
-		
+				
 		MenuVentana vent= new MenuVentana();
 		vent.initialize();
 		vent.setVisible(true);
@@ -31,40 +27,5 @@ public class MenuPrincipal{
         });
 		
 		System.out.println("CIAOOOOOOOOOOOOOOOOOOOO");
-		
-		/*
-		 * Si no hemos recibido por parametro el archivo fuente, avisamos del error.
-		 */
-		/*if (args.length == 0){
-			System.out.println("ERROR: Debe indicar fichero fuente como parametro.");
-		}
-		else {*/	
-			/*try {
-				/*
-				 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
-				 * se recoge mas abajo.
-				 
-				String f = args[0];
-				if (f.endsWith("txt")){
-					fuente = new RandomAccessFile(new File(f),"r");
-					Procesador p=new Procesador();
-					p.procesa(fuente, f);
-					MaquinaP maquina= new MaquinaP(f);
-					maquina.ejecuta();
-					maquina.resultadoMem();
-					
-				}
-				else{
-					System.out.println("ERROR: Debe indicar fichero fuente como parametro.\n\n"
-							+"Acabado en extension \".txt\"");
-				}
-			} 
-			catch (java.io.FileNotFoundException e) {
-				System.out.println("ERROR: Archivo no encontrado: " + args[0]);	
-			}*/
-			
-		//}
-
 	}
-
 }  

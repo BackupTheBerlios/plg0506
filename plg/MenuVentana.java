@@ -8,28 +8,24 @@ import java.io.RandomAccessFile;
 
 import javax.swing.JFrame;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import procesador.Procesador;
 import maquinaP.MaquinaP;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import java.awt.Dimension;
-import java.awt.Color;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-//import javax.swing.filechooser.FileFilter;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 
 public class MenuVentana extends JFrame{
-	 //TODO Cambiar los JDialog por JOptionPanes.  
-	// TODO Que cuando se haga click en Compilar o Ejecutar sin ning?n archivo, se abra el JFileChooser para hcaerlo.
+	
 	static final long serialVersionUID=1;
 	private JPanel jPanel = null;
 	private JButton jButton = null;
@@ -152,30 +148,15 @@ public class MenuVentana extends JFrame{
 								System.out.println("he tratado de mostrar...");
 							}
 							else{
-								JDialog error = new JDialog();
-								error.setTitle("Error");
-								error.setVisible(true);
-								error.setSize(new Dimension(341,170));
-								error.add(getJTextPaneError("ERROR: Debe indicar fichero fuente como parametro.\n\n"
-										+"Acabado en extension \".txt\"", error.getSize()));
-							}
+								JOptionPane.showMessageDialog(null,"Debe indicar el fichero fuente como parametro, con extension \".txt\"","Error",JOptionPane.ERROR_MESSAGE);
+							}	
 						}
 						else{
-							JDialog error = new JDialog();
-							error.setTitle("Error");
-							error.setVisible(true);
-							error.setSize(new Dimension(341,170));
-							error.add(getJTextPaneError("ERROR: Debe indicar un fichero fuente como parametro.\n\n"
-									+"Escribalo en el recuadro indicado.\n\n "+
-									"Acabado en extension \".txt\"", error.getSize()));
+							JOptionPane.showMessageDialog(null,"Debe indicar el fichero fuente como parametro, escribalo en el recuadro indicado y con extension \".txt\"","Error",JOptionPane.ERROR_MESSAGE);
 						}
 					} 
 					catch (java.io.FileNotFoundException e1) {
-						JDialog error = new JDialog();
-						error.setTitle("Error");
-						error.setVisible(true);
-						error.setSize(new Dimension(341,170));
-						error.add(getJTextPaneError("ERROR: Archivo no encontrado: " + compilar.getName(), error.getSize()));	
+						JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + compilar.getName(),"Error",JOptionPane.ERROR_MESSAGE);	
 					}
 					
 					System.out.println("actionPerformed()       Compilar"); // TODO Auto-generated Event stub actionPerformed()
@@ -185,16 +166,6 @@ public class MenuVentana extends JFrame{
 		return jButton;
 	}
 
-	private JTextPane getJTextPaneError(String s, Dimension d){
-		JTextPane jError=new JTextPane(); 
-		jError.setSize(d);
-		jError.setPreferredSize(d);
-		jError.setVisible(true);
-		jError.setEditable(false);
-		jError.setText(s);
-		jError.setCaretColor(Color.GRAY);
-		return jError;
-	}
 	
 	/**
 	 * This method initializes jPanel1	
@@ -287,7 +258,7 @@ public class MenuVentana extends JFrame{
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecuci?n");
+			jLabelE.setText("Resultado de la Ejecución");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -323,7 +294,7 @@ public class MenuVentana extends JFrame{
 			jButton2.setText("Ejecutar");
 			jButton2.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//try {
+
 						/*
 						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 						 * se recoge mas abajo.
@@ -412,7 +383,7 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilaci?n");
+			jLabelC.setText("          Resultado de la Compilación");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
@@ -493,7 +464,6 @@ public class MenuVentana extends JFrame{
 			Dimension d = new Dimension(w,h);
 			jPanel11a.setSize(d);
 			jPanel11a.setPreferredSize(new java.awt.Dimension(512,28));
-			//jPanel11a.add(getJFileChooserC());
 			jPanel11a.add(getJTextFieldC(), java.awt.BorderLayout.CENTER);
 			jPanel11a.add(getJButtonEC(), java.awt.BorderLayout.EAST);
 		}
@@ -519,35 +489,7 @@ public class MenuVentana extends JFrame{
 		}
 		return jPanel11b;
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private JFileChooser getJFileChooser(){
-		//JFileChooser jFileChooser= new
-		//if (jFileChooserC==null){
-			JFileChooser jFileChooserC=new JFileChooser();
-			jFileChooserC.setDialogTitle("Examinar");
-			jFileChooserC.setVisible(true);
-			jFileChooserC.setSize(380,160);
-		//}
-		return jFileChooserC;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	/*private JFileChooser getJFileChooserE(){
-		//if (jFileChooserE==null){
-			JFileChooser jFileChooserE=new JFileChooser();
-			jFileChooserE.setDialogTitle("Examinar");
-			jFileChooserE.setVisible(false);
-	//	}
-		return jFileChooserE;
-	}*/
-	
+		
 	/**
 	 * This method initializes jTextField	
 	 * 	
@@ -565,16 +507,12 @@ public class MenuVentana extends JFrame{
 			jTextFieldC.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (compilar != null && jTextFieldC.getText()== null){
-						System.out.println("Cambiando archivo");
 						jTextFieldC.setText(compilar.getAbsolutePath());
 						
 					}
 					else if(compilar == null && jTextFieldC.getText()!= null){
-						System.out.println("Cambiando archivo");
 						compilar = new File(jTextFieldC.getText());
 					}
-					System.out.println(compilar.getAbsolutePath());
-					System.out.println("actionPerformed()FieldC"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			
@@ -601,25 +539,7 @@ public class MenuVentana extends JFrame{
 			jButtonEC.setPreferredSize(new java.awt.Dimension(171,28));
 			jButtonEC.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//JDialog jDialogEC=new JDialog();
 					cargaFichero(jTextFieldC, "Compilar");
-					//examina.setSize(380,160);
-					//JFileChooser examina= getJFileChooser();
-					//jDialogEC.setTitle("Examinar archivo");
-					//jDialogEC.setVisible(true);
-					//jDialogEC.setSize(380,160); 
-					//jDialogEC.add(examina);
-					//examina.setVisible(true);
-					/*if (examina.getSelectedFile()==null){
-						compilar=null;
-					}
-					else{
-						compilar = examina.getSelectedFile();
-					}
-					if (examina.accept(ejecutar)){
-						examina.setVisible(false);
-					}*/
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 		}
@@ -643,16 +563,12 @@ public class MenuVentana extends JFrame{
 			jTextFieldE.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (ejecutar != null && jTextFieldE.getText()== null){
-						System.out.println("Cambiando archivo");
 						jTextFieldE.setText(ejecutar.getAbsolutePath());
 						
 					}
 					else if(ejecutar == null && jTextFieldE.getText()!= null){
-						System.out.println("Cambiando archivo");
 						ejecutar = new File(jTextFieldE.getText());
 					}
-					System.out.println(ejecutar.getAbsolutePath());
-					System.out.println("actionPerformed()FieldE"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 		}
