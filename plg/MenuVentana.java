@@ -76,6 +76,12 @@ public class MenuVentana extends JFrame{
         this.setSize(new java.awt.Dimension(1024,680));
         this.setResizable(false);
         this.setContentPane(getJPanel());
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        	public void windowClosing(java.awt.event.WindowEvent e) {
+        		System.out.println("Cerramos ventana"); // TODO Auto-generated Event stub windowClosing()
+        		cerrarVentana();
+        	}
+        });
         this.compilado=false;
         this.ejecutado=false;
         this.compilar=null;
@@ -258,7 +264,7 @@ public class MenuVentana extends JFrame{
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecución");
+			jLabelE.setText("Resultado de la Ejecuci?n");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -383,7 +389,7 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilación");
+			jLabelC.setText("          Resultado de la Compilaci?n");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
@@ -750,5 +756,9 @@ public class MenuVentana extends JFrame{
 			String ruta = examina.getSelectedFile().getAbsolutePath();
 			campo.setText(ruta);
 		}
+	}
+	
+	private void cerrarVentana(){
+		this.dispose();
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
