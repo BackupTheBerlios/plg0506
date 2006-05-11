@@ -277,7 +277,7 @@ public class Lexico {
 						}
 			
 			/*
-			 * Si detectamos 'a' hay que discernir si es el operador 'and' o es un identificador.
+			 * Si detectamos 'e' hay que discernir si es el operador 'end' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 'e':	a = (char)fuente.read();
