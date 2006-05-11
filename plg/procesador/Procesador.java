@@ -1,5 +1,7 @@
 package procesador;
 import java.io.RandomAccessFile;
+
+import javax.swing.JOptionPane;
 //import java.util.Vector;
 
 import tablaSimbolos.TablaSimbolos;
@@ -36,8 +38,7 @@ public class Procesador {
 				//return sintactico.getCodigo().getCod();
 			} 
 			catch (Exception e) {
-				System.out.println(e.getMessage());
-				//return null;
+				JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 		
 	}

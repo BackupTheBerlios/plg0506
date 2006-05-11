@@ -15,17 +15,8 @@ public class MenuPrincipal{
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-				
 		MenuVentana vent= new MenuVentana();
 		vent.initialize();
 		vent.setVisible(true);
-		vent.addWindowListener(new java.awt.event.WindowAdapter() {
-        	public void windowClosing(java.awt.event.WindowEvent e) {
-        		System.out.println("windowClosing()"); // TODO Auto-generated Event stub windowClosing()
-        		
-        	}
-        });
-		
-		System.out.println("CIAOOOOOOOOOOOOOOOOOOOO");
 	}
 }  

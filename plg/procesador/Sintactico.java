@@ -49,16 +49,16 @@ public class Sintactico{
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase sintactico. 
+	 * @return Devuelve el codigo generado hasta ese momento
 	 */
 	public Codigo getCodigo() {
 		return codigo;
 	}
 
 	/**
-	 * 
-	 * @param codigo
+	 * Mutador para el atributo de la clase sintactico. 
+	 * @param codigo Recibe el nuevo valor del codigo que se ha generado
 	 */
 	public void setCodigo(Codigo codigo) {
 		this.codigo = codigo;
