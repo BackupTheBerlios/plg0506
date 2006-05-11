@@ -7,8 +7,9 @@ import java.util.Vector;
 
 /**
  * La clase <B>Codigo</B> se encarga de manejar el código generado por las instrucciones del lenguaje.
- * <P>Tiene un sólo atributo:
- * <UL><LI><CODE>cod:</CODE> string donde se almacena el código del lenguaje objeto, que es el código de la máquina P. Como la máquina P de momento no existe, este el contenido de este atributo se mostrará por pantalla.</LI></UL></P>
+ * <P>Tiene dos atributos:
+ * <UL><LI><CODE>cod:</CODE> string donde se almacena el código del lenguaje objeto, que es el código de la máquina P. Como la máquina P de momento no existe, este el contenido de este atributo se mostrará por pantalla.</LI></UL>
+ * <UL><LI><CODE>fichero:</CODE> Es el fichero donde vamos a guardar las instrucciones que podra ejecutar la máquinaP.</LI></UL></P>
  * 
  * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
@@ -18,8 +19,7 @@ public class Codigo {
 	/*
 	 * Atributos de la clase:
 	 * 
-	 *  Este String guarda el codigo del lenguaje objeto, que es el codigo de la maquina P que 
-	 *  no existe asique de momento se mostrara por pantalla.
+	 *  El String cod guarda el codigo del lenguaje objeto, que es el codigo de la maquina P.
 	 */
 	Vector cod;
 	FileOutputStream fichero;

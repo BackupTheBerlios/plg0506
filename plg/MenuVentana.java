@@ -318,9 +318,10 @@ public class MenuVentana extends JFrame{
 						if (ejecutar.getName().endsWith("obj")){
 							MaquinaP maquina= new MaquinaP(ejecutar.getName());
 							maquina.ejecuta();
+							String pasos = maquina.getPasos();
 							String resultado = maquina.resultadoMem();
 							ejecutado=true;
-							jTextPaneE.setText(resultado);
+							jTextPaneE.setText(pasos+resultado);
 						}
 						else{
 							JOptionPane.showMessageDialog(null,"Debe indicar el fichero objeto, con extensi?n .obj","Error",JOptionPane.ERROR_MESSAGE);

@@ -230,6 +230,7 @@ public class MaquinaP {
 				linea = i.split(" ");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					apila((new Integer(Integer.parseInt(linea[1]))).intValue());
@@ -237,6 +238,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("desapila-dir")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
@@ -244,6 +246,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("apila-dir")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
@@ -251,6 +254,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("suma")==0){
 					System.out.print(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					suma();
@@ -259,6 +263,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("resta")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					resta();
@@ -267,6 +272,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("multiplica")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					multiplica();
@@ -275,6 +281,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("divide")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					divide();
@@ -283,12 +290,16 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("and")==0){
 					System.out.println(linea[0]+ "  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
 					and();
 					System.out.println(pila.peek());
 					j++;
 				}
 				else if (linea[0].compareTo("or")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					or();
@@ -297,6 +308,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("not")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					not();
@@ -305,6 +317,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("neg")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					neg();
@@ -313,6 +326,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("menor")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					menor();
@@ -321,6 +335,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("menor_o_igual")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					menorIgual();
@@ -329,6 +344,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("mayor")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					mayor();
@@ -337,6 +353,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("mayor_o_igual")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					mayorIgual();
@@ -345,6 +362,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("igual")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					igual();
@@ -353,6 +371,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("distinto")==0){
 					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					distinto();
@@ -361,6 +380,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("ir-a")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
@@ -369,6 +389,7 @@ public class MaquinaP {
 				}
 				else if (linea[0].compareTo("ir-f")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
