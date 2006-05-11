@@ -139,19 +139,27 @@ public class Tipos {
 	public static final int TKDIF		= 25;
 	
 	/**
-	 * Valor para reconocer la palabra reservada.
+	 * Valor para reconocer la palabra reservada 'begin'.
 	 */
 	public static final int TKBEG		= 26;
 
-	/**
-	 * Valor para reconocer el final del fichero.
-	 */
-	public static final int TKFF			= 28;
-	
 	/**
 	 * Valor para reconocer la palabra reservada 'end'.
 	 */
 	public static final int TKEND		= 27;
 	
+	/**
+	 * Valor para reconocer la palabra reservada 'do'.
+	 */
+	public static final int TKDO		= 28;
 	
+	/**
+	 * Valor para reconocer la palabra reservada 'while'.
+	 */
+	public static final int TKWHL		= 29;
+	
+	/**
+	 * Valor para reconocer el final del fichero.
+	 */
+	public static final int TKFF		= 30;	
 }

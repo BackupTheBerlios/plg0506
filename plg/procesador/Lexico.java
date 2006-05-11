@@ -277,7 +277,7 @@ public class Lexico {
 						}
 			
 			/*
-			 * Si detectamos 'e' hay que discernir si es el operador 'end' o es un identificador.
+			 * Si detectamos 'e' hay que discernir si es la palabra reservada 'end' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 'e':	a = (char)fuente.read();
@@ -384,6 +384,35 @@ public class Lexico {
 							fuente.seek(posicion);
 							String aux;
 							aux = leerCaracter("o");
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'd' hay que discernir si es la palabra reservada 'do' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'd':	a = (char)fuente.read();
+						posicion ++;
+						if (a =='o'){
+							a = (char)fuente.read();
+							posicion ++;
+							if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("do");
+								return new Token (aux,Tipos.TKIDEN);
+							}
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								return new Token ("do",Tipos.TKDO);
+							}
+						}	
+						else{
+							posicion --;
+							fuente.seek(posicion);
+							String aux;
+							aux = leerCaracter("d");
 							return new Token (aux,Tipos.TKIDEN);
 						}
 						
@@ -645,6 +674,70 @@ public class Lexico {
 								return new Token (aux,Tipos.TKIDEN);
 							}
 						}
+						
+			/*
+			 * Si detectamos 'w' hay que discernir si es la palabra reservada 'while' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'w':	a = (char)fuente.read();
+						posicion ++;
+						if (a =='h'){
+							a = (char)fuente.read();
+							posicion ++;
+							if (a =='i'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (a =='l'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (a =='e'){
+										a = (char)fuente.read();
+										posicion ++;
+										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("while");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											return new Token ("while",Tipos.TKWHL);
+										}
+									}	
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("whil");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+								}	
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("whi");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}	
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("wh");
+								return new Token (aux,Tipos.TKIDEN);
+							}
+						}
+						else{							
+							posicion --;
+							fuente.seek(posicion);
+							String aux;
+							aux = leerCaracter("w");
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.
