@@ -146,5 +146,12 @@ public class Tipos {
 	/**
 	 * Valor para reconocer el final del fichero.
 	 */
-	public static final int TKFF			= 26; 
+	public static final int TKFF			= 26;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'end'.
+	 */
+	public static final int TKEND		= 28;
+	
+	
 }

@@ -277,6 +277,46 @@ public class Lexico {
 						}
 			
 			/*
+			 * Si detectamos 'a' hay que discernir si es el operador 'and' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'e':	a = (char)fuente.read();
+						posicion ++;
+						if (a =='n'){
+							a = (char)fuente.read();
+							posicion ++;
+							if (a =='d'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("end");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									return new Token ("end",Tipos.TKEND);
+								}
+							}	
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("en");
+								return new Token (aux,Tipos.TKIDEN);
+							}	
+						}	
+						else{	
+							posicion --;
+							fuente.seek(posicion);
+							String aux;
+							aux = leerCaracter("e");
+							return new Token (aux,Tipos.TKIDEN);
+						}
+			/*
 			 * Si detectamos 'n' hay que discernir si es el operador 'not' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
