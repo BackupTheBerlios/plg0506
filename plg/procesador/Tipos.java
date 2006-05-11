@@ -1,9 +1,9 @@
 package procesador;
 /**
- * La clase <B>Tipos</B> declara las categorías léxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
- * <P>No tiene atributos, sólo las constantes de los tipos.</P>
+ * La clase <B>Tipos</B> declara las categoras lxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
+ * <P>No tiene atributos, slo las constantes de los tipos.</P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
  *
  */
 public class Tipos {
@@ -14,7 +14,7 @@ public class Tipos {
 	 */
 	
 	/**
-	 * Valor para reconocer números enteros.
+	 * Valor para reconocer nmeros enteros.
 	 */
 	public static final int TKNUM 		= 1;
 	
@@ -29,7 +29,7 @@ public class Tipos {
 	public static final int TKIDEN 		= 3; 
 	
 	/**
-	 * Valor para reconocer una asignación.
+	 * Valor para reconocer una asignacin.
 	 */
 	public static final int TKASIGN	 	= 4; 
 	
@@ -49,22 +49,22 @@ public class Tipos {
 	public static final int TKRESTA		= 7; 
 	
 	/**
-	 * Valor para reconocer un signo de multiplicación '*'.
+	 * Valor para reconocer un signo de multiplicacin '*'.
 	 */
 	public static final int TKMULT		= 8; 
 	
 	/**
-	 * Valor para reconocer un signo de división '/'.
+	 * Valor para reconocer un signo de divisin '/'.
 	 */
 	public static final int TKDIV	 	= 9; 
 	
 	/**
-	 * valor para reconocer un paréntesis de apertura '('.
+	 * valor para reconocer un parntesis de apertura '('.
 	 */
 	public static final int TKPAP		= 10; 
 	
 	/**
-	 * Valor para reconocer un paréntesis de cierre ')'.
+	 * Valor para reconocer un parntesis de cierre ')'.
 	 */
 	public static final int TKPCI		= 11; 
 	
@@ -129,7 +129,7 @@ public class Tipos {
 	public static final int TKBOOL		= 23;
 	
 	/**
-	 * Valor para reconocer carácter que indica el final de las declaraciones '#'.
+	 * Valor para reconocer carcter que indica el final de las declaraciones '#'.
 	 */
 	public static final int TKCUA		= 24;
 	
@@ -138,6 +138,11 @@ public class Tipos {
 	 */
 	public static final int TKDIF		= 25;
 	
+	/**
+	 * Valor para reconocer la palabra reservada.
+	 */
+	public static final int TKBEG		= 26;
+
 	/**
 	 * Valor para reconocer el final del fichero.
 	 */

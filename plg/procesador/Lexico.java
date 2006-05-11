@@ -504,7 +504,7 @@ public class Lexico {
 						}
 
 			/*
-			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
+			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool', la palabras reservada 'begin' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 'b':	a = (char)fuente.read();
@@ -548,11 +548,62 @@ public class Lexico {
 							}	
 						}	
 						else{							
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("b");
-							return new Token (aux,Tipos.TKIDEN);
+							if (a =='e'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (a =='g'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (a =='i'){
+										a = (char)fuente.read();
+										posicion ++;
+										if (a =='n'){
+											a = (char)fuente.read();
+											posicion ++;
+											if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+												posicion --;
+												fuente.seek(posicion);
+												String aux;
+												aux = leerCaracter("begin");
+												return new Token (aux,Tipos.TKIDEN);
+											}
+											else{
+												posicion --;
+												fuente.seek(posicion);
+												return new Token ("begin",Tipos.TKBEG);
+											}
+										}
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("begi");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+									}
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("beg");
+										return new Token (aux,Tipos.TKIDEN);
+									}	
+								}	
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("be");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("b");
+								return new Token (aux,Tipos.TKIDEN);
+							}
 						}
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
