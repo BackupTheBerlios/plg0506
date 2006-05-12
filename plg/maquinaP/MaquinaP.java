@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.Stack;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
+
 /**
  * La clase <B>MaquinaP</B> implementa la maquina virtual. Para que el lenguaje objeto que hemos creado tenga valor 
  * es necesario que sea ejecutado en una máquina y que ésta traduzca los elementos del lenguaje fuente al lenguaje 
@@ -23,6 +25,8 @@ import java.util.Vector;
  * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui había puesto el nombre del fichero pero quizas deberia ser el
  * código del programa.</LI>
  * <LI><CODE>Mem:</CODE> Memoria de datos.</LI>
+ * <LI><CODE>fichero:</CODE> Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP. Sera un fichero con extension '.obj'</LI>
+ * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
  * </UL></P>
  * 
  * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
@@ -40,6 +44,8 @@ public class MaquinaP {
 	 * Prog:Memoria de programas. Aqui había puesto el nombre del fichero pero quizas deberia ser el
 	 * código del programa.
 	 * Mem: Memoria de datos.
+	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
+	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
 	private Stack pila;
 	private int PC;
@@ -51,8 +57,8 @@ public class MaquinaP {
 	private String pasos;
 	
 	/**
-	 * 
-	 * @param prog
+	 * El constructor de la clase MaquinaP que sólo tiene el buffer de lectura del fichero como parmetro de entrada.
+	 * @param f Recibe como parámetro la ruta del fichero a ejecutar para poder inicializar todo.
 	 */	
 	public MaquinaP(String f) {
 		super();
@@ -70,47 +76,47 @@ public class MaquinaP {
 			fichero = new FileReader(fich);
 		}
 		catch(java.io.FileNotFoundException e) {
-			System.out.println("ERROR: Archivo no encontrado: " + fcod);	
+			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + fcod,"Error",JOptionPane.ERROR_MESSAGE);
 		}
 		Prog = damePrograma(fichero);
 		pasos="";
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, pasos. 
+	 * @return String con los pasos ejecutados y estados de la pila.
 	 */
 	public String getPasos() {
 		return pasos;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, H. Que indica el estado de la pila. 
+	 * @return String con los pasos ejecutados y estados de la pila.
 	 */
 	public int getH() {
 		return H;
 	}
 	
 	/**
-	 * 
-	 * @param h
+	 * Mutador para el atributo de la clase, H. 
+	 * @param h Entero que controla el estado actual de la pila, además es donde se refleja el error.
 	 */
 	public void setH(int h) {
 		H = h;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, M. Que indica el estado de la memoria del Programa. 
+	 * @return Vector donde cada celda es una posición de Memoria.
 	 */
 	public Vector getMem() {
 		return Mem;
 	}
 	
 	/**
-	 * 
-	 * @param mem
+	 * Mutador para el atributo de la clase, M. Que indica el estado de la memoria del Programa. 
+	 * @param mem Se recibe un vector a modo de memoria de Progrma.
 	 */
 	public void setMem(Vector mem) {
 		Mem = mem;
@@ -197,10 +203,10 @@ public class MaquinaP {
 	      }
 	    }
 	    catch (FileNotFoundException ex) {
-		      ex.printStackTrace();
+		      JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 		catch (IOException ex){
-		      ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 		return v;
 	}
@@ -223,6 +229,7 @@ public class MaquinaP {
 		String i;
 		String[] linea;
 		int j= 0;
+		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
 		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
 		while (H==0){
 			if(j<Prog.size()){
@@ -234,6 +241,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					apila((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("desapila-dir")==0){
@@ -242,6 +257,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("apila-dir")==0){
@@ -250,6 +273,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("suma")==0){
@@ -258,7 +289,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					suma();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("resta")==0){
@@ -267,7 +305,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					resta();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("multiplica")==0){
@@ -276,7 +321,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					multiplica();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("divide")==0){
@@ -285,7 +337,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					divide();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("and")==0){
@@ -294,7 +353,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					and();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("or")==0){
@@ -303,7 +369,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					or();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("not")==0){
@@ -312,7 +385,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					not();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("neg")==0){
@@ -321,7 +401,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					neg();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("menor")==0){
@@ -330,7 +417,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					menor();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("menor_o_igual")==0){
@@ -339,7 +433,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					menorIgual();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("mayor")==0){
@@ -348,7 +449,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					mayor();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("mayor_o_igual")==0){
@@ -357,7 +465,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					mayorIgual();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("igual")==0){
@@ -366,7 +481,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					igual();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("distinto")==0){
@@ -375,7 +497,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
 					distinto();
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("ir-a")==0){
@@ -384,7 +513,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else if (linea[0].compareTo("ir-f")==0){
@@ -393,7 +529,14 @@ public class MaquinaP {
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
-					System.out.println(pila.peek());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
 					j++;
 				}
 				else{

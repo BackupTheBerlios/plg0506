@@ -23,6 +23,19 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+/**
+ * La clase <B>Lexico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepcin en caso de que esto no sea posible. Puede suceder
+ * que el token sea erroneo o que ocurra algun problema con el fichero de lectura.
+ * <P>La clase Lexico cuenta con los siguientes atributos:
+ * <UL><LI><CODE>linea:</CODE> Entero que controla la lnea del cdigo donde se detecta el error.</LI>
+ * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanlisis.</LI>
+ * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar.</LI>
+ * <LI><CODE>posicion:</CODE> Entero que marca la posicin en la que se est leyendo dentro de una lnea.</LI>
+ * </UL></P>
+ * 
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
+ *
+ */
 
 public class MenuVentana extends JFrame{
 	
@@ -58,8 +71,8 @@ public class MenuVentana extends JFrame{
 	private JLabel jLabelE = null;
 	private JLabel jLabelEC = null;
 	private JLabel jLabelEE = null;
-	private boolean compilado;
-	private boolean ejecutado;
+	//private boolean compilado;
+	//private boolean ejecutado;
 	private JPanel jPanel4 = null;
 	
 	public MenuVentana(){
@@ -78,12 +91,12 @@ public class MenuVentana extends JFrame{
         this.setContentPane(getJPanel());
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         	public void windowClosing(java.awt.event.WindowEvent e) {
-        		System.out.println("Cerramos ventana"); // TODO Auto-generated Event stub windowClosing()
+        		// TODO Auto-generated Event stub windowClosing()
         		cerrarVentana();
         	}
         });
-        this.compilado=false;
-        this.ejecutado=false;
+        //this.compilado=false;
+        //this.ejecutado=false;
         this.compilar=null;
         this.ejecutar=null;
 	}
@@ -143,8 +156,8 @@ public class MenuVentana extends JFrame{
 								fuente = new RandomAccessFile(compilar,"r");
 								Procesador p=new Procesador();
 								p.procesa(fuente, compilar.getName());
-								System.out.println("he compilado...");
-								compilado=true;
+								//System.out.println("he compilado...");
+								//compilado=true;
 								int i= compilar.getName().length();
 								String fcod = new String(compilar.getName().substring( 0,i-3));
 								fcod = fcod.concat("obj");
@@ -164,8 +177,6 @@ public class MenuVentana extends JFrame{
 					catch (java.io.FileNotFoundException e1) {
 						JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + compilar.getName(),"Error",JOptionPane.ERROR_MESSAGE);	
 					}
-					
-					System.out.println("actionPerformed()       Compilar"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 		}
@@ -320,7 +331,7 @@ public class MenuVentana extends JFrame{
 							maquina.ejecuta();
 							String pasos = maquina.getPasos();
 							String resultado = maquina.resultadoMem();
-							ejecutado=true;
+							//ejecutado=true;
 							jTextPaneE.setText(pasos+resultado);
 						}
 						else{
@@ -681,9 +692,9 @@ public class MenuVentana extends JFrame{
 			jTextPaneC.setEditable(false);
 			jTextPaneC.setToolTipText("Se muestra el resultado de compilar el archivo");
 			jTextPaneC.setPreferredSize(this.jScrollPaneC.getSize());
-			if (compilado){
+			/*if (compilado){
 				jTextPaneC.setText(mostrarFichero(compilar));
-			}
+			}*/
 		}
 		return jTextPaneC;
 	}
@@ -701,9 +712,9 @@ public class MenuVentana extends JFrame{
 			jTextPaneE.setToolTipText("Se muestra el resultado de ejecutar el archivo");
 			jTextPaneE.setText("");
 			jTextPaneE.setPreferredSize(this.jScrollPaneE.getSize());
-			if (ejecutado){
+			/*if (ejecutado){
 				jTextPaneE.setText(mostrarFichero(ejecutar));
-			}
+			}*/
 		}
 		return jTextPaneE;
 	}

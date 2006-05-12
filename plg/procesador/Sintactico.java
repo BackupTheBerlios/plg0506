@@ -624,18 +624,6 @@ public class Sintactico{
 		}
 	}
 
-	/*
-	
-	public void genOpAnd(){
-
-		codigo.genIns("and");
-	}
-
-	public void genOpOr(){
-
-		codigo.genIns("or");
-	}*/
-
 	/**
 	 * Genera el csdigo de la negacisn booleana "not".
 	 *

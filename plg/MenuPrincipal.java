@@ -1,16 +1,16 @@
-
+/**
+ * La clase <B>MenuPrincipalo</B> es el main del compilador del lenguaje especificado. Lo único que hace es crear e inicializar un 
+ * objeto de la clase MenuVentana.
+ * <P>La clase Lexico no tiene atributos.
+ * 
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ *
+ */
 
 public class MenuPrincipal{
 
-	
-
 	/**
-	 * El método main de esta clase implementa el menú principal de la practica que es capaz de procesar del lenguaje 
-	 * y captura una excepción IOException procedente de la función de RandomAccessFile de JAVA si no se encuentra el 
-	 * fichero de entrada. Además también se ofrece la posiblidad de ejecutar en la maquinaP el código obtenido despues
-	 * de procesar el fichero fuente.
-	 * 
-	 * @param args Que contendrá la ruta del fichero a procesar.
+	 * El método main de esta clase inicializa la parte gráfica del compilador.
 	 * 
 	 */
 	public static void main(String[] args) {

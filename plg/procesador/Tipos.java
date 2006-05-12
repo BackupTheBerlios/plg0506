@@ -3,7 +3,7 @@ package procesador;
  * La clase <B>Tipos</B> declara las categoras lxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
  * <P>No tiene atributos, slo las constantes de los tipos.</P>
  * 
- * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 public class Tipos {
@@ -159,7 +159,22 @@ public class Tipos {
 	public static final int TKWHL		= 29;
 	
 	/**
+	 * Valor para reconocer la palabra reservada 'if'.
+	 */
+	public static final int TKIF		= 30;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'else'.
+	 */
+	public static final int TKELS		= 31;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'then'.
+	 */
+	public static final int TKTHN		= 32;
+	
+	/**
 	 * Valor para reconocer el final del fichero.
 	 */
-	public static final int TKFF		= 30;	
+	public static final int TKFF		= 33;	
 }

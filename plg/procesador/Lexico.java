@@ -34,7 +34,7 @@ public class Lexico {
 	int posicion;
 	
 	/**
-	 * El constructor de la clase Lexico que slo tiene el buffer de lectura del fichero como parmetro de entrada.
+	 * El constructor de la clase Lexico que sólo tiene el buffer de lectura del fichero como parmetro de entrada.
 	 * @param f Buffer de entrada del que se leen caracteres. Que es del tipo RandomAccessFile.
 	 * 
 	 */
@@ -46,7 +46,7 @@ public class Lexico {
 	}
 	
 	/**
-	 * Accesor para el atributo de la clase linea. 
+	 * Accesor para el atributo de la clase, linea. 
 	 * @return Entero que controla la lnea del cdigo donde se detecta el error.
 	 */
 	public int getLinea() {
@@ -277,7 +277,7 @@ public class Lexico {
 						}
 			
 			/*
-			 * Si detectamos 'e' hay que discernir si es la palabra reservada 'end' o es un identificador.
+			 * Si detectamos 'e' hay que discernir si es la palabra reservada 'end' o la palabra reservada 'else' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 'e':	a = (char)fuente.read();
@@ -310,11 +310,51 @@ public class Lexico {
 							}	
 						}	
 						else{	
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("e");
-							return new Token (aux,Tipos.TKIDEN);
+							if (a =='l'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (a =='s'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (a =='e'){
+										a = (char)fuente.read();
+										posicion ++;
+										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("else");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											return new Token ("else",Tipos.TKELS);
+										}
+									}	
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("els");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+								}	
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("el");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("e");
+								return new Token (aux,Tipos.TKIDEN);
+							}
 						}
 			/*
 			 * Si detectamos 'n' hay que discernir si es el operador 'not' o es un identificador.
@@ -417,7 +457,7 @@ public class Lexico {
 						}
 						
 			/*
-			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
+			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o la palabra reservada then o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 't':	a = (char)fuente.read();
@@ -461,11 +501,51 @@ public class Lexico {
 							}
 						}
 						else{							
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("t");
-							return new Token (aux,Tipos.TKIDEN);
+							if (a =='h'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (a =='e'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (a =='n'){
+										a = (char)fuente.read();
+										posicion ++;
+										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("then");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											return new Token ("then",Tipos.TKTHN);
+										}
+									}	
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("the");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+								}	
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("th");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}
+							else{							
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("t");
+								return new Token (aux,Tipos.TKIDEN);
+							}
 						}
 			
 			/*
@@ -532,7 +612,7 @@ public class Lexico {
 						}
 						
 			/*
-			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
+			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es la palabra reservada 'if' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 'i':	a = (char)fuente.read();
@@ -565,15 +645,33 @@ public class Lexico {
 							}	
 						}	
 						else{							
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("i");
-							return new Token (aux,Tipos.TKIDEN);
+							if (a =='f'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("if");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									return new Token ("if",Tipos.TKIF);
+								}
+							}	
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("i");
+								return new Token (aux,Tipos.TKIDEN);
+							}
 						}
 
 			/*
-			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool', la palabras reservada 'begin' o es un identificador.
+			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool', la palabra reservada 'begin' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
 			case 'b':	a = (char)fuente.read();
@@ -845,7 +943,7 @@ public class Lexico {
 	}
 	
 	/**
-	 * El mtodo getNextToken devuelve el siguiente Token para poder realizar el preanlisis. Llama a getToken(). Tambin acutualiza el lookahead de Lexico.
+	 * El método getNextToken devuelve el siguiente Token para poder realizar el preanlisis. Llama a getToken(). Tambin acutualiza el lookahead de Lexico.
 	 * 
 	 * @see procesador.Lexico#getToken()
 	 * @return Token actual que ha reconocido.

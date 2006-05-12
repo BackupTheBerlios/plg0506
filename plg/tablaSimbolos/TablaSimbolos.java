@@ -68,6 +68,11 @@ public class TablaSimbolos {
 		return this.tabla.containsKey(id);
 	}
 	
+	/**
+	 * Este método devuelve el tipo de un identificador que le llega por párametro. Y el resultado lo devuelve como un String.
+	 * @param id Identificador sobre el cual se va a buscar su tipo.
+	 * @return
+	 */
 	public String getTipo(String id){
 		if (this.tabla.containsKey(id))
 			return ((Par)this.tabla.get(id)).getTipo();// Devolver el tipo...
