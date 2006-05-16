@@ -211,6 +211,10 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos I() throws Exception{
+		/*ahora puede ser ICompuesta, IIf
+		 * las ecs son:
+		 * - {I.err= ICompuesta.err; }
+		 * - {I.err= Iif.err;}*/
 		Atributos a = new Atributos();
 		Atributos atrDeIAsig;
 		atrDeIAsig = IAsig();
@@ -267,6 +271,32 @@ public class Sintactico{
 		a.setErr(errDeIAsig);
 		return a;
 	}
+	
+	/*
+	 * Aquí hay q añadir ICompuesta:
+	 * ICompuesta ::= begin IsOpc end 
+	 * {ICompuesta.err=IsOpc.err; }
+	 */
+	
+	/*
+	 * Aquí hay q añadir IOpc:
+	 * IsOpc ::= λ {IsOpc.err=false;}
+	 * IsOpc ::= Is {IsOpc.err = Is.err; }
+	 */
+	/*
+	 * Aquí hay q añadir IIf:
+	 * IIf ::= { var etqs1, etqs2;}
+	 * if Exp then {emite(ir-f(?));
+	 * 		etqs1 <-- etq;
+	 * 		etq <--etq +1;} I
+	 * 		{emite(ir-a(?));
+	 * 		etqs2 <-- etq;
+	 * 		etq <--etq +1;} 
+	 * 		parchea(etqs1,etq);}
+	 * 		Pelse {parchea(etqs2,etq);}
+	 * 
+	 * CREO Q NO ESTÁ BIEN ESPECIFICADO
+	 */
 	
 	/**
 	 * Procesa y desarrolla una Expresisn de Comparacisn, ExpC, llamando a Exp y a RExpC, 
@@ -569,7 +599,7 @@ public class Sintactico{
 	}
 	
 	/**
-	 * Genera el c�digo de la operaci�n de suma, resta o el or.
+	 * Genera el cdigo de la operacin de suma, resta o el or.
 	 * 
 	 * @param opDeOpAd
 	 */
