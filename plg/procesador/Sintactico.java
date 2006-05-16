@@ -216,12 +216,74 @@ public class Sintactico{
 		 * - {I.err= ICompuesta.err; }
 		 * - {I.err= Iif.err;}*/
 		Atributos a = new Atributos();
-		Atributos atrDeIAsig;
-		atrDeIAsig = IAsig();
-		a.setErr(atrDeIAsig.getErr());
+		Atributos atrDeIns;
+		if (lexico.reconoce(Tipos.TKBEG)){
+			atrDeIns = ICompuesta();
+			throw new Exception("Paso por begin");
+		}
+		else{
+			/*if (lexico.reconoce(Tipos.TKIF)){
+				atrDeIns = IIf();
+			}
+			else{*/
+				atrDeIns = IAsig();
+			//}
+		}
+		a.setErr(atrDeIns.getErr());
 		return a;
 	}
+
+	/*
+	 * Aquí hay q añadir ICompuesta:
+	 * ICompuesta ::= begin IsOpc end 
+	 * {ICompuesta.err=IsOpc.err; }
+	 */
+
+	public Atributos ICompuesta() throws Exception{
+		Atributos a = new Atributos();
+		Atributos atrDeIns;
+		atrDeIns = IsOpc();
+		System.out.println("Paso por Compuesta");
+		a.setErr(atrDeIns.getErr());
+		return a;	
+	}
 	
+	/*
+	 * Aquí hay q añadir IOpc:
+	 * IsOpc ::= λ {IsOpc.err=false;}
+	 * IsOpc ::= Is {IsOpc.err = Is.err; }
+	 */
+	
+	public Atributos IsOpc() throws Exception{
+		Atributos a = new Atributos();
+		Atributos atrDeIns;
+		System.out.println("Paso por Opc");
+		if (lexico.reconoce(Tipos.TKEND)){
+			System.out.println("Es el end");
+			a.setErr(false);
+		}
+		else{
+			System.out.println("Voy a una nueva instruccion");
+			atrDeIns = I();
+			a.setErr(atrDeIns.getErr());
+		}	
+		return a;	
+	}
+	
+	/*
+	 * Aquí hay q añadir IIf:
+	 * IIf ::= { var etqs1, etqs2;}
+	 * if Exp then {emite(ir-f(?));
+	 * 		etqs1 <-- etq;
+	 * 		etq <--etq +1;} I
+	 * 		{emite(ir-a(?));
+	 * 		etqs2 <-- etq;
+	 * 		etq <--etq +1;} 
+	 * 		parchea(etqs1,etq);}
+	 * 		Pelse {parchea(etqs2,etq);}
+	 * 
+	 * CREO Q NO ESTÁ BIEN ESPECIFICADO
+	 */
 	/**
 	 * Procesa una instruccisn de asignacisn, de la forma:
 	 * 
@@ -234,12 +296,13 @@ public class Sintactico{
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
+
 	public Atributos IAsig() throws Exception{
 		Atributos  atrDeExpC = new Atributos();
 		Atributos a = new Atributos();
 		boolean errDeIAsig; 
-		Token tk;
 		String lex = "";
+		Token tk;
 		tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
@@ -271,32 +334,7 @@ public class Sintactico{
 		a.setErr(errDeIAsig);
 		return a;
 	}
-	
-	/*
-	 * Aquí hay q añadir ICompuesta:
-	 * ICompuesta ::= begin IsOpc end 
-	 * {ICompuesta.err=IsOpc.err; }
-	 */
-	
-	/*
-	 * Aquí hay q añadir IOpc:
-	 * IsOpc ::= λ {IsOpc.err=false;}
-	 * IsOpc ::= Is {IsOpc.err = Is.err; }
-	 */
-	/*
-	 * Aquí hay q añadir IIf:
-	 * IIf ::= { var etqs1, etqs2;}
-	 * if Exp then {emite(ir-f(?));
-	 * 		etqs1 <-- etq;
-	 * 		etq <--etq +1;} I
-	 * 		{emite(ir-a(?));
-	 * 		etqs2 <-- etq;
-	 * 		etq <--etq +1;} 
-	 * 		parchea(etqs1,etq);}
-	 * 		Pelse {parchea(etqs2,etq);}
-	 * 
-	 * CREO Q NO ESTÁ BIEN ESPECIFICADO
-	 */
+
 	
 	/**
 	 * Procesa y desarrolla una Expresisn de Comparacisn, ExpC, llamando a Exp y a RExpC, 
