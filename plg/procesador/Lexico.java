@@ -951,8 +951,12 @@ public class Lexico {
 	 * @exception Exception que propagamos de la funcion getToken().
 	 */
 	public Token getNextToken() throws IOException, Exception{
-		lookahead = getToken();
-		return lookahead;	
+		int aux = posicion;
+		Token tk = getToken();
+		fuente.seek(aux);
+		posicion = aux;
+		return tk;	
+		
 	}
 	
 	/**
@@ -963,7 +967,7 @@ public class Lexico {
 	 * @exception Exception que propagamos de la funcion getNextToken().
 	 */
 	public Token lexer() throws IOException, Exception{
-			lookahead = getNextToken();
+			lookahead = getToken();
 			return lookahead;
 	}
 	

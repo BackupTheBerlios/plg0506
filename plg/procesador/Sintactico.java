@@ -217,6 +217,7 @@ public class Sintactico{
 		 * - {I.err= Iif.err;}*/
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
+		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
 			throw new Exception("Paso por begin");
@@ -258,7 +259,9 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
 		System.out.println("Paso por Opc");
-		if (lexico.reconoce(Tipos.TKEND)){
+		Token tk;
+		tk = lexico.getNextToken();
+		if (tk.equals( new Token("end",Tipos.TKEND) )){
 			System.out.println("Es el end");
 			a.setErr(false);
 		}
@@ -270,7 +273,7 @@ public class Sintactico{
 		return a;	
 	}
 	
-	/*
+	/*s
 	 * Aquí hay q añadir IIf:
 	 * IIf ::= { var etqs1, etqs2;}
 	 * if Exp then {emite(ir-f(?));
@@ -284,6 +287,7 @@ public class Sintactico{
 	 * 
 	 * CREO Q NO ESTÁ BIEN ESPECIFICADO
 	 */
+	
 	/**
 	 * Procesa una instruccisn de asignacisn, de la forma:
 	 * 
@@ -303,7 +307,7 @@ public class Sintactico{
 		boolean errDeIAsig; 
 		String lex = "";
 		Token tk;
-		tk = lexico.lexer();
+		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			tk = lexico.lexer();

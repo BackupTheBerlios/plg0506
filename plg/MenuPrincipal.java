@@ -1,5 +1,5 @@
 /**
- * La clase <B>MenuPrincipalo</B> es el main del compilador del lenguaje especificado. Lo único que hace es crear e inicializar un 
+ * La clase <B>MenuPrincipal</B> es el main del compilador del lenguaje especificado. Lo único que hace es crear e inicializar un 
  * objeto de la clase MenuVentana.
  * <P>La clase Lexico no tiene atributos.
  * 
