@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
  * </UL></P>
  * 
  * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
- *
+ * @see java.io.FileReader#FileReader(java.lang.String)
  */
 public class MaquinaP {
 
@@ -59,6 +59,7 @@ public class MaquinaP {
 	/**
 	 * El constructor de la clase MaquinaP que sólo tiene el buffer de lectura del fichero como parmetro de entrada.
 	 * @param f Recibe como parámetro la ruta del fichero a ejecutar para poder inicializar todo.
+	 *
 	 */	
 	public MaquinaP(String f) {
 		super();
@@ -107,7 +108,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Accesor para el atributo de la clase, M. Que indica el estado de la memoria del Programa. 
+	 * Accesor para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
 	 * @return Vector donde cada celda es una posición de Memoria.
 	 */
 	public Vector getMem() {
@@ -115,7 +116,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Mutador para el atributo de la clase, M. Que indica el estado de la memoria del Programa. 
+	 * Mutador para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
 	 * @param mem Se recibe un vector a modo de memoria de Progrma.
 	 */
 	public void setMem(Vector mem) {
@@ -123,75 +124,79 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, PC. Que indica el contador de instrucciones del Programa. 
+	 * @return Entero que indica el numero de instrucción.
 	 */
 	public int getPC() {
 		return PC;
 	}
 	
 	/**
-	 * 
-	 * @param pc
+	 * Mutador para el atributo de la clase, PC. Que indica el contador de instrucciones del Programa. 
+	 * @param pc Entero para actualizar la nueva posción del programa.
 	 */
 	public void setPC(int pc) {
 		PC = pc;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, pila. Pila del programa. 
+	 * @return Devuelve la pila del programa.
 	 */
 	public Stack getPila() {
 		return pila;
 	}
 	
 	/**
-	 * 
-	 * @param pila
+	 * Mutador para el atributo de la clase, pila. Se actualizara la pila del programa.
+	 * @param pila una nueva pila con valores y operaciones.
 	 */
 	public void setPila(Stack pila) {
 		this.pila = pila;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, Prog. Vector con las intrucciones del programa que se ha de ejecutar.
+	 * @return Vector con el contenido del programa.
 	 */
 	public Vector getProg() {
 		return Prog;
 	}
 	
 	/**
-	 * 
-	 * @param prog
+	 * Mutador para el atributo de la clase, Prog. Se actualizaran el vector con las instrucciones del Programa.
+	 * @param prog Se recibe el vector con el nuevo programa.
 	 */
 	public void setProg(Vector prog) {
 		Prog = prog;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo la clase, ST. Se debuelve el valor que apunta a la cima de la pila.
+	 * @return Entero que apunta a la cima de la pila de la maquina.
 	 */
 	public int getST() {
 		return ST;
 	}
 	
 	/**
-	 * 
-	 * @param st
+	 * Mutador para el atributo de la clase ST. Se cambia el puntero a la cima de la pila, con lo que cambiara la cima de la pila.
+	 * @param st Recibe por parámetro el entero con el que cambiar la cima de la pila.
 	 */
 	public void setST(int st) {
 		ST = st;
 	}
 	
 	/**
+	 * Obtiene el programa del fichero que recibe por parámetro. Guarda cada instruccion del programa en una posición del 
+	 * vector Prog. Para obtener el programa crea un BufferReader y se lanzan y capturan excepciones al respecto. 
 	 * 
-	 * @param f
-	 * @return
+	 * @param f Recibe por parámetro el fichero del cual obtiene el programa. Ha de ser un FileReader para luego trabajar con el.
+	 * @return Devuelve el Vector con el programa. Cada posición es una instruccion de la maquina P.
+	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo método.
+	 * @exception java.io.IOException Se lanza y se captura en este mismo método.
 	 */
-	public Vector damePrograma(FileReader f){
+	private Vector damePrograma(FileReader f){
 		Vector v=new Vector();
 		BufferedReader entrada = null;
 	    try {
@@ -212,17 +217,18 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Aumenta el tamaño del vector memoria según las necesidades del programa que va a ejecutar.
 	 * 
-	 * @param tam
+	 * @param tam Recibe un entero con el tamaño que ha de aumentar.
 	 */
-	public void aumentoMem(int tam){
+	private void aumentoMem(int tam){
 		for(int i = Mem.size();i<tam+1;i++){
 			Mem.add(i,null);
 		}
 	}
 	
 	/**
-	 * 
+	 * Método que ejecuta la Máquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
 	 *
 	 */
 	public void ejecuta(){
@@ -551,7 +557,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Método que devuelve un String con el contenido de la Memoria. 
+	 * Se usa para ver el contenido final de la memoria para despues de ejecutar la máquina P.
 	 * 
+	 * @return String con el contenido del vector Mamoria.
 	 */
 	public String resultadoMem(){
 		String s="";
@@ -566,6 +575,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Método que realiza una operación suma. Se desapilan los dos primeros elementos de la pila y se suman.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habrá un elemento menos. También se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R1) suma:
 	 * Pila[ST-1] <-- Pila[ST-1] + Pila[ST]
 	 * ST <-- ST -1 

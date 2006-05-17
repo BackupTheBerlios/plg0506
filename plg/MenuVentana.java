@@ -24,21 +24,28 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 /**
- * La clase <B>Lexico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepcin en caso de que esto no sea posible. Puede suceder
- * que el token sea erroneo o que ocurra algun problema con el fichero de lectura.
- * <P>La clase Lexico cuenta con los siguientes atributos:
- * <UL><LI><CODE>linea:</CODE> Entero que controla la lnea del cdigo donde se detecta el error.</LI>
- * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanlisis.</LI>
- * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar.</LI>
- * <LI><CODE>posicion:</CODE> Entero que marca la posicin en la que se est leyendo dentro de una lnea.</LI>
+ * La clase <B>MenuVentana</B> contiene todos los elementos gráficos del compilador. Extiende de la clase JFrame, contiene JPanel,
+ * JTextField, JTextPane y JButton. 
+ * <P>La clase Lexico cuenta con los siguientes tipos de atributos:
+ * <UL><LI><CODE>JPanel:</CODE> Para poder luego poner mas cosas dentro con diferentes Layaout.</LI>
+ * <LI><CODE>JButton:</CODE> Botones para que el usuario pueda realizar las acciones que esten definidas en el evento.</LI>
+ * <LI><CODE>JSplitPane:</CODE> Paneles que muestran una division por la mitad horizontal y vertical.</LI>
+ * <LI><CODE>JTextField:</CODE> Campo para introducir una linea de texto, en este caso los ficheros del compilador.</LI>
+ * <LI><CODE>JScrollPane:</CODE> Panel que contiene barras cuando son necesarias.</LI>
+ * <LI><CODE>JTextPane:</CODE> Panel de texto, usado para mostrar texto.</LI>
+ * <LI><CODE>JLabel:</CODE> Etiquetas para mostrar texto en los paneles.</LI>
+ * <LI><CODE>File:</CODE> Ficheros usados para el analisis y para la ejecución.</LI>
  * </UL></P>
  * 
- * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 
 public class MenuVentana extends JFrame{
 	
+	/*
+	 * Atributos de la clase MenuVentana
+	 */
 	static final long serialVersionUID=1;
 	private JPanel jPanel = null;
 	private JButton jButton = null;
@@ -71,17 +78,17 @@ public class MenuVentana extends JFrame{
 	private JLabel jLabelE = null;
 	private JLabel jLabelEC = null;
 	private JLabel jLabelEE = null;
-	//private boolean compilado;
-	//private boolean ejecutado;
 	private JPanel jPanel4 = null;
 	
+	/**
+	 * Constructor de la clase, que llama al constructor de JFrame
+	 */
 	public MenuVentana(){
 		super();
 	}
 	
 	/**
-	 * This method initializes this
-	 * 
+	 * Este método inicializa el JFrame que extiende. Le cambia el titulo, el tamaño, la visibilidad y otras propiedades.
 	 */
 	public void initialize() {
         this.setTitle("Practica Plg");
@@ -91,18 +98,15 @@ public class MenuVentana extends JFrame{
         this.setContentPane(getJPanel());
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         	public void windowClosing(java.awt.event.WindowEvent e) {
-        		// TODO Auto-generated Event stub windowClosing()
         		cerrarVentana();
         	}
         });
-        //this.compilado=false;
-        //this.ejecutado=false;
         this.compilar=null;
         this.ejecutar=null;
 	}
 
 	/**
-	 * This method initializes jPanel	
+	 * Este método inicializa el atributo jPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -122,7 +126,8 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jButton	
+	 * Este método inicializa el jButton que hace la compilación del programa. Si no hay un fichero que compilar mostrara
+	 * un error.	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
@@ -156,15 +161,12 @@ public class MenuVentana extends JFrame{
 								fuente = new RandomAccessFile(compilar,"r");
 								Procesador p=new Procesador();
 								p.procesa(fuente, compilar.getName());
-								//System.out.println("he compilado...");
-								//compilado=true;
 								int i= compilar.getName().length();
 								String fcod = new String(compilar.getName().substring( 0,i-3));
 								fcod = fcod.concat("obj");
 								ejecutar= new File(fcod);
 								jTextPaneC.setText(mostrarFichero(ejecutar));
 								jTextFieldE.setText(fcod);
-								System.out.println("he tratado de mostrar...");
 							}
 							else{
 								JOptionPane.showMessageDialog(null,"Debe indicar el fichero fuente como parametro, con extension \".txt\"","Error",JOptionPane.ERROR_MESSAGE);
@@ -185,7 +187,8 @@ public class MenuVentana extends JFrame{
 
 	
 	/**
-	 * This method initializes jPanel1	
+	 * Este método inicializa jPanel1. En este panel se encuentran los jLabel que inidican el "Archivo a compilar" y el "Archivo a 
+	 * ejecutar"	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -212,7 +215,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel2	
+	 * Este método devuelve jPanel2. Lo inicializa y guarda sus componentes según el Layaout adecuado.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -234,7 +237,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel3	
+	 * Este método devuelve el jPanel21. Lo inicializa y adecua su tamaño.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -251,7 +254,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel4	
+	 * This method initializes jPanel22. Lo inicializa y adecua su tamaño	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -268,14 +271,14 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel5	
+	 * This method initializes jPanel23. Lo inicializa y guarda sus componentes según el Layaout adecuado.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecuci?n");
+			jLabelE.setText("Resultado de la Ejecución");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -291,7 +294,8 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jButton1	
+	 * Este método inicializa y devuelve jButton1. El boton correspondiente a la acción de 
+	 * ejecutar, sino hay un fichero adecuado mostrara un error.	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
@@ -311,11 +315,10 @@ public class MenuVentana extends JFrame{
 			jButton2.setText("Ejecutar");
 			jButton2.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-
-						/*
-						 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
-						 * se recoge mas abajo.
-						 */
+					/*
+					 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
+					 * se recoge mas abajo.
+					 */
 					String rutaejecutar=jTextFieldE.getText();
 					if(rutaejecutar!=null){
 						if (ejecutar==null){
@@ -331,7 +334,6 @@ public class MenuVentana extends JFrame{
 							maquina.ejecuta();
 							String pasos = maquina.getPasos();
 							String resultado = maquina.resultadoMem();
-							//ejecutado=true;
 							jTextPaneE.setText(pasos+resultado);
 						}
 						else{
@@ -341,7 +343,6 @@ public class MenuVentana extends JFrame{
 					else{
 						JOptionPane.showMessageDialog(null,"Debe indicar un fichero objeto a ejecutar como par?metro.","Error",JOptionPane.ERROR_MESSAGE);
 					}
-					System.out.println("actionPerformed()      Ejecutar"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 		}
@@ -349,7 +350,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel3	
+	 * Este método devuelve jPanel3. Lo inicializa y guarda sus componentes según el Layaout adecuado.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -371,7 +372,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel4	
+	 * Este metodo devuelve jPanel31. Lo inicializa y adecua su tamaño.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -388,7 +389,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel5	
+	 * Este método devuelve jPanel33. Lo inicializa y guarda sus componentes según el Layaout adecuado.
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -401,17 +402,16 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilaci?n");
+			jLabelC.setText("          Resultado de la Compilación");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
-			
 		}
 		return jPanel33;
 	}
 
 	/**
-	 * This method initializes jPanel6	
+	 * Este método devuelve jPanel32. Lo inicializa y guarda sus componentes según el Layaout adecuado.
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -428,7 +428,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel4	
+	 * Este método devuelve jPanel11. Lo inicializa y adecua el tamaño.
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -440,13 +440,12 @@ public class MenuVentana extends JFrame{
 			Dimension d= new Dimension(w,h);
 			jPanel11.setPreferredSize(new java.awt.Dimension(d));
 			jPanel11.setSize(d);
-			
 		}
 		return jPanel11;
 	}
 
 	/**
-	 * This method initializes jSplitPane	
+	 * Este método inicializa el jSplitPane. 	
 	 * 	
 	 * @return javax.swing.JSplitPane	
 	 */
@@ -469,7 +468,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel4	
+	 * This method initializes jPanel11a	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -526,14 +525,12 @@ public class MenuVentana extends JFrame{
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (compilar != null && jTextFieldC.getText()== null){
 						jTextFieldC.setText(compilar.getAbsolutePath());
-						
 					}
 					else if(compilar == null && jTextFieldC.getText()!= null){
 						compilar = new File(jTextFieldC.getText());
 					}
 				}
 			});
-			
 		}
 		return jTextFieldC;
 	}
@@ -582,7 +579,6 @@ public class MenuVentana extends JFrame{
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (ejecutar != null && jTextFieldE.getText()== null){
 						jTextFieldE.setText(ejecutar.getAbsolutePath());
-						
 					}
 					else if(ejecutar == null && jTextFieldE.getText()!= null){
 						ejecutar = new File(jTextFieldE.getText());
@@ -615,7 +611,6 @@ public class MenuVentana extends JFrame{
 					cargaFichero(jTextFieldE, "Ejecutar");
 				}
 			});
-			
 		}
 		return jButtonEE;
 	}
@@ -692,9 +687,6 @@ public class MenuVentana extends JFrame{
 			jTextPaneC.setEditable(false);
 			jTextPaneC.setToolTipText("Se muestra el resultado de compilar el archivo");
 			jTextPaneC.setPreferredSize(this.jScrollPaneC.getSize());
-			/*if (compilado){
-				jTextPaneC.setText(mostrarFichero(compilar));
-			}*/
 		}
 		return jTextPaneC;
 	}
@@ -712,9 +704,6 @@ public class MenuVentana extends JFrame{
 			jTextPaneE.setToolTipText("Se muestra el resultado de ejecutar el archivo");
 			jTextPaneE.setText("");
 			jTextPaneE.setPreferredSize(this.jScrollPaneE.getSize());
-			/*if (ejecutado){
-				jTextPaneE.setText(mostrarFichero(ejecutar));
-			}*/
 		}
 		return jTextPaneE;
 	}
@@ -734,16 +723,20 @@ public class MenuVentana extends JFrame{
 			while ((linea = entrada.readLine()) != null){
 				s= s.concat(linea.concat(" \n"));
 			}
-			
 	    }
 	    catch (FileNotFoundException ex) {
-		      ex.printStackTrace();
+	    	JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage()+
+	    			"\n","Error",JOptionPane.ERROR_MESSAGE);  
+	    	ex.printStackTrace();
 		}
 		catch (IOException ex){
-		      ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage()+
+    			"\n","Error",JOptionPane.ERROR_MESSAGE);  
+		    ex.printStackTrace();
 		}
 		return s;
 	}
+	
 	/**
 	 * This method initializes jPanel41	
 	 * 	
@@ -761,6 +754,11 @@ public class MenuVentana extends JFrame{
 		return jPanel4;
 	}
 	
+	/**
+	 * 
+	 * @param campo
+	 * @param objetivo
+	 */
 	private void cargaFichero(JTextField campo, String objetivo){
 		JFileChooser examina=new JFileChooser();
 		examina.setDialogTitle("Cargar fichero para" + objetivo.toLowerCase() );
@@ -770,7 +768,10 @@ public class MenuVentana extends JFrame{
 		}
 	}
 	
+	/**
+	 * Este método sirve para cerrar la ventana. Llamando al método adecuado de JFrame.
+	 */
 	private void cerrarVentana(){
 		this.dispose();
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

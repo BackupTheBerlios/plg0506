@@ -71,7 +71,7 @@ public class TablaSimbolos {
 	/**
 	 * Este método devuelve el tipo de un identificador que le llega por párametro. Y el resultado lo devuelve como un String.
 	 * @param id Identificador sobre el cual se va a buscar su tipo.
-	 * @return
+	 * @return String que devuelve el tipo asociado al id que entra como parámetro.
 	 */
 	public String getTipo(String id){
 		if (this.tabla.containsKey(id))
@@ -104,7 +104,7 @@ public class TablaSimbolos {
 	}
 
 	/**
-	 * El mC)todo eliminaID elimina un identificador 'id' de la tabla si existe. 
+	 * El método eliminaID elimina un identificador 'id' de la tabla si existe. 
 	 * Si no, lanzara una excepcion.
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
@@ -123,7 +123,7 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El mC)todo muestra se usa para mostrar por pantalla la tabla de smbolos actual.
+	 * El método muestra se usa para mostrar por pantalla la tabla de smbolos actual.
 	 */
 	public void muestra(){
 		String aux = this.tabla.toString();

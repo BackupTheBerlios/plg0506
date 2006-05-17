@@ -4,16 +4,16 @@ import java.io.RandomAccessFile;
 
 
 /**
- * La clase <B>Lexico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepcin en caso de que esto no sea posible. Puede suceder
+ * La clase <B>Lexico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepción en caso de que esto no sea posible. Puede suceder
  * que el token sea erroneo o que ocurra algun problema con el fichero de lectura.
  * <P>La clase Lexico cuenta con los siguientes atributos:
- * <UL><LI><CODE>linea:</CODE> Entero que controla la lnea del cdigo donde se detecta el error.</LI>
- * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanlisis.</LI>
- * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar.</LI>
- * <LI><CODE>posicion:</CODE> Entero que marca la posicin en la que se est leyendo dentro de una lnea.</LI>
+ * <UL><LI><CODE>linea:</CODE> Entero que controla la lnea del código donde se detecta el error.</LI>
+ * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanálisis.</LI>
+ * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el código a analizar.</LI>
+ * <LI><CODE>posicion:</CODE> Entero que marca la posición en la que se está leyendo dentro de una línea.</LI>
  * </UL></P>
  * 
- * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
+ * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
  *
  */
 
@@ -104,7 +104,7 @@ public class Lexico {
 	}
 
 	/**
-	 * El mtodo getToken lee caracteres del flujo hasta que identifica un token y lo devuelve, o detecta un error y genera una excepcin.
+	 * El método getToken lee caracteres del flujo hasta que identifica un token y lo devuelve, o detecta un error y genera una excepcin.
 	 * Utiliza las funciones que ofrece RandomAccessFile para manejar el flujo que lee de fichero.
 	 * 
 	 * @see java.io.RandomAccessFile#read() 
