@@ -177,4 +177,26 @@ public class Tipos {
 	 * Valor para reconocer el final del fichero.
 	 */
 	public static final int TKFF		= 33;	
+	
+	/**
+	 * Valor para reconocer la palabra array.
+	 */
+	public static final int TKARRAY		= 34;	
+	
+	/**
+	 * Valor para reconocer la palabra of.
+	 */
+	public static final int TKOF		= 35;	
+	
+	/**
+	 * Valor para reconocer la palabra pointer.
+	 */
+	public static final int TKPOINTER		= 36;
+	
+	/**
+	 * Valor para reconocer la palabra memdir.
+	 */
+	public static final int TKMEMDIR		= 37;
+	
+	
 }
