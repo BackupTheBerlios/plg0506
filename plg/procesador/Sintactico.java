@@ -33,6 +33,7 @@ public class Sintactico{
 	Lexico lexico;
 	TablaSimbolos TS;
 	int dir;
+	int etq;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -85,6 +86,7 @@ public class Sintactico{
 		boolean errDeProg = true;
 		Atributos atrDeDecs;
 		Atributos atrDeIs;
+		etq = 0;
 		atrDeDecs = Decs();
 		atrDeIs = Is();
 		errDeProg = atrDeDecs.getErr() || atrDeIs.getErr();
@@ -205,7 +207,7 @@ public class Sintactico{
 	}
 
 	/**
-	 * Procesa cada instruccisn el conjunto de instrucciones del Programa.
+	 * Procesa cada instruccion el conjunto de instrucciones del Programa.
 	 * 
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
@@ -220,15 +222,14 @@ public class Sintactico{
 		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
-			throw new Exception("Paso por begin");
 		}
 		else{
-			/*if (lexico.reconoce(Tipos.TKIF)){
+			if (lexico.reconoce(Tipos.TKIF)){
 				atrDeIns = IIf();
 			}
-			else{*/
+			else{
 				atrDeIns = IAsig();
-			//}
+			}
 		}
 		a.setErr(atrDeIns.getErr());
 		return a;
@@ -244,8 +245,20 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
 		atrDeIns = IsOpc();
-		System.out.println("Paso por Compuesta");
-		a.setErr(atrDeIns.getErr());
+		Token tk = lexico.lexer();
+		if (tk.equals(new Token("end",Tipos.TKEND))){
+			lexico.lexer();
+			if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){
+				a.setErr(true);
+				throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
+			}
+			else {
+				a.setErr(atrDeIns.getErr());
+			}	
+		}
+		else {
+			a.setErr(true);
+		}
 		return a;	
 	}
 	
@@ -258,35 +271,84 @@ public class Sintactico{
 	public Atributos IsOpc() throws Exception{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
-		System.out.println("Paso por Opc");
 		Token tk;
+		System.out.println("Isopc");
 		tk = lexico.getNextToken();
 		if (tk.equals( new Token("end",Tipos.TKEND) )){
-			System.out.println("Es el end");
-			a.setErr(false);
+				a.setErr(false);
 		}
 		else{
-			System.out.println("Voy a una nueva instruccion");
 			atrDeIns = I();
 			a.setErr(atrDeIns.getErr());
 		}	
 		return a;	
 	}
 	
-	/*s
-	 * Aquí hay q añadir IIf:
-	 * IIf ::= { var etqs1, etqs2;}
-	 * if Exp then {emite(ir-f(?));
-	 * 		etqs1 <-- etq;
-	 * 		etq <--etq +1;} I
-	 * 		{emite(ir-a(?));
-	 * 		etqs2 <-- etq;
-	 * 		etq <--etq +1;} 
-	 * 		parchea(etqs1,etq);}
-	 * 		Pelse {parchea(etqs2,etq);}
-	 * 
-	 * CREO Q NO ESTÁ BIEN ESPECIFICADO
+	/*	
+	 * IIf ::= {var etqs1, etqs2;
+	 * 			Exp();
+	 *  		then 
+	 * 			emite(ir-f);
+	 * 			etqs1 <-- etq;
+	 * 			etq <--etq +1;
+	 * 			I();
+	 * 			emite(ir-a);
+	 * 			etqs2 <-- etq;
+	 * 			parchea(etqs1,etq);
+	 * 			etq <--etq +1;
+	 * 			PElse();
+	 * 			parchea(etqs2,etq); 
+	 * 			}
 	 */
+	public Atributos IIf() throws Exception{
+		Atributos a = new Atributos();
+		Atributos atrDeExp;
+		Atributos atrDeI;
+		Atributos atrDePElse;
+		int etqs1;
+		int etqs2;
+		atrDeExp = Exp();
+		Token tk;
+		tk = lexico.lexer();
+		if (tk.equals(new Token("then",Tipos.TKTHN))){
+				codigo.emite("ir-f");
+				etqs1 = etq; 
+				etq ++;
+				atrDeI = I();
+				codigo.emite("ir-a");
+				etqs2 = etq;
+				codigo.parchea(etqs1,etq);
+				etq ++;
+				atrDePElse = PElse();
+		}
+		else{
+			a.setErr(true);
+		}	
+		return a;	
+	}
+	
+	/*
+	 * Pelse ::= else I() 
+	 * PElse ::= λ {}
+	 */
+	
+	public Atributos PElse() throws Exception{
+		Atributos a = new Atributos();
+		Atributos atrDeIns;
+		if (lexico.reconoce(Tipos.TKPYCOMA)){
+				a.setErr(false);
+		}
+		else{
+			if (lexico.reconoce(Tipos.TKELS)){
+				atrDeIns = I();
+				a.setErr(atrDeIns.getErr());
+			}
+			else{
+				a.setErr(true);
+			}
+		}	
+		return a;	
+	}
 	
 	/**
 	 * Procesa una instruccisn de asignacisn, de la forma:
@@ -319,6 +381,7 @@ public class Sintactico{
 				}
 				else{
 						codigo.genIns("desapila-dir",TS.dirID(lex));
+						etq ++;
 				}
 			}
 			else{
@@ -587,6 +650,7 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKNUM)){
 			a.setTipo("int");
 			codigo. genIns("apila", Integer.parseInt(tk.getLexema()) );
+			etq ++;
 		} 
 		else if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
 			a.setTipo("bool");
@@ -596,6 +660,7 @@ public class Sintactico{
 			else
 				cod = 1;
 			codigo.genIns("apila", cod);
+			etq ++;
 		} else if (lexico.reconoce(Tipos.TKNOT) || lexico.reconoce(Tipos.TKRESTA)) {  // es un OpUn
 			boolean numerico = lexico.reconoce(Tipos.TKRESTA); // numerico != true ==> booleano = true
 			atrDeFact = Fact();
@@ -622,6 +687,7 @@ public class Sintactico{
 					a.setTipo("error");
 				}
 				codigo.genIns("apila-dir",TS.dirID(tk.getLexema()));
+				etq ++;
 			}
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
