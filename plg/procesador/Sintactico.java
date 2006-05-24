@@ -107,29 +107,45 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		boolean errDeDecs = false;
 		atrDeDec = Dec();
-		lexico.lexer();
-		if (lexico.reconoce(Tipos.TKPYCOMA)){
-			atrDeDecs = Decs();
-			errDeDecs = atrDeDec.getErr() || atrDeDecs.getErr();
-			a.setErr(errDeDecs);
-			a.setTipo("");
-			return a;
-		}
-		else{
-			if (lexico.reconoce(Tipos.TKCUA)){
-				errDeDecs = atrDeDec.getErr() || errDeDecs;
-				a.setErr(errDeDecs);
-				a.setTipo("");
-				return a;
-			}
-			else{
-				errDeDecs = true;
-			}
-		}
-		a.setErr(errDeDecs);
-		a.setTipo("");
-		return a;
-	}
+		Token tk=lexico.getNextToken();
+        if (tk.getCategoriaLexica()==Tipos.TKCUA){  
+        	lexico.lexer();
+        	a.setErr(false);
+            a.setTipo("");
+            return a;
+        }
+        else{
+            if (tk.getCategoriaLexica()==Tipos.TKIDEN){ 
+                atrDeDec = Dec();
+                if (tk.getCategoriaLexica()==Tipos.TKPYCOMA){ 
+                	lexico.lexer();
+                	atrDeDecs = Decs();
+                    errDeDecs = atrDeDec.getErr() || atrDeDecs.getErr();
+                    a.setErr(errDeDecs);
+                    a.setTipo("");
+                    return a;
+                }
+                else{
+                    if (tk.getCategoriaLexica()==Tipos.TKCUA){
+                    	lexico.lexer();
+                    	a.setErr(atrDeDec.getErr());
+                        a.setTipo("");
+                        return a;
+                    }
+                    else{
+                        a.setErr(true);
+                        a.setTipo("");
+                        return a;   
+                    }
+                }
+            }   
+            else{
+                a.setErr(true);
+                a.setTipo("");
+                return a;   
+            }
+        }
+    }
 
 	/**
 	 * Procesa una declaracisn de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
