@@ -191,7 +191,7 @@ public class Tipos {
 	/**
 	 * Valor para reconocer la palabra pointer.
 	 */
-	public static final int TKPUNTERO		= 36;
+	public static final int TKPUNT		= 36;
 	
 	/**
 	 * Valor para reconocer la palabra memdir.

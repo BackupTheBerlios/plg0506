@@ -16,13 +16,17 @@ public class PruebaLex {
 		String f= "Ejemplo.txt";
 		try{
 			fuente= new RandomAccessFile(f,"r");
+		
 			Lexico lexico = new Lexico(fuente);
 			Token tk=lexico.lexer();
+			System.out.println(tk.muestraToken());
 			while(!tk.equals(new Token("eof",Tipos.TKFF))){
 				tk=lexico.lexer();
+				
 				System.out.println(tk.muestraToken());
+				
 			}
-			System.out.println("por aqui 4");
+		
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
