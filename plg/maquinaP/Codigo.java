@@ -8,12 +8,12 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 /**
- * La clase <B>Codigo</B> se encarga de manejar el código generado por las instrucciones del lenguaje.
+ * La clase <B>Codigo</B> se encarga de manejar el cdigo generado por las instrucciones del lenguaje.
  * <P>Tiene dos atributos:
- * <UL><LI><CODE>cod:</CODE> string donde se almacena el código del lenguaje objeto, que es el código de la máquina P. Como la máquina P de momento no existe, este el contenido de este atributo se mostrará por pantalla.</LI></UL>
- * <UL><LI><CODE>fichero:</CODE> Es el fichero donde vamos a guardar las instrucciones que podra ejecutar la máquinaP. Se guarda con extensión '.obj'</LI></UL></P>
+ * <UL><LI><CODE>cod:</CODE> string donde se almacena el cdigo del lenguaje objeto, que es el cdigo de la mquina P. Como la mquina P de momento no existe, este el contenido de este atributo se mostrar por pantalla.</LI></UL>
+ * <UL><LI><CODE>fichero:</CODE> Es el fichero donde vamos a guardar las instrucciones que podra ejecutar la mquinaP. Se guarda con extensin '.obj'</LI></UL></P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
  *
  */
 public class Codigo {
@@ -22,15 +22,15 @@ public class Codigo {
 	 * Atributos de la clase:
 	 * 
 	 *  El String cod guarda el codigo del lenguaje objeto, que es el codigo de la maquina P.
-	 *  En el fichero se guarda tambien el codigo generado, por si se quiere ejecutar en otra ocasión. El fichero se guarda con extension '.obj'
+	 *  En el fichero se guarda tambien el codigo generado, por si se quiere ejecutar en otra ocasin. El fichero se guarda con extension '.obj'
 	 */
 	Vector cod;
 	FileOutputStream fichero;
 	
 	/**
-	 * El constructor de la clase Codigo no tiene parámetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vacía.
+	 * El constructor de la clase Codigo no tiene parmetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vaca.
 	 * 
-	 * @param f String que guarda la ruta del fichero donde se almacenara el código. Este se almacena en el mismo directorio que se encuentra el código fuente.
+	 * @param f String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
 	 */
 	public Codigo(String f){		
 		cod = new Vector();
@@ -47,7 +47,7 @@ public class Codigo {
 		}
 	}
 	/**
-	 * Accesor para el atributo cod de la clase Código. 
+	 * Accesor para el atributo cod de la clase Cdigo. 
 	 * @return Devuelve el codigo generado hasta ese momento
 	 */
 	public Vector getCod() {
@@ -55,18 +55,18 @@ public class Codigo {
 	}
 
 	/**
-	 * Este método inicializa el atributo cod con la cadena vacía. No cuenta con parámetros de entrada ni de salida. No devuelve nada.
+	 * Este mtodo inicializa el atributo cod con la cadena vaca. No cuenta con parmetros de entrada ni de salida. No devuelve nada.
 	 */
 	public void inicializaCodigo(){
 		cod = new Vector();
 	}
 	
 	/**
-	 * Método que modifica el contenido del atributo cod agregándole la instrucción y el número de línea que recibe como parámetro. 
-	 * Además de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la máquinaP. No devuelve nada.
+	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin y el nmero de lnea que recibe como parmetro. 
+	 * Adems de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
 	 * 
-	 * @param instr String con la instrucción que ha codificado.
-	 * @param num Entero indica el número de línea.
+	 * @param instr String con la instruccin que ha codificado.
+	 * @param num Entero indica el nmero de lnea.
 	 * 
 	 */
 	public void genIns(String instr, int num){
@@ -82,8 +82,8 @@ public class Codigo {
 	}
 	
 	/**
-	 * Método que modifica el contenido del atributo cod agregándole la instrucción que recibe como parámetro y un salto de línea. 
-	 * Además de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la máquinaP. No devuelve nada.
+	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin que recibe como parmetro y un salto de lnea. 
+	 * Adems de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
 	 * 
 	 * @param instr String con la instruccion que ha codificado.
 	 * 
@@ -101,7 +101,7 @@ public class Codigo {
 	}
 	
 	/**
-	 * Método que imprime por pantalla el contenido del atributo cod. No tiene parámetros de entrada ni de salida.
+	 * Mtodo que imprime por pantalla el contenido del atributo cod. No tiene parmetros de entrada ni de salida.
 	 * 
 	 */
 	public void muestraCodigo(){		
@@ -115,4 +115,19 @@ public class Codigo {
 			JOptionPane.showMessageDialog(null,"No he podido cerrar el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
+	public void emite(String s){
+		if (s.equals("ir-f")){
+			genIns("ir-f");	
+		}
+		if (s.equals("ir-a")){
+			genIns("ir-a");
+		}
+	}
+	
+	public void parchea(int a, int b){
+		String i = (String)cod.elementAt(a) + " " + b;
+		cod.setElementAt(i,a);
+	}
+	
 }
