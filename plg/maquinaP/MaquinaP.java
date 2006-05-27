@@ -231,7 +231,7 @@ public class MaquinaP {
 	 * Método que ejecuta la Máquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
 	 *
 	 */
-	public void ejecuta(){
+	public void ejecuta() throws Exception{
 		String i;
 		String[] linea;
 		int j= 0;
@@ -661,11 +661,16 @@ public class MaquinaP {
 	 *
 	 * @param d
 	 */
-	public void apila_dir (int d){
+	public void apila_dir (int d) throws Exception{
 		ST = ST + 1; 
-		System.out.println(Mem.elementAt(d));
-		pila.push(Mem.elementAt(d));  
-		PC = PC + 1;
+		//System.out.println();
+		if ((Mem.size()-1<d)&&(Mem.elementAt(d)!=null)){
+			pila.push(Mem.elementAt(d));  
+			PC = PC + 1;
+		}
+		else{
+			throw new Exception("ERROR: Variable sin inicializar.");
+		}
 	}
 	
 	/**

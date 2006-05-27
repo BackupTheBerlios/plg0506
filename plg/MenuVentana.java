@@ -330,11 +330,16 @@ public class MenuVentana extends JFrame{
 							}
 						}
 						if (ejecutar.getName().endsWith("obj")){
-							MaquinaP maquina= new MaquinaP(ejecutar.getName());
-							maquina.ejecuta();
-							String pasos = maquina.getPasos();
-							String resultado = maquina.resultadoMem();
-							jTextPaneE.setText(pasos+resultado);
+							try{
+								MaquinaP maquina= new MaquinaP(ejecutar.getName());
+								maquina.ejecuta();
+								String pasos = maquina.getPasos();
+								String resultado = maquina.resultadoMem();
+								jTextPaneE.setText(pasos+resultado);
+							}
+							catch (Exception e1) {
+								JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);	
+							}
 						}
 						else{
 							JOptionPane.showMessageDialog(null,"Debe indicar el fichero objeto, con extensi?n .obj","Error",JOptionPane.ERROR_MESSAGE);
