@@ -664,12 +664,17 @@ public class MaquinaP {
 	public void apila_dir (int d) throws Exception{
 		ST = ST + 1; 
 		//System.out.println();
-		if ((Mem.size()-1<d)&&(Mem.elementAt(d)!=null)){
-			pila.push(Mem.elementAt(d));  
-			PC = PC + 1;
+		if (d > 0){
+			if ((Mem.size()-1<d)&&(Mem.elementAt(d)!=null)){
+				pila.push(Mem.elementAt(d));  
+				PC = PC + 1;
+			}
+			else{
+				throw new Exception("ERROR: Variable sin inicializar.");
+			}
 		}
 		else{
-			throw new Exception("ERROR: Variable sin inicializar.");
+			throw new Exception("ERROR: Puntero sin inicializar.");
 		}
 	}
 	
@@ -681,22 +686,27 @@ public class MaquinaP {
 	 *
 	 * @param d
 	 */
-	public void desapila_dir(int d){
+	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tamaño del vector.
-		if (d>=Mem.size()){
-			aumentoMem(d);
-			Mem.set(d,pila.pop());
-			System.out.println(Mem.elementAt(d)+" "+d);
+		if (d > 0){
+			if (d>=Mem.size()){
+				aumentoMem(d);
+				Mem.set(d,pila.pop());
+				System.out.println(Mem.elementAt(d)+" "+d);
+			}
+			else{
+				System.out.println("La cima de la Pila es:  "+pila.peek());
+				Mem.set(d,pila.pop());
+				System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
+				//Mem.insertElementAt(pila.elementAt(ST),d);
+			}
+			ST = ST -1;
+			PC = PC + 1;
 		}
 		else{
-			System.out.println("La cima de la Pila es:  "+pila.peek());
-			Mem.set(d,pila.pop());
-			System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
-			//Mem.insertElementAt(pila.elementAt(ST),d);
+			throw new Exception("ERROR: Puntero sin inicializar.");
 		}
-		ST = ST -1;
-		PC = PC + 1;
 	}
 	
 	/**
@@ -908,7 +918,7 @@ public class MaquinaP {
 	 * (R21) ir-f(s):
 	 *	si Pila[ST] = 0 PC <-- s
 	 *	sino PC <--PC+1 fsi
-	 *	ST <-- ST ? 1	
+	 *	ST <-- ST - 1	
 	 */
 	public void ir_f(int s){
 		if (((Integer)pila.pop()).intValue()==0){
@@ -918,5 +928,21 @@ public class MaquinaP {
 			PC = PC + 1;
 		}
 		ST = ST -1;
+	}
+	
+	/**
+	 * (R22) libera(d)
+	 *  Mem[d] <-- null
+	 *  PC <-- PC +1
+	 * pone a null la posicion d de la memoria
+	 */
+	public void libera (int d) throws Exception{
+		if (d < Mem.size()){
+			Mem.setElementAt(null,d);
+			PC =PC + 1;
+		}
+		else{
+			throw new Exception("ERROR: Ese puntero no existe o no esta inicializado.");
+		}
 	}
 }
