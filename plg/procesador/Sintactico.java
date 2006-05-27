@@ -186,26 +186,23 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		boolean errDeIs = false;
 		//if (!lexico.reconoce(Tipos.TKEND)){
-			atrDeI = I();
-			if (lexico.reconoce(Tipos.TKFF)){
-				errDeIs = false;	
+		atrDeI = I();
+		if (lexico.reconoce(Tipos.TKFF)){
+			errDeIs = false;	
+		}
+		else{
+			if (lexico.reconoce(Tipos.TKPYCOMA)){
+				atrDeIs = Is();
+				errDeIs = atrDeI.getErr() || atrDeIs.getErr();
+				a.setErr(errDeIs);
+				a.setTipo(atrDeI.getTipo());
+				return a;
 			}
 			else{
-				if (lexico.reconoce(Tipos.TKPYCOMA)){
-					atrDeIs = Is();
-					errDeIs = atrDeI.getErr() || atrDeIs.getErr();
-					a.setErr(errDeIs);
-					a.setTipo(atrDeI.getTipo());
-					return a;
-				}
-				else{
-					if (!lexico.reconoce(Tipos.TKEND)){
-						errDeIs = true;
-						throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
-					}	
-				}
+				errDeIs = true;
+				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
-		//}	
+		}
 		a.setErr(errDeIs);
 		return a;	
 	}
@@ -222,7 +219,7 @@ public class Sintactico{
 		 * - {I.err= ICompuesta.err; }
 		 * - {I.err= Iif.err;}*/
 		Atributos a = new Atributos();
-		Atributos atrDeIns;
+		Atributos atrDeIns = null;
 		Token tk = lexico.lexer();
 		System.out.println("Comienzo nueva instruccion");
 		System.out.println(tk.muestraToken());
@@ -233,14 +230,14 @@ public class Sintactico{
 			if (lexico.reconoce(Tipos.TKIF)){
 				atrDeIns = IIf();
 			}
-			else{
+			/*else{
 				if(lexico.reconoce(Tipos.TKEND)){
 					a.setErr(false);
 					return a;
-				}
-				else{
-					atrDeIns = IAsig();
-				}
+				}*/
+			else{
+				atrDeIns = IAsig();
+				//}
 			}
 		}
 		a.setErr(atrDeIns.getErr());
@@ -248,7 +245,7 @@ public class Sintactico{
 	}
 
 	/*
-	 * Aquí hay q añadir ICompuesta:
+	 * Aqu?? hay q a??adir ICompuesta:
 	 * ICompuesta ::= begin IsOpc end 
 	 * {ICompuesta.err=IsOpc.err; }
 	 */
@@ -272,29 +269,48 @@ public class Sintactico{
 		}
 		else {
 			a.setErr(true);
+			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
 		return a;	
 	}
 	
 	/*
-	 * Aquí hay q añadir IOpc:
-	 * IsOpc ::= λ {IsOpc.err=false;}
+	 * Aqu?? hay q a??adir IOpc:
+	 * IsOpc ::= ?? {IsOpc.err=false;}
 	 * IsOpc ::= Is {IsOpc.err = Is.err; }
 	 */
 	
 	public Atributos IsOpc() throws Exception{
+		Atributos atrDeIsOpc;
+		Atributos atrDeI;
 		Atributos a = new Atributos();
-		Atributos atrDeIns;
-		Token tk;
-		System.out.println("Isopc");
-		tk = lexico.getNextToken();
-		if (tk.equals( new Token("end",Tipos.TKEND) )){
-				a.setErr(false);
+		boolean errDeIsOpc = false;
+		//if (!lexico.reconoce(Tipos.TKEND)){
+		atrDeI = I();
+		if (lexico.reconoce(Tipos.TKFF)){
+			errDeIsOpc = true;	
 		}
 		else{
-			atrDeIns = Is();
-			a.setErr(atrDeIns.getErr());
-		}	
+			if (lexico.reconoce(Tipos.TKPYCOMA)){
+				atrDeIsOpc = IsOpc();
+				errDeIsOpc = atrDeI.getErr() || atrDeIsOpc.getErr();
+				a.setErr(errDeIsOpc);
+				a.setTipo(atrDeI.getTipo());
+				return a;
+			}
+			else{
+				if (lexico.reconoce(Tipos.TKEND)){
+					errDeIsOpc = false;
+					
+				}
+				else {
+					errDeIsOpc=true;
+					a.setTipo("");
+					throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Todo begin debe llevar end.");
+				}
+			}
+		}
+		a.setErr(errDeIsOpc);
 		return a;	
 	}
 	
@@ -343,7 +359,7 @@ public class Sintactico{
 	
 	/*
 	 * Pelse ::= else I() 
-	 * PElse ::= λ {}
+	 * PElse ::= ?? {}
 	 */
 	
 	public Atributos PElse() throws Exception{
@@ -459,7 +475,12 @@ public class Sintactico{
 		Atributos atrDeExp;
 		Atributos atrDeRExpC;
 		Atributos a = new Atributos();
-		if (!lexico.reconoce(Tipos.TKPYCOMA)){
+		if (lexico.reconoce(Tipos.TKFF)){
+			a.setErr(true);
+			a.setTipo("");
+			return a;
+		}
+		if (!lexico.reconoce(Tipos.TKPYCOMA) || !lexico.reconoce(Tipos.TKEND)){
 			if (lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKMAYIG) || lexico.reconoce(Tipos.TKMEN) || lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) || lexico.reconoce(Tipos.TKDIF)){
 				Token tk = lexico.getLookahead();
 				atrDeExp = Exp();
@@ -517,11 +538,16 @@ public class Sintactico{
 		Atributos atrDeTerm = new Atributos();
 		Atributos atrDeRExp;
 		Atributos a = new Atributos();
+		if (lexico.reconoce(Tipos.TKFF)){
+			a.setErr(true);
+			a.setTipo("");
+			return a;
+		}
 		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
 				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
 				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
 				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
-				lexico.reconoce(Tipos.TKPCI))){
+				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKEND))){
 			Token tk;
 			tk = lexico.getLookahead(); 
 		
@@ -602,12 +628,17 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		Token tk;
 		tk = lexico.lexer();
+		if (lexico.reconoce(Tipos.TKFF)){
+			a.setErr(true);
+			a.setTipo("");
+			return a;
+		}
 		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
 				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
 				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
 				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
 				lexico.reconoce(Tipos.TKPCI) || lexico.reconoce(Tipos.TKSUMA) ||
-				lexico.reconoce(Tipos.TKRESTA))){
+				lexico.reconoce(Tipos.TKRESTA) || lexico.reconoce(Tipos.TKEND))){
 			
 
 			boolean numerico = lexico.reconoce(Tipos.TKMULT) || lexico.reconoce(Tipos.TKDIV);
