@@ -202,7 +202,6 @@ public class MaquinaP {
 	    try {
 	      entrada = new BufferedReader(f);
 	      String linea = null;
-	      //int i=0;
 	      while ((linea = entrada.readLine()) != null){
 	    	  v.add(linea.trim());
 	      }
@@ -564,11 +563,15 @@ public class MaquinaP {
 	 * @return String con el contenido del vector Mamoria.
 	 */
 	public String resultadoMem(){
-		String s="";
+		String s="Memoria:"+"\n";
 		for (int i=0;i<Mem.size();i++){
 			System.out.println(Mem.elementAt(i));
 			if(Mem.elementAt(i)!=null){
-				s= s.concat(((Integer)Mem.elementAt(i)).toString());
+				s= s.concat("posicion "+i+":  "+((Integer)Mem.elementAt(i)).toString());
+				s=s.concat(" \n");
+			}
+			else{
+				s=s.concat("posicion "+i+": "+" null");
 				s=s.concat(" \n");
 			}
 		}
@@ -914,9 +917,10 @@ public class MaquinaP {
 		if (s<Prog.size()){
 			PC = s;
 		}
-		/*else{
+		else{
+			PC =s;
 			eof(); ///////////////////////////////////////////////////////////////////////////////
-		}*/
+		}
 	}
 	
 	/**

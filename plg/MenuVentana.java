@@ -335,7 +335,7 @@ public class MenuVentana extends JFrame{
 								maquina.ejecuta();
 								String pasos = maquina.getPasos();
 								String resultado = maquina.resultadoMem();
-								jTextPaneE.setText(pasos+resultado);
+								jTextPaneE.setText(pasos+"\n"+resultado);
 							}
 							catch (Exception e1) {
 								JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);	

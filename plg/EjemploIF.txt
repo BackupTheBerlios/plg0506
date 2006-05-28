@@ -1,6 +1,17 @@
 int a;
 int c;
 bool b#
-b := false;
-if (b); then a := 7;
-else c:= 7; 
+b:= false;
+if true then
+	begin
+		if true then 
+			begin
+				a := 8;
+				c := 7;
+			end;
+		else 
+			begin
+				c:= 7;
+				a:= 7;
+			end;
+	end;
