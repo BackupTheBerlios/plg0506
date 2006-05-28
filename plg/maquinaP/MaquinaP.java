@@ -237,9 +237,10 @@ public class MaquinaP {
 		int j= 0;
 		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
 		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
+		System.out.println(Prog.size());
 		while (H==0){
-			if(j<Prog.size()){
-				i= (String)Prog.get(j);
+			if(PC<Prog.size()){
+				i= (String)Prog.get(PC);
 				linea = i.split(" ");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
@@ -664,12 +665,13 @@ public class MaquinaP {
 	public void apila_dir (int d) throws Exception{
 		ST = ST + 1; 
 		//System.out.println();
-		if (d > 0){
-			if ((Mem.size()-1<d)&&(Mem.elementAt(d)!=null)){
+		if (d >= 0){
+			if ((Mem.size()-1<=d)&&(Mem.elementAt(d)!=null)){
 				pila.push(Mem.elementAt(d));  
 				PC = PC + 1;
 			}
 			else{
+				
 				throw new Exception("ERROR: Variable sin inicializar.");
 			}
 		}
@@ -689,7 +691,7 @@ public class MaquinaP {
 	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tamaño del vector.
-		if (d > 0){
+		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);
 				Mem.set(d,pila.pop());
@@ -912,6 +914,9 @@ public class MaquinaP {
 		if (s<Prog.size()){
 			PC = s;
 		}
+		/*else{
+			eof(); ///////////////////////////////////////////////////////////////////////////////
+		}*/
 	}
 	
 	/**
@@ -922,6 +927,7 @@ public class MaquinaP {
 	 */
 	public void ir_f(int s){
 		if (((Integer)pila.pop()).intValue()==0){
+			System.out.println("Paso bien");
 			PC = s;
 		}
 		else{

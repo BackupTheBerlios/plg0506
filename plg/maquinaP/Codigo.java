@@ -72,13 +72,13 @@ public class Codigo {
 	public void genIns(String instr, int num){
 		String i =instr + " " + num;
 		cod.add(i);
-		i= i.concat("\n");
+		/*i= i.concat("\n");
 		try{
 			fichero.write(i.getBytes());
 		}
 		catch(java.io.IOException e){
 			JOptionPane.showMessageDialog(null,"No he podido escribir en el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
 	}
 	
 	/**
@@ -92,12 +92,12 @@ public class Codigo {
 		String i= instr;
 		cod.add(i);
 		i= i.concat("\n");
-		try{
+		/*try{
 			fichero.write(i.getBytes());
 		}
 		catch(java.io.IOException e){	
 			JOptionPane.showMessageDialog(null,"No he podido escribir en el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
 	}
 	
 	/**
@@ -106,9 +106,15 @@ public class Codigo {
 	 */
 	public void muestraCodigo(){		
 		for (int i=0;i<cod.size();i++){
-			System.out.println(cod.elementAt(i));
+			System.out.println(i+"  "+cod.elementAt(i));
 		}
+		String ins;
 		try{
+			for (int i=0;i<cod.size();i++){
+				ins = (String)cod.elementAt(i);
+				ins = ins+("\n");
+				fichero.write(ins.getBytes());
+			}
 			fichero.close();
 		}
 		catch(java.io.IOException e){
@@ -117,6 +123,7 @@ public class Codigo {
 	}
 	
 	public void emite(String s){
+		System.out.println("Estoy pasando por emite");
 		if (s.equals("ir-f")){
 			genIns("ir-f");	
 		}
@@ -126,6 +133,7 @@ public class Codigo {
 	}
 	
 	public void parchea(int a, int b){
+		System.out.println("Estoy pasando por parche");
 		String i = (String)cod.elementAt(a) + " " + b;
 		cod.setElementAt(i,a);
 	}

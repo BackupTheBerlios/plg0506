@@ -33,7 +33,7 @@ public class Sintactico{
 	Lexico lexico;
 	TablaSimbolos TS;
 	int dir;
-	int etq;
+	int etq;//,etqs1,etqs2;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -185,7 +185,6 @@ public class Sintactico{
 		Atributos atrDeI;
 		Atributos a = new Atributos();
 		boolean errDeIs = false;
-		//if (!lexico.reconoce(Tipos.TKEND)){
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
 			errDeIs = false;	
@@ -200,6 +199,7 @@ public class Sintactico{
 			}
 			else{
 				errDeIs = true;
+				System.out.println("Toy llegando aqui");
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
 		}
@@ -316,7 +316,7 @@ public class Sintactico{
 	
 	/*	
 	 * IIf ::= {var etqs1, etqs2;
-	 * 			Exp();
+	 * 			ExpC();
 	 *  		then 
 	 * 			emite(ir-f);
 	 * 			etqs1 <-- etq;
@@ -332,24 +332,30 @@ public class Sintactico{
 	 */
 	public Atributos IIf() throws Exception{
 		Atributos a = new Atributos();
-		Atributos atrDeExp;
+		Atributos atrDeExpC;
 		Atributos atrDeI;
 		Atributos atrDePElse;
 		int etqs1;
 		int etqs2;
-		atrDeExp = Exp();
+		System.out.println("Llego a IIF");
+		atrDeExpC = ExpC();
+		System.out.println("IIF - Salgo de ExpC");
 		Token tk;
 		tk = lexico.lexer();
+		System.out.println(tk.muestraToken());
 		if (tk.equals(new Token("then",Tipos.TKTHN))){
-				codigo.emite("ir-f");
-				etqs1 = etq; 
-				etq ++;
-				atrDeI = I();
-				codigo.emite("ir-a");
-				etqs2 = etq;
-				codigo.parchea(etqs1,etq);
-				etq ++;
-				atrDePElse = PElse();
+			System.out.println("Reconozco Then");	
+			codigo.emite("ir-f");
+			etqs1 = etq; 
+			etq ++;
+			atrDeI = I();
+			codigo.emite("ir-a");
+			etqs2 = etq;
+			codigo.parchea(etqs1,etq);
+			etq ++;
+			System.out.println(lexico.getLookahead().muestraToken());
+			atrDePElse = PElse();
+			codigo.parchea(etqs2,etq);
 		}
 		else{
 			a.setErr(true);
@@ -365,12 +371,27 @@ public class Sintactico{
 	public Atributos PElse() throws Exception{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
+		System.out.println("Inicio PElse");
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
-				a.setErr(false);
+				//a.setErr(false);
+			lexico.lexer();
+			if (lexico.reconoce(Tipos.TKELS)){
+				System.out.println("PElse - Me voy a I");
+				atrDeIns = I();
+				System.out.println("PElse - Salgo de  I");
+				System.out.println(lexico.getLookahead().muestraToken());
+				a.setErr(atrDeIns.getErr());
+			}
+			else{
+				a.setErr(true);
+			}
 		}
 		else{
 			if (lexico.reconoce(Tipos.TKELS)){
+				System.out.println("PElse - Me voy a I");
 				atrDeIns = I();
+				System.out.println("PElse - Salgo de  I");
+				System.out.println(lexico.getLookahead().muestraToken());
 				a.setErr(atrDeIns.getErr());
 			}
 			else{
@@ -443,9 +464,12 @@ public class Sintactico{
 	public Atributos ExpC() throws Exception{
 		Atributos atrDeExp;
 		Atributos atrDeRExpC;
+		System.out.println("ExpC - Inicio me voy a Exp");
 		atrDeExp = Exp();
+		System.out.println("EXPC - Vengo de Exp, me voy a RExpC");
 		Atributos a = new Atributos();
 		atrDeRExpC = RExpC();
+		System.out.println("ExpC - Vengo de RExpC");
 		if ( atrDeExp.getTipo().compareTo(atrDeRExpC.getTipo()) == 0){
 			if (atrDeExp.getTipo().compareTo("int") == 0)
 					a.setTipo("int");
