@@ -926,6 +926,7 @@ public class Sintactico{
 	public Atributos Fact() throws Exception{
 		Atributos a = new Atributos();
 		Atributos atrDeExpC;
+		Atributos atrDeExp;
 		Atributos atrDeFact;
 		Token tk;
 		tk = lexico.lexer();
@@ -963,14 +964,36 @@ public class Sintactico{
 				}
 			}
 		}
-		else if (lexico.reconoce(Tipos.TKIDEN)){
-				if (TS.existeID(tk.getLexema()) ){
-					a.setTipo(TS.getTipo(tk.getLexema()));
-				} else {
-					a.setTipo("error");
+		else {
+			if (lexico.reconoce(Tipos.TKIDEN)){
+				tk = lexico.getNextToken();
+				String i = tk.getLexema();
+				if (tk.getCategoriaLexica()!=Tipos.TKCAP){
+					if (TS.existeID(i) ){
+						a.setTipo(TS.getTipo(i));
+					} 
+					else {
+						a.setTipo("error");
+					}
+					codigo.genIns("apila-dir",TS.dirID(i));
+					etq ++;
 				}
-				codigo.genIns("apila-dir",TS.dirID(tk.getLexema()));
-				etq ++;
+				else{
+					lexico.lexer();
+					atrDeExp = Exp();
+					//se me paso comprobar q es int
+					lexico.lexer();
+					if (lexico.reconoce(Tipos.TKCCI)){
+						if (TS.existeID(i) && ((TS.getTipo(i)).equals("array"))){
+							a.setTipo(i);
+						}
+						a.setTbase("error");
+						a.setI(-1);
+					}
+					else{
+						a.setTipo("error"); 
+					}
+				}
 			}
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
@@ -986,6 +1009,7 @@ public class Sintactico{
 					a.setTipo("error");
 				}
 			}
+		}	
 		return a;
 	}
 	

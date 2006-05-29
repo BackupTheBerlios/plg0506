@@ -1,7 +1,6 @@
 int a;
 bool b;
 maria = array [4] of bool;
-pepe c
+maria s
 #
-a := 3 - 4;
-b := 5 >= 8;
+b = s[3]
