@@ -18,6 +18,8 @@ public class Par {
 	 */
 	String id;
 	String tipo;
+	String tbase;
+	int i;
 	
 	/**
 	 * 
@@ -34,10 +36,12 @@ public class Par {
 	 * @param tipo String con el tipo del identificador.
 	 *  
 	 */
-	public Par(String id, String tipo) {
+	public Par(String id, String tipo, String tbase, int i) {
 		super();
 		this.id = id;
 		this.tipo = tipo;
+		this.tbase = tbase;
+		this.i = i;
 	}
 
 	/**
@@ -69,6 +73,23 @@ public class Par {
 		this.tipo = tipo;
 	}
 	
+	
+	public int getI() {
+		return i;
+	}
+
+	public void setI(int i) {
+		this.i = i;
+	}
+
+	public String getTbase() {
+		return tbase;
+	}
+
+	public void setTbase(String tbase) {
+		this.tbase = tbase;
+	}
+
 	/**
 	 * El método toString pasa a String la clase Par para poder mostrarla por pantalla.
 	 * @return String que contiene un par para poderlo mostrar por pantalla.
@@ -78,6 +99,10 @@ public class Par {
 		aux = aux.concat(id);
 		aux = aux.concat(",");
 		aux = aux.concat(tipo);
+		aux = aux.concat(",");
+		aux = aux.concat(tbase);
+		aux = aux.concat(",");
+		aux = aux.concat((new Integer(i)).toString());
 		aux = aux.concat(")");
 		return aux;
 	}

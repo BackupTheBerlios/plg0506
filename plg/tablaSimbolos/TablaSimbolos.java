@@ -92,12 +92,12 @@ public class TablaSimbolos {
 	 * @exception Exception Porque no se puede duplicar un identificador
 	 * 
 	 */
-	public boolean agnadeID(String id, String t) throws Exception{
+	public boolean agnadeID(String id, String t, String tb, int i) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			Par p = new Par(id,t);
+			Par p = new Par(id,t, tb, i);
 			this.tabla.put(id,p);
 			return true;	
 		}	
