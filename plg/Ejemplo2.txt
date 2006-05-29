@@ -1,6 +1,6 @@
 int a;
 bool b;
-pepe = array [7] of int;
+maria = array [4] of bool;
 pepe c
 #
 a := 3 - 4;
