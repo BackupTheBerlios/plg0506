@@ -1,12 +1,12 @@
 package procesador;
 /**
- * La clase <B>Atributos</B> almacena los atributos err y tipo de las gramáticas.
+ * La clase <B>Atributos</B> almacena los atributos err y tipo de las gramticas.
  * 
  * <P>Los atributos que tiene esta clase son los siguientes:
  * <UL><LI><CODE>err:</CODE> booleano que nos indica si hubo un error o no.</LI>
  * <LI><CODE>tipo:</CODE> string donde se almacena el tipo: int o bool.</LI></UL></P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín.
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn.
  * 
  */
 public class Atributos {
@@ -21,25 +21,37 @@ public class Atributos {
 	 */
 	String tipo;
 	
+	String iden;
+	
+	String tbase;
+	
+	int i;
+	
 	/**
 	 * Constructor de la clase sin parametros. Inicializa llamando al constructor superior.
 	 */
 	public Atributos() {
 		super();
 		tipo = "";
+		iden = "";
+		tbase = "";
+		i = 0;
 	}
 	
 	/**
-	 * Constructor que inicializa los atributos de Atributos con los valores que recibe por parámetro.
+	 * Constructor que inicializa los atributos de Atributos con los valores que recibe por parmetro.
 	 * 
 	 * @param err Booleano que nos indica si ha sucedido un error.
 	 * @param tipo String con el tipo del identificador, expresion o valor.
 	 * 
 	 */
-	public Atributos(boolean err, String tipo) {
+	public Atributos(boolean err, String iden,  String tipo, String tbase, int i) {
 		super();
 		this.err = err;
 		this.tipo = tipo;
+		this.iden = iden;
+		this.tbase = tbase;
+		this.i = i;
 	}
 	
 	/**
@@ -69,5 +81,31 @@ public class Atributos {
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
-	}	
+	}
+
+	public String getIden() {
+		return iden;
+	}
+
+	public void setIden(String iden) {
+		this.iden = iden;
+	}
+
+	public int getI() {
+		return i;
+	}
+
+	public void setI(int i) {
+		this.i = i;
+	}
+
+	public String getTbase() {
+		return tbase;
+	}
+
+	public void setTbase(String tbase) {
+		this.tbase = tbase;
+	}
+	
+	
 }

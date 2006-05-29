@@ -107,18 +107,20 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		boolean errDeDecs = false;
 		atrDeDec = Dec();
+		TS.agnadeID(atrDeDec.getIden(),atrDeDec.getTipo(),atrDeDec.getTbase(),atrDeDec.getI());
+		errDeDecs = atrDeDec.getErr();
+		dir ++;
 		lexico.lexer();
 		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
 			atrDeDecs = Decs();
-			errDeDecs = atrDeDec.getErr() || atrDeDecs.getErr();
+			errDeDecs = errDeDecs || atrDeDecs.getErr();
 			a.setErr(errDeDecs);
 			a.setTipo("");
 			return a;
 		}
 		else{
 			if (lexico.reconoce(Tipos.TKCUA)){
-				errDeDecs = atrDeDec.getErr() || errDeDecs;
 				a.setErr(errDeDecs);
 				a.setTipo("");
 				return a;
@@ -132,6 +134,139 @@ public class Sintactico{
 		return a;
     }
 
+	public Atributos Dec() throws Exception{
+		Atributos atrDeDecVar;
+		Atributos atrDeDecTipo;
+		Atributos a = new Atributos();
+		boolean errDeDec = false;
+		Token tk = lexico.getNextToken();
+		if (TS.existeID(tk.getLexema()) || tk.equals(new Token("int",Tipos.TKINT)) || tk.equals(new Token("bool",Tipos.TKBOOL))){
+			atrDeDecVar = DecVar();
+			errDeDec = TS.existeID(atrDeDecVar.getIden());
+			a.setIden(atrDeDecVar.getIden());
+			a.setTipo(atrDeDecVar.getTipo());
+			a.setTbase(atrDeDecVar.getTbase());
+			a.setI(atrDeDecVar.getI());
+			a.setErr(errDeDec);
+		}
+		else{
+			atrDeDecTipo = DecTipo();
+			errDeDec = TS.existeID(atrDeDecTipo.getIden());
+			a.setIden(atrDeDecTipo.getIden());
+			a.setTipo(atrDeDecTipo.getTipo());
+			a.setTbase(atrDeDecTipo.getTbase());
+			a.setI(atrDeDecTipo.getI());
+			a.setErr(errDeDec);
+		}
+		return a;
+	}
+	
+	public Atributos DecTipo() throws Exception{
+		Atributos a = new Atributos();
+		Token tk;
+		String i;
+		String t;
+		int n;
+		tk = lexico.lexer();
+		if (lexico.reconoce(Tipos.TKIDEN)){
+			i = tk.getLexema();
+			lexico.lexer();
+			if (lexico.reconoce(Tipos.TKIG)){
+				lexico.lexer();
+				if (lexico.reconoce(Tipos.TKARRAY)){
+					lexico.lexer();
+					if (lexico.reconoce(Tipos.TKCAP)){
+						tk = lexico.lexer();
+						if (lexico.reconoce(Tipos.TKNUM)){
+							n = Integer.parseInt(tk.getLexema());
+							if (! (n <= 0)){
+								lexico.lexer();
+								if (lexico.reconoce(Tipos.TKCCI)){
+									lexico.lexer();
+									if (lexico.reconoce(Tipos.TKOF)){
+										tk = lexico.lexer();
+										if (lexico.reconoce(Tipos.TKIDEN)){
+											t = tk.getLexema();
+											a.setTipo("array");
+											a.setI(n);
+											a.setTbase(t);
+											a.setIden(i);
+											if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array"))){
+												a.setErr(true);
+											}
+											else{
+												if (!TS.existeID(i)){
+													a.setErr(false);
+												}
+												else{
+													a.setErr(true);
+													throw new Exception("ERROR: Identificador duplicado.");
+												}
+											}
+										}
+										else{
+											if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
+												t = tk.getLexema();
+												a.setTipo("array");
+												a.setI(n);
+												a.setTbase(t);
+												a.setIden(i);
+												if (!TS.existeID(i)){
+													a.setErr(false);
+												}
+												else{
+													a.setErr(true);
+													throw new Exception("ERROR: Identificador duplicado.");
+												}
+											}
+											else{
+												a.setErr(true);
+												throw new Exception("ERROR: Tipo no definido.");
+											}	
+										}
+									}
+									else{
+										a.setErr(true);
+										throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+									}
+								}
+								else{
+									a.setErr(true);
+									throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+								}
+							}
+							else{
+								a.setErr(true);
+								throw new Exception("ERROR: El rango debe ser un natural mayor que 0. El formato correcto es: iden = array [entero] of Tipo");
+							}
+						}
+						else{
+							a.setErr(true);
+							throw new Exception("ERROR: El rango es un numero. El formato correcto es: iden = array [numero] of Tipo");
+						}	
+					}
+					else{
+						a.setErr(true);
+						throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+					}
+				}
+				else{
+					a.setErr(true);
+					throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+				}
+			}
+			else{
+				a.setErr(true);
+				throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			}
+		}
+		else{
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+		}		
+		return a;
+	}
+	
 	/**
 	 * Procesa una declaracisn de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
 	 * y su nombre, de la forma: 
@@ -140,7 +275,7 @@ public class Sintactico{
 	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos Dec() throws Exception{
+	public Atributos DecVar() throws Exception{
 		boolean errDeDec;
 		Atributos a = new Atributos();
 		String t = "";
@@ -153,13 +288,11 @@ public class Sintactico{
 			System.out.println(lexico.getLookahead().muestraToken());
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				String i = tk.getLexema();
-				errDeDec = TS.existeID(i);
-				if (!errDeDec){
-					TS.agnadeID(i,t);
-				}
-				else {
-					throw new Exception("ERROR: Identificador duplicado.  Cada identificador solo se puede declarar una vez");
-				}
+				a.setIden(i);
+				a.setTipo(t);
+				a.setTbase("error");
+				a.setI(-1);
+				errDeDec = false;
 			}
 			else{
 				errDeDec = true;
@@ -167,8 +300,21 @@ public class Sintactico{
 			}
 		}
 		else{
-			errDeDec = true;
-			throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
+			t = tk.getLexema();
+			tk = lexico.lexer();
+			System.out.println(lexico.getLookahead().muestraToken());
+			if (lexico.reconoce(Tipos.TKIDEN)){
+				String i = tk.getLexema();
+				a.setIden(i);
+				a.setTipo(t);
+				a.setTbase("error");
+				a.setI(-1);
+				errDeDec = false;
+			}
+			else{
+				errDeDec = true;
+				throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
+			}
 		}
 		a.setErr(errDeDec);
 		a.setTipo(t);

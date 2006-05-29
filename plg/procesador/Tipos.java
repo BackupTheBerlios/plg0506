@@ -3,7 +3,7 @@ package procesador;
  * La clase <B>Tipos</B> declara las categoras lxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
  * <P>No tiene atributos, slo las constantes de los tipos.</P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
  *
  */
 public class Tipos {
@@ -202,6 +202,8 @@ public class Tipos {
 	 * Valor para reconocer la palabra proc.
 	 */
 	public static final int TKPROC		= 38;
+	public static final int TKCAP		= 39;
+	public static final int TKCCI		= 40;
 	
 	
 }

@@ -138,6 +138,8 @@ public class Lexico {
 			case '0':	return new Token("0",Tipos.TKNUM);
 			case '(':	return new Token("(",Tipos.TKPAP);
 			case ')':	return new Token(")",Tipos.TKPCI);
+			case '[':	return new Token("(",Tipos.TKCAP);
+			case ']':	return new Token(")",Tipos.TKCCI);
 			case '*':	return new Token("*",Tipos.TKMULT);
 			case '/':	return new Token("/",Tipos.TKDIV);
 			case ';':	return new Token(";",Tipos.TKPYCOMA);

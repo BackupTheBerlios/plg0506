@@ -1,10 +1,7 @@
 int a;
-bool b; 
-int integral;
-bool falseado;
-int only#
-a := (3 - 4) * ((-1) + 7);
-b := (3 + 5) >= (8 + 2 * 1);
-integral := 4 * 7 - 3 / (2 + 13);
-falseado := not (3 > 4) or (not true) and (true and true);
-only := b + integral;
+bool b;
+pepe = array [7] of int;
+pepe c
+#
+a := 3 - 4;
+b := 5 >= 8;
