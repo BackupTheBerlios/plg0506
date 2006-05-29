@@ -124,17 +124,21 @@ public class Codigo {
 	
 	public void emite(String s){
 		System.out.println("Estoy pasando por emite");
-		if (s.equals("ir-f")){
-			genIns("ir-f");	
+		if (s.startsWith("ir-f")){
+			// Metemos s, para permitir los "ir-f NumInst"
+			//genIns("ir-f");
+			genIns(s);
 		}
-		if (s.equals("ir-a")){
-			genIns("ir-a");
+		if (s.startsWith("ir-a")){
+//			 Metemos s, para permitir los "ir-f NumInst"
+			//genIns("ir-a");
+			genIns(s);
 		}
 	}
 	
 	public void parchea(int a, int b){
-		System.out.println("Estoy pasando por parche");
 		String i = (String)cod.elementAt(a) + " " + b;
+		System.out.println("Estoy pasando por parche: cambio " + (String)cod.elementAt(a) + " por " + i);
 		cod.setElementAt(i,a);
 	}
 	

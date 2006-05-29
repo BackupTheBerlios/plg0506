@@ -234,14 +234,11 @@ public class Sintactico{
 			if (lexico.reconoce(Tipos.TKIF)){
 				atrDeIns = IIf();
 			}
-			/*else{
-				if(lexico.reconoce(Tipos.TKEND)){
-					a.setErr(false);
-					return a;
-				}*/
+			else if(lexico.reconoce(Tipos.TKWHL)){
+					atrDeIns = IWhile();
+				}
 			else{
 				atrDeIns = IAsig();
-				//}
 			}
 		}
 		a.setErr(atrDeIns.getErr());
@@ -334,7 +331,7 @@ public class Sintactico{
 		return a;	
 	}
 	
-	/*	
+	/**	
 	 * IIf ::= {var etqs1, etqs2;
 	 * 			ExpC();
 	 *  		then 
@@ -378,7 +375,7 @@ public class Sintactico{
 			a.setErr(true);
 			return a;
 		}	
-		a.setErr(atrDeI.getErr() || atrDePElse.getErr());
+		a.setErr(atrDeI.getErr() || atrDePElse.getErr() || atrDeExpC.getErr());
 		System.out.println("El token ultimo q lee el if es");
 		System.out.println(lexico.getLookahead().muestraToken());
 		return a;	
@@ -423,6 +420,52 @@ public class Sintactico{
 		}	
 		return a;	
 	}
+
+	/**	
+	 * IWhile ::= {var etqb, etqs;
+	 *  		etqb <-- etq
+	 * 			ExpC();
+	 *  		do 
+	 * 			emite(ir-f);
+	 * 			etqs <-- etq;
+	 * 			etq <--etq +1;
+	 * 			I();
+	 * 			emite(ir-a etqb);
+	 * 			etq <--etq +1;
+	 * 			parchea(etqs,etq); 
+	 * 			}
+	 */
+	public Atributos IWhile() throws Exception{
+		Atributos a = new Atributos();
+		Atributos atrDeExpC;
+		Atributos atrDeI;
+		int etqb = etq;
+		int etqs;
+		System.out.println("Llego a IWhile");
+		atrDeExpC = ExpC();
+		System.out.println("IWhile - Salgo de ExpC");
+		if (lexico.reconoce(Tipos.TKDO)){
+			System.out.println("Reconozco el 'do'");	
+			codigo.emite("ir-f");
+			etqs = etq; 
+			etq ++;
+			System.out.println("Ejecuto la instruccion.  ETQ = " + etq);
+			atrDeI = I();
+			System.out.println("VUelvo de la Instruccion. ETQ = " + etq);
+			codigo.emite("ir-a " + etqb);
+			etq ++;
+			codigo.parchea(etqs,etq);
+		}
+		else{
+			a.setErr(true);
+			return a;
+		}	
+		a.setErr(atrDeI.getErr() || atrDeExpC.getErr());
+		System.out.println("El token ultimo q lee el WHILE es");
+		System.out.println(lexico.getLookahead().muestraToken());
+		return a;	
+	}
+	
 	
 	/**
 	 * Procesa una instruccisn de asignacisn, de la forma:
@@ -523,7 +566,7 @@ public class Sintactico{
 		Atributos atrDeExp;
 		Atributos atrDeRExpC;
 		Atributos a = new Atributos();
-		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN)){
+		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
 			a.setErr(true);
 			a.setTipo("");
 			return a;
@@ -586,7 +629,7 @@ public class Sintactico{
 		Atributos atrDeTerm = new Atributos();
 		Atributos atrDeRExp;
 		Atributos a = new Atributos();
-		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN)){
+		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
 			a.setErr(true);
 			a.setTipo("");
 			return a;
@@ -677,7 +720,7 @@ public class Sintactico{
 		Token tk;
 		tk = lexico.lexer();
 		System.out.println(lexico.getLookahead().muestraToken());
-		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN)){
+		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
 			a.setErr(true);
 			a.setTipo("");
 			return a;
@@ -813,6 +856,7 @@ public class Sintactico{
 			codigo.genIns("resta");
 		else
 			codigo.genIns("or");
+		etq ++;
 	}
 	
 	/**
@@ -828,6 +872,7 @@ public class Sintactico{
 			codigo.genIns("divide");
 		else 
 			codigo.genIns("and");
+		etq ++;
 	}
 	
 	/**
@@ -854,6 +899,7 @@ public class Sintactico{
 		if (opDeOpComp == "!="){
 				codigo.genIns("distinto");
 		}
+		etq ++;
 	}
 
 	/**
@@ -861,11 +907,12 @@ public class Sintactico{
 	 *
 	 */
 	public void genOpNot(){
-
 		codigo.genIns("not");
+		etq ++;
 	}
 	
 	public void genOpNega(){
 		codigo.genIns("neg");
+		etq ++;
 	}
 }

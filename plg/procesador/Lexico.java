@@ -517,6 +517,7 @@ public class Lexico {
 							else{
 								posicion --;
 								fuente.seek(posicion);
+								System.out.println("HE LEIDO UN DO");
 								return new Token ("do",Tipos.TKDO);
 							}
 						}	

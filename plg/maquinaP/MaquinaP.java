@@ -15,21 +15,21 @@ import javax.swing.JOptionPane;
 
 /**
  * La clase <B>MaquinaP</B> implementa la maquina virtual. Para que el lenguaje objeto que hemos creado tenga valor 
- * es necesario que sea ejecutado en una máquina y que ésta traduzca los elementos del lenguaje fuente al lenguaje 
+ * es necesario que sea ejecutado en una m?quina y que ?sta traduzca los elementos del lenguaje fuente al lenguaje 
  * objeto.
  * <P>La clase MaquinaP cuenta con los siguientes atributos:
- * <UL><LI><CODE>pila:</CODE> La pila de los operandos de la máquina.</LI>
- * <LI><CODE>PC:</CODE> Contador de programa. Al final de la ejecución nos dice cuantas lienas tiene dicho programa.</LI>
- * <LI><CODE>H:</CODE> Indica si la máquina esta en ejecución, parada por error, o acabo su ejecución.</LI>
+ * <UL><LI><CODE>pila:</CODE> La pila de los operandos de la m?quina.</LI>
+ * <LI><CODE>PC:</CODE> Contador de programa. Al final de la ejecuci?n nos dice cuantas lienas tiene dicho programa.</LI>
+ * <LI><CODE>H:</CODE> Indica si la m?quina esta en ejecuci?n, parada por error, o acabo su ejecuci?n.</LI>
  * <LI><CODE>ST:</CODE> Puntero a la cima de la pila.</LI>
- * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui había puesto el nombre del fichero pero quizas deberia ser el
- * código del programa.</LI>
+ * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
+ * c?digo del programa.</LI>
  * <LI><CODE>Mem:</CODE> Memoria de datos.</LI>
  * <LI><CODE>fichero:</CODE> Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP. Sera un fichero con extension '.obj'</LI>
  * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
  * </UL></P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jon?s Andradas, Paloma de la Fuente, Leticia Garc?a y Silvia Mart?n
  * @see java.io.FileReader#FileReader(java.lang.String)
  */
 public class MaquinaP {
@@ -37,12 +37,12 @@ public class MaquinaP {
 	/*
 	 * Atributos de la clase:
 	 * 
-	 * pila: La pila de los operandos de la máquina.
-	 * PC: Contador de programa. Al final de la ejecución nos dice cuantas lienas tiene dicho programa.
-	 * H: Indica si la máquina esta en ejecución, parada por error, o acabo su ejecución.
+	 * pila: La pila de los operandos de la m?quina.
+	 * PC: Contador de programa. Al final de la ejecuci?n nos dice cuantas lienas tiene dicho programa.
+	 * H: Indica si la m?quina esta en ejecuci?n, parada por error, o acabo su ejecuci?n.
 	 * ST: Puntero a la cima de la pila.
-	 * Prog:Memoria de programas. Aqui había puesto el nombre del fichero pero quizas deberia ser el
-	 * código del programa.
+	 * Prog:Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
+	 * c?digo del programa.
 	 * Mem: Memoria de datos.
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
@@ -57,8 +57,8 @@ public class MaquinaP {
 	private String pasos;
 	
 	/**
-	 * El constructor de la clase MaquinaP que sólo tiene el buffer de lectura del fichero como parmetro de entrada.
-	 * @param f Recibe como parámetro la ruta del fichero a ejecutar para poder inicializar todo.
+	 * El constructor de la clase MaquinaP que s?lo tiene el buffer de lectura del fichero como parmetro de entrada.
+	 * @param f Recibe como par?metro la ruta del fichero a ejecutar para poder inicializar todo.
 	 *
 	 */	
 	public MaquinaP(String f) {
@@ -101,7 +101,7 @@ public class MaquinaP {
 	
 	/**
 	 * Mutador para el atributo de la clase, H. 
-	 * @param h Entero que controla el estado actual de la pila, además es donde se refleja el error.
+	 * @param h Entero que controla el estado actual de la pila, adem?s es donde se refleja el error.
 	 */
 	public void setH(int h) {
 		H = h;
@@ -109,7 +109,7 @@ public class MaquinaP {
 	
 	/**
 	 * Accesor para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
-	 * @return Vector donde cada celda es una posición de Memoria.
+	 * @return Vector donde cada celda es una posici?n de Memoria.
 	 */
 	public Vector getMem() {
 		return Mem;
@@ -125,7 +125,7 @@ public class MaquinaP {
 	
 	/**
 	 * Accesor para el atributo de la clase, PC. Que indica el contador de instrucciones del Programa. 
-	 * @return Entero que indica el numero de instrucción.
+	 * @return Entero que indica el numero de instrucci?n.
 	 */
 	public int getPC() {
 		return PC;
@@ -133,7 +133,7 @@ public class MaquinaP {
 	
 	/**
 	 * Mutador para el atributo de la clase, PC. Que indica el contador de instrucciones del Programa. 
-	 * @param pc Entero para actualizar la nueva posción del programa.
+	 * @param pc Entero para actualizar la nueva posci?n del programa.
 	 */
 	public void setPC(int pc) {
 		PC = pc;
@@ -181,20 +181,20 @@ public class MaquinaP {
 	
 	/**
 	 * Mutador para el atributo de la clase ST. Se cambia el puntero a la cima de la pila, con lo que cambiara la cima de la pila.
-	 * @param st Recibe por parámetro el entero con el que cambiar la cima de la pila.
+	 * @param st Recibe por par?metro el entero con el que cambiar la cima de la pila.
 	 */
 	public void setST(int st) {
 		ST = st;
 	}
 	
 	/**
-	 * Obtiene el programa del fichero que recibe por parámetro. Guarda cada instruccion del programa en una posición del 
+	 * Obtiene el programa del fichero que recibe por par?metro. Guarda cada instruccion del programa en una posici?n del 
 	 * vector Prog. Para obtener el programa crea un BufferReader y se lanzan y capturan excepciones al respecto. 
 	 * 
-	 * @param f Recibe por parámetro el fichero del cual obtiene el programa. Ha de ser un FileReader para luego trabajar con el.
-	 * @return Devuelve el Vector con el programa. Cada posición es una instruccion de la maquina P.
-	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo método.
-	 * @exception java.io.IOException Se lanza y se captura en este mismo método.
+	 * @param f Recibe por par?metro el fichero del cual obtiene el programa. Ha de ser un FileReader para luego trabajar con el.
+	 * @return Devuelve el Vector con el programa. Cada posici?n es una instruccion de la maquina P.
+	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo m?todo.
+	 * @exception java.io.IOException Se lanza y se captura en este mismo m?todo.
 	 */
 	private Vector damePrograma(FileReader f){
 		Vector v=new Vector();
@@ -216,9 +216,9 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Aumenta el tamaño del vector memoria según las necesidades del programa que va a ejecutar.
+	 * Aumenta el tama?o del vector memoria seg?n las necesidades del programa que va a ejecutar.
 	 * 
-	 * @param tam Recibe un entero con el tamaño que ha de aumentar.
+	 * @param tam Recibe un entero con el tama?o que ha de aumentar.
 	 */
 	private void aumentoMem(int tam){
 		for(int i = Mem.size();i<tam+1;i++){
@@ -227,7 +227,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Método que ejecuta la Máquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
+	 * M?todo que ejecuta la M?quina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
 	 *
 	 */
 	public void ejecuta() throws Exception{
@@ -557,8 +557,8 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Método que devuelve un String con el contenido de la Memoria. 
-	 * Se usa para ver el contenido final de la memoria para despues de ejecutar la máquina P.
+	 * M?todo que devuelve un String con el contenido de la Memoria. 
+	 * Se usa para ver el contenido final de la memoria para despues de ejecutar la m?quina P.
 	 * 
 	 * @return String con el contenido del vector Mamoria.
 	 */
@@ -579,8 +579,8 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Método que realiza una operación suma. Se desapilan los dos primeros elementos de la pila y se suman.  Despues se apila 
-	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habrá un elemento menos. También se aumenta en uno 
+	 * M?todo que realiza una operaci?n suma. Se desapilan los dos primeros elementos de la pila y se suman.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habr? un elemento menos. Tambi?n se aumenta en uno 
 	 * el contador del programa.
 	 * 
 	 * (R1) suma:
@@ -669,12 +669,17 @@ public class MaquinaP {
 		ST = ST + 1; 
 		//System.out.println();
 		if (d >= 0){
-			if ((Mem.size()-1<=d)&&(Mem.elementAt(d)!=null)){
+			if ((Mem.size()-1>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
 				pila.push(Mem.elementAt(d));  
 				PC = PC + 1;
 			}
 			else{
-				
+				/*System.out.println("-------------=================INICIO Depuracion de la MAQUINAP================----------");
+				System.out.println("Tama?o de la memoria:   Mem.size = " + Mem.size());
+				System.out.println("Apila-dir de " + d);
+				System.out.println("Y en la memoria tenemos:");
+				for (int z=0; z< Mem.size();z++)
+					System.out.println("Pos " + (z+1) + ":  " + String.valueOf(Mem.elementAt(z)));*/
 				throw new Exception("ERROR: Variable sin inicializar.");
 			}
 		}
@@ -693,7 +698,7 @@ public class MaquinaP {
 	 */
 	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
-		//Sino lo es aumentamos el tamaño del vector.
+		//Sino lo es aumentamos el tama?o del vector.
 		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);
@@ -723,7 +728,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * (R9) En cualquier otro caso, la máquina entra en estado de error y se detiene la ejecución.
+	 * (R9) En cualquier otro caso, la m?quina entra en estado de error y se detiene la ejecuci?n.
 	 * H <-- -1
 	 */
 	public void error(){
