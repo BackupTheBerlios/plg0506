@@ -138,8 +138,8 @@ public class Lexico {
 			case '0':	return new Token("0",Tipos.TKNUM);
 			case '(':	return new Token("(",Tipos.TKPAP);
 			case ')':	return new Token(")",Tipos.TKPCI);
-			case '[':	return new Token("(",Tipos.TKCAP);
-			case ']':	return new Token(")",Tipos.TKCCI);
+			case '[':	return new Token("[",Tipos.TKCAP);
+			case ']':	return new Token("]",Tipos.TKCCI);
 			case '*':	return new Token("*",Tipos.TKMULT);
 			case '/':	return new Token("/",Tipos.TKDIV);
 			case ';':	return new Token(";",Tipos.TKPYCOMA);
@@ -1206,8 +1206,16 @@ public class Lexico {
 		char a;
 		while ((a = (char)fuente.read()) != -1){
 			posicion ++;
-			if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-				aux = aux.concat(new Character(a).toString());			
+			if (a!='['){
+				if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+					System.out.println(new Character(a).toString());
+					aux = aux.concat(new Character(a).toString());			
+				}
+				else{
+					posicion --;
+					fuente.seek(posicion);
+					return aux;
+				}
 			}
 			else{
 				posicion --;

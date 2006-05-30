@@ -641,6 +641,7 @@ public class Sintactico{
 				atrDeExpC = ExpC();
 				errDeIAsig = (atrDeExpC.getTipo().compareTo(TS.getTipo(lex)) != 0 ) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().compareTo("error")== 0 );
 				if (!(TS.existeID(lex))){
+					errDeIAsig = true;
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
@@ -649,8 +650,48 @@ public class Sintactico{
 				}
 			}
 			else{
-				errDeIAsig = true;
-				throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+				if (lexico.reconoce(Tipos.TKCAP)){
+					tk = lexico.lexer();
+					System.out.println(lexico.getLookahead().muestraToken());
+					if (lexico.reconoce(Tipos.TKNUM)){
+						int n= Integer.parseInt(tk.getLexema());
+						tk = lexico.lexer();
+						// aqui debo hacer algo con el entero pero aun no se que... :S
+						System.out.println(lexico.getLookahead().muestraToken());
+						if (lexico.reconoce(Tipos.TKCCI)){
+							tk = lexico.lexer();
+							System.out.println(lexico.getLookahead().muestraToken());
+							if (lexico.reconoce(Tipos.TKASIGN)){
+								atrDeExpC = ExpC();
+								errDeIAsig = (atrDeExpC.getTipo().compareTo(TS.getTipo(lex)) != 0 ) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().compareTo("error")== 0 );
+								if (!(TS.existeID(lex))){
+									errDeIAsig = true;
+									throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
+								}
+								else{
+										codigo.genIns("desapila-dir",TS.dirID(lex)+(n-1)); // +(n-1)
+										etq ++;
+								}
+							}
+							else{
+								errDeIAsig = true;
+								throw new Exception("ERROR: Asignación incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+							}
+						}
+						else{
+							errDeIAsig = true;
+							throw new Exception("ERROR: Asignación incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+						}
+					}
+					else{
+						errDeIAsig = true;
+						throw new Exception("ERROR: Asignación incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+					}
+				}
+				else{
+					errDeIAsig = true;
+					throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+				}
 			}
 		}
 		else{

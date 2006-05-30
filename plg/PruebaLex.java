@@ -13,7 +13,7 @@ public class PruebaLex {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		RandomAccessFile fuente;
-		String f= "Ejemplo.txt";
+		String f= "Ejemplo2.txt";
 		try{
 			fuente= new RandomAccessFile(f,"r");
 		

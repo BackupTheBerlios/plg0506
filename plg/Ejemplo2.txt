@@ -3,4 +3,8 @@ bool b;
 maria = array [4] of bool;
 maria s
 #
-b = s[3]
+b := false;
+s[0] := true;
+s[1] := true;
+s[2] := false;
+s[3] := true;
