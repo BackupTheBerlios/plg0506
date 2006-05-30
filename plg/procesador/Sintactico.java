@@ -653,6 +653,7 @@ public class Sintactico{
 				if (lexico.reconoce(Tipos.TKCAP)){
 					tk = lexico.lexer();
 					System.out.println(lexico.getLookahead().muestraToken());
+					//Aqui tb puede ser expresion
 					if (lexico.reconoce(Tipos.TKNUM)){
 						int n= Integer.parseInt(tk.getLexema());
 						tk = lexico.lexer();
@@ -1022,18 +1023,23 @@ public class Sintactico{
 				else{
 					lexico.lexer();
 					atrDeExp = Exp();
-					//se me paso comprobar q es int
-					lexico.lexer();
-					if (lexico.reconoce(Tipos.TKCCI)){
-						if (TS.existeID(i) && ((TS.getTipo(i)).equals("array"))){
-							a.setTipo(i);
+					if (atrDeExp.getTipo().equals("int")){
+						lexico.lexer();
+						if (lexico.reconoce(Tipos.TKCCI)){
+							if (TS.existeID(i) && ((TS.getTipo(i)).equals("array"))){
+								a.setTipo(i);
+							}
+							a.setTbase("error");
+							a.setI(-1);
 						}
-						a.setTbase("error");
-						a.setI(-1);
+						else{
+							a.setTipo("error"); 
+						}
 					}
 					else{
 						a.setTipo("error"); 
 					}
+					
 				}
 			}
 			else {
