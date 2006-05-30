@@ -628,6 +628,7 @@ public class Sintactico{
 
 	public Atributos IAsig() throws Exception{
 		Atributos  atrDeExpC = new Atributos();
+		Atributos  atrDeExp = new Atributos();
 		Atributos a = new Atributos();
 		boolean errDeIAsig; 
 		String lex = "";
@@ -653,45 +654,50 @@ public class Sintactico{
 				if (lexico.reconoce(Tipos.TKCAP)){
 					tk = lexico.lexer();
 					System.out.println(lexico.getLookahead().muestraToken());
-					//Aqui tb puede ser expresion
+					int n;
 					if (lexico.reconoce(Tipos.TKNUM)){
-						int n= Integer.parseInt(tk.getLexema());
+						n= Integer.parseInt(tk.getLexema());
+					}
+					else{
+						atrDeExp = Exp();
+						if (atrDeExp.getTipo().equals("int")){
+							n = Integer.parseInt(atrDeExp.getIden());
+						}	
+						else{
+							errDeIAsig = true;
+							throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+						}
+					}
+					tk = lexico.lexer();
+					System.out.println(lexico.getLookahead().muestraToken());
+					if (lexico.reconoce(Tipos.TKCCI)){
 						tk = lexico.lexer();
-						// aqui debo hacer algo con el entero pero aun no se que... :S
 						System.out.println(lexico.getLookahead().muestraToken());
-						if (lexico.reconoce(Tipos.TKCCI)){
-							tk = lexico.lexer();
-							System.out.println(lexico.getLookahead().muestraToken());
-							if (lexico.reconoce(Tipos.TKASIGN)){
-								atrDeExpC = ExpC();
-								errDeIAsig = (atrDeExpC.getTipo().compareTo(TS.getTipo(lex)) != 0 ) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().compareTo("error")== 0 );
-								if (!(TS.existeID(lex))){
-									errDeIAsig = true;
-									throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
-								}
-								else{
-										codigo.genIns("desapila-dir",TS.dirID(lex)+(n-1)); // +(n-1)
-										etq ++;
-								}
+						if (lexico.reconoce(Tipos.TKASIGN)){
+							atrDeExpC = ExpC();
+							errDeIAsig = (atrDeExpC.getTipo().compareTo(TS.getTipo(lex)) != 0 ) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().compareTo("error")== 0 );
+							if (!(TS.existeID(lex))){
+								errDeIAsig = true;
+								throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 							}
 							else{
-								errDeIAsig = true;
-								throw new Exception("ERROR: Asignación incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+									codigo.genIns("desapila-dir",TS.dirID(lex)+(n-1)); // +(n-1)
+									etq ++;
 							}
 						}
 						else{
 							errDeIAsig = true;
-							throw new Exception("ERROR: Asignación incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+							throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
 						}
 					}
 					else{
 						errDeIAsig = true;
-						throw new Exception("ERROR: Asignación incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+						throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
 					}
 				}
 				else{
 					errDeIAsig = true;
-					throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+					throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
 				}
 			}
 		}
