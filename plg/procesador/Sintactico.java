@@ -446,6 +446,9 @@ public class Sintactico{
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
+		if (!atrDeExpC.getTipo().equals("bool")){
+			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
+		}
 		if (lexico.reconoce(Tipos.TKTHN)){
 			codigo.emite("ir-f");
 			etqs1 = etq; 
@@ -519,6 +522,9 @@ public class Sintactico{
 		int etqb = etq;
 		int etqs;
 		atrDeExpC = ExpC();
+		if (!atrDeExpC.getTipo().equals("bool")){
+			throw new Exception("ERROR: La condicion del while ha de ser una expresion booleana.");
+		}
 		if (lexico.reconoce(Tipos.TKDO)){
 			codigo.emite("ir-f");
 			etqs = etq; 

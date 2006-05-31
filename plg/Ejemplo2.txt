@@ -9,4 +9,8 @@ b := true;
 c := 3;
 s[0] := false;
 s[1] := true;
-while 7 do c:= c+1;
+if true then c:= c - 1;
+while 7 do 
+begin
+	c:= c+1;
+end;
