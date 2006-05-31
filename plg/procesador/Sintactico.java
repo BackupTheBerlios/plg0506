@@ -142,13 +142,10 @@ public class Sintactico{
 	
 	public Atributos DecTipo() throws Exception{
 		Atributos a = new Atributos();
-		Token tk;
-		String i;
-		String t;
-		int n;
-		tk = lexico.lexer();
+		a.setErr(false);
+		Token tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKIDEN)){
-			i = tk.getLexema();
+			String i = tk.getLexema();
 			lexico.lexer();
 			if (lexico.reconoce(Tipos.TKIG)){
 				lexico.lexer();
@@ -157,43 +154,34 @@ public class Sintactico{
 					if (lexico.reconoce(Tipos.TKCAP)){
 						tk = lexico.lexer();
 						if (lexico.reconoce(Tipos.TKNUM)){
-							n = Integer.parseInt(tk.getLexema());
+							int n = Integer.parseInt(tk.getLexema());
 							if (! (n <= 0)){
 								lexico.lexer();
 								if (lexico.reconoce(Tipos.TKCCI)){
 									lexico.lexer();
 									if (lexico.reconoce(Tipos.TKOF)){
 										tk = lexico.lexer();
+										String t = tk.getLexema();
 										if (lexico.reconoce(Tipos.TKIDEN)){
-											t = tk.getLexema();
 											a.setTipo("array");
 											a.setI(n+1);
 											a.setTbase(t);
 											a.setIden(i);
-											if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array"))){
+											if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array")) && TS.existeID(i)){
 												a.setErr(true);
+												throw new Exception("ERROR: Identificador duplicado.");
 											}
 											else{
-												if (!TS.existeID(i)){
-													a.setErr(false);
-												}
-												else{
-													a.setErr(true);
-													throw new Exception("ERROR: Identificador duplicado.");
-												}
+												a.setErr(true);
 											}
 										}
 										else{
 											if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
-												t = tk.getLexema();
 												a.setTipo("array");
 												a.setI(n);
 												a.setTbase(t);
 												a.setIden(i);
-												if (!TS.existeID(i)){
-													a.setErr(false);
-												}
-												else{
+												if (TS.existeID(i)){
 													a.setErr(true);
 													throw new Exception("ERROR: Identificador duplicado.");
 												}
