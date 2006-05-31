@@ -20,6 +20,7 @@ public class Par {
 	String tipo;
 	String tbase;
 	int i;
+	int dir;
 	
 	/**
 	 * 
@@ -90,6 +91,15 @@ public class Par {
 		this.tbase = tbase;
 	}
 
+	
+	public int getDir() {
+		return dir;
+	}
+
+	public void setDir(int dir) {
+		this.dir = dir;
+	}
+
 	/**
 	 * El método toString pasa a String la clase Par para poder mostrarla por pantalla.
 	 * @return String que contiene un par para poderlo mostrar por pantalla.
@@ -103,6 +113,8 @@ public class Par {
 		aux = aux.concat(tbase);
 		aux = aux.concat(",");
 		aux = aux.concat((new Integer(i)).toString());
+		aux = aux.concat(",");
+		aux = aux.concat((new Integer(dir)).toString());
 		aux = aux.concat(")");
 		return aux;
 	}
