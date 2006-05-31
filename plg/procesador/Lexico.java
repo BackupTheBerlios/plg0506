@@ -1207,9 +1207,16 @@ public class Lexico {
 		while ((a = (char)fuente.read()) != -1){
 			posicion ++;
 			if (a!='['){
-				if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-					System.out.println(new Character(a).toString());
-					aux = aux.concat(new Character(a).toString());			
+				if (a!=']'){	
+					if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+						System.out.println(new Character(a).toString());
+						aux = aux.concat(new Character(a).toString());			
+					}
+					else{
+						posicion --;
+						fuente.seek(posicion);
+						return aux;
+					}
 				}
 				else{
 					posicion --;

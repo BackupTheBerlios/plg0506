@@ -1016,9 +1016,11 @@ public class Sintactico{
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				tk = lexico.getNextToken();
 				String i = tk.getLexema();
+				System.out.println("Toy aki");
 				if (tk.getCategoriaLexica()!=Tipos.TKCAP){
 					if (TS.existeID(i) ){
 						a.setTipo(TS.getTipo(i));
+						
 					} 
 					else {
 						a.setTipo("error");
@@ -1027,7 +1029,8 @@ public class Sintactico{
 					etq ++;
 				}
 				else{
-					lexico.lexer();
+					Token al = lexico.lexer();
+					System.out.println(al.muestraToken()+" ya reconozco edl nombnre del array");
 					atrDeExp = Exp();
 					if (atrDeExp.getTipo().equals("int")){
 						lexico.lexer();
@@ -1045,7 +1048,6 @@ public class Sintactico{
 					else{
 						a.setTipo("error"); 
 					}
-					
 				}
 			}
 			else {
