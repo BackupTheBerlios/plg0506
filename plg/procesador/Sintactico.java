@@ -107,9 +107,9 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		boolean errDeDecs = false;
 		atrDeDec = Dec();
-		TS.agnadeID(atrDeDec.getIden(),atrDeDec.getTipo(),atrDeDec.getTbase(),atrDeDec.getI());
+		TS.agnadeID(atrDeDec.getIden(),atrDeDec.getTipo(),atrDeDec.getTbase(),atrDeDec.getI(),dir);
 		errDeDecs = atrDeDec.getErr();
-		dir ++;
+		dir = dir + atrDeDec.getI();
 		lexico.lexer();
 		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
@@ -188,7 +188,7 @@ public class Sintactico{
 										if (lexico.reconoce(Tipos.TKIDEN)){
 											t = tk.getLexema();
 											a.setTipo("array");
-											a.setI(n);
+											a.setI(n+1);
 											a.setTbase(t);
 											a.setIden(i);
 											if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array"))){
@@ -291,7 +291,7 @@ public class Sintactico{
 				a.setIden(i);
 				a.setTipo(t);
 				a.setTbase("error");
-				a.setI(-1);
+				a.setI(1);
 				errDeDec = false;
 			}
 			else{
@@ -308,7 +308,7 @@ public class Sintactico{
 				a.setIden(i);
 				a.setTipo(t);
 				a.setTbase("error");
-				a.setI(-1);
+				a.setI(TS.getTam(i));
 				errDeDec = false;
 			}
 			else{
@@ -640,13 +640,14 @@ public class Sintactico{
 			System.out.println(lexico.getLookahead().muestraToken());
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
-				errDeIAsig = (atrDeExpC.getTipo().compareTo(TS.getTipo(lex)) != 0 ) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().compareTo("error")== 0 );
+				errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTipo(lex))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error")));
+				System.out.println(errDeIAsig);
 				if (!(TS.existeID(lex))){
 					errDeIAsig = true;
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
-						codigo.genIns("desapila-dir",TS.dirID(lex));
+						codigo.genIns("desapila-dir",TS.getDir(lex));
 						etq ++;
 				}
 			}
@@ -668,6 +669,11 @@ public class Sintactico{
 							throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
 						}
 					}
+					if (n>TS.getTam(TS.getTipo(lex))){
+						System.out.println("El numero es");
+						System.out.println(n);
+						throw new Exception("ERROR: array overflow");
+					}
 					tk = lexico.lexer();
 					System.out.println(lexico.getLookahead().muestraToken());
 					if (lexico.reconoce(Tipos.TKCCI)){
@@ -681,7 +687,7 @@ public class Sintactico{
 								throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 							}
 							else{
-									codigo.genIns("desapila-dir",TS.dirID(lex)+(n-1)); // +(n-1)
+									codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
 									etq ++;
 							}
 						}
@@ -1017,39 +1023,55 @@ public class Sintactico{
 				tk = lexico.getNextToken();
 				String i = tk.getLexema();
 				System.out.println("Toy aki");
-				if (tk.getCategoriaLexica()!=Tipos.TKCAP){
+				if (tk.getCategoriaLexica() != Tipos.TKCAP){
 					if (TS.existeID(i) ){
 						a.setTipo(TS.getTipo(i));
-						
 					} 
 					else {
 						a.setTipo("error");
 					}
-					codigo.genIns("apila-dir",TS.dirID(i));
+					codigo.genIns("apila-dir",TS.getDir(i));
 					etq ++;
 				}
 				else{
 					Token al = lexico.lexer();
 					System.out.println(al.muestraToken()+" ya reconozco edl nombnre del array");
-					atrDeExp = Exp();
-					if (atrDeExp.getTipo().equals("int")){
-						lexico.lexer();
-						if (lexico.reconoce(Tipos.TKCCI)){
-							if (TS.existeID(i) && ((TS.getTipo(i)).equals("array"))){
-								a.setTipo(i);
-							}
-							a.setTbase("error");
-							a.setI(-1);
+					int n;
+					if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
+						System.out.println("Q me duele?");
+						tk = lexico.lexer();
+						n = Integer.parseInt(tk.getLexema());
+						System.out.println(tk.muestraToken());
+						System.out.println(n);
+					}
+					else{
+						atrDeExp = Exp();
+						if (atrDeExp.getTipo().equals("int")){
+							n = Integer.parseInt(atrDeExp.getIden());
 						}
 						else{
-							a.setTipo("error"); 
+							throw new Exception("ERROR: El indice del array no es un entero");
 						}
+					}	
+					System.out.println(TS.getTam(i));
+					if ( n > TS.getTam(i)){
+						System.out.println("El numero es");
+						System.out.println(n);
+						throw new Exception("ERROR: array overflow");
+					}
+					lexico.lexer();
+					if (lexico.reconoce(Tipos.TKCCI)){
+						if (TS.existeID(i) && ((TS.getTipo(i)).equals("array"))){
+							a.setTipo(i);
+						}
+						a.setTbase("error");
+						a.setI(1);
 					}
 					else{
 						a.setTipo("error"); 
 					}
 				}
-			}
+			}	
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
 					atrDeExpC = ExpC();

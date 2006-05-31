@@ -1,11 +1,11 @@
 package tablaSimbolos;
 /**
- * La clase <B>Par</B> define los atributos y métodos relacionados con los identificadores reconocidos. Los elementos de esta clase serán almacenados en la tabla de símbolos
+ * La clase <B>Par</B> define los atributos y mtodos relacionados con los identificadores reconocidos. Los elementos de esta clase sern almacenados en la tabla de smbolos
  * <P>Los atributos que tiene esta clase son los siguientes:
  * <UL><LI><CODE>id:</CODE> String que almacena el nombre del identificador</LI>
  * <LI><CODE>tipo:</CODE> String que almacena el tipo del identificador.</LI></UL></P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
  *
  */
 public class Par {
@@ -31,18 +31,19 @@ public class Par {
 	}
 
 	/**
-	 * Constructor de la clase Par con valores de inicialización recibidos por parámetro
+	 * Constructor de la clase Par con valores de inicializacin recibidos por parmetro
 	 * 
 	 * @param id String con el nombre del identificador.
 	 * @param tipo String con el tipo del identificador.
 	 *  
 	 */
-	public Par(String id, String tipo, String tbase, int i) {
+	public Par(String id, String tipo, String tbase, int i, int dir) {
 		super();
 		this.id = id;
 		this.tipo = tipo;
 		this.tbase = tbase;
 		this.i = i;
+		this.dir = dir;
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class Par {
 	}
 
 	/**
-	 * El método toString pasa a String la clase Par para poder mostrarla por pantalla.
+	 * El mtodo toString pasa a String la clase Par para poder mostrarla por pantalla.
 	 * @return String que contiene un par para poderlo mostrar por pantalla.
 	 */
 	public String toString(){

@@ -69,9 +69,9 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * Este método devuelve el tipo de un identificador que le llega por párametro. Y el resultado lo devuelve como un String.
+	 * Este mtodo devuelve el tipo de un identificador que le llega por prametro. Y el resultado lo devuelve como un String.
 	 * @param id Identificador sobre el cual se va a buscar su tipo.
-	 * @return String que devuelve el tipo asociado al id que entra como parámetro.
+	 * @return String que devuelve el tipo asociado al id que entra como parmetro.
 	 */
 	public String getTipo(String id){
 		if (this.tabla.containsKey(id))
@@ -80,6 +80,19 @@ public class TablaSimbolos {
 			return null;
 	}
 	
+	public int getDir(String id){
+		if (this.tabla.containsKey(id))
+			return ((Par)this.tabla.get(id)).getDir();// Devolver la dir...
+		else
+			return -1;
+	}
+	
+	public int getTam(String id){
+		if (this.tabla.containsKey(id))
+			return ((Par)this.tabla.get(id)).getI();// Devolver el tamaÃ±o...
+		else
+			return -1;
+	}
 	/**
 	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador con ese nombre 
 	 * El valor de la clave en la tabla hash es znico, ya que concatenamos el nombre del identificador con el tipo usando 
@@ -92,19 +105,19 @@ public class TablaSimbolos {
 	 * @exception Exception Porque no se puede duplicar un identificador
 	 * 
 	 */
-	public boolean agnadeID(String id, String t, String tb, int i) throws Exception{
+	public boolean agnadeID(String id, String t, String tb, int i, int dir) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			Par p = new Par(id,t, tb, i);
+			Par p = new Par(id,t, tb, i, dir);
 			this.tabla.put(id,p);
 			return true;	
 		}	
 	}
 
 	/**
-	 * El método eliminaID elimina un identificador 'id' de la tabla si existe. 
+	 * El mtodo eliminaID elimina un identificador 'id' de la tabla si existe. 
 	 * Si no, lanzara una excepcion.
 	 * 
 	 * @param id String que tienen almacenado el nombre del identificador
@@ -123,7 +136,7 @@ public class TablaSimbolos {
 	}
 	
 	/**
-	 * El método muestra se usa para mostrar por pantalla la tabla de smbolos actual.
+	 * El mtodo muestra se usa para mostrar por pantalla la tabla de smbolos actual.
 	 */
 	public void muestra(){
 		String aux = this.tabla.toString();

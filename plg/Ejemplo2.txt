@@ -1,9 +1,11 @@
 int a;
 bool b;
 maria = array [2] of bool;
-maria s
+maria s;
+int c
 #
-b := false;
 a := 1;
-s[0] := true;
-s[1] := s[a];
+b := 7;
+c := 3;
+s[0] := false;
+s[1] := 5;
