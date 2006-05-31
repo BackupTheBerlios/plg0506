@@ -8,4 +8,5 @@ a := 1;
 b := true;
 c := 3;
 s[0] := false;
-s[1] := 7;
+s[1] := true;
+while 7 do c:= c+1;

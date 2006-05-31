@@ -120,7 +120,12 @@ public class Sintactico{
 		a.setTipo("");
 		return a;
     }
-
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributos Dec() throws Exception{
 		Atributos a = new Atributos();
 		boolean errDeDec = false;
