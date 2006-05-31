@@ -107,5 +107,11 @@ public class Atributos {
 		this.tbase = tbase;
 	}
 	
-	
+	public void props(Atributos a){
+		this.err = a.getErr();
+		this.tipo = a.getTipo();
+		this.iden = a.getIden();
+		this.tbase = a.getTbase();
+		this.i = a.getI();
+	}
 }

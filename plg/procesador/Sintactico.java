@@ -47,7 +47,6 @@ public class Sintactico{
 		codigo = new Codigo(f);
 		lexico = new Lexico(fuente);		
 		TS = T;
-		dir = 0;
 	}
 
 	/**
@@ -85,13 +84,11 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	public boolean Prog() throws Exception{
-		boolean errDeProg = true;
-		Atributos atrDeDecs;
-		Atributos atrDeIs;
 		etq = 0;
-		atrDeDecs = Decs();
-		atrDeIs = Is();
-		errDeProg = atrDeDecs.getErr() || atrDeIs.getErr();
+		dir = 0;
+		Atributos atrDeDecs = Decs();
+		Atributos atrDeIs = Is();
+		boolean errDeProg = atrDeDecs.getErr() || atrDeIs.getErr();
 		return errDeProg;	
 	}
 	
@@ -104,29 +101,18 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Atributos Decs() throws Exception{
-		Atributos atrDeDecs;
-		Atributos atrDeDec;
 		Atributos a = new Atributos();
-		boolean errDeDecs = false;
-		atrDeDec = Dec();
+		Atributos atrDeDec = Dec();
 		TS.agnadeID(atrDeDec.getIden(),atrDeDec.getTipo(),atrDeDec.getTbase(),atrDeDec.getI(),dir);
-		errDeDecs = atrDeDec.getErr();
+		boolean errDeDecs = atrDeDec.getErr();
 		dir = dir + atrDeDec.getI();
 		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
-			atrDeDecs = Decs();
+			Atributos atrDeDecs = Decs();
 			errDeDecs = errDeDecs || atrDeDecs.getErr();
-			a.setErr(errDeDecs);
-			a.setTipo("");
-			return a;
 		}
 		else{
-			if (lexico.reconoce(Tipos.TKCUA)){
-				a.setErr(errDeDecs);
-				a.setTipo("");
-				return a;
-			}
-			else{
+			if (!lexico.reconoce(Tipos.TKCUA)){
 				errDeDecs = true;
 			}
 		}
@@ -136,27 +122,19 @@ public class Sintactico{
     }
 
 	public Atributos Dec() throws Exception{
-		Atributos atrDeDecVar;
-		Atributos atrDeDecTipo;
 		Atributos a = new Atributos();
 		boolean errDeDec = false;
 		Token tk = lexico.getNextToken();
 		if (TS.existeID(tk.getLexema()) || tk.equals(new Token("int",Tipos.TKINT)) || tk.equals(new Token("bool",Tipos.TKBOOL))){
-			atrDeDecVar = DecVar();
-			errDeDec = TS.existeID(atrDeDecVar.getIden());
-			a.setIden(atrDeDecVar.getIden());
-			a.setTipo(atrDeDecVar.getTipo());
-			a.setTbase(atrDeDecVar.getTbase());
-			a.setI(atrDeDecVar.getI());
+			Atributos atrDeDecVar = DecVar();
+			errDeDec = TS.existeID(atrDeDecVar.getIden()); //Esto creo q no está bien, lo comprobamos arriba, y sino
+			a.props(atrDeDecVar);
 			a.setErr(errDeDec);
 		}
 		else{
-			atrDeDecTipo = DecTipo();
+			Atributos atrDeDecTipo = DecTipo();
 			errDeDec = TS.existeID(atrDeDecTipo.getIden());
-			a.setIden(atrDeDecTipo.getIden());
-			a.setTipo(atrDeDecTipo.getTipo());
-			a.setTbase(atrDeDecTipo.getTbase());
-			a.setI(atrDeDecTipo.getI());
+			a.props(atrDeDecTipo);
 			a.setErr(errDeDec);
 		}
 		return a;
