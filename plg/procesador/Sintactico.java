@@ -149,96 +149,77 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		a.setErr(false);
 		Token tk = lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKIDEN)){
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+		}
+		String i = tk.getLexema();
+		if(TS.existeID(i)){
+			a.setErr(true);
+			throw new Exception("ERROR: Identificador duplicado.");
+		}	
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKIG)){
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");			
+		}	
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKARRAY)){
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+		}
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKCAP)){
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+		}
+		tk = lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKNUM)){
+			a.setErr(true);
+			throw new Exception("ERROR: El rango es un numero. El formato correcto es: iden = array [numero] of Tipo");
+		}	
+		int n = Integer.parseInt(tk.getLexema());
+		if (n <= 0){
+			a.setErr(true);
+			throw new Exception("ERROR: El rango debe ser un natural mayor que 0. El formato correcto es: iden = array [entero] of Tipo");
+		}
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKCCI)){
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+		}
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKOF)){
+			a.setErr(true);
+			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+		}
+		tk = lexico.lexer();
+		String t = tk.getLexema();
+		System.out.println("Llegue ");
 		if (lexico.reconoce(Tipos.TKIDEN)){
-			String i = tk.getLexema();
-			lexico.lexer();
-			if (lexico.reconoce(Tipos.TKIG)){
-				lexico.lexer();
-				if (lexico.reconoce(Tipos.TKARRAY)){
-					lexico.lexer();
-					if (lexico.reconoce(Tipos.TKCAP)){
-						tk = lexico.lexer();
-						if (lexico.reconoce(Tipos.TKNUM)){
-							int n = Integer.parseInt(tk.getLexema());
-							if (! (n <= 0)){
-								lexico.lexer();
-								if (lexico.reconoce(Tipos.TKCCI)){
-									lexico.lexer();
-									if (lexico.reconoce(Tipos.TKOF)){
-										tk = lexico.lexer();
-										String t = tk.getLexema();
-										if (lexico.reconoce(Tipos.TKIDEN)){
-											a.setTipo("array");
-											a.setI(n+1);
-											a.setTbase(t);
-											a.setIden(i);
-											if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array")) && TS.existeID(i)){
-												a.setErr(true);
-												throw new Exception("ERROR: Identificador duplicado.");
-											}
-											else{
-												a.setErr(true);
-											}
-										}
-										else{
-											if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
-												a.setTipo("array");
-												a.setI(n);
-												a.setTbase(t);
-												a.setIden(i);
-												if (TS.existeID(i)){
-													a.setErr(true);
-													throw new Exception("ERROR: Identificador duplicado.");
-												}
-											}
-											else{
-												a.setErr(true);
-												throw new Exception("ERROR: Tipo no definido.");
-											}	
-										}
-									}
-									else{
-										a.setErr(true);
-										throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-									}
-								}
-								else{
-									a.setErr(true);
-									throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-								}
-							}
-							else{
-								a.setErr(true);
-								throw new Exception("ERROR: El rango debe ser un natural mayor que 0. El formato correcto es: iden = array [entero] of Tipo");
-							}
-						}
-						else{
-							a.setErr(true);
-							throw new Exception("ERROR: El rango es un numero. El formato correcto es: iden = array [numero] of Tipo");
-						}	
-					}
-					else{
-						a.setErr(true);
-						throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-					}
-				}
-				else{
-					a.setErr(true);
-					throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-				}
-			}
-			else{
+			a.setTipo("array");
+			a.setI(n+1);
+			a.setTbase(t);
+			a.setIden(i);
+			if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array")) && TS.existeID(i)){
 				a.setErr(true);
-				throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+				throw new Exception("ERROR: Identificador duplicado.");
 			}
 		}
 		else{
-			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-		}		
+			if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
+				a.setTipo("array");
+				a.setI(n);
+				a.setTbase(t);
+				a.setIden(i);
+			}
+			else{
+				a.setErr(true);
+				throw new Exception("ERROR: Tipo no definido.");
+			}	
+		}
 		return a;
-	}
-	
+	}	
 	/**
 	 * Procesa una declaracisn de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
 	 * y su nombre, de la forma: 
@@ -251,39 +232,34 @@ public class Sintactico{
 		boolean errDeDec;
 		Atributos a = new Atributos();
 		String t = "";
-		Token tk;
-		tk = lexico.lexer();
+		Token tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
 			t = tk.getLexema();
 			tk = lexico.lexer();
-			if (lexico.reconoce(Tipos.TKIDEN)){
-				String i = tk.getLexema();
-				a.setIden(i);
-				a.setTipo(t);
-				a.setTbase("error");
-				a.setI(1);
-				errDeDec = false;
-			}
-			else{
+			if (!lexico.reconoce(Tipos.TKIDEN)){
 				errDeDec = true;
 				throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
-			}
+			}	
+			String i = tk.getLexema();
+			a.setIden(i);
+			a.setTipo(t);
+			a.setTbase("error");
+			a.setI(1);
+			errDeDec = false;
 		}
 		else{
 			t = tk.getLexema();
 			tk = lexico.lexer();
-			if (lexico.reconoce(Tipos.TKIDEN)){
-				String i = tk.getLexema();
-				a.setIden(i);
-				a.setTipo(t);
-				a.setTbase("error");
-				a.setI(TS.getTam(i));
-				errDeDec = false;
-			}
-			else{
+			if (!lexico.reconoce(Tipos.TKIDEN)){
 				errDeDec = true;
 				throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
 			}
+			String i = tk.getLexema();
+			a.setIden(i);
+			a.setTipo(t);
+			a.setTbase("error");
+			a.setI(TS.getTam(i));
+			errDeDec = false;
 		}
 		a.setErr(errDeDec);
 		a.setTipo(t);
@@ -308,17 +284,15 @@ public class Sintactico{
 			errDeIs = false;	
 		}
 		else{
-			if (lexico.reconoce(Tipos.TKPYCOMA)){
-				atrDeIs = Is();
-				errDeIs = atrDeI.getErr() || atrDeIs.getErr();
-				a.setErr(errDeIs);
-				a.setTipo(atrDeI.getTipo());
-				return a;
-			}
-			else{
+			if (!lexico.reconoce(Tipos.TKPYCOMA)){
 				errDeIs = true;
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
+			atrDeIs = Is();
+			errDeIs = atrDeI.getErr() || atrDeIs.getErr();
+			a.setErr(errDeIs);
+			a.setTipo(atrDeI.getTipo());
+			return a;	
 		}
 		a.setErr(errDeIs);
 		return a;	
@@ -345,12 +319,14 @@ public class Sintactico{
 			if (lexico.reconoce(Tipos.TKIF)){
 				atrDeIns = IIf();
 			}
-			else if(lexico.reconoce(Tipos.TKWHL)){
+			else{
+				if(lexico.reconoce(Tipos.TKWHL)){
 					atrDeIns = IWhile();
 				}
-			else{
-				atrDeIns = IAsig();
-			}
+				else{
+					atrDeIns = IAsig();
+				}
+			}	
 		}
 		a.setErr(atrDeIns.getErr());
 		return a;
@@ -364,22 +340,19 @@ public class Sintactico{
 
 	public Atributos ICompuesta() throws Exception{
 		Atributos a = new Atributos();
-		Atributos atrDeIns;
-		atrDeIns = IsOpc();
-		if (lexico.reconoce(Tipos.TKEND)){
-			lexico.lexer();
-			if (! (lexico.reconoce(Tipos.TKPYCOMA))){
-				a.setErr(true);
-				throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
-			}
-			else {
-				a.setErr(atrDeIns.getErr());
-			}	
-		}
-		else {
+		Atributos atrDeIns = IsOpc();
+		if (!lexico.reconoce(Tipos.TKEND)){
 			a.setErr(true);
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
+		lexico.lexer();
+		if (! (lexico.reconoce(Tipos.TKPYCOMA))){
+			a.setErr(true);
+			throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
+		}
+		else {
+			a.setErr(atrDeIns.getErr());
+		}	
 		return a;	
 	}
 	
@@ -480,23 +453,19 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
 			Token tk;
 			tk = lexico.getNextToken();
-			if (tk.equals(new Token ("else",Tipos.TKELS))){
-				lexico.lexer();
-				atrDeIns = I();
-				a.setErr(atrDeIns.getErr());
-			}
-			else{
+			if (!tk.equals(new Token ("else",Tipos.TKELS))){
 				a.setErr(true);
 			}
+			lexico.lexer();
+			atrDeIns = I();
+			a.setErr(atrDeIns.getErr());	
 		}
 		else{
-			if (lexico.reconoce(Tipos.TKELS)){
-				atrDeIns = I();
-				a.setErr(atrDeIns.getErr());
-			}
-			else{
+			if (!lexico.reconoce(Tipos.TKELS)){
 				a.setErr(true);
 			}
+			atrDeIns = I();
+			a.setErr(atrDeIns.getErr());
 		}	
 		return a;	
 	}
