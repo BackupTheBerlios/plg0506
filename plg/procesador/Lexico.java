@@ -519,7 +519,6 @@ public class Lexico {
 							else{
 								posicion --;
 								fuente.seek(posicion);
-								System.out.println("HE LEIDO UN DO");
 								return new Token ("do",Tipos.TKDO);
 							}
 						}	
@@ -1209,7 +1208,6 @@ public class Lexico {
 			if (a!='['){
 				if (a!=']'){	
 					if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-						System.out.println(new Character(a).toString());
 						aux = aux.concat(new Character(a).toString());			
 					}
 					else{

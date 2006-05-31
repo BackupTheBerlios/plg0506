@@ -80,6 +80,13 @@ public class TablaSimbolos {
 			return null;
 	}
 	
+	public String getTBase(String id){
+		if (this.tabla.containsKey(id))
+			return ((Par)this.tabla.get(id)).getTbase();// Devolver el tipo base...
+		else
+			return null;
+	}
+	
 	public int getDir(String id){
 		if (this.tabla.containsKey(id))
 			return ((Par)this.tabla.get(id)).getDir();// Devolver la dir...

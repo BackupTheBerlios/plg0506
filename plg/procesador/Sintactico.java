@@ -33,7 +33,7 @@ public class Sintactico{
 	Lexico lexico;
 	TablaSimbolos TS;
 	int dir;
-	int etq;//,etqs1,etqs2;
+	int etq;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -71,7 +71,9 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public void startParsing() throws Exception{
-		Prog();
+		if (Prog()){
+			throw new Exception("El programa contiene errores de tipo");
+		}
 		codigo.muestraCodigo();
 	}
 
@@ -111,7 +113,6 @@ public class Sintactico{
 		errDeDecs = atrDeDec.getErr();
 		dir = dir + atrDeDec.getI();
 		lexico.lexer();
-		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
 			atrDeDecs = Decs();
 			errDeDecs = errDeDecs || atrDeDecs.getErr();
@@ -281,11 +282,9 @@ public class Sintactico{
 		String t = "";
 		Token tk;
 		tk = lexico.lexer();
-		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
 			t = tk.getLexema();
 			tk = lexico.lexer();
-			System.out.println(lexico.getLookahead().muestraToken());
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				String i = tk.getLexema();
 				a.setIden(i);
@@ -302,7 +301,6 @@ public class Sintactico{
 		else{
 			t = tk.getLexema();
 			tk = lexico.lexer();
-			System.out.println(lexico.getLookahead().muestraToken());
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				String i = tk.getLexema();
 				a.setIden(i);
@@ -348,7 +346,6 @@ public class Sintactico{
 			}
 			else{
 				errDeIs = true;
-				System.out.println("Toy llegando aqui");
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
 		}
@@ -369,10 +366,7 @@ public class Sintactico{
 		 * - {I.err= Iif.err;}*/
 		Atributos a = new Atributos();
 		Atributos atrDeIns = null;
-		Token tk = lexico.lexer();
-		System.out.println(lexico.getLookahead().muestraToken());
-		System.out.println("Comienzo nueva instruccion");
-		System.out.println(tk.muestraToken());
+		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
 		}
@@ -401,24 +395,17 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
 		atrDeIns = IsOpc();
-		System.out.println("Llego al end");
-		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKEND)){
-			System.out.println("Es el end");
 			lexico.lexer();
-			System.out.println(lexico.getLookahead().muestraToken());
 			if (! (lexico.reconoce(Tipos.TKPYCOMA))){
-				System.out.println("no es ;");	
 				a.setErr(true);
 				throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
 			}
 			else {
-				System.out.println("Es el ;");
 				a.setErr(atrDeIns.getErr());
 			}	
 		}
 		else {
-			System.out.println("no Es el end");
 			a.setErr(true);
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
@@ -434,11 +421,8 @@ public class Sintactico{
 		Atributos atrDeIsOpc;
 		Atributos atrDeI;
 		Atributos a = new Atributos();
-		System.out.println("Estoy en IsOpc");
 		boolean errDeIsOpc = false;
 		atrDeI = I();
-		System.out.println("salgo de I en isopc");
-		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKFF)){
 			errDeIsOpc = true;	
 		}
@@ -447,30 +431,20 @@ public class Sintactico{
 				Token tk;
 				tk = lexico.getNextToken();
 				if (tk.equals(new Token("end",Tipos.TKEND))){
-					System.out.println("reconozco el end");
 					tk = lexico.lexer();
-					System.out.println(tk.muestraToken());
 					a.setErr(errDeIsOpc);
 					a.setTipo(atrDeI.getTipo());
 					return a;
 				}
 				else{
-					System.out.println("no reconozco el end");
 					atrDeIsOpc = IsOpc();
 					errDeIsOpc = atrDeI.getErr() || atrDeIsOpc.getErr();
-					//lexico.lexer();System.out.println(lexico.getLookahead());
 				}	
 			}
 			else{
-				/*if (lexico.reconoce(Tipos.TKEND)){
-					errDeIsOpc = false;
-					
-				}
-				else {*/
-					errDeIsOpc=true;
-					a.setTipo("");
-					throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Todo begin debe llevar end.");
-				//}
+				errDeIsOpc=true;
+				a.setTipo("");
+				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Todo begin debe llevar end.");
 			}
 		}
 		a.setErr(errDeIsOpc);
@@ -500,20 +474,16 @@ public class Sintactico{
 		Atributos atrDePElse;
 		int etqs1;
 		int etqs2;
-		System.out.println("Llego a IIF");
 		atrDeExpC = ExpC();
-		System.out.println("IIF - Salgo de ExpC");
 		if (lexico.reconoce(Tipos.TKTHN)){
-			System.out.println("Reconozco Then");	
 			codigo.emite("ir-f");
 			etqs1 = etq; 
 			etq ++;
 			atrDeI = I();
 			codigo.emite("ir-a");
 			etqs2 = etq;
-			etq ++; // esto estaba debajo del parchea
+			etq ++;
 			codigo.parchea(etqs1,etq);
-			System.out.println(lexico.getLookahead().muestraToken());
 			atrDePElse = PElse();
 			codigo.parchea(etqs2,etq);
 		}
@@ -522,8 +492,6 @@ public class Sintactico{
 			return a;
 		}	
 		a.setErr(atrDeI.getErr() || atrDePElse.getErr() || atrDeExpC.getErr());
-		System.out.println("El token ultimo q lee el if es");
-		System.out.println(lexico.getLookahead().muestraToken());
 		return a;	
 	}
 	
@@ -535,17 +503,12 @@ public class Sintactico{
 	public Atributos PElse() throws Exception{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;
-		System.out.println("Inicio PElse");
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
-				//a.setErr(false);
 			Token tk;
 			tk = lexico.getNextToken();
 			if (tk.equals(new Token ("else",Tipos.TKELS))){
 				lexico.lexer();
-				System.out.println("PElse - Me voy a I");
 				atrDeIns = I();
-				System.out.println("PElse - Salgo de  I");
-				System.out.println(lexico.getLookahead().muestraToken());
 				a.setErr(atrDeIns.getErr());
 			}
 			else{
@@ -554,10 +517,7 @@ public class Sintactico{
 		}
 		else{
 			if (lexico.reconoce(Tipos.TKELS)){
-				System.out.println("PElse - Me voy a I");
 				atrDeIns = I();
-				System.out.println("PElse - Salgo de  I");
-				System.out.println(lexico.getLookahead().muestraToken());
 				a.setErr(atrDeIns.getErr());
 			}
 			else{
@@ -587,17 +547,12 @@ public class Sintactico{
 		Atributos atrDeI;
 		int etqb = etq;
 		int etqs;
-		System.out.println("Llego a IWhile");
 		atrDeExpC = ExpC();
-		System.out.println("IWhile - Salgo de ExpC");
 		if (lexico.reconoce(Tipos.TKDO)){
-			System.out.println("Reconozco el 'do'");	
 			codigo.emite("ir-f");
 			etqs = etq; 
 			etq ++;
-			System.out.println("Ejecuto la instruccion.  ETQ = " + etq);
 			atrDeI = I();
-			System.out.println("VUelvo de la Instruccion. ETQ = " + etq);
 			codigo.emite("ir-a " + etqb);
 			etq ++;
 			codigo.parchea(etqs,etq);
@@ -607,8 +562,6 @@ public class Sintactico{
 			return a;
 		}	
 		a.setErr(atrDeI.getErr() || atrDeExpC.getErr());
-		System.out.println("El token ultimo q lee el WHILE es");
-		System.out.println(lexico.getLookahead().muestraToken());
 		return a;	
 	}
 	
@@ -636,12 +589,14 @@ public class Sintactico{
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			tk = lexico.lexer();
 			System.out.println(lexico.getLookahead().muestraToken());
+			System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
+			tk = lexico.lexer();
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
 				errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTipo(lex))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error")));
-				System.out.println(errDeIAsig);
+				System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
+				System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
 					errDeIAsig = true;
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
@@ -654,7 +609,6 @@ public class Sintactico{
 			else{
 				if (lexico.reconoce(Tipos.TKCAP)){
 					tk = lexico.lexer();
-					System.out.println(lexico.getLookahead().muestraToken());
 					int n;
 					if (lexico.reconoce(Tipos.TKNUM)){
 						n= Integer.parseInt(tk.getLexema());
@@ -670,25 +624,26 @@ public class Sintactico{
 						}
 					}
 					if (n>TS.getTam(TS.getTipo(lex))){
-						System.out.println("El numero es");
-						System.out.println(n);
+						errDeIAsig = true;
 						throw new Exception("ERROR: array overflow");
 					}
 					tk = lexico.lexer();
-					System.out.println(lexico.getLookahead().muestraToken());
 					if (lexico.reconoce(Tipos.TKCCI)){
 						tk = lexico.lexer();
-						System.out.println(lexico.getLookahead().muestraToken());
 						if (lexico.reconoce(Tipos.TKASIGN)){
 							atrDeExpC = ExpC();
-							errDeIAsig = (atrDeExpC.getTipo().compareTo(TS.getTipo(lex)) != 0 ) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().compareTo("error")== 0 );
+							System.out.println(lexico.getLookahead().muestraToken());
+							errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTBase(TS.getTipo(lex))))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error"));
+							System.out.println(TS.getTBase(TS.getTipo(lex)));
+							System.out.println("Estoy en IAsig - 2 -"+errDeIAsig);
+							System.out.println(atrDeExpC.getTipo());
 							if (!(TS.existeID(lex))){
 								errDeIAsig = true;
 								throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 							}
 							else{
-									codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
-									etq ++;
+								codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
+								etq ++;
 							}
 						}
 						else{
@@ -731,16 +686,13 @@ public class Sintactico{
 	public Atributos ExpC() throws Exception{
 		Atributos atrDeExp;
 		Atributos atrDeRExpC;
-		System.out.println("ExpC - Inicio me voy a Exp");
 		atrDeExp = Exp();
-		System.out.println("EXPC - Vengo de Exp, me voy a RExpC");
 		Atributos a = new Atributos();
 		atrDeRExpC = RExpC();
-		System.out.println("ExpC - Vengo de RExpC");
-		if ( atrDeExp.getTipo().compareTo(atrDeRExpC.getTipo()) == 0){
-			if (atrDeExp.getTipo().compareTo("int") == 0)
+		if ( atrDeExp.getTipo().equals(atrDeRExpC.getTipo())){
+			if (atrDeExp.getTipo().equals("int"))
 					a.setTipo("int");
-			else if (atrDeExp.getTipo().compareTo("bool") == 0)
+			else if (atrDeExp.getTipo().equals("bool"))
 					a.setTipo("bool");
 			else a.setTipo("error");
 		}
@@ -863,7 +815,8 @@ public class Sintactico{
 					} else {
 						a.setTipo("error");
 					}
-				} else if (booleano){
+				} 
+				else if (booleano){
 					if ( atrDeTerm.getTipo().equals("bool") && atrDeTerm.getTipo().equals(atrDeRExp.getTipo()) ){
 						a.setTipo("bool");
 					} else {
@@ -919,7 +872,6 @@ public class Sintactico{
 		Atributos a = new Atributos();
 		Token tk;
 		tk = lexico.lexer();
-		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
 			a.setErr(true);
 			a.setTipo("");
@@ -984,7 +936,6 @@ public class Sintactico{
 		Atributos atrDeFact;
 		Token tk;
 		tk = lexico.lexer();
-		System.out.println(lexico.getLookahead().muestraToken());
 		if (lexico.reconoce(Tipos.TKNUM)){
 			a.setTipo("int");
 			codigo. genIns("apila", Integer.parseInt(tk.getLexema()) );
@@ -1022,7 +973,6 @@ public class Sintactico{
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				tk = lexico.getNextToken();
 				String i = tk.getLexema();
-				System.out.println("Toy aki");
 				if (tk.getCategoriaLexica() != Tipos.TKCAP){
 					if (TS.existeID(i) ){
 						a.setTipo(TS.getTipo(i));
@@ -1034,15 +984,11 @@ public class Sintactico{
 					etq ++;
 				}
 				else{
-					Token al = lexico.lexer();
-					System.out.println(al.muestraToken()+" ya reconozco edl nombnre del array");
+					lexico.lexer();
 					int n;
 					if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
-						System.out.println("Q me duele?");
 						tk = lexico.lexer();
 						n = Integer.parseInt(tk.getLexema());
-						System.out.println(tk.muestraToken());
-						System.out.println(n);
 					}
 					else{
 						atrDeExp = Exp();
@@ -1053,10 +999,7 @@ public class Sintactico{
 							throw new Exception("ERROR: El indice del array no es un entero");
 						}
 					}	
-					System.out.println(TS.getTam(i));
 					if ( n > TS.getTam(i)){
-						System.out.println("El numero es");
-						System.out.println(n);
 						throw new Exception("ERROR: array overflow");
 					}
 					lexico.lexer();

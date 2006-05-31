@@ -5,7 +5,7 @@ maria s;
 int c
 #
 a := 1;
-b := 7;
+b := true;
 c := 3;
 s[0] := false;
-s[1] := 5;
+s[1] := 7;
