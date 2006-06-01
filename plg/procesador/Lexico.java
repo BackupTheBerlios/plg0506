@@ -1232,8 +1232,8 @@ public class Lexico {
 	}
 	
 	/**
-	 * El m?todo getNextToken devuelve el siguiente Token para poder realizar el preanlisis. Llama a getToken(). Tambin acutualiza el lookahead de Lexico.
-	 * 
+	 * El m?todo getNextToken devuelve el siguiente Token para poder realizar el preanlisis. 
+	 * No avanza el cursor, sino que s?lo "mira" cu?l es el siguiente Token que leer?a "lexer()"
 	 * @see procesador.Lexico#getToken()
 	 * @return Token actual que ha reconocido.
 	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.

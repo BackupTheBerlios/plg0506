@@ -132,7 +132,7 @@ public class Sintactico{
 		Token tk = lexico.getNextToken();
 		if (TS.existeID(tk.getLexema()) || tk.equals(new Token("int",Tipos.TKINT)) || tk.equals(new Token("bool",Tipos.TKBOOL))){
 			Atributos atrDeDecVar = DecVar();
-			errDeDec = TS.existeID(atrDeDecVar.getIden()); //Esto creo q no está bien, lo comprobamos arriba, y sino
+			errDeDec = TS.existeID(atrDeDecVar.getIden()); //Esto creo q no est?? bien, lo comprobamos arriba, y sino
 			a.props(atrDeDecVar);
 			a.setErr(errDeDec);
 		}
@@ -151,7 +151,7 @@ public class Sintactico{
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKIDEN)){
 			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
 		}
 		String i = tk.getLexema();
 		if(TS.existeID(i)){
@@ -161,17 +161,17 @@ public class Sintactico{
 		lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKIG)){
 			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");			
+			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");			
 		}	
 		lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKARRAY)){
 			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
 		}
 		lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKCAP)){
 			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
 		}
 		tk = lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKNUM)){
@@ -186,12 +186,12 @@ public class Sintactico{
 		lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKCCI)){
 			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
 		}
 		lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKOF)){
 			a.setErr(true);
-			throw new Exception("ERROR: Declaración de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
 		}
 		tk = lexico.lexer();
 		String t = tk.getLexema();
@@ -315,19 +315,18 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
 		}
-		else{
-			if (lexico.reconoce(Tipos.TKIF)){
-				atrDeIns = IIf();
-			}
-			else{
-				if(lexico.reconoce(Tipos.TKWHL)){
-					atrDeIns = IWhile();
-				}
-				else{
-					atrDeIns = IAsig();
-				}
-			}	
+		else if (lexico.reconoce(Tipos.TKIF)){
+			atrDeIns = IIf();
 		}
+		else if (lexico.reconoce(Tipos.TKWHL)){
+				atrDeIns = IWhile();
+			}
+		else if (lexico.reconoce(Tipos.TKPUNT)){
+			atrDeIns = IPointer();
+		}
+		else{
+			atrDeIns = IAsig();
+		}	
 		a.setErr(atrDeIns.getErr());
 		return a;
 	}
@@ -623,6 +622,166 @@ public class Sintactico{
 		return a;
 	}
 
+	/**
+	 * Procesa una instruccisn de asignacisn, de la forma:
+	 * 
+	 * 		pointer identificador := Expresisn.
+	 * 
+	 * Si hay un error en el formato de la instruccisn de asignacisn, o si 
+	 * el tipo del puntero  usado no coincide con el de la expresisn, 
+	 * se lanza una Excepcisn.
+	 * 
+	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
+	 */
+
+	public Atributos IPointer() throws Exception{
+		Atributos  atrDeExpC = new Atributos();
+		Atributos  atrDeExp = new Atributos();
+		Atributos a = new Atributos();
+		boolean errDeIPointer = false;
+		int dirMem;
+		String lex;
+		
+		Token tk;
+		tk = lexico.getLookahead();
+		
+		if (lexico.reconoce(Tipos.TKPUNT)){
+			System.out.println("Tratamos el caso recursivo");
+			//tk = lexico.lexer();
+			if ( !(avanzaPtr())){
+				a.setErr(true);
+				throw new Exception("Despu?s de 'pointer' debe ir una variable de tipo puntero, u otro 'pointer'");
+			}
+			
+			System.out.println("Salimos del tratamiento recursivo");
+			System.out.println("Aqu? tratamos el := y el ExpC ?C?mo hacer lo del tipo?");
+
+			tk = lexico.getLookahead();
+			if (lexico.reconoce(Tipos.TKIDEN)){
+				lex = tk.getLexema();
+				System.out.println(lexico.getLookahead().muestraToken());
+				System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
+				tk = lexico.lexer();
+				if (lexico.reconoce(Tipos.TKASIGN)){
+					atrDeExpC = ExpC();
+					errDeIPointer = (!(atrDeExpC.getTipo().equals(TS.getTBase(lex))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error")));
+					System.out.println("Estoy en IAsig - 1 -"+errDeIPointer);
+					System.out.println(atrDeExpC.getTipo());
+					if (!(TS.existeID(lex))){
+						errDeIPointer = true;
+						throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
+					}
+					else{
+							codigo.genIns("desapila-ind",TS.getDir(lex));
+							etq ++;
+					}
+				}
+				/*else{
+					if (lexico.reconoce(Tipos.TKCAP)){
+						tk = lexico.lexer();
+						int n;
+						if (lexico.reconoce(Tipos.TKNUM)){
+							n= Integer.parseInt(tk.getLexema());
+						}
+						else{
+							atrDeExp = Exp();
+							if (atrDeExp.getTipo().equals("int")){
+								n = Integer.parseInt(atrDeExp.getIden());
+							}	
+							else{
+								errDeIAsig = true;
+								throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+							}
+						}
+						if (n>TS.getTam(TS.getTipo(lex))){
+							errDeIAsig = true;
+							throw new Exception("ERROR: array overflow");
+						}
+						tk = lexico.lexer();
+						if (lexico.reconoce(Tipos.TKCCI)){
+							tk = lexico.lexer();
+							if (lexico.reconoce(Tipos.TKASIGN)){
+								atrDeExpC = ExpC();
+								System.out.println(lexico.getLookahead().muestraToken());
+								errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTBase(TS.getTipo(lex))))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error"));
+								System.out.println(TS.getTBase(TS.getTipo(lex)));
+								System.out.println("Estoy en IAsig - 2 -"+errDeIAsig);
+								System.out.println(atrDeExpC.getTipo());
+								if (!(TS.existeID(lex))){
+									errDeIAsig = true;
+									throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
+								}
+								else{
+									codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
+									etq ++;
+								}
+							}
+							else{
+								errDeIAsig = true;
+								throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+							}
+						}
+						else{
+							errDeIAsig = true;
+							throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+						}
+					}*/
+					else{
+						errDeIPointer = true;
+						throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
+					}
+				}
+			}
+			else{
+				if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){
+					errDeIPointer = true;
+					throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
+				} 
+				else {
+					errDeIPointer = false;
+				}
+			}
+			a.setErr(errDeIPointer);
+
+		return a;
+	}
+
+	
+	private boolean avanzaPtr() throws Exception{
+		
+		Token tk;
+		tk = lexico.lexer(); //getLookahead();
+		System.out.println("Dentro de AvanzaPTR: " + tk.getLexema());
+		
+		if (lexico.reconoce(Tipos.TKIDEN)){
+			//tk = lexico.lexer();
+			System.out.println("Leemos el IDEN dentro de AVANZAPTR:" + tk.getLexema());
+			if (TS.existeID(tk.getLexema()) && TS.getTipo(tk.getLexema()).equals("pointer")){
+				codigo.genIns("apila-dir", TS.dirID(tk.getLexema()));
+				etq ++;
+				
+				System.out.println("HAY QUE DEVOLVER EL TIPO BASE DEL PUNTERO");
+				System.out.println("??? C?MO LO HACEMOS ???");
+				
+				return true;
+			} else {
+				return false;
+			}
+		} else if (lexico.reconoce(Tipos.TKPUNT)) {
+			//tk = lexico.lexer();
+			System.out.println("Leemos el POINTER dentro de AVANZAPTR:" + tk.getLexema());
+			if (avanzaPtr()){
+				codigo.genIns("apila-ind");
+				etq ++;
+				return true;
+			} else {
+				return false;
+			}
+		} else { 
+			return false;
+		}
+	}
 	
 	/**
 	 * Procesa y desarrolla una Expresisn de Comparacisn, ExpC, llamando a Exp y a RExpC, 

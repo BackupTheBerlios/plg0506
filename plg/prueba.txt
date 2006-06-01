@@ -1,0 +1,17 @@
+int a;
+int b;
+int c
+#
+a := 0;
+if a > 1 then
+	b := 10000;
+else
+	b := -7;
+
+while (a < 4) do
+	begin
+		a := a + 1;
+		c := 2 * a;
+		if c > 14 then
+			b := c + b;
+	end;
