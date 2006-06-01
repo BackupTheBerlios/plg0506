@@ -446,7 +446,9 @@ public class Sintactico{
 	 * Pelse ::= else I() 
 	 * PElse ::= ?? {}
 	 */
-	
+	/**
+	 * 
+	 */
 	public Atributos PElse() throws Exception{
 		Atributos a = new Atributos();
 		Atributos atrDeIns;

@@ -534,7 +534,71 @@ public class MaquinaP {
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
+					libera((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("libera")==0){
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("reserva")==0){
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					reserva(); //(new Integer(Integer.parseInt(linea[1]))).intValue()
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("apila-ind")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]);
+					pasos= pasos.concat(" \n");
+					apila_ind();
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("desapila-ind")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]);
+					pasos= pasos.concat(" \n");
+					desapila_ind();
 					if (!pila.empty()){
 						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
 						pasos= pasos.concat(" \n");
@@ -958,6 +1022,62 @@ public class MaquinaP {
 		}
 		else{
 			throw new Exception("ERROR: Ese puntero no existe o no esta inicializado.");
+		}
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public void reserva()throws Exception{
+		
+	}
+	
+	/**
+	 * Para acceder a las partes de las estructuras es necesario dotar a la máquina de capacidad de direccionamiento indirecto. Esto implica las siguientes operaciones:
+
+		? apila-ind: Interpreta el valor d en la cima de la pila como un número de celda en la memoria, y substituye dicho valor por el almacenado en dicha celda.
+			Pila[ST] ? Mem[Pila[ST]]	
+			PC ? PC+1
+		 @throws Exception
+	 */
+	public void apila_ind() throws Exception{
+		int i = ((Integer)pila.pop()).intValue();
+		if ((i>=Mem.size())|| (i<0)){
+			throw new Exception("Posicion de memoria no inicializada");
+		}
+		pila.push(Mem.elementAt(i));
+		PC = PC +1;
+	}
+	
+	/**
+	 * ? despila-ind: Desapila el valor de la cima v y la subcima d, interpreta d como un número de celda en la memoria, y almacena v en dicha celda.
+			Mem[Pila[ST-1]] ? Pila[ST]
+			ST?ST-2
+			PC ? PC+1
+	 *  @throws Exception
+	 */
+	public void desapila_ind() throws Exception{
+		//	Primero comprobamos que la memoria sea suficiente.
+		//Sino lo es aumentamos el tama?o del vector.
+		int d = ((Integer)pila.pop()).intValue();
+		if (d >= 0){
+			if (d>=Mem.size()){
+				aumentoMem(d);
+				Mem.set(d,pila.pop());
+				System.out.println(Mem.elementAt(d)+" "+d);
+			}
+			else{
+				System.out.println("La cima de la Pila es:  "+pila.peek());
+				Mem.set(d,pila.pop());
+				System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
+				//Mem.insertElementAt(pila.elementAt(ST),d);
+			}
+			ST = ST-2;
+			PC = PC + 1;
+		}
+		else{
+			throw new Exception("ERROR: Memoria sin inicializar.");
 		}
 	}
 }
