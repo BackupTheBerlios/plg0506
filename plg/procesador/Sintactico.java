@@ -4,6 +4,7 @@ import java.io.RandomAccessFile;
 
 import maquinaP.Codigo;
 import tablaSimbolos.TablaSimbolos;
+import tablaSimbolos.Par;
 
 /**
  * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
@@ -86,39 +87,87 @@ public class Sintactico{
 	public boolean Prog() throws Exception{
 		etq = 0;
 		dir = 0;
-		Atributos atrDeDecs = Decs();
-		Atributos atrDeIs = Is();
-		boolean errDeProg = atrDeDecs.getErr() || atrDeIs.getErr();
+		Par atrDeDecs = Decs();
+		Par atrDeIs = Is();
+		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); // falta pend
 		return errDeProg;	
 	}
+	
+	/*  
+	 DecVar ::= Tipo iden
+	DecVar.id = iden.lex
+	DecVar.tipo = Tipo.tipo
+		DecVar.err = Tipo.err ∨ existeID(DecTipo.tsh,iden.lex) ∨ referenciaErronea(Tipo1.tipo,Tipoo.tsh)
+	Tipo.tsh = DecTipo.tsh
+	DecVar.pend = Tipo.pend
+
+	   
+	 Tipo ::= int
+	Tipo.tipo = <t:int>
+	Tipo.tipo = <t:num,tam:1>
+		
+	Tipo ::= bool
+	Tipo.tipo = <t:bool>
+	Tipo.tipo = <t:num,tam:1>
+	
+	Tipo ::= iden
+	Tipo.tipo = <t:ref,id:iden.lex>
+	Tipo.tipo= <t:ref,id:iden,lex,tam:Tipo.tsh[iden.lex].tipo.tam>
+	
+	Tipo ::= array [num] of Tipo
+	Tipoo.tipo= <t:array,nelems:valorDe(num.lex),tbase:Tipo1.tipo>
+	Tipo.tipo = <t:array,nelems:valorDe(num.lex),tbase:Tipo.tipo,
+	tam:valorDe(num.lex)*Tipo1.tipo.tam>
+	
+	Tipo ::= pointer Tipo
+	Tipoo.tipo = <t:puntero,tbase:Tipo1.tipo>
+	Tipoo.err = Tipo1.err
+	Tipoo.pend = Tipo1.pend
+	Tipo1.tsh = Tipoo.tsh
+	Tipoo.tipo = <t:puntero,tbase:Tipo.tipo,tam:1>
+	 */
 	
 	/**
 	 * Recorre el conjunto de declaraciones (Dec) una por una.  Si tras una declaracisn encontramos
 	 * un punto y coma (";"), procesamos otra mas.  Si en cambio lo que encontramos es una almohadilla
 	 * ("#"), dejamos de leer Decs.
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos Decs() throws Exception{
-		Atributos a = new Atributos();
-		Atributos atrDeDec = Dec();
-		TS.agnadeID(atrDeDec.getIden(),atrDeDec.getTipo(),atrDeDec.getTbase(),atrDeDec.getI(),dir);
-		boolean errDeDecs = atrDeDec.getErr();
-		dir = dir + atrDeDec.getI();
-		lexico.lexer();
-		if (lexico.reconoce(Tipos.TKPYCOMA)){
-			Atributos atrDeDecs = Decs();
-			errDeDecs = errDeDecs || atrDeDecs.getErr();
+	public Par Decs() throws Exception{
+	/*
+	 * Decs ::= Decs; Dec
+	 * Decso.pend = Decs1.pend ∪ Dec.pend –	(si Dec.props.clase = tipo entonces {Dec.id} si no ∅ ) 
+	 * Decs ::= Dec
+	 * Decs.pend = Dec.pend – (si Dec.props.clase = tipo entonces {Dec.id} 	si no ∅∅)
+	 */
+		Par a = new Par();
+		Par atrDeDec = Dec();
+		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir());
+		dir = dir + atrDeDec.getProps().getTam();
+		if (atrDeDec.getProps().getTipo().equals("error")){
+			a.getProps().setTipo("error");
+		}
+		Token tk = lexico.getNextToken();
+		if (tk.equals(new Token("#", Tipos.TKCUA))){
+			lexico.lexer(); //consumimos #
+			return a;
 		}
 		else{
-			if (!lexico.reconoce(Tipos.TKCUA)){
-				errDeDecs = true;
+			if (tk.equals(new Token(";", Tipos.TKPYCOMA))){
+				Par atrDeDecs = Decs();
+				TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir());
+				if (atrDeDec.getProps().getTipo().equals("error")){
+					a.getProps().setTipo("error");
+				}
+				return a;
+			}
+			else{
+				a.getProps().setTipo("error");
+				return a;
 			}
 		}
-		a.setErr(errDeDecs);
-		a.setTipo("");
-		return a;
     }
 	
 	/**
@@ -126,98 +175,47 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributos Dec() throws Exception{
-		Atributos a = new Atributos();
-		boolean errDeDec = false;
+	public Par Dec() throws Exception{
+		/*
+		 * Dec ::= DecTipo 
+		 * Dec.pend = DecTipo.pend
+		 * 
+		 * Dec ::= DecVar
+		 * Dec.pend = DecVar.pend
+		 */
+		Par a = new Par();
 		Token tk = lexico.getNextToken();
-		if (TS.existeID(tk.getLexema()) || tk.equals(new Token("int",Tipos.TKINT)) || tk.equals(new Token("bool",Tipos.TKBOOL))){
-			Atributos atrDeDecVar = DecVar();
-			errDeDec = TS.existeID(atrDeDecVar.getIden()); //Esto creo q no est?? bien, lo comprobamos arriba, y sino
-			a.props(atrDeDecVar);
-			a.setErr(errDeDec);
+		if (tk.equals(new Token("tipo", Tipos.TKTIPO))){
+			Par atrDeDecTipo = DecTipo();
+			a.setId(atrDeDecTipo.getId());
+			a.setProps(atrDeDecTipo.getProps());
+			a.setClase("tipo");
+			return a;
 		}
-		else{
-			Atributos atrDeDecTipo = DecTipo();
-			errDeDec = TS.existeID(atrDeDecTipo.getIden());
-			a.props(atrDeDecTipo);
-			a.setErr(errDeDec);
+		else {
+			Par atrDeDecVar = DecVar();
+			a.setId(atrDeDecVar.getId());
+			a.setProps(atrDeDecVar.getProps());
+			a.setClase("var");
+			return a;
 		}
-		return a;
 	}
 	
-	public Atributos DecTipo() throws Exception{
-		Atributos a = new Atributos();
-		a.setErr(false);
+	public Par DecTipo() throws Exception{
+		Par a = new Par();
+		lexico.lexer(); // consumimos tipo
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(Tipos.TKIDEN)){
-			a.setErr(true);
-			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception ("ERROR: Necesitas un identificador");
 		}
-		String i = tk.getLexema();
-		if(TS.existeID(i)){
-			a.setErr(true);
-			throw new Exception("ERROR: Identificador duplicado.");
-		}	
-		lexico.lexer();
+		a.setId(tk.getLexema());
+		tk = lexico.lexer(); //consumimos =
 		if (!lexico.reconoce(Tipos.TKIG)){
-			a.setErr(true);
-			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");			
-		}	
-		lexico.lexer();
-		if (!lexico.reconoce(Tipos.TKARRAY)){
-			a.setErr(true);
-			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
+			throw new Exception ("ERROR: Necesitas un =");
 		}
-		lexico.lexer();
-		if (!lexico.reconoce(Tipos.TKCAP)){
-			a.setErr(true);
-			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-		}
-		tk = lexico.lexer();
-		if (!lexico.reconoce(Tipos.TKNUM)){
-			a.setErr(true);
-			throw new Exception("ERROR: El rango es un numero. El formato correcto es: iden = array [numero] of Tipo");
-		}	
-		int n = Integer.parseInt(tk.getLexema());
-		if (n <= 0){
-			a.setErr(true);
-			throw new Exception("ERROR: El rango debe ser un natural mayor que 0. El formato correcto es: iden = array [entero] of Tipo");
-		}
-		lexico.lexer();
-		if (!lexico.reconoce(Tipos.TKCCI)){
-			a.setErr(true);
-			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-		}
-		lexico.lexer();
-		if (!lexico.reconoce(Tipos.TKOF)){
-			a.setErr(true);
-			throw new Exception("ERROR: Declaraci??n de tipo incompleta. El formato correcto es: iden = array [entero] of Tipo");
-		}
-		tk = lexico.lexer();
-		String t = tk.getLexema();
-		System.out.println("Llegue ");
-		if (lexico.reconoce(Tipos.TKIDEN)){
-			a.setTipo("array");
-			a.setI(n+1);
-			a.setTbase(t);
-			a.setIden(i);
-			if (!TS.existeID(t) && !((TS.getTipo(i)).equals("array")) && TS.existeID(i)){
-				a.setErr(true);
-				throw new Exception("ERROR: Identificador duplicado.");
-			}
-		}
-		else{
-			if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
-				a.setTipo("array");
-				a.setI(n);
-				a.setTbase(t);
-				a.setIden(i);
-			}
-			else{
-				a.setErr(true);
-				throw new Exception("ERROR: Tipo no definido.");
-			}	
-		}
+		Par atrDeTipo = Tipo();
+		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
+		a.getProps().setTam(0);
 		return a;
 	}	
 	/**
@@ -225,59 +223,26 @@ public class Sintactico{
 	 * y su nombre, de la forma: 
 	 * 			tipo identificador;
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos DecVar() throws Exception{
-		boolean errDeDec;
-		Atributos a = new Atributos();
-		String t = "";
-		Token tk = lexico.lexer();
-		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
-			t = tk.getLexema();
-			tk = lexico.lexer();
-			if (!lexico.reconoce(Tipos.TKIDEN)){
-				errDeDec = true;
-				throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
-			}	
-			String i = tk.getLexema();
-			a.setIden(i);
-			a.setTipo(t);
-			a.setTbase("error");
-			a.setI(1);
-			errDeDec = false;
-		}
-		else{
-			t = tk.getLexema();
-			tk = lexico.lexer();
-			if (!lexico.reconoce(Tipos.TKIDEN)){
-				errDeDec = true;
-				throw new Exception("ERROR: Declaracion Incorrecta. El formato correcto es \"tipo identificador;\".");
-			}
-			String i = tk.getLexema();
-			a.setIden(i);
-			a.setTipo(t);
-			a.setTbase("error");
-			a.setI(TS.getTam(i));
-			errDeDec = false;
-		}
-		a.setErr(errDeDec);
-		a.setTipo(t);
-		return a;
+	public Par DecVar() throws Exception{
 	}	
 	
+	public Par Tipo() throws Exception{
+	}
 	/**
 	 * Recorre el conjunto de Instrucciones del programa.  Cada instruccion I se separa del conjunto de 
 	 * instrucciones restantes (Is) mediante un punto y coma (";").  Si encontramos el token Fin de Fichero,
 	 * hemos terminado de leer instrucciones. 
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos Is() throws Exception{
-		Atributos atrDeIs;
-		Atributos atrDeI;
-		Atributos a = new Atributos();
+	public Par Is() throws Exception{
+		Par atrDeIs;
+		Par atrDeI;
+		Par a = new Par();
 		boolean errDeIs = false;
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
@@ -301,32 +266,33 @@ public class Sintactico{
 	/**
 	 * Procesa cada instruccion el conjunto de instrucciones del Programa.
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos I() throws Exception{
+	public Par I() throws Exception{
 		/*ahora puede ser ICompuesta, IIf
 		 * las ecs son:
 		 * - {I.err= ICompuesta.err; }
 		 * - {I.err= Iif.err;}*/
-		Atributos a = new Atributos();
-		Atributos atrDeIns = null;
+		Par a = new Par();
+		Par atrDeIns = null;
 		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
 		}
-		else if (lexico.reconoce(Tipos.TKIF)){
-			atrDeIns = IIf();
-		}
-		else if (lexico.reconoce(Tipos.TKWHL)){
-				atrDeIns = IWhile();
-			}
-		else if (lexico.reconoce(Tipos.TKPUNT)){
-			atrDeIns = IPointer();
-		}
 		else{
-			atrDeIns = IAsig();
-		}	
+			if (lexico.reconoce(Tipos.TKIF)){
+				atrDeIns = IIf();
+			}
+			else{
+				if(lexico.reconoce(Tipos.TKWHL)){
+					atrDeIns = IWhile();
+				}
+				else{
+					atrDeIns = IAsig();
+				}
+			}	
+		}
 		a.setErr(atrDeIns.getErr());
 		return a;
 	}
@@ -337,9 +303,9 @@ public class Sintactico{
 	 * {ICompuesta.err=IsOpc.err; }
 	 */
 
-	public Atributos ICompuesta() throws Exception{
-		Atributos a = new Atributos();
-		Atributos atrDeIns = IsOpc();
+	public Par ICompuesta() throws Exception{
+		Par a = new Par();
+		Par atrDeIns = IsOpc();
 		if (!lexico.reconoce(Tipos.TKEND)){
 			a.setErr(true);
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
@@ -360,10 +326,10 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributos IsOpc() throws Exception{
-		Atributos atrDeIsOpc;
-		Atributos atrDeI;
-		Atributos a = new Atributos();
+	public Par IsOpc() throws Exception{
+		Par atrDeIsOpc;
+		Par atrDeI;
+		Par a = new Par();
 		boolean errDeIsOpc = false;
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
@@ -410,11 +376,11 @@ public class Sintactico{
 	 * 			parchea(etqs2,etq); 
 	 * 			}
 	 */
-	public Atributos IIf() throws Exception{
-		Atributos a = new Atributos();
-		Atributos atrDeExpC;
-		Atributos atrDeI;
-		Atributos atrDePElse;
+	public Par IIf() throws Exception{
+		Par a = new Par();
+		Par atrDeExpC;
+		Par atrDeI;
+		Par atrDePElse;
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
@@ -445,12 +411,10 @@ public class Sintactico{
 	 * Pelse ::= else I() 
 	 * PElse ::= ?? {}
 	 */
-	/**
-	 * 
-	 */
-	public Atributos PElse() throws Exception{
-		Atributos a = new Atributos();
-		Atributos atrDeIns;
+	
+	public Par PElse() throws Exception{
+		Par a = new Par();
+		Par atrDeIns;
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
 			Token tk;
 			tk = lexico.getNextToken();
@@ -485,10 +449,10 @@ public class Sintactico{
 	 * 			parchea(etqs,etq); 
 	 * 			}
 	 */
-	public Atributos IWhile() throws Exception{
-		Atributos a = new Atributos();
-		Atributos atrDeExpC;
-		Atributos atrDeI;
+	public Par IWhile() throws Exception{
+		Par a = new Par();
+		Par atrDeExpC;
+		Par atrDeI;
 		int etqb = etq;
 		int etqs;
 		atrDeExpC = ExpC();
@@ -522,14 +486,14 @@ public class Sintactico{
 	 * el tipo del identificador usado no coincide con el de la expresisn, 
 	 * se lanza una Excepcisn.
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 
-	public Atributos IAsig() throws Exception{
-		Atributos  atrDeExpC = new Atributos();
-		Atributos  atrDeExp = new Atributos();
-		Atributos a = new Atributos();
+	public Par IAsig() throws Exception{
+		Par  atrDeExpC = new Par();
+		Par  atrDeExp = new Par();
+		Par a = new Par();
 		boolean errDeIAsig; 
 		String lex = "";
 		Token tk;
@@ -622,179 +586,19 @@ public class Sintactico{
 		return a;
 	}
 
-	/**
-	 * Procesa una instruccisn de asignacisn, de la forma:
-	 * 
-	 * 		pointer identificador := Expresisn.
-	 * 
-	 * Si hay un error en el formato de la instruccisn de asignacisn, o si 
-	 * el tipo del puntero  usado no coincide con el de la expresisn, 
-	 * se lanza una Excepcisn.
-	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
-	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
-	 */
-
-	public Atributos IPointer() throws Exception{
-		Atributos  atrDeExpC = new Atributos();
-		Atributos  atrDeExp = new Atributos();
-		Atributos a = new Atributos();
-		boolean errDeIPointer = false;
-		int dirMem;
-		String lex;
-		
-		Token tk;
-		tk = lexico.getLookahead();
-		
-		if (lexico.reconoce(Tipos.TKPUNT)){
-			System.out.println("Tratamos el caso recursivo");
-			//tk = lexico.lexer();
-			if ( !(avanzaPtr())){
-				a.setErr(true);
-				throw new Exception("Despu?s de 'pointer' debe ir una variable de tipo puntero, u otro 'pointer'");
-			}
-			
-			System.out.println("Salimos del tratamiento recursivo");
-			System.out.println("Aqu? tratamos el := y el ExpC ?C?mo hacer lo del tipo?");
-
-			tk = lexico.getLookahead();
-			if (lexico.reconoce(Tipos.TKIDEN)){
-				lex = tk.getLexema();
-				System.out.println(lexico.getLookahead().muestraToken());
-				System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
-				tk = lexico.lexer();
-				if (lexico.reconoce(Tipos.TKASIGN)){
-					atrDeExpC = ExpC();
-					errDeIPointer = (!(atrDeExpC.getTipo().equals(TS.getTBase(lex))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error")));
-					System.out.println("Estoy en IAsig - 1 -"+errDeIPointer);
-					System.out.println(atrDeExpC.getTipo());
-					if (!(TS.existeID(lex))){
-						errDeIPointer = true;
-						throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
-					}
-					else{
-							codigo.genIns("desapila-ind",TS.getDir(lex));
-							etq ++;
-					}
-				}
-				/*else{
-					if (lexico.reconoce(Tipos.TKCAP)){
-						tk = lexico.lexer();
-						int n;
-						if (lexico.reconoce(Tipos.TKNUM)){
-							n= Integer.parseInt(tk.getLexema());
-						}
-						else{
-							atrDeExp = Exp();
-							if (atrDeExp.getTipo().equals("int")){
-								n = Integer.parseInt(atrDeExp.getIden());
-							}	
-							else{
-								errDeIAsig = true;
-								throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
-							}
-						}
-						if (n>TS.getTam(TS.getTipo(lex))){
-							errDeIAsig = true;
-							throw new Exception("ERROR: array overflow");
-						}
-						tk = lexico.lexer();
-						if (lexico.reconoce(Tipos.TKCCI)){
-							tk = lexico.lexer();
-							if (lexico.reconoce(Tipos.TKASIGN)){
-								atrDeExpC = ExpC();
-								System.out.println(lexico.getLookahead().muestraToken());
-								errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTBase(TS.getTipo(lex))))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error"));
-								System.out.println(TS.getTBase(TS.getTipo(lex)));
-								System.out.println("Estoy en IAsig - 2 -"+errDeIAsig);
-								System.out.println(atrDeExpC.getTipo());
-								if (!(TS.existeID(lex))){
-									errDeIAsig = true;
-									throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
-								}
-								else{
-									codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
-									etq ++;
-								}
-							}
-							else{
-								errDeIAsig = true;
-								throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-							}
-						}
-						else{
-							errDeIAsig = true;
-							throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-						}
-					}*/
-					else{
-						errDeIPointer = true;
-						throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-					}
-				}
-			}
-			else{
-				if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){
-					errDeIPointer = true;
-					throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
-				} 
-				else {
-					errDeIPointer = false;
-				}
-			}
-			a.setErr(errDeIPointer);
-
-		return a;
-	}
-
-	
-	private boolean avanzaPtr() throws Exception{
-		
-		Token tk;
-		tk = lexico.lexer(); //getLookahead();
-		System.out.println("Dentro de AvanzaPTR: " + tk.getLexema());
-		
-		if (lexico.reconoce(Tipos.TKIDEN)){
-			//tk = lexico.lexer();
-			System.out.println("Leemos el IDEN dentro de AVANZAPTR:" + tk.getLexema());
-			if (TS.existeID(tk.getLexema()) && TS.getTipo(tk.getLexema()).equals("pointer")){
-				codigo.genIns("apila-dir", TS.dirID(tk.getLexema()));
-				etq ++;
-				
-				System.out.println("HAY QUE DEVOLVER EL TIPO BASE DEL PUNTERO");
-				System.out.println("??? C?MO LO HACEMOS ???");
-				
-				return true;
-			} else {
-				return false;
-			}
-		} else if (lexico.reconoce(Tipos.TKPUNT)) {
-			//tk = lexico.lexer();
-			System.out.println("Leemos el POINTER dentro de AVANZAPTR:" + tk.getLexema());
-			if (avanzaPtr()){
-				codigo.genIns("apila-ind");
-				etq ++;
-				return true;
-			} else {
-				return false;
-			}
-		} else { 
-			return false;
-		}
-	}
 	
 	/**
 	 * Procesa y desarrolla una Expresisn de Comparacisn, ExpC, llamando a Exp y a RExpC, 
 	 * para empezar a desarrollar el arbol sintactico que reconocera la Expresisn. 
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos ExpC() throws Exception{
-		Atributos atrDeExp;
-		Atributos atrDeRExpC;
+	public Par ExpC() throws Exception{
+		Par atrDeExp;
+		Par atrDeRExpC;
 		atrDeExp = Exp();
-		Atributos a = new Atributos();
+		Par a = new Par();
 		atrDeRExpC = RExpC();
 		if ( atrDeExp.getTipo().equals(atrDeRExpC.getTipo())){
 			if (atrDeExp.getTipo().equals("int"))
@@ -818,13 +622,13 @@ public class Sintactico{
 	 * 
 	 *       OpComp Exp RExpC | landa
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos RExpC() throws Exception{
-		Atributos atrDeExp;
-		Atributos atrDeRExpC;
-		Atributos a = new Atributos();
+	public Par RExpC() throws Exception{
+		Par atrDeExp;
+		Par atrDeRExpC;
+		Par a = new Par();
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
 			a.setErr(true);
 			a.setTipo("");
@@ -852,13 +656,13 @@ public class Sintactico{
 	/**
 	 * Reconoce una Expresisn, tanto aritmitica como lsgica (booleana).
 	 *  
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos Exp() throws Exception{
-		Atributos atrDeTerm;
-		Atributos atrDeRExp;
-		Atributos a = new Atributos();
+	public Par Exp() throws Exception{
+		Par atrDeTerm;
+		Par atrDeRExp;
+		Par a = new Par();
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
 		if ( atrDeTerm.getTipo().compareTo(atrDeRExp.getTipo()) == 0){
@@ -881,13 +685,13 @@ public class Sintactico{
 	/**
 	 * Reconoce la segunda mitad (con el operador) de la descomposicisn de una Expresisn booleana o aritmitica.
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos RExp() throws Exception{
-		Atributos atrDeTerm = new Atributos();
-		Atributos atrDeRExp;
-		Atributos a = new Atributos();
+	public Par RExp() throws Exception{
+		Par atrDeTerm = new Par();
+		Par atrDeRExp;
+		Par a = new Par();
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
 			a.setErr(true);
 			a.setTipo("");
@@ -941,13 +745,13 @@ public class Sintactico{
 	/**
 	 * Reconoce un Tirmino, compuesto de un Factor y un Tirmino Recursivo:
 	 *  
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos Term() throws Exception{
-		Atributos atrDeFact;
-		Atributos atrDeRTerm;
-		Atributos a = new Atributos();
+	public Par Term() throws Exception{
+		Par atrDeFact;
+		Par atrDeRTerm;
+		Par a = new Par();
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
 		if ( atrDeFact.getTipo().compareTo(atrDeRTerm.getTipo()) == 0){
@@ -970,13 +774,13 @@ public class Sintactico{
 	/**
 	 * Reconoce un Tirmino Aritmitico recursivo.
 	 *  
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos RTerm() throws Exception{
-		Atributos atrDeFact;
-		Atributos atrDeRTerm;
-		Atributos a = new Atributos();
+	public Par RTerm() throws Exception{
+		Par atrDeFact;
+		Par atrDeRTerm;
+		Par a = new Par();
 		Token tk;
 		tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
@@ -1033,14 +837,14 @@ public class Sintactico{
 	 * Reconoce un Factor.  Un Factor puede ser un entero, un identificador o una Expresisn aritmitica
 	 * entre parintesis.
 	 * 
-	 * @return Atributos devuelve los atributos obtenidos en el analisis del Programa.
+	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
-	public Atributos Fact() throws Exception{
-		Atributos a = new Atributos();
-		Atributos atrDeExpC;
-		Atributos atrDeExp;
-		Atributos atrDeFact;
+	public Par Fact() throws Exception{
+		Par a = new Par();
+		Par atrDeExpC;
+		Par atrDeExp;
+		Par atrDeFact;
 		Token tk;
 		tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKNUM)){

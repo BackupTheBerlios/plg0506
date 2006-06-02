@@ -28,6 +28,7 @@ public class Par {
 	 */
 	public Par() {
 		super();
+		this.props = new Atributos();
 	}
 
 	/**
@@ -73,13 +74,12 @@ public class Par {
 	public void setProps(Atributos props) {
 		this.props = props;
 	}
-	
-	
+
 	public String getClase() {
 		return clase;
 	}
 
-	public void setTbase(String clase) {
+	public void setClase(String clase) {
 		this.clase = clase;
 	}
 
@@ -91,7 +91,7 @@ public class Par {
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
-
+	
 	/**
 	 * El mtodo toString pasa a String la clase Par para poder mostrarla por pantalla.
 	 * @return String que contiene un par para poderlo mostrar por pantalla.
