@@ -614,11 +614,44 @@ public class Lexico {
 								}
 							}
 							else{							
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("t");
-								return new Token (aux,Tipos.TKIDEN);
+								if (a =='i'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (a =='p'){
+										a = (char)fuente.read();
+										posicion ++;
+										if (a =='o'){
+											a = (char)fuente.read();
+											posicion ++;
+											if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+												posicion --;
+												fuente.seek(posicion);
+												String aux;
+												aux = leerCaracter("tipo");
+												return new Token (aux,Tipos.TKIDEN);
+											}
+											else{
+												posicion --;
+												fuente.seek(posicion);
+												return new Token ("tipo",Tipos.TKTIPO);
+											}
+										}	
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("tip");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+									}	
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("ti");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+								}
 							}
 						}
 			

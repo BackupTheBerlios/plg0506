@@ -609,6 +609,22 @@ public class MaquinaP {
 					}
 					j++;
 				}
+				else if (linea[0].compareTo("mueve")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
 				else{
 					error();
 					j++;
@@ -1078,6 +1094,38 @@ public class MaquinaP {
 		}
 		else{
 			throw new Exception("ERROR: Memoria sin inicializar.");
+		}
+	}
+	
+	/**
+	 * 
+	 * mueve(s). Dicha instrucción encuentra en la cima la dirección origen o y en la subcima la dirección destino d, y realiza el movimiento de s celdas desde o a s.
+		para i?0 hasta s-1 hacer
+		Mem[Pila[ST-1]+i] ? Mem[Pila[ST]+i]
+		ST?ST-2
+		PC ? PC+1
+	 * 
+	 * @param s
+	 * @throws Exception
+	 */
+	public void mueve (int s) throws Exception{
+		if (pila.size()>2){ 
+			int o = ((Integer)pila.pop()).intValue();
+			int d = ((Integer)pila.pop()).intValue();
+			for (int i=0;i<s;i++){
+				if(d+i<Mem.size()-1){
+					Mem.set(d+i,Mem.get(o+i));
+				}
+				else{
+					aumentoMem(d+i);
+					Mem.set(d+i,Mem.get(o+i));
+				}
+			}
+			ST = ST-2;
+			PC = PC +1;
+		}
+		else{
+			throw new Exception("ERROR: La pila no contiene los datos necesarios.");
 		}
 	}
 }

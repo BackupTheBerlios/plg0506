@@ -1,6 +1,6 @@
-int a;
-bool b
-#
-end;
-
- 
+tipo
+tip
+ti
+tipeando
+tipoteando
+tirotenado

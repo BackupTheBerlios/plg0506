@@ -5,8 +5,8 @@ maria s;
 int c
 #
 a := 1;
-b := true;
-c := 3;
+b := true < 5;
+c := true + falso;
 s[0] := false;
 s[1] := true;
 
