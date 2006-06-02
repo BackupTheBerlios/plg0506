@@ -24,7 +24,8 @@ import javax.swing.JOptionPane;
  * <LI><CODE>ST:</CODE> Puntero a la cima de la pila.</LI>
  * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
  * c?digo del programa.</LI>
- * <LI><CODE>Mem:</CODE> Memoria de datos.</LI>
+ * <LI><CODE>Mem:</CODE> Memoria de datos estática.</LI>
+ * <LI><CODE>heap:</CODE> Memoria de datos dinámica.</LI>
  * <LI><CODE>fichero:</CODE> Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP. Sera un fichero con extension '.obj'</LI>
  * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
  * </UL></P>
@@ -43,7 +44,8 @@ public class MaquinaP {
 	 * ST: Puntero a la cima de la pila.
 	 * Prog:Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
 	 * c?digo del programa.
-	 * Mem: Memoria de datos.
+	 * Mem: Memoria de datos estatica.
+	 * heap:Memoria de datos dinámica.
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
@@ -53,6 +55,7 @@ public class MaquinaP {
 	private int ST;
 	private Vector Prog;
 	private Vector Mem;
+	private Heap heap;
 	private FileReader fichero;
 	private String pasos;
 	
@@ -69,6 +72,8 @@ public class MaquinaP {
 		H = 0;
 		ST = -1;
 		Mem= new Vector();
+		// el 1º entero indica el tamño inicial, y el otro la capacidad de aumento
+		heap= new Heap(50);
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
 		fcod = fcod.concat("obj");
@@ -187,6 +192,34 @@ public class MaquinaP {
 		ST = st;
 	}
 	
+	/**
+	 * @return Returns the fichero.
+	 */
+	public FileReader getFichero() {
+		return fichero;
+	}
+
+	/**
+	 * @param fichero The fichero to set.
+	 */
+	public void setFichero(FileReader fichero) {
+		this.fichero = fichero;
+	}
+
+	/**
+	 * @return Returns the heap.
+	 */
+	public Heap getHeap() {
+		return heap;
+	}
+
+	/**
+	 * @param heap The heap to set.
+	 */
+	public void setHeap(Heap heap) {
+		this.heap = heap;
+	}
+
 	/**
 	 * Obtiene el programa del fichero que recibe por par?metro. Guarda cada instruccion del programa en una posici?n del 
 	 * vector Prog. Para obtener el programa crea un BufferReader y se lanzan y capturan excepciones al respecto. 
