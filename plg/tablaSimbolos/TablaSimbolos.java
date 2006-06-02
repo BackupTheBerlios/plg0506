@@ -73,16 +73,9 @@ public class TablaSimbolos {
 	 * @param id Identificador sobre el cual se va a buscar su tipo.
 	 * @return String que devuelve el tipo asociado al id que entra como parmetro.
 	 */
-	public String getTipo(String id){
+	public Atributos getProps(String id){
 		if (this.tabla.containsKey(id))
-			return ((Par)this.tabla.get(id)).getTipo();// Devolver el tipo...
-		else
-			return null;
-	}
-	
-	public String getTBase(String id){
-		if (this.tabla.containsKey(id))
-			return ((Par)this.tabla.get(id)).getTbase();// Devolver el tipo base...
+			return ((Par)this.tabla.get(id)).getProps();
 		else
 			return null;
 	}
@@ -94,12 +87,6 @@ public class TablaSimbolos {
 			return -1;
 	}
 	
-	public int getTam(String id){
-		if (this.tabla.containsKey(id))
-			return ((Par)this.tabla.get(id)).getI();// Devolver el tamaño...
-		else
-			return -1;
-	}
 	/**
 	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador con ese nombre 
 	 * El valor de la clave en la tabla hash es znico, ya que concatenamos el nombre del identificador con el tipo usando 
@@ -112,12 +99,12 @@ public class TablaSimbolos {
 	 * @exception Exception Porque no se puede duplicar un identificador
 	 * 
 	 */
-	public boolean agnadeID(String id, String t, String tb, int i, int dir) throws Exception{
+	public boolean agnadeID(String id, Atributos t, String clase, int dir) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			Par p = new Par(id,t, tb, i, dir);
+			Par p = new Par(id, t, clase, dir);
 			this.tabla.put(id,p);
 			return true;	
 		}	
@@ -170,4 +157,29 @@ public class TablaSimbolos {
 	     }
 		return i;
 	}	
+	
+	/*fun ref!(exp,ts)
+	si exp.t = ref entonces
+		si existeID(ts,exp.id)
+			devuelve ref!(ts[exp.id].tipo,ts)
+		si no <t:err>
+	si no devuelve exp
+	ffun*/
+	
+	public Atributos ref(Atributos exp){
+		if (exp.getTipo().equals("ref")){
+			String iden = exp.getTbase();
+			if(this.existeID( iden )){
+				return ref( this.getProps(iden) );
+			}
+			else{
+				Atributos a = new Atributos("err","",0,0);
+				return a;
+			}
+		}
+		else{
+			return exp;
+		}
+		
+	}
 }

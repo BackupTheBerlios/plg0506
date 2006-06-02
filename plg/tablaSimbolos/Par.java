@@ -16,10 +16,10 @@ public class Par {
 	 * id almacena el nombre del identificador,
 	 * tipo es un string que almacena el tipo del identificador.
 	 */
+	
 	String id;
-	String tipo;
-	String tbase;
-	int i;
+	Atributos props;
+	String clase;
 	int dir;
 	
 	/**
@@ -37,12 +37,11 @@ public class Par {
 	 * @param tipo String con el tipo del identificador.
 	 *  
 	 */
-	public Par(String id, String tipo, String tbase, int i, int dir) {
+	public Par(String id, Atributos props, String clase, int dir) {
 		super();
 		this.id = id;
-		this.tipo = tipo;
-		this.tbase = tbase;
-		this.i = i;
+		this.props = props;
+		this.clase = clase;
 		this.dir = dir;
 	}
 
@@ -61,35 +60,27 @@ public class Par {
 		this.id = id;
 	}
 	/**
-	 * Accesor el atributo de la clase tipo.
-	 * @return String con el tipo del identificador.
+	 * Accesor el atributo de la clase props.
+	 * @return String con el props del identificador.
 	 */
-	public String getTipo() {
-		return tipo;
+	public Atributos getProps() {
+		return props;
 	}
 	/**
-	 * Mutador el atributo de la clase tipo.
-	 * @param tipo String con el tipo del identificador.
+	 * Mutador el atributo de la clase props.
+	 * @param props String con el props del identificador.
 	 */
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setProps(Atributos props) {
+		this.props = props;
 	}
 	
 	
-	public int getI() {
-		return i;
+	public String getClase() {
+		return clase;
 	}
 
-	public void setI(int i) {
-		this.i = i;
-	}
-
-	public String getTbase() {
-		return tbase;
-	}
-
-	public void setTbase(String tbase) {
-		this.tbase = tbase;
+	public void setTbase(String clase) {
+		this.clase = clase;
 	}
 
 	
@@ -109,11 +100,9 @@ public class Par {
 		String aux = "(";
 		aux = aux.concat(id);
 		aux = aux.concat(",");
-		aux = aux.concat(tipo);
+		aux = aux.concat(props.toString());
 		aux = aux.concat(",");
-		aux = aux.concat(tbase);
-		aux = aux.concat(",");
-		aux = aux.concat((new Integer(i)).toString());
+		aux = aux.concat(clase);
 		aux = aux.concat(",");
 		aux = aux.concat((new Integer(dir)).toString());
 		aux = aux.concat(")");
