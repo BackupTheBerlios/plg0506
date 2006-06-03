@@ -69,7 +69,9 @@ public class Atributos {
 		aux = "( ";
 		aux = aux.concat(tipo);
 		aux = aux.concat(", ");
-		aux.concat((new Integer(tam)).toString());
+		System.out.println("Desde atributos por tam tengo un: "+tam);
+		Integer n= new Integer (tam);
+		aux= aux.concat(n.toString());
 		aux = aux.concat(", ");
 		aux = aux.concat(tbase);
 		aux = aux.concat(", ");
