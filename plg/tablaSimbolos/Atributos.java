@@ -69,13 +69,13 @@ public class Atributos {
 		aux = "( ";
 		aux = aux.concat(tipo);
 		aux = aux.concat(", ");
-		System.out.println("Desde atributos por tam tengo un: "+tam);
 		Integer n= new Integer (tam);
 		aux= aux.concat(n.toString());
 		aux = aux.concat(", ");
 		aux = aux.concat(tbase);
 		aux = aux.concat(", ");
-		aux = aux.concat((new Integer(elems)).toString());
+		n= new Integer (elems);
+		aux = aux.concat(n.toString());
 		aux = aux.concat(" )");
 		return aux;
 	}

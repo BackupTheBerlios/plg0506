@@ -180,6 +180,8 @@ public class Sintactico{
 			a.setId(atrDeDecTipo.getId());
 			a.setProps(atrDeDecTipo.getProps());
 			a.setClase("tipo");
+			System.out.println("A la salida de dec props");
+			System.out.println(a.getProps().toString());
 			return a;
 		}
 		else {
@@ -216,7 +218,9 @@ public class Sintactico{
 		System.out.println("llamo a tipo");
 		Par atrDeTipo = Tipo();
 		System.out.println("vuelvo de tipo");
-		a.getProps().setTam(0);
+		a.setProps(atrDeTipo.getProps());
+		System.out.println("A la salida de DecTipo props");
+		System.out.println(a.getProps().toString());
 		return a;
 	}	
 	/**
@@ -243,15 +247,15 @@ public class Sintactico{
 		a.setId(tk.getLexema());
 		a.setProps(atrDeTipo.getProps());
 		
-		/*System.out.println("en decvar");
-		System.out.println(a.getId());
-		System.out.println(a.getProps().getTipo());
-		System.out.println(a.getProps().toString());
+		System.out.println("en decvar");
+		//System.out.println(a.getId());
+		//System.out.println(a.getProps().getTipo());
+		//System.out.println(a.getProps().toString());
 		System.out.println("El iden esta duplicado");
 		System.out.println(a.getId());
 		System.out.println(TS.existeID(a.getId()));
 		System.out.println("la referencia está mal");
-		System.out.println(TS.referenciaErronea(atrDeTipo.getProps()));*/
+		System.out.println(TS.referenciaErronea(atrDeTipo.getProps()));
 		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo.getProps())){
 			a.getProps().setTipo("error");
 			System.out.println(a.getProps().toString());
@@ -323,6 +327,8 @@ public class Sintactico{
 			System.out.println("el puntero es un tipo");
 			System.out.println(a.getProps().toString());
 		}
+		System.out.println("A la salida de tipo props");
+		System.out.println(a.getProps().toString());
 		return a;
 	}
 	/**
