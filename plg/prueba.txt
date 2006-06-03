@@ -1,6 +1,5 @@
 int a;
 bool b;
-tipo maria = int;
-pointer int c;
-array [4] of int d
+array [4] of int d;
+tipo maria = array [3] of bool
 #

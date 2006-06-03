@@ -128,6 +128,7 @@ public class Sintactico{
 		//System.out.println(atrDeDec.getId());
 		//System.out.println(atrDeDec.getProps().getTipo());
 		dir = dir + atrDeDec.getProps().getTam();
+		System.out.println(dir);
 		if (atrDeDec.getProps().getTipo().equals("error")){
 			a.getProps().setTipo("error");
 		}
@@ -192,6 +193,7 @@ public class Sintactico{
 			//System.out.println(a.getId());
 			//System.out.println(a.getProps().getTipo());
 			a.setClase("var");
+			a.setDir(dir);
 			return a;
 		}
 	}
@@ -214,7 +216,6 @@ public class Sintactico{
 		System.out.println("llamo a tipo");
 		Par atrDeTipo = Tipo();
 		System.out.println("vuelvo de tipo");
-		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
 		a.getProps().setTam(0);
 		return a;
 	}	
@@ -241,6 +242,7 @@ public class Sintactico{
 		}
 		a.setId(tk.getLexema());
 		a.setProps(atrDeTipo.getProps());
+		
 		/*System.out.println("en decvar");
 		System.out.println(a.getId());
 		System.out.println(a.getProps().getTipo());
@@ -267,14 +269,18 @@ public class Sintactico{
 		System.out.println(tk.muestraToken());
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
 			a.getProps().setTipo(tk.getLexema());
-			System.out.println(a.getProps().getTipo());
+			a.getProps().setTam(1);
+			System.out.println("el tamaño es");
+			System.out.println(a.getProps().getTam());
+			System.out.println("int y bool son tipos");
+			System.out.println(a.getProps().toString());
 		}
 		else if(lexico.reconoce(Tipos.TKIDEN)){
 			a.getProps().setTipo("ref");
 			a.setId(tk.getLexema());
 			a.getProps().setTam(TS.getProps(tk.getLexema()).getTam());
-			System.out.println(a.getId());
-			System.out.println(a.getProps().getTipo());
+			//System.out.println(a.getId());
+			//System.out.println(a.getProps());
 		}
 		else if(lexico.reconoce(Tipos.TKARRAY)){
 			lexico.lexer(); //consumimos [
