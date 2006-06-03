@@ -10,7 +10,10 @@ public class Atributos {
 	
 	public Atributos() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.tipo = "";
+		this.tbase = "";
+		this.elems = 0;
+		this.tam = 0;
 	}
 
 

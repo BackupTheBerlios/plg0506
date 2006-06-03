@@ -191,6 +191,6 @@ public class TablaSimbolos {
 	 */
 	
 	public boolean referenciaErronea(Atributos e){
-		return e.getTipo().equals("ref") || !this.existeID(e.getTipo());
+		return e.getTipo().equals("ref") && !this.existeID(e.getTipo());
 	}
 }

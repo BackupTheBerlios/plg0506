@@ -28,7 +28,10 @@ public class Par {
 	 */
 	public Par() {
 		super();
+		this.id = "";
 		this.props = new Atributos();
+		this.clase = "";
+		this.dir = 0;
 	}
 
 	/**
