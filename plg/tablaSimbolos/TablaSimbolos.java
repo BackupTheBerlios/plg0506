@@ -158,13 +158,15 @@ public class TablaSimbolos {
 		return i;
 	}	
 	
-	/*fun ref!(exp,ts)
-	si exp.t = ref entonces
-		si existeID(ts,exp.id)
-			devuelve ref!(ts[exp.id].tipo,ts)
-		si no <t:err>
-	si no devuelve exp
-	ffun*/
+	/*
+	 * fun ref!(exp,ts)
+	 * 	si exp.t = ref entonces
+	 * 		si existeID(ts,exp.id)
+	 * 			devuelve ref!(ts[exp.id].tipo,ts)
+	 * 		si no <t:err>
+	 * 	si no devuelve exp
+	 * ffun
+	 */
 	
 	public Atributos ref(Atributos exp){
 		if (exp.getTipo().equals("ref")){
@@ -181,5 +183,14 @@ public class TablaSimbolos {
 			return exp;
 		}
 		
+	}
+	
+	/*
+	 * fun referenciaErronea(e,ts)
+	 * 	devuelve e.t=ref ∧ ¬existeID(ts,e.id)
+	 */
+	
+	public boolean referenciaErronea(Atributos e){
+		return e.getTipo().equals("ref") || !this.existeID(e.getTipo());
 	}
 }

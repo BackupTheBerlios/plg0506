@@ -85,47 +85,16 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	public boolean Prog() throws Exception{
+		/*
+		 * 	Progs.err = Progs.err ∨ Decs.pend ≠∅∅ 
+		 */
 		etq = 0;
 		dir = 0;
 		Par atrDeDecs = Decs();
 		Par atrDeIs = Is();
-		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); // falta pend
+		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		return errDeProg;	
 	}
-	
-	/*  
-	 DecVar ::= Tipo iden
-	DecVar.id = iden.lex
-	DecVar.tipo = Tipo.tipo
-		DecVar.err = Tipo.err ∨ existeID(DecTipo.tsh,iden.lex) ∨ referenciaErronea(Tipo1.tipo,Tipoo.tsh)
-	Tipo.tsh = DecTipo.tsh
-	DecVar.pend = Tipo.pend
-
-	   
-	 Tipo ::= int
-	Tipo.tipo = <t:int>
-	Tipo.tipo = <t:num,tam:1>
-		
-	Tipo ::= bool
-	Tipo.tipo = <t:bool>
-	Tipo.tipo = <t:num,tam:1>
-	
-	Tipo ::= iden
-	Tipo.tipo = <t:ref,id:iden.lex>
-	Tipo.tipo= <t:ref,id:iden,lex,tam:Tipo.tsh[iden.lex].tipo.tam>
-	
-	Tipo ::= array [num] of Tipo
-	Tipoo.tipo= <t:array,nelems:valorDe(num.lex),tbase:Tipo1.tipo>
-	Tipo.tipo = <t:array,nelems:valorDe(num.lex),tbase:Tipo.tipo,
-	tam:valorDe(num.lex)*Tipo1.tipo.tam>
-	
-	Tipo ::= pointer Tipo
-	Tipoo.tipo = <t:puntero,tbase:Tipo1.tipo>
-	Tipoo.err = Tipo1.err
-	Tipoo.pend = Tipo1.pend
-	Tipo1.tsh = Tipoo.tsh
-	Tipoo.tipo = <t:puntero,tbase:Tipo.tipo,tam:1>
-	 */
 	
 	/**
 	 * Recorre el conjunto de declaraciones (Dec) una por una.  Si tras una declaracisn encontramos
@@ -139,6 +108,7 @@ public class Sintactico{
 	/*
 	 * Decs ::= Decs; Dec
 	 * Decso.pend = Decs1.pend ∪ Dec.pend –	(si Dec.props.clase = tipo entonces {Dec.id} si no ∅ ) 
+	 * 
 	 * Decs ::= Dec
 	 * Decs.pend = Dec.pend – (si Dec.props.clase = tipo entonces {Dec.id} 	si no ∅∅)
 	 */
@@ -202,6 +172,9 @@ public class Sintactico{
 	}
 	
 	public Par DecTipo() throws Exception{
+		/*	
+		 * Dec.pend = DecTipo.pend
+		 */
 		Par a = new Par();
 		lexico.lexer(); // consumimos tipo
 		Token tk = lexico.lexer();
@@ -227,9 +200,73 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Par DecVar() throws Exception{
+		/*
+		 * DecVar.pend = Tipo.pend
+		 */
+		Par a = new Par();
+		Par atrDeTipo = Tipo();
+		Token tk = lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKIDEN)){
+			throw new Exception ("ERROR: Necesitas un identificador");
+		}
+		a.setId(tk.getLexema());
+		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
+		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo.getProps())){
+			a.getProps().setTipo("error");
+		}
+		return a;
 	}	
 	
 	public Par Tipo() throws Exception{
+		/* Tipo ::= pointer Tipo
+		Tipoo.pend = Tipo1.pend
+		 */
+		Par a = new Par();
+		Token tk = lexico.lexer(); // cosumimos int, bool, iden, array o pointer
+		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
+			a.getProps().setTipo(tk.getLexema());
+		}
+		else if(lexico.reconoce(Tipos.TKIDEN)){
+			a.getProps().setTipo("ref");
+			a.setId(tk.getLexema());
+			a.getProps().setTam(TS.getProps(tk.getLexema()).getTam());
+		}
+		else if(lexico.reconoce(Tipos.TKARRAY)){
+			lexico.lexer(); //consumimos [
+			if (!lexico.reconoce(Tipos.TKCAP)){
+				throw new Exception ("ERROR: Necesitas un [");
+			}
+			tk = lexico.lexer(); //consumimos num
+			if (!lexico.reconoce(Tipos.TKNUM)){
+				throw new Exception ("ERROR: Necesitas un numero");
+			}
+			int n = Integer.parseInt(tk.getLexema());
+			lexico.lexer(); //consumimos ]
+			if (!lexico.reconoce(Tipos.TKCCI)){
+				throw new Exception ("ERROR: Necesitas un ]");
+			}
+			lexico.lexer(); //consumimos of
+			if (!lexico.reconoce(Tipos.TKOF)){
+				throw new Exception ("ERROR: Necesitas un of");
+			}
+			Par atrDeTipo = Tipo();
+			String t = atrDeTipo.getProps().getTipo();
+			int tam = atrDeTipo.getProps().getTam() * n;
+			a.getProps().setTipo("array");
+			a.getProps().setElems(n);
+			a.getProps().setTbase(t);
+			a.getProps().setTam(tam);
+		}
+		else if(lexico.reconoce(Tipos.TKPUNT)){
+			Par atrDeTipo = Tipo();
+			if (a.getProps().getTipo().equals("error")){
+				a.getProps().setTipo("error");
+			}
+			a.getProps().setTipo("pointer");
+			a.getProps().setTbase(atrDeTipo.getProps().getTipo());
+			a.getProps().setTam(1);
+		}
+		return a;
 	}
 	/**
 	 * Recorre el conjunto de Instrucciones del programa.  Cada instruccion I se separa del conjunto de 
@@ -258,7 +295,7 @@ public class Sintactico{
 			a.setErr(errDeIs);
 			a.setTipo(atrDeI.getTipo());
 			return a;	
-		}
+		})
 		a.setErr(errDeIs);
 		return a;	
 	}
