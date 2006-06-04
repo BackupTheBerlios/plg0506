@@ -539,18 +539,15 @@ public class Sintactico{
 			Token tk;
 			tk = lexico.getNextToken();
 			if (!tk.equals(new Token ("else",Tipos.TKELS))){
-				a.getProps().setTipo("error");
+				a.getProps().setTipo("");
+				return a;
 			}
-			lexico.lexer();
+			lexico.lexer(); //consumimos else
 			atrDeIns = I();
 			a = atrDeIns;	
 		}
 		else{
-			if (!lexico.reconoce(Tipos.TKELS)){
-				a.getProps().setTipo("error");
-			}
-			atrDeIns = I();
-			a = atrDeIns;
+			a.getProps().setTipo("error");
 		}	
 		return a;	
 	}
@@ -1038,35 +1035,7 @@ public class Sintactico{
 				}
 				else{
 					lexico.lexer();
-					int n;
-					if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
-						tk = lexico.lexer();
-						n = Integer.parseInt(tk.getLexema());
-					}
-					else{
-						atrDeExp = Exp();
-						if (atrDeExp.getProps().getTipo().equals("int")){
-							n = Integer.parseInt(atrDeExp.getId());
-						}
-						else{
-							a.getProps().setTipo("error");
-							throw new Exception("ERROR: El indice del array no es un entero");
-						}
-					}	
-					if ( n > TS.getProps(i).getTam()){
-						a.getProps().setTipo("error");
-						throw new Exception("ERROR: array overflow");
-					}
-					lexico.lexer();
-					if (lexico.reconoce(Tipos.TKCCI)){
-						if (TS.existeID(i) && ((TS.getProps(i).getTipo()).equals("array"))){
-							a.getProps().setTipo(i);
-						}
-						a.getProps().getTbase().setTipo("error");
-					}
-					else{
-						a.getProps().setTipo("error"); 
-					}
+					
 				}
 			}	
 			else {
@@ -1085,6 +1054,95 @@ public class Sintactico{
 			}
 		}	
 		return a;
+	}
+	
+	public Par Mem() throws Exception{
+/*		Mem ::= id
+		Mem.cod = apila(Mem.tsh[id.lex].dir)
+		Mem.etq = Mem.etqh + 1
+	Mem ::= Mem^
+		Memo.cod = Mem1.cod || apila-ind
+		Mem1.etqh = Memo.etqh
+		Memo.etq = Mem1.etq + 1
+	Mem ::= Mem [Exp]
+		Memo.cod = Mem1.cod || Exp.cod || apila(Mem1.tipo.tam) ||
+				multiplica || suma 
+		Mem1.etqh = Memo.etqh
+		Exp.etqh = Mem1.etq
+		Memo.etq = Exp.etq + 3
+*/
+		Par a = new Par();
+		
+		Atributos props,propsBase;
+		
+		Token tk = lexico.getLookahead();    //lexico.lexer();
+		Token tkAux = lexico.getNextToken();
+		System.out.println("EN MEM!!! Deberia leer un Iden, p. ej., y leo: " + tk.getLexema());
+		if (lexico.reconoce(Tipos.TKIDEN)){ // Esta comprobacion es superflua, pero la dejamos "por si acaso" :)
+			String iden = tk.getLexema();
+			
+			props = TS.getProps(iden);
+			propsBase = props.getTbase();
+			
+			while (tkAux.getCategoriaLexica() == Tipos.TKIDEN || tkAux.equals(new Token("[",Tipos.TKCAP)) || 
+					tkAux.equals(new Token("pointer",Tipos.TKPUNT))){
+				
+				tk = lexico.lexer();
+				
+				
+				
+				if (lexico.reconoce(Tipos.TKCAP)){
+					System.out.println("En Mem, reconozco que es un array y lo trato.");
+					int n;
+					if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
+						tk = lexico.lexer();
+						n = Integer.parseInt(tk.getLexema());
+					}
+					else{
+						Par atrDeExp = Exp();
+						if (atrDeExp.getProps().getTipo().equals("int")){
+							n = Integer.parseInt(atrDeExp.getId());
+						}
+						else{
+							a.getProps().setTipo("error");
+							throw new Exception("ERROR: El indice del array no es un entero");
+						}
+					}	
+					if ( n > TS.getProps(iden).getTam()){
+						a.getProps().setTipo("error");
+						throw new Exception("ERROR: array overflow");
+					}
+					tk = lexico.lexer();
+					if (lexico.reconoce(Tipos.TKCCI)){
+						if (TS.existeID(iden) && ((TS.getProps(iden).getTipo()).equals("array"))){
+							a.getProps().setTipo("array");
+							a.getProps().setTbase(TS.getProps(iden).getTbase());
+						}
+						a.getProps().getTbase().setTipo("error");
+					}
+					else{
+						a.getProps().setTipo("error"); 
+					}
+				}
+				else { 
+					System.out.println("En Mem, reconozco el iden y apilo su contenido.");
+				
+				codigo.genIns("apila-dir", TS.getDir(tk.getLexema()));
+				etq++;
+				
+				a.getProps().setTipo(TS.getProps(tk.getLexema()).getTipo());
+				System.out.println("Solo por curiosidad:  dirID = " + TS.dirID(tk.getLexema()) + "  y getDir = " + TS.getDir(tk.getLexema()));
+				}
+				tkAux = lexico.getNextToken();
+			}
+			
+		}
+		else {  
+			System.out.println("No es un MEM. Error.");
+			a.getProps().setTipo("error");
+			throw new Exception("ERROR: Expresion derecha mal construida");
+		}
+		return null;
 	}
 	
 	/**
