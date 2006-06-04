@@ -89,7 +89,7 @@ public class Sintactico{
 	 */	
 	public boolean Prog() throws Exception{
 		/*
-		 * 	Progs.err = Progs.err ∨ Decs.pend ≠∅∅ 
+		 * 	Progs.err = Progs.err ??? Decs.pend ????????? 
 		 */
 		etq = 0;
 		dir = 0;
@@ -114,10 +114,10 @@ public class Sintactico{
 	public Par Decs() throws Exception{
 	/*
 	 * Decs ::= Decs; Dec
-	 * Decso.pend = Decs1.pend ∪ Dec.pend –	(si Dec.props.clase = tipo entonces {Dec.id} si no ∅ ) 
+	 * Decso.pend = Decs1.pend ??? Dec.pend ???	(si Dec.props.clase = tipo entonces {Dec.id} si no ??? ) 
 	 * 
 	 * Decs ::= Dec
-	 * Decs.pend = Dec.pend – (si Dec.props.clase = tipo entonces {Dec.id} 	si no ∅∅)
+	 * Decs.pend = Dec.pend ??? (si Dec.props.clase = tipo entonces {Dec.id} 	si no ??????)
 	 */
 		Par a = new Par();
 		System.out.println("llamo a dec");
@@ -254,7 +254,7 @@ public class Sintactico{
 		System.out.println("El iden esta duplicado");
 		System.out.println(a.getId());
 		System.out.println(TS.existeID(a.getId()));
-		System.out.println("la referencia está mal");
+		System.out.println("la referencia est?? mal");
 		System.out.println(TS.referenciaErronea(atrDeTipo.getProps()));
 		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo.getProps())){
 			a.getProps().setTipo("error");
@@ -274,7 +274,7 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
 			a.getProps().setTipo(tk.getLexema());
 			a.getProps().setTam(1);
-			System.out.println("el tamaño es");
+			System.out.println("el tama??o es");
 			System.out.println(a.getProps().getTam());
 			System.out.println("int y bool son tipos");
 			System.out.println(a.getProps().toString());
@@ -346,20 +346,26 @@ public class Sintactico{
 		boolean errDeIs = false;
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
-			errDeIs = false;	
+			// Simplemente ponemos el tipo a vac?o (no se me ocurr?a otra forma)
+			//errDeIs = false;
+			a.getProps().setTipo("");
 		}
 		else{
 			if (!lexico.reconoce(Tipos.TKPYCOMA)){
-				errDeIs = true;
+				a.getProps().setTipo("error");
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
 			atrDeIs = Is();
-			//errDeIs = atrDeI.getErr() || atrDeIs.getErr();
-			//a.setErr(errDeIs);
-			//a.setTipo(atrDeI.getTipo());
+			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
+				a.getProps().setTipo("error");
+			}
+			else {
+				// Qu? props habr?a que meter... Las de I???
+				// O igualamos todo el par?  No s? c?mo juntar ambos pares.
+				a.setProps(atrDeIs.getProps());
+			}
 			return a;	
 		}
-		//a.setErr(errDeIs);
 		return a;	
 	}
 
@@ -393,7 +399,7 @@ public class Sintactico{
 				}
 			}	
 		}
-		//a.setErr(atrDeIns.getErr());
+		a = atrDeIns;
 		return a;
 	}
 
@@ -407,16 +413,16 @@ public class Sintactico{
 		Par a = new Par();
 		Par atrDeIns = IsOpc();
 		if (!lexico.reconoce(Tipos.TKEND)){
-			//a.setErr(true);
+			a.getProps().setTipo("error");
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
 		lexico.lexer();
 		if (! (lexico.reconoce(Tipos.TKPYCOMA))){
-			//a.setErr(true);
+			a.getProps().setTipo("error");
 			throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
 		}
 		else {
-			//a.setErr(atrDeIns.getErr());
+			a = atrDeIns;;
 		}	
 		return a;	
 	}
@@ -441,22 +447,26 @@ public class Sintactico{
 				tk = lexico.getNextToken();
 				if (tk.equals(new Token("end",Tipos.TKEND))){
 					tk = lexico.lexer();
-					//a.setErr(errDeIsOpc);
-					//a.setTipo(atrDeI.getTipo());
+					a = atrDeI;
 					return a;
 				}
 				else{
 					atrDeIsOpc = IsOpc();
-					//errDeIsOpc = atrDeI.getErr() || atrDeIsOpc.getErr();
+					errDeIsOpc = (atrDeI.getProps().getTipo().equals("error") || atrDeIsOpc.getProps().getTipo().equals("error"));
 				}	
 			}
 			else{
 				errDeIsOpc=true;
-				//a.setTipo("");
+				a.getProps().setTipo("error"); // Como lanzamos excepcion, creo que si no lo pongo aqu?, no se rellena.
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Todo begin debe llevar end.");
 			}
 		}
-		//a.setErr(errDeIsOpc);
+		if (errDeIsOpc) {
+			a.getProps().setTipo("error");
+		}
+		else {
+			a = atrDeI;
+		}
 		return a;	
 	}
 	
@@ -484,26 +494,35 @@ public class Sintactico{
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
-		//if (!atrDeExpC.getTipo().equals("bool")){
-			//throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
-		//}
-		if (lexico.reconoce(Tipos.TKTHN)){
-			codigo.emite("ir-f");
-			etqs1 = etq; 
-			etq ++;
-			atrDeI = I();
-			codigo.emite("ir-a");
-			etqs2 = etq;
-			etq ++;
-			codigo.parchea(etqs1,etq);
-			atrDePElse = PElse();
-			codigo.parchea(etqs2,etq);
+		if (!atrDeExpC.getProps().getTipo().equals("bool")){
+			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
-		else{
-			//a.setErr(true);
-			return a;
-		}	
-		//a.setErr(atrDeI.getErr() || atrDePElse.getErr() || atrDeExpC.getErr());
+		else {
+			if (lexico.reconoce(Tipos.TKTHN)){
+				codigo.emite("ir-f");
+				etqs1 = etq; 
+				etq ++;
+				atrDeI = I();
+				codigo.emite("ir-a");
+				etqs2 = etq;
+				etq ++;
+				codigo.parchea(etqs1,etq);
+				atrDePElse = PElse();
+				codigo.parchea(etqs2,etq);
+				
+				if ( atrDeI.getProps().getTipo().equals("error") || atrDePElse.getProps().getTipo().equals("error") || atrDeExpC.getProps().getTipo().equals("error")){
+					a.getProps().setTipo("error");
+				}
+				else {
+					a = atrDeI; // por que de atrDeI???  o atrDePElse??  O como uno ambos?... :(
+				}
+			}
+			else{
+				a.getProps().setTipo("error");
+				return a;
+			}	
+			
+		}
 		return a;	
 	}
 	
@@ -519,18 +538,18 @@ public class Sintactico{
 			Token tk;
 			tk = lexico.getNextToken();
 			if (!tk.equals(new Token ("else",Tipos.TKELS))){
-				//a.setErr(true);
+				a.getProps().setTipo("error");
 			}
 			lexico.lexer();
 			atrDeIns = I();
-			//a.setErr(atrDeIns.getErr());	
+			a = atrDeIns;	
 		}
 		else{
 			if (!lexico.reconoce(Tipos.TKELS)){
-				//a.setErr(true);
+				a.getProps().setTipo("error");
 			}
 			atrDeIns = I();
-			//a.setErr(atrDeIns.getErr());
+			a = atrDeIns;
 		}	
 		return a;	
 	}
@@ -556,23 +575,30 @@ public class Sintactico{
 		int etqb = etq;
 		int etqs;
 		atrDeExpC = ExpC();
-		//if (!atrDeExpC.getTipo().equals("bool")){
-			//throw new Exception("ERROR: La condicion del while ha de ser una expresion booleana.");
-		//}
-		if (lexico.reconoce(Tipos.TKDO)){
-			codigo.emite("ir-f");
-			etqs = etq; 
-			etq ++;
-			atrDeI = I();
-			codigo.emite("ir-a " + etqb);
-			etq ++;
-			codigo.parchea(etqs,etq);
+		if (!atrDeExpC.getProps().getTipo().equals("bool")){
+			throw new Exception("ERROR: La condicion del while ha de ser una expresion booleana.");
 		}
-		else{
-			//a.setErr(true);
-			return a;
-		}	
-		//a.setErr(atrDeI.getErr() || atrDeExpC.getErr());
+		else {
+			if (lexico.reconoce(Tipos.TKDO)){
+				codigo.emite("ir-f");
+				etqs = etq; 
+				etq ++;
+				atrDeI = I();
+				codigo.emite("ir-a " + etqb);
+				etq ++;
+				codigo.parchea(etqs,etq);
+			}
+			else{
+				a.getProps().setTipo("error");
+				return a;
+			}	
+			if ( atrDeI.getProps().getTipo().equals("error") || atrDeExpC.getProps().getTipo().equals("error")){
+				a.getProps().setTipo("error");
+			}
+			else {
+				a = atrDeI; // Es lo "importante" y donde se van a modificar cosas...
+			}
+		}
 		return a;	
 	}
 	
@@ -605,16 +631,21 @@ public class Sintactico{
 			tk = lexico.lexer();
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
-				//errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTipo(lex))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error")));
+				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(TS.getProps(lex).getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
 					errDeIAsig = true;
+					a.getProps().setTipo("error"); // Como antes, creo que la Excepcion me saca del m?todo, y quisiera dejar el error marcado.
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
 						codigo.genIns("desapila-dir",TS.getDir(lex));
 						etq ++;
+						
+						a.setId(lex);
+						a.getProps().setTipo(TS.getProps(lex).getTipo());
+						// O metemos en 'a' directamente a.setprops( TS.getProps(lex) )  tal cual?  O que otros atributos rellenamos si no?
 				}
 			}
 			else{
@@ -626,49 +657,58 @@ public class Sintactico{
 					}
 					else{
 						atrDeExp = Exp();
-						//if (atrDeExp.getTipo().equals("int")){
-							//n = Integer.parseInt(atrDeExp.getIden());
-						//}	
-						//else{
+						if (atrDeExp.getProps().getTipo().equals("int")){
+							n = Integer.parseInt(atrDeExp.getId());
+						}	
+						else{
 							errDeIAsig = true;
+							a.getProps().setTipo("error");
 							throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
-						//}
+						}
 					}
-					//if (n>TS.getTam(TS.getTipo(lex))){
-						//errDeIAsig = true;
-						//throw new Exception("ERROR: array overflow");
-					//}
+					if (n > TS.getProps(lex).getTam()){
+						errDeIAsig = true;
+						a.getProps().setTipo("error");
+						throw new Exception("ERROR: array overflow");
+					}
 					tk = lexico.lexer();
 					if (lexico.reconoce(Tipos.TKCCI)){
 						tk = lexico.lexer();
 						if (lexico.reconoce(Tipos.TKASIGN)){
 							atrDeExpC = ExpC();
 							//System.out.println(lexico.getLookahead().muestraToken());
-							//errDeIAsig = (!(atrDeExpC.getTipo().equals(TS.getTBase(TS.getTipo(lex))))) || !(TS.existeID(lex)) || (atrDeExpC.getTipo().equals("error"));
+							errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(TS.getProps(lex).getTbase())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")) );
 							//System.out.println(TS.getTBase(TS.getTipo(lex)));
 							//System.out.println("Estoy en IAsig - 2 -"+errDeIAsig);
 							//System.out.println(atrDeExpC.getTipo());
 							if (!(TS.existeID(lex))){
 								errDeIAsig = true;
+								a.getProps().setTipo("error");
 								throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 							}
 							else{
 								codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
 								etq ++;
+								
+								a.setId(lex);
+								a.getProps().setTipo(atrDeExpC.getProps().getTipo());
 							}
 						}
 						else{
 							errDeIAsig = true;
+							a.getProps().setTipo("error");
 							throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
 						}
 					}
 					else{
 						errDeIAsig = true;
+						a.getProps().setTipo("error");
 						throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
 					}
 				}
 				else{
 					errDeIAsig = true;
+					a.getProps().setTipo("error");
 					throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
 				}
 			}
@@ -676,13 +716,16 @@ public class Sintactico{
 		else{
 			if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){
 				errDeIAsig = true;
+				a.getProps().setTipo("error");
 				throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
 			} 
 			else {
 				errDeIAsig = false;
 			}
 		}
-		//a.setErr(errDeIAsig);
+		if (errDeIAsig){
+			a.getProps().setTipo("error");
+		}
 		return a;
 	}
 
@@ -700,20 +743,20 @@ public class Sintactico{
 		atrDeExp = Exp();
 		Par a = new Par();
 		atrDeRExpC = RExpC();
-		/*if ( atrDeExp.getTipo().equals(atrDeRExpC.getTipo())){
-			if (atrDeExp.getTipo().equals("int"))
-					a.setTipo("int");
-			else if (atrDeExp.getTipo().equals("bool"))
-					a.setTipo("bool");
-			else a.setTipo("error");
+		if ( atrDeExp.getProps().getTipo().equals(atrDeRExpC.getProps().getTipo())){
+			if (atrDeExp.getProps().getTipo().equals("int"))
+					a.getProps().setTipo("int");
+			else if (atrDeExp.getProps().getTipo().equals("bool"))
+					a.getProps().setTipo("bool");
+			else a.getProps().setTipo("error");
 		}
 		else{
-			if (atrDeRExpC.getTipo().equals("")){
-				a.setTipo(atrDeExp.getTipo());
+			if (atrDeRExpC.getProps().getTipo().equals("")){
+				a.getProps().setTipo(atrDeExp.getProps().getTipo());
 			}else{
-				a.setTipo("error");
+				a.getProps().setTipo("error");
 			}
-		}*/
+		}
 		return a;
 	}
 	
@@ -730,8 +773,7 @@ public class Sintactico{
 		Par atrDeRExpC;
 		Par a = new Par();
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
-			//a.setErr(true);
-			//a.setTipo("");
+			a.getProps().setTipo("error");
 			return a;
 		}
 		if (!lexico.reconoce(Tipos.TKPYCOMA) || !lexico.reconoce(Tipos.TKEND)){
@@ -740,16 +782,16 @@ public class Sintactico{
 				atrDeExp = Exp();
 				genOpComp(tk.getLexema());				
 				atrDeRExpC = RExpC();
-				/*if ( ( (atrDeExp.getTipo().compareTo(atrDeRExpC.getTipo()) == 0) && (atrDeExp.getTipo().compareTo("bool") == 0) ) || atrDeRExpC.getTipo().equals("")){
-					a.setTipo(atrDeExp.getTipo());
+				if ( ( (atrDeExp.getProps().getTipo().equals(atrDeRExpC.getProps().getTipo())) && (atrDeExp.getProps().getTipo().equals("bool")) ) || atrDeRExpC.getProps().getTipo().equals("")){
+					a.getProps().setTipo(atrDeExp.getProps().getTipo());
 				}
 				else{
-					a.setTipo("error");
+					a.getProps().setTipo("error");
 				}
-				return a;*/
+				return a;
 			} 
 		} 
-		//a.setTipo("");
+		a.getProps().setTipo("");
 		return a;
 	}
 	
@@ -765,20 +807,20 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
-		/*if ( atrDeTerm.getTipo().compareTo(atrDeRExp.getTipo()) == 0){
-			if (atrDeTerm.getTipo().compareTo("int") == 0)
-					a.setTipo("int");
-			else if (atrDeTerm.getTipo().compareTo("bool") == 0)
-					a.setTipo("bool");
-			else a.setTipo("error");
+		if ( atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo())){
+			if (atrDeTerm.getProps().getTipo().equals("int"))
+					a.getProps().setTipo("int");
+			else if (atrDeTerm.getProps().getTipo().equals("bool"))
+					a.getProps().setTipo("bool");
+			else a.getProps().setTipo("error");
 		}
 		else{
-			if (atrDeRExp.getTipo().equals("")){
-				a.setTipo(atrDeTerm.getTipo());
+			if (atrDeRExp.getProps().getTipo().equals("")){
+				a.getProps().setTipo(atrDeTerm.getProps().getTipo());
 			}else{
-				a.setTipo("error");
+				a.getProps().setTipo("error");
 			}
-		}*/
+		}
 		return a;
 	}
 	
@@ -793,8 +835,7 @@ public class Sintactico{
 		Par atrDeRExp;
 		Par a = new Par();
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
-			//a.setErr(true);
-			//a.setTipo("");
+			a.getProps().setTipo("error");
 			return a;
 		}
 		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
@@ -817,27 +858,27 @@ public class Sintactico{
 			}
 			atrDeRExp = RExp();
 			
-			/*if ( (atrDeTerm.getTipo().compareTo("error") == 0) || (atrDeRExp.getTipo().compareTo("error") == 0) ){
-				a.setTipo("error");
+			if ( (atrDeTerm.getProps().getTipo().compareTo("error") == 0) || (atrDeRExp.getProps().getTipo().compareTo("error") == 0) ){
+				a.getProps().setTipo("error");
 			} else {
 				if (numerico){
-					if ( atrDeRExp.getTipo().equals("int") && atrDeRExp.getTipo().equals(atrDeTerm.getTipo()) ){
-						a.setTipo("int");
+					if ( atrDeRExp.getProps().getTipo().equals("int") && atrDeRExp.getProps().getTipo().equals(atrDeTerm.getProps().getTipo()) ){
+						a.getProps().setTipo("int");
 					} else {
-						a.setTipo("error");
+						a.getProps().setTipo("error");
 					}
 				} 
 				else if (booleano){
-					if ( atrDeTerm.getTipo().equals("bool") && atrDeTerm.getTipo().equals(atrDeRExp.getTipo()) ){
-						a.setTipo("bool");
+					if ( atrDeTerm.getProps().getTipo().equals("bool") && atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo()) ){
+						a.getProps().setTipo("bool");
 					} else {
-						a.setTipo("error");
+						a.getProps().setTipo("error");
 					}
 				}
-			}*/
+			}
 		} 
 		else {
-			//a.setTipo("");
+			a.getProps().setTipo("");
 		}
 		return a;
 	}
@@ -854,20 +895,20 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
-		/*if ( atrDeFact.getTipo().compareTo(atrDeRTerm.getTipo()) == 0){
-			if (atrDeFact.getTipo().compareTo("int") == 0)
-					a.setTipo("int");
-			else if (atrDeFact.getTipo().compareTo("bool") == 0)
-					a.setTipo("bool");
-			else a.setTipo("error");
+		if ( atrDeFact.getProps().getTipo().compareTo(atrDeRTerm.getProps().getTipo()) == 0){
+			if (atrDeFact.getProps().getTipo().compareTo("int") == 0)
+					a.getProps().setTipo("int");
+			else if (atrDeFact.getProps().getTipo().compareTo("bool") == 0)
+					a.getProps().setTipo("bool");
+			else a.getProps().setTipo("error");
 		}
 		else{
-			if (atrDeRTerm.getTipo().equals("")){
-				a.setTipo(atrDeFact.getTipo());
+			if (atrDeRTerm.getProps().getTipo().equals("")){
+				a.getProps().setTipo(atrDeFact.getProps().getTipo());
 			}else{
-				a.setTipo("error");
+				a.getProps().setTipo("error");
 			}
-		}*/
+		}
 		return a;
 	}
 	
@@ -884,8 +925,7 @@ public class Sintactico{
 		Token tk;
 		tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKFF) || lexico.reconoce(Tipos.TKTHN) || lexico.reconoce(Tipos.TKDO)){
-			//a.setErr(true);
-			//a.setTipo("");
+			a.getProps().setTipo("error");
 			return a;
 		}
 		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
@@ -908,26 +948,26 @@ public class Sintactico{
 			}
 			atrDeRTerm = RTerm();
 			
-			/*if ( atrDeFact.getTipo().equals("error") || atrDeRTerm.getTipo().equals("error")){
-				a.setTipo("error");
+			if ( atrDeFact.getProps().getTipo().equals("error") || atrDeRTerm.getProps().getTipo().equals("error")){
+				a.getProps().setTipo("error");
 			} else {
 				if (numerico){ 
-					if (atrDeFact.getTipo().equals(atrDeRTerm.getTipo()) && atrDeFact.getTipo().equals("int") ){
-						a.setTipo(atrDeFact.getTipo()); // int
+					if (atrDeFact.getProps().getTipo().equals(atrDeRTerm.getProps().getTipo()) && atrDeFact.getProps().getTipo().equals("int") ){
+						a.getProps().setTipo(atrDeFact.getProps().getTipo()); // int
 					} else {
-						a.setTipo("error");
+						a.getProps().setTipo("error");
 					}
 				} else if (booleano) {
-					if (atrDeFact.getTipo().equals(atrDeRTerm.getTipo()) && atrDeFact.getTipo().equals("bool") ){
-						a.setTipo(atrDeFact.getTipo()); // int
+					if (atrDeFact.getProps().getTipo().equals(atrDeRTerm.getProps().getTipo()) && atrDeFact.getProps().getTipo().equals("bool") ){
+						a.getProps().setTipo(atrDeFact.getProps().getTipo()); // bool
 					} else {
-						a.setTipo("error");
+						a.getProps().setTipo("error");
 					}
 				}
-			}*/
+			}
 		}
 		else{
-			//a.setTipo("");
+			a.getProps().setTipo("");
 		}
 		return a;
 	}
@@ -948,12 +988,12 @@ public class Sintactico{
 		Token tk;
 		tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKNUM)){
-			//a.setTipo("int");
+			a.getProps().setTipo("int");
 			codigo. genIns("apila", Integer.parseInt(tk.getLexema()) );
 			etq ++;
 		} 
 		else if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
-			//a.setTipo("bool");
+			a.getProps().setTipo("bool");
 			int cod;
 			if (tk.getLexema().equals("false"))
 				cod = 0;
@@ -964,20 +1004,21 @@ public class Sintactico{
 		} else if (lexico.reconoce(Tipos.TKNOT) || lexico.reconoce(Tipos.TKRESTA)) {  // es un OpUn
 			boolean numerico = lexico.reconoce(Tipos.TKRESTA); // numerico != true ==> booleano = true
 			atrDeFact = Fact();
+			a = atrDeFact;
 			if (numerico){
 				genOpNega();
-				/*if (atrDeFact.getTipo().equals("int")){
-					a.setTipo(atrDeFact.getTipo());
+				if (atrDeFact.getProps().getTipo().equals("int")){
+					a.getProps().setTipo(atrDeFact.getProps().getTipo());
 				}else{
-					a.setTipo("error");
-				}*/
+					a.getProps().setTipo("error");
+				}
 			} else {
 				genOpNot();
-				/*if (atrDeFact.getTipo().equals("bool")){
-					a.setTipo(atrDeFact.getTipo());
+				if (atrDeFact.getProps().getTipo().equals("bool")){
+					a.getProps().setTipo(atrDeFact.getProps().getTipo());
 				}else{
-					a.setTipo("error");
-				}*/
+					a.getProps().setTipo("error");
+				}
 			}
 		}
 		else {
@@ -985,12 +1026,12 @@ public class Sintactico{
 				tk = lexico.getNextToken();
 				String i = tk.getLexema();
 				if (tk.getCategoriaLexica() != Tipos.TKCAP){
-					/*if (TS.existeID(i) ){
-						a.setTipo(TS.getTipo(i));
+					if (TS.existeID(i) ){
+						a.getProps().setTipo(TS.getProps(i).getTipo());
 					} 
 					else {
-						a.setTipo("error");
-					}*/
+						a.getProps().setTipo("error");
+					}
 					codigo.genIns("apila-dir",TS.getDir(i));
 					etq ++;
 				}
@@ -1003,41 +1044,43 @@ public class Sintactico{
 					}
 					else{
 						atrDeExp = Exp();
-						/*if (atrDeExp.getTipo().equals("int")){
-							n = Integer.parseInt(atrDeExp.getIden());
+						if (atrDeExp.getProps().getTipo().equals("int")){
+							n = Integer.parseInt(atrDeExp.getId());
 						}
 						else{
+							a.getProps().setTipo("error");
 							throw new Exception("ERROR: El indice del array no es un entero");
-						}*/
+						}
 					}	
-					/*if ( n > TS.getTam(i)){
+					if ( n > TS.getProps(i).getTam()){
+						a.getProps().setTipo("error");
 						throw new Exception("ERROR: array overflow");
 					}
 					lexico.lexer();
 					if (lexico.reconoce(Tipos.TKCCI)){
-						if (TS.existeID(i) && ((TS.getTipo(i)).equals("array"))){
-							a.setTipo(i);
+						if (TS.existeID(i) && ((TS.getProps(i).getTipo()).equals("array"))){
+							a.getProps().setTipo(i);
 						}
-						a.setTbase("error");
-						a.setI(1);
+						a.getProps().setTbase("error");
+						a.setI(1); // ????
 					}
 					else{
-						a.setTipo("error"); 
-					}*/
+						a.getProps().setTipo("error"); 
+					}
 				}
 			}	
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
 					atrDeExpC = ExpC();
-					/*if (lexico.reconoce(Tipos.TKPCI)){
-						a.setTipo(atrDeExpC.getTipo());
+					if (lexico.reconoce(Tipos.TKPCI)){
+						a.getProps().setTipo(atrDeExpC.getProps().getTipo());
 					}
 					else{
-						a.setTipo("error");
-					}*/
+						a.getProps().setTipo("error");
+					}
 				}
 				else{
-					//a.setTipo("error");
+					a.getProps().setTipo("error");
 				}
 			}
 		}	
