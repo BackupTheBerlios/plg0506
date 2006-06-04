@@ -204,6 +204,8 @@ public class Tipos {
 	public static final int TKPROC		= 38;
 	public static final int TKCAP		= 39;
 	public static final int TKCCI		= 40;
+	public static final int TKNEW		= 41;
+	public static final int TKDEL		= 42;
 	
 	
 }

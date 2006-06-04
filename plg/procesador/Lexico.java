@@ -443,12 +443,41 @@ public class Lexico {
 								return new Token (aux,Tipos.TKIDEN);
 							}	
 						}	
-						else{							
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("n");
-							return new Token (aux,Tipos.TKIDEN);
+						else{
+							if (a =='e'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (a =='w'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("new");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										return new Token ("new",Tipos.TKNEW);
+									}
+								}	
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("ne");
+									return new Token (aux,Tipos.TKIDEN);
+								}	
+							}	
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("n");
+								return new Token (aux,Tipos.TKIDEN);
+							}
 						}
 			
 			/*
@@ -523,11 +552,73 @@ public class Lexico {
 							}
 						}	
 						else{
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("d");
-							return new Token (aux,Tipos.TKIDEN);
+							if (a =='e'){
+								a = (char)fuente.read();
+								posicion ++;
+								if (a =='l'){
+									a = (char)fuente.read();
+									posicion ++;
+									if (a =='e'){
+										a = (char)fuente.read();
+										posicion ++;
+										if (a =='t'){
+											a = (char)fuente.read();
+											posicion ++;
+											if (a =='e'){
+												a = (char)fuente.read();
+												posicion ++;
+												if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
+													posicion --;
+													fuente.seek(posicion);
+													String aux;
+													aux = leerCaracter("delete");
+													return new Token (aux,Tipos.TKIDEN);
+												}
+												else{
+													posicion --;
+													fuente.seek(posicion);
+													return new Token ("delete",Tipos.TKDEL);
+												}
+											}
+											else{
+												posicion --;
+												fuente.seek(posicion);
+												String aux;
+												aux = leerCaracter("delet");
+												return new Token (aux,Tipos.TKIDEN);
+											}
+										}
+										else{
+											posicion --;
+											fuente.seek(posicion);
+											String aux;
+											aux = leerCaracter("dele");
+											return new Token (aux,Tipos.TKIDEN);
+										}
+									}
+									else{
+										posicion --;
+										fuente.seek(posicion);
+										String aux;
+										aux = leerCaracter("del");
+										return new Token (aux,Tipos.TKIDEN);
+									}
+								}
+								else{
+									posicion --;
+									fuente.seek(posicion);
+									String aux;
+									aux = leerCaracter("de");
+									return new Token (aux,Tipos.TKIDEN);
+								}
+							}
+							else{
+								posicion --;
+								fuente.seek(posicion);
+								String aux;
+								aux = leerCaracter("d");
+								return new Token (aux,Tipos.TKIDEN);
+							}
 						}
 						
 			/*
