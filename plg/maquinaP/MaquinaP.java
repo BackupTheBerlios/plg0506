@@ -272,6 +272,7 @@ public class MaquinaP {
 		System.out.println(Prog.size());
 		while (H==0){
 			if(PC<Prog.size()){
+				System.out.println(muestraPila());
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
 				if (linea[0].compareTo("apila")==0){
@@ -707,6 +708,7 @@ public class MaquinaP {
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()+s1.intValue());
 		pila.push(s);
+		System.out.println("La cima de la pila es: "+ pila.peek());
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -856,13 +858,15 @@ public class MaquinaP {
 	 *	PC <-- PC + 1 
 	 */
 	public void and(){
-		int a1= ((Integer)pila.pop()).intValue();
-		if ((a1!=0)&&(((Integer)pila.pop()).intValue()!=0)){
+		int a1 = ((Integer)pila.pop()).intValue();
+		int a2 =((Integer)pila.pop()).intValue();
+		if ((a1!=0)&&(a2!=0)){
 			pila.push(new Integer(1));
 		}
 		else{
 			pila.push(new Integer(0));
 		}
+		System.out.println("La cima de la pila: "+pila.peek());
 		ST = ST -1;
 		PC = PC + 1;
 	}
@@ -876,7 +880,8 @@ public class MaquinaP {
 	 */
 	public void or(){
 		int o1= ((Integer)pila.pop()).intValue();
-		if ((o1==0)&&(((Integer)pila.pop()).intValue()==0)){
+		int o2=((Integer)pila.pop()).intValue();
+		if ((o1==0)&&(o2==0)){
 			pila.push(new Integer(0));
 		}
 		else{
@@ -893,7 +898,8 @@ public class MaquinaP {
 	 *	PC <-- PC + 1 
 	 */
 	public void not(){
-		if (((Integer)pila.pop()).intValue()==0){
+		int n=((Integer)pila.pop()).intValue();
+		if (n==0){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -922,7 +928,8 @@ public class MaquinaP {
 	 */
 	public void menor(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (((Integer)pila.pop()).intValue()<c1){
+		int c2 = ((Integer)pila.pop()).intValue();
+		if (c2<c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -941,7 +948,8 @@ public class MaquinaP {
 	 */
 	public void menorIgual(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (((Integer)pila.pop()).intValue()<=c1){
+		int c2=((Integer)pila.pop()).intValue(); 
+		if (c2<=c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -960,7 +968,8 @@ public class MaquinaP {
 	 */
 	public void mayor(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (((Integer)pila.pop()).intValue()>c1){
+		int c2 = ((Integer)pila.pop()).intValue(); 
+		if (c2>c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -979,7 +988,8 @@ public class MaquinaP {
 	 */
 	public void mayorIgual(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (((Integer)pila.pop()).intValue()>=c1){
+		int c2=((Integer)pila.pop()).intValue(); 
+		if (c2>=c1){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -998,7 +1008,8 @@ public class MaquinaP {
 	 */
 	public void igual(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (c1==((Integer)pila.pop()).intValue()){
+		int c2= ((Integer)pila.pop()).intValue();
+		if (c1==c2){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -1017,7 +1028,8 @@ public class MaquinaP {
 	 */
 	public void distinto(){
 		int c1= ((Integer)pila.pop()).intValue();
-		if (c1!=((Integer)pila.pop()).intValue()){
+		int c2 =((Integer)pila.pop()).intValue();
+		if (c1!=c2){
 			pila.push(new Integer(1));
 		}
 		else{
@@ -1114,6 +1126,8 @@ public class MaquinaP {
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
 		System.out.println("D vale: " + d);
+		System.out.println("valor vale: " + valor);
+		System.out.println("El tama?o de la mem: " + Mem.size());
 		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);
@@ -1121,8 +1135,8 @@ public class MaquinaP {
 				System.out.println(Mem.elementAt(d)+" "+d);
 			}
 			else{
-				System.out.println("La cima de la Pila es:  "+pila.peek());
-				Mem.set(d,pila.pop());
+				//System.out.println("La cima de la Pila es:  "+pila.peek());
+				Mem.set(d,valor);
 				System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
 				//Mem.insertElementAt(pila.elementAt(ST),d);
 			}
@@ -1164,5 +1178,20 @@ public class MaquinaP {
 		else{
 			throw new Exception("ERROR: La pila no contiene los datos necesarios.");
 		}
+	}
+	public String muestraPila(){
+		Stack aux = new Stack();
+		String pilas="La puta pila es: \n";
+		while(!pila.isEmpty()){
+			Integer n = (Integer)pila.pop();
+			pilas= pilas.concat(n.toString());
+			pilas = pilas.concat("\n");
+			aux.push(n);
+		}
+		while(!aux.isEmpty()){
+			Integer n = (Integer)aux.pop();
+			pila.push(n);
+		}
+		return pilas;
 	}
 }

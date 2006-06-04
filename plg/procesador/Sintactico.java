@@ -685,6 +685,8 @@ public class Sintactico{
 				System.out.println("voy a expC "+tk.getLexema());
 				atrDeExpC = ExpC();
 				System.out.println("vuelvo de expc "+tk.getLexema());
+				System.out.println("El tipo de ExpC es: " + atrDeExpC.getProps().getTipo());
+				System.out.println("El tipo de A es: " + a.getProps().getTipo());
 				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(a.getProps().getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
@@ -697,7 +699,7 @@ public class Sintactico{
 				else{
 					
 					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1)) || TS.compatibles(a.getProps(), new Atributos("bool","",0,1))){
-							codigo.genIns("desapila-ind",TS.getDir(lex));
+							codigo.genIns("desapila-ind");
 							etq ++;		
 					}
 					else {
@@ -804,14 +806,18 @@ public class Sintactico{
 		atrDeExp = Exp();
 		Par a = new Par();
 		atrDeRExpC = RExpC();
+		System.out.println("El tipo de Exp es: " + atrDeExp.getProps().getTipo());
+		System.out.println("El tipo de RExpC es: " + atrDeRExpC.getProps().getTipo());
+		
 		if ( atrDeExp.getProps().getTipo().equals(atrDeRExpC.getProps().getTipo())){
 			if (atrDeExp.getProps().getTipo().equals("int"))
-					a.getProps().setTipo("int");
+					a.getProps().setTipo("bool");
 			else if (atrDeExp.getProps().getTipo().equals("bool"))
 					a.getProps().setTipo("bool");
 			else a.getProps().setTipo("error");
 		}
 		else{
+			
 			if (atrDeRExpC.getProps().getTipo().equals("")){
 				a.getProps().setTipo(atrDeExp.getProps().getTipo());
 			}else{
@@ -843,11 +849,16 @@ public class Sintactico{
 				atrDeExp = Exp();
 				genOpComp(tk.getLexema());				
 				atrDeRExpC = RExpC();
-				if ( ( (atrDeExp.getProps().getTipo().equals(atrDeRExpC.getProps().getTipo())) && (atrDeExp.getProps().getTipo().equals("bool")) ) || atrDeRExpC.getProps().getTipo().equals("")){
+				if (atrDeRExpC.getProps().getTipo().equals("")){
 					a.getProps().setTipo(atrDeExp.getProps().getTipo());
 				}
-				else{
-					a.getProps().setTipo("error");
+				else {
+					if ( ( (atrDeExp.getProps().getTipo().equals(atrDeRExpC.getProps().getTipo())) && (atrDeExp.getProps().getTipo().equals("bool")) ) || atrDeRExpC.getProps().getTipo().equals("")){
+						a.getProps().setTipo(atrDeExp.getProps().getTipo());
+					}
+					else{
+						a.getProps().setTipo("error");
+					}
 				}
 				return a;
 			} 
@@ -868,6 +879,8 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
+		System.out.println("El tipo de Term es: " + atrDeTerm.getProps().getTipo());
+		System.out.println("El tipo de RExp es: " + atrDeRExp.getProps().getTipo());
 		if ( atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo())){
 			if (atrDeTerm.getProps().getTipo().equals("int"))
 					a.getProps().setTipo("int");
@@ -911,29 +924,37 @@ public class Sintactico{
 			boolean booleano = lexico.reconoce(Tipos.TKOR); 
 		
 			atrDeTerm = Term();
-			
+			System.out.println("En Rexp el tk" + tk.getLexema());
 			if (numerico){
 				genOpAd(tk.getLexema());
 			} else if (booleano) {
 				genOpAd("or");    // O deber?amos cambiarlo por un genOpAd(tk.getLexema()) tambi?n??  CONSULTAR
 			}
 			atrDeRExp = RExp();
+			System.out.println("Rexp termina");
 			
-			if ( (atrDeTerm.getProps().getTipo().compareTo("error") == 0) || (atrDeRExp.getProps().getTipo().compareTo("error") == 0) ){
+			if ( (atrDeTerm.getProps().getTipo().equals("error")) || (atrDeRExp.getProps().getTipo().equals("error")) ){
 				a.getProps().setTipo("error");
 			} else {
-				if (numerico){
-					if ( atrDeRExp.getProps().getTipo().equals("int") && atrDeRExp.getProps().getTipo().equals(atrDeTerm.getProps().getTipo()) ){
-						a.getProps().setTipo("int");
-					} else {
-						a.getProps().setTipo("error");
-					}
-				} 
-				else if (booleano){
-					if ( atrDeTerm.getProps().getTipo().equals("bool") && atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo()) ){
-						a.getProps().setTipo("bool");
-					} else {
-						a.getProps().setTipo("error");
+				if (atrDeRExp.getProps().getTipo().equals("")){
+					a.getProps().setTipo(atrDeTerm.getProps().getTipo());
+				}
+				else {
+					if (numerico){
+						System.out.println("numerico");
+						if ( atrDeRExp.getProps().getTipo().equals("int") && atrDeRExp.getProps().getTipo().equals(atrDeTerm.getProps().getTipo()) ){
+							a.getProps().setTipo("int");
+						} else {
+							a.getProps().setTipo("error");
+						}
+					} 
+					else if (booleano){
+						System.out.println("bool");
+						if ( atrDeTerm.getProps().getTipo().equals("bool") && atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo()) ){
+							a.getProps().setTipo("bool");
+						} else {
+							a.getProps().setTipo("error");
+						}
 					}
 				}
 			}
@@ -956,6 +977,9 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
+		System.out.println("El tipo de Fact es: " + atrDeFact.getProps().getTipo());
+		System.out.println("El tipo de RTerm es: " + atrDeRTerm.getProps().getTipo());
+		
 		if ( atrDeFact.getProps().getTipo().compareTo(atrDeRTerm.getProps().getTipo()) == 0){
 			if (atrDeFact.getProps().getTipo().compareTo("int") == 0)
 					a.getProps().setTipo("int");
@@ -1012,17 +1036,22 @@ public class Sintactico{
 			if ( atrDeFact.getProps().getTipo().equals("error") || atrDeRTerm.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
 			} else {
-				if (numerico){ 
-					if (atrDeFact.getProps().getTipo().equals(atrDeRTerm.getProps().getTipo()) && atrDeFact.getProps().getTipo().equals("int") ){
-						a.getProps().setTipo(atrDeFact.getProps().getTipo()); // int
-					} else {
-						a.getProps().setTipo("error");
-					}
-				} else if (booleano) {
-					if (atrDeFact.getProps().getTipo().equals(atrDeRTerm.getProps().getTipo()) && atrDeFact.getProps().getTipo().equals("bool") ){
-						a.getProps().setTipo(atrDeFact.getProps().getTipo()); // bool
-					} else {
-						a.getProps().setTipo("error");
+				if (atrDeRTerm.getProps().getTipo().equals("")){
+					a.getProps().setTipo(atrDeFact.getProps().getTipo());
+				}
+				else {
+					if (numerico){ 
+						if (atrDeFact.getProps().getTipo().equals(atrDeRTerm.getProps().getTipo()) && atrDeFact.getProps().getTipo().equals("int") ){
+							a.getProps().setTipo(atrDeFact.getProps().getTipo()); // int
+						} else {
+							a.getProps().setTipo("error");
+						}
+					} else if (booleano) {
+						if (atrDeFact.getProps().getTipo().equals(atrDeRTerm.getProps().getTipo()) && atrDeFact.getProps().getTipo().equals("bool") ){
+							a.getProps().setTipo(atrDeFact.getProps().getTipo()); // bool
+						} else {
+							a.getProps().setTipo("error");
+						}
 					}
 				}
 			}
@@ -1140,27 +1169,36 @@ public class Sintactico{
 					System.out.println("En Mem, reconozco que es un array y lo trato.");
 					int n;
 					if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
-						tk = lexico.lexer();
+						tk = lexico.lexer(); //consumo la n
 						n = Integer.parseInt(tk.getLexema());
+						System.out.println("soy num");
 					}
 					else{
 						Par atrDeExp = Exp();
 						if (atrDeExp.getProps().getTipo().equals("int")){
+							System.out.println("soy exp");
 							n = Integer.parseInt(atrDeExp.getId());
 						}
 						else{
+							System.out.println("no soy");
 							a.getProps().setTipo("error");
 							throw new Exception("ERROR: El indice del array no es un entero");
 						}
 					}	
-					if ( n > TS.getProps(iden).getTam()){
+					System.out.println("tam de a " + a.getProps().getElems());
+					System.out.println("tam de iden " + TS.getProps(iden).getElems());
+					if ( n > TS.getProps(iden).getElems()){
 						a.getProps().setTipo("error");
 						throw new Exception("ERROR: array overflow");
 					}
-					tk = lexico.lexer();
+					tk = lexico.lexer(); // consumo ]
+					System.out.println("el nuevo token" + tk.getLexema());
 					if (lexico.reconoce(Tipos.TKCCI)){
+						System.out.println("soy ]");
 						if (TS.existeID(iden) && ((TS.getProps(iden).getTipo()).equals("array"))){
-							a.getProps().setTipo(a.getProps().getTbase().getTipo());
+							System.out.println("la vida es bella");
+							a.getProps().setTipo(TS.getProps(iden).getTbase().getTipo());
+							System.out.println("la vida es bella 2? parte");
 							a.getProps().setTam(a.getProps().getTbase().getTam());
 							codigo.genIns("apila",a.getProps().getTam());
 							codigo.genIns("multiplica");
@@ -1170,6 +1208,7 @@ public class Sintactico{
 						a.getProps().getTbase().setTipo("error");
 					}
 					else{
+						System.out.println("no soy ]");
 						a.getProps().setTipo("error"); 
 					}
 				}
@@ -1198,6 +1237,10 @@ public class Sintactico{
 				a.setClase(TS.getClase(tk.getLexema()));
 				a.setDir(TS.getDir(tk.getLexema()));
 				a.setProps(TS.getProps(tk.getLexema()));
+			}
+			else {
+				codigo.genIns("apila-ind");
+				etq ++;
 			}
 			System.out.println("salimos del if "+tk.getLexema());
 		}
