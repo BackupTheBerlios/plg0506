@@ -607,14 +607,31 @@ public class Sintactico{
 	
 	
 	public Par INew() throws Exception{
-		Token tk = lexico.lexer(); // Consumimos el new
-		if (lexico.reconoce(Tipos.TKIDEN)){
-			
+		
+		Par a = Mem();
+		if (a.getProps().getTipo().equals("ref")){
+			codigo.genIns("new",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
 		}
+		else {
+			codigo.genIns("new",a.getProps().getTam());
+		}
+		codigo.genIns("desapila-ind");
+		etq += 2;
+		
+		return a;
 	}
 	
 	public Par IDel() throws Exception{
+		Par a = Mem();
+		if (a.getProps().getTipo().equals("ref")){
+			codigo.genIns("delete",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+		}
+		else {
+			codigo.genIns("delete",a.getProps().getTam());
+		}
+		etq ++;
 		
+		return a;
 	}
 	
 	/**
