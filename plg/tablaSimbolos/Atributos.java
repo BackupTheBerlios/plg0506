@@ -82,5 +82,10 @@ public class Atributos {
 		aux = aux.concat(" )");
 		return aux;
 	}
+	
+	public boolean equals(Atributos a){
+		return (this.elems == a.getElems() && this.tam == a.getTam() && this.tipo.equals(a.getTipo()) && 
+				this.tbase.getTipo().equals(a.getTbase().getTipo()));
+	}
 
 }
