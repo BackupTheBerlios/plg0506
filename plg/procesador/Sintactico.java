@@ -669,9 +669,8 @@ public class Sintactico{
 		IAsig.etq = Exp.etq + 2*/
 		
 		Par  atrDeExpC = new Par();
-		Par  atrDeExp = new Par();
 		Par a = new Par();
-		boolean errDeIAsig; 
+		boolean errDeIAsig = false; 
 		String lex = "";
 		Token tk;
 		tk = lexico.getLookahead();
@@ -696,27 +695,20 @@ public class Sintactico{
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
-					System.out.println("existe el iden "+tk.getLexema());
-					Atributos at = new Atributos("int","",0,1);
-					System.out.println("creo el atributos a comparar "+tk.getLexema());
-					if (TS.compatibles(a.getProps(), at)){
-						System.out.println("compatible es true "+tk.getLexema());
-						if ( (a.getProps().getTipo().equals("int") || a.getProps().getTipo().equals("bool"))){
+					
+					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1)) || TS.compatibles(a.getProps(), new Atributos("bool","",0,1))){
 							codigo.genIns("desapila-ind",TS.getDir(lex));
 							etq ++;		
-						}
-						else {
-							codigo.genIns("mueve",a.getProps().getTam());
-							etq ++;
-						}
 					}
-					
-					
-					a.setId(lex);
-					a.getProps().setTipo(TS.getProps(lex).getTipo());
-					// O metemos en 'a' directamente a.setprops( TS.getProps(lex) )  tal cual?  O que otros atributos rellenamos si no?
-				}
-			}
+					else {
+						codigo.genIns("mueve",a.getProps().getTam());
+						etq ++;
+					}
+				}	
+				a.setId(lex);
+				a.getProps().setTipo(TS.getProps(lex).getTipo());
+				// O metemos en 'a' directamente a.setprops( TS.getProps(lex) )  tal cual?  O que otros atributos rellenamos si no?
+			}/*
 			else{
 				if (lexico.reconoce(Tipos.TKCAP)){
 					tk = lexico.lexer();
@@ -779,8 +771,8 @@ public class Sintactico{
 					errDeIAsig = true;
 					a.getProps().setTipo("error");
 					throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-				}
-			}
+				}*/
+		
 		}
 		else{
 			if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){

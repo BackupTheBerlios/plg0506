@@ -1103,7 +1103,7 @@ public class MaquinaP {
 	
 	/**
 	 * ? despila-ind: Desapila el valor de la cima v y la subcima d, interpreta d como un n?mero de celda en la memoria, y almacena v en dicha celda.
-			Mem[Pila[ST-1]] ? Pila[ST]
+			Mem[Pila[ST]] ? Pila[ST-1]
 			ST?ST-2
 			PC ? PC+1
 	 *  @throws Exception
