@@ -21,7 +21,14 @@ public class Atributos {
 		super();
 		// TODO Auto-generated constructor stub
 		this.tipo = tipo;
-		this.tbase = new Atributos(tbase,"",0,0);
+		System.out.println("voy crear tbase ");
+		if (tbase != ""){
+			this.tbase = new Atributos(tbase,"",0,0);
+		}
+		else{
+			tbase = null;
+		}
+		System.out.println("creo tbase ");
 		this.elems = elems;
 		this.tam = tam;
 	}

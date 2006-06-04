@@ -782,17 +782,17 @@ public class MaquinaP {
 		ST = ST + 1; 
 		//System.out.println();
 		if (d >= 0){
-			if ((Mem.size()-1>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
+			if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
 				pila.push(Mem.elementAt(d));  
 				PC = PC + 1;
 			}
 			else{
-				/*System.out.println("-------------=================INICIO Depuracion de la MAQUINAP================----------");
+				System.out.println("-------------=================INICIO Depuracion de la MAQUINAP================----------");
 				System.out.println("Tama?o de la memoria:   Mem.size = " + Mem.size());
 				System.out.println("Apila-dir de " + d);
 				System.out.println("Y en la memoria tenemos:");
 				for (int z=0; z< Mem.size();z++)
-					System.out.println("Pos " + (z+1) + ":  " + String.valueOf(Mem.elementAt(z)));*/
+					System.out.println("Pos " + (z+1) + ":  " + String.valueOf(Mem.elementAt(z)));
 				throw new Exception("ERROR: Variable sin inicializar.");
 			}
 		}
@@ -1113,6 +1113,7 @@ public class MaquinaP {
 		//Sino lo es aumentamos el tama?o del vector.
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
+		System.out.println("D vale: " + d);
 		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);

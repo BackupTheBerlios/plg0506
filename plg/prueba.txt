@@ -1,4 +1,5 @@
-tipo maria = array [1] of bool;
-tipo pepe = maria;
-pepe c
+int a;
+bool b
 #
+a := 1;
+b:=true;

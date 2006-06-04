@@ -243,6 +243,7 @@ public class Sintactico{
 		Par a = new Par();
 		System.out.println("llamo a tipo");
 		Par atrDeTipo = Tipo();
+		System.out.println(atrDeTipo.getProps().getTipo());
 		System.out.println("vuelvo de tipo");
 		Token tk = lexico.lexer();
 		System.out.println(tk.muestraToken());
@@ -252,7 +253,7 @@ public class Sintactico{
 		a.setId(tk.getLexema());
 		a.getProps().setElems(atrDeTipo.getProps().getElems());
 		a.getProps().setTam(atrDeTipo.getProps().getTam());
-		a.getProps().setTipo(atrDeTipo.getId());
+		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
 		System.out.println("en decvar");
 		//System.out.println(a.getId());
 		//System.out.println(a.getProps().getTipo());
@@ -677,22 +678,29 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			a = Mem();
+			System.out.println("vulevo de mem "+tk.getLexema());
 			//System.out.println(lexico.getLookahead().muestraToken());
 			//System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
 			tk = lexico.lexer();
 			if (lexico.reconoce(Tipos.TKASIGN)){
+				System.out.println("voy a expC "+tk.getLexema());
 				atrDeExpC = ExpC();
+				System.out.println("vuelvo de expc "+tk.getLexema());
 				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(a.getProps().getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
+					System.out.println("no existe el iden "+tk.getLexema());
 					errDeIAsig = true;
 					a.getProps().setTipo("error"); // Como antes, creo que la Excepcion me saca del m?todo, y quisiera dejar el error marcado.
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
-					
-					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1))){
+					System.out.println("existe el iden "+tk.getLexema());
+					Atributos at = new Atributos("int","",0,1);
+					System.out.println("creo el atributos a comparar "+tk.getLexema());
+					if (TS.compatibles(a.getProps(), at)){
+						System.out.println("compatible es true "+tk.getLexema());
 						if ( (a.getProps().getTipo().equals("int") || a.getProps().getTipo().equals("bool"))){
 							codigo.genIns("desapila-ind",TS.getDir(lex));
 							etq ++;		
@@ -1119,18 +1127,22 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKIDEN)){ // Esta comprobacion es superflua, pero la dejamos "por si acaso" :)
 			String iden = tk.getLexema();
 			
-			codigo.genIns("apila-dir", TS.getDir(tk.getLexema()));
+			codigo.genIns("apila", TS.getDir(tk.getLexema()));
 			etq++;
 			
+			System.out.println("he generado la direccion "+tk.getLexema());
 			
 			a.getProps().setTam(TS.getProps(iden).getTam());
+			System.out.println("he cambiado tam "+tk.getLexema());
 			a.getProps().setTipo(TS.getProps(iden).getTipo());
 			
+			System.out.println("antes del while (aux)"+tkAux.getLexema());
 			while (tkAux.getCategoriaLexica() == Tipos.TKIDEN || tkAux.equals(new Token("[",Tipos.TKCAP)) || 
 					tkAux.equals(new Token("pointer",Tipos.TKPUNT))){
 				
 				tk = lexico.lexer();
 				
+				System.out.println("en el while "+tk.getLexema());
 				
 				if (lexico.reconoce(Tipos.TKCAP)){
 					System.out.println("En Mem, reconozco que es un array y lo trato.");
@@ -1188,9 +1200,17 @@ public class Sintactico{
 				
 				tkAux = lexico.getNextToken();
 			}
-			
+			System.out.println("salimos del while "+tk.getLexema());
+			if (tkAux.getCategoriaLexica() == Tipos.TKASIGN){
+				System.out.println("en el if "+tk.getLexema());
+				a.setClase(TS.getClase(tk.getLexema()));
+				a.setDir(TS.getDir(tk.getLexema()));
+				a.setProps(TS.getProps(tk.getLexema()));
+			}
+			System.out.println("salimos del if "+tk.getLexema());
 		}
 		else {  
+			System.out.println("en el else de muy abajo "+tk.getLexema());
 			System.out.println("No es un MEM. Error.");
 			a.getProps().setTipo("error");
 			throw new Exception("ERROR: Expresion derecha mal construida");

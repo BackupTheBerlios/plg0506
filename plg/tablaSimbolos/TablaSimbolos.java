@@ -88,7 +88,14 @@ public class TablaSimbolos {
 		else
 			return -1;
 	}
-	
+
+	public String getClase(String id){
+		if (this.tabla.containsKey(id))
+			return ((Par)this.tabla.get(id)).getClase();// Devolver la clase...
+		else
+			return "";
+	}
+
 	/**
 	 * El mtodo agnadeID aade un identificador 'id' de tipo 't' a la tabla si no existe ningun identificador con ese nombre 
 	 * El valor de la clave en la tabla hash es znico, ya que concatenamos el nombre del identificador con el tipo usando 
