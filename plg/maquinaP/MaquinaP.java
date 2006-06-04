@@ -24,8 +24,8 @@ import javax.swing.JOptionPane;
  * <LI><CODE>ST:</CODE> Puntero a la cima de la pila.</LI>
  * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
  * c?digo del programa.</LI>
- * <LI><CODE>Mem:</CODE> Memoria de datos estática.</LI>
- * <LI><CODE>heap:</CODE> Memoria de datos dinámica.</LI>
+ * <LI><CODE>Mem:</CODE> Memoria de datos est?tica.</LI>
+ * <LI><CODE>heap:</CODE> Memoria de datos din?mica.</LI>
  * <LI><CODE>fichero:</CODE> Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP. Sera un fichero con extension '.obj'</LI>
  * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
  * </UL></P>
@@ -45,7 +45,7 @@ public class MaquinaP {
 	 * Prog:Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
 	 * c?digo del programa.
 	 * Mem: Memoria de datos estatica.
-	 * heap:Memoria de datos dinámica.
+	 * heap:Memoria de datos din?mica.
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
@@ -72,7 +72,7 @@ public class MaquinaP {
 		H = 0;
 		ST = -1;
 		Mem= new Vector();
-		// el 1º entero indica el tamño inicial, y el otro la capacidad de aumento
+		// el 1? entero indica el tam?o inicial, y el otro la capacidad de aumento
 		heap= new Heap(50);
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
@@ -567,22 +567,6 @@ public class MaquinaP {
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
-					libera((new Integer(Integer.parseInt(linea[1]))).intValue());
-					if (!pila.empty()){
-						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
-						pasos= pasos.concat(" \n");
-					}
-					else{
-						pasos= pasos.concat("La pila ahora esta vacia");
-						pasos= pasos.concat(" \n");
-					}
-					j++;
-				}
-				else if (linea[0].compareTo("libera")==0){
-					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
-					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
-					pasos= pasos.concat(" \n");
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
 					if (!pila.empty()){
 						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
@@ -594,12 +578,28 @@ public class MaquinaP {
 					}
 					j++;
 				}
-				else if (linea[0].compareTo("reserva")==0){
+				else if (linea[0].compareTo("delete")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat(" \n");
-					reserva(); //(new Integer(Integer.parseInt(linea[1]))).intValue()
+					delete((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("new")==0){
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					new_o((new Integer(Integer.parseInt(linea[1]))).intValue());
 					if (!pila.empty()){
 						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
 						pasos= pasos.concat(" \n");
@@ -1062,30 +1062,32 @@ public class MaquinaP {
 	 * (R22) libera(d)
 	 *  Mem[d] <-- null
 	 *  PC <-- PC +1
-	 * pone a null la posicion d de la memoria
+	 * del(t): Desapila una direcci?n de comienzo d de la cima de la pila, 
+	 * y libera en el heap t celdas consecutivas a partir de d.
 	 */
-	public void libera (int d) throws Exception{
-		if (d < Mem.size()){
-			Mem.setElementAt(null,d);
-			PC =PC + 1;
-		}
-		else{
-			throw new Exception("ERROR: Ese puntero no existe o no esta inicializado.");
-		}
+	public void delete (int t) throws Exception{
+		int d= ((Integer)pila.pop()).intValue();
+		ST= ST-1;
+		heap.libera(d,t);
+		PC++;
 	}
 	
 	/**
 	 * 
 	 * @throws Exception
 	 */
-	public void reserva()throws Exception{
-		
+	public void new_o(int i) throws Exception{
+		int j=heap.reserva(i);
+		ST=ST+1;
+		pila.push(new Integer (j));
+		System.out.println(pila.peek());
+		PC++;
 	}
 	
 	/**
-	 * Para acceder a las partes de las estructuras es necesario dotar a la máquina de capacidad de direccionamiento indirecto. Esto implica las siguientes operaciones:
+	 * Para acceder a las partes de las estructuras es necesario dotar a la m?quina de capacidad de direccionamiento indirecto. Esto implica las siguientes operaciones:
 
-		? apila-ind: Interpreta el valor d en la cima de la pila como un número de celda en la memoria, y substituye dicho valor por el almacenado en dicha celda.
+		? apila-ind: Interpreta el valor d en la cima de la pila como un n?mero de celda en la memoria, y substituye dicho valor por el almacenado en dicha celda.
 			Pila[ST] ? Mem[Pila[ST]]	
 			PC ? PC+1
 		 @throws Exception
@@ -1100,7 +1102,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * ? despila-ind: Desapila el valor de la cima v y la subcima d, interpreta d como un número de celda en la memoria, y almacena v en dicha celda.
+	 * ? despila-ind: Desapila el valor de la cima v y la subcima d, interpreta d como un n?mero de celda en la memoria, y almacena v en dicha celda.
 			Mem[Pila[ST-1]] ? Pila[ST]
 			ST?ST-2
 			PC ? PC+1
@@ -1132,7 +1134,7 @@ public class MaquinaP {
 	
 	/**
 	 * 
-	 * mueve(s). Dicha instrucción encuentra en la cima la dirección origen o y en la subcima la dirección destino d, y realiza el movimiento de s celdas desde o a s.
+	 * mueve(s). Dicha instrucci?n encuentra en la cima la direcci?n origen o y en la subcima la direcci?n destino d, y realiza el movimiento de s celdas desde o a s.
 		para i?0 hasta s-1 hacer
 		Mem[Pila[ST-1]+i] ? Mem[Pila[ST]+i]
 		ST?ST-2

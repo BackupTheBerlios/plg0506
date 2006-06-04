@@ -609,15 +609,16 @@ public class Sintactico{
 	public Par INew() throws Exception{
 		
 		Par a = Mem();
-		if (a.getProps().getTipo().equals("ref")){
-			codigo.genIns("new",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
+			if (a.getProps().getTipo().equals("ref")){
+				codigo.genIns("new",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+			}
+			else {
+				codigo.genIns("new",a.getProps().getTam());
+			}
+			codigo.genIns("desapila-ind");
+			etq += 2;
 		}
-		else {
-			codigo.genIns("new",a.getProps().getTam());
-		}
-		codigo.genIns("desapila-ind");
-		etq += 2;
-		
 		return a;
 	}
 	
@@ -1114,8 +1115,9 @@ public class Sintactico{
 			codigo.genIns("apila-dir", TS.getDir(tk.getLexema()));
 			etq++;
 			
-			a.getProps().setTam(TS.getProps(iden).getTbase().getTam());
-			a.getProps().setTipo(TS.getProps(iden).getTbase().getTipo());
+			
+			a.getProps().setTam(TS.getProps(iden).getTam());
+			a.getProps().setTipo(TS.getProps(iden).getTipo());
 			
 			while (tkAux.getCategoriaLexica() == Tipos.TKIDEN || tkAux.equals(new Token("[",Tipos.TKCAP)) || 
 					tkAux.equals(new Token("pointer",Tipos.TKPUNT))){
