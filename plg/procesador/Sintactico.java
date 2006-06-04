@@ -5,6 +5,7 @@ import java.io.RandomAccessFile;
 import maquinaP.Codigo;
 import tablaSimbolos.TablaSimbolos;
 import tablaSimbolos.Par;
+import tablaSimbolos.Atributos;
 
 /**
  * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
@@ -181,7 +182,6 @@ public class Sintactico{
 			a.setProps(atrDeDecTipo.getProps());
 			a.setClase("tipo");
 			System.out.println("A la salida de dec props");
-			System.out.println(a.getProps().toString());
 			return a;
 		}
 		else {
@@ -211,16 +211,21 @@ public class Sintactico{
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
 		a.setId(tk.getLexema());
-		tk = lexico.lexer(); //consumimos =
+		lexico.lexer(); //consumimos =
 		if (!lexico.reconoce(Tipos.TKIG)){
 			throw new Exception ("ERROR: Necesitas un =");
 		}
 		System.out.println("llamo a tipo");
 		Par atrDeTipo = Tipo();
 		System.out.println("vuelvo de tipo");
-		a.setProps(atrDeTipo.getProps());
-		System.out.println("A la salida de DecTipo props");
-		System.out.println(a.getProps().toString());
+		a.setId(tk.getLexema());
+		a.setClase("tipo");
+		a.setDir(0);
+		a.getProps().setTipo("ref");
+		a.getProps().setTbase(new Atributos());
+		System.out.println(atrDeTipo.toString());
+		a.getProps().setTbase(atrDeTipo.getProps());
+		System.out.println(a.getProps().getTbase().toString());
 		return a;
 	}	
 	/**
@@ -245,8 +250,9 @@ public class Sintactico{
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
 		a.setId(tk.getLexema());
-		a.setProps(atrDeTipo.getProps());
-		
+		a.getProps().setElems(atrDeTipo.getProps().getElems());
+		a.getProps().setTam(atrDeTipo.getProps().getTam());
+		a.getProps().setTipo(atrDeTipo.getId());
 		System.out.println("en decvar");
 		//System.out.println(a.getId());
 		//System.out.println(a.getProps().getTipo());
@@ -255,8 +261,7 @@ public class Sintactico{
 		System.out.println(a.getId());
 		System.out.println(TS.existeID(a.getId()));
 		System.out.println("la referencia est?? mal");
-		System.out.println(TS.referenciaErronea(atrDeTipo.getProps()));
-		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo.getProps())){
+		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo)){
 			a.getProps().setTipo("error");
 			System.out.println(a.getProps().toString());
 		}
@@ -274,17 +279,10 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
 			a.getProps().setTipo(tk.getLexema());
 			a.getProps().setTam(1);
-			System.out.println("el tama??o es");
-			System.out.println(a.getProps().getTam());
-			System.out.println("int y bool son tipos");
-			System.out.println(a.getProps().toString());
 		}
 		else if(lexico.reconoce(Tipos.TKIDEN)){
 			a.getProps().setTipo("ref");
 			a.setId(tk.getLexema());
-			a.getProps().setTam(TS.getProps(tk.getLexema()).getTam());
-			//System.out.println(a.getId());
-			//System.out.println(a.getProps());
 		}
 		else if(lexico.reconoce(Tipos.TKARRAY)){
 			lexico.lexer(); //consumimos [
@@ -308,13 +306,18 @@ public class Sintactico{
 			Par atrDeTipo = Tipo();
 			System.out.println("vuelvo de tipo");
 			String t = atrDeTipo.getProps().getTipo();
+			System.out.println("t");
+			System.out.println(t);
 			int tam = atrDeTipo.getProps().getTam() * n;
+			System.out.println("tam");
 			a.getProps().setTipo("array");
+			System.out.println("n");
 			a.getProps().setElems(n);
-			a.getProps().setTbase(t);
+			System.out.println("tbase");
+			a.getProps().setTbase(atrDeTipo.getProps());
+			System.out.println("tam");
 			a.getProps().setTam(tam);
 			System.out.println("el array es un tipo");
-			System.out.println(a.getProps().toString());
 		}
 		else if(lexico.reconoce(Tipos.TKPUNT)){
 			Par atrDeTipo = Tipo();
@@ -322,13 +325,11 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 			a.getProps().setTipo("pointer");
-			a.getProps().setTbase(atrDeTipo.getProps().getTipo());
+			a.getProps().getTbase().setTipo(atrDeTipo.getProps().getTipo());
 			a.getProps().setTam(1);
 			System.out.println("el puntero es un tipo");
-			System.out.println(a.getProps().toString());
 		}
 		System.out.println("A la salida de tipo props");
-		System.out.println(a.getProps().toString());
 		return a;
 	}
 	/**
@@ -1061,8 +1062,7 @@ public class Sintactico{
 						if (TS.existeID(i) && ((TS.getProps(i).getTipo()).equals("array"))){
 							a.getProps().setTipo(i);
 						}
-						a.getProps().setTbase("error");
-						a.setI(1); // ????
+						a.getProps().getTbase().setTipo("error");
 					}
 					else{
 						a.getProps().setTipo("error"); 

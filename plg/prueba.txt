@@ -1,3 +1,4 @@
-tipo maria = int;
-maria c
+tipo maria = array [1] of bool;
+tipo pepe = maria;
+pepe c
 #

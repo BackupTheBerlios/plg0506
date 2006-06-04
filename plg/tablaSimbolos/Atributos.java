@@ -3,7 +3,7 @@ package tablaSimbolos;
 public class Atributos {
 	
 	String tipo;
-	String tbase;
+	Atributos tbase;
 	int elems;
 	int tam;
 	
@@ -11,7 +11,7 @@ public class Atributos {
 	public Atributos() {
 		super();
 		this.tipo = "";
-		this.tbase = "";
+		this.tbase = null;
 		this.elems = 0;
 		this.tam = 0;
 	}
@@ -21,7 +21,7 @@ public class Atributos {
 		super();
 		// TODO Auto-generated constructor stub
 		this.tipo = tipo;
-		this.tbase = tbase;
+		this.tbase = new Atributos(tbase,"",0,0);
 		this.elems = elems;
 		this.tam = tam;
 	}
@@ -36,15 +36,14 @@ public class Atributos {
 	}
 
 
-	public String getTbase() {
+	public Atributos getTbase() {
 		return tbase;
 	}
 
 
-	public void setTbase(String tbase) {
+	public void setTbase(Atributos tbase) {
 		this.tbase = tbase;
 	}
-
 
 	public String getTipo() {
 		return tipo;
@@ -72,7 +71,11 @@ public class Atributos {
 		Integer n= new Integer (tam);
 		aux= aux.concat(n.toString());
 		aux = aux.concat(", ");
-		aux = aux.concat(tbase);
+		aux = aux.concat("(");
+		if (tbase!=null){
+			aux = aux.concat(tbase.getTipo());
+		}
+		aux = aux.concat(") ");
 		aux = aux.concat(", ");
 		n= new Integer (elems);
 		aux = aux.concat(n.toString());

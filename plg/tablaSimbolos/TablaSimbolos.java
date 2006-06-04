@@ -170,7 +170,7 @@ public class TablaSimbolos {
 	
 	public Atributos ref(Atributos exp){
 		if (exp.getTipo().equals("ref")){
-			String iden = exp.getTbase();
+			String iden = exp.getTbase().getTipo();
 			if(this.existeID( iden )){
 				return ref( this.getProps(iden) );
 			}
@@ -190,7 +190,10 @@ public class TablaSimbolos {
 	 * 	devuelve e.t=ref ∧ ¬existeID(ts,e.id)
 	 */
 	
-	public boolean referenciaErronea(Atributos e){
-		return e.getTipo().equals("ref") && !this.existeID(e.getTipo());
+	public boolean referenciaErronea(Par e){
+		System.out.println("En ref erroenes ref es");
+		System.out.println(e.getProps().getTipo());
+		System.out.println(e.getProps().getTipo().equals("ref"));
+		return e.getProps().getTipo().equals("ref") && !this.existeID(e.getId());
 	}
 }
