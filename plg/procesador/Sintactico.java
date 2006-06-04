@@ -619,19 +619,26 @@ public class Sintactico{
 			codigo.genIns("desapila-ind");
 			etq += 2;
 		}
+		else {
+			a.getProps().setTipo("error");
+		}
 		return a;
 	}
 	
 	public Par IDel() throws Exception{
 		Par a = Mem();
-		if (a.getProps().getTipo().equals("ref")){
-			codigo.genIns("delete",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
+			if (a.getProps().getTipo().equals("ref")){
+				codigo.genIns("delete",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+			}
+			else {
+				codigo.genIns("delete",a.getProps().getTam());
+			}
+			etq ++;
 		}
 		else {
-			codigo.genIns("delete",a.getProps().getTam());
+			a.getProps().setTipo("error");
 		}
-		etq ++;
-		
 		return a;
 	}
 	

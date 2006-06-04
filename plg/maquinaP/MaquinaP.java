@@ -1111,11 +1111,12 @@ public class MaquinaP {
 	public void desapila_ind() throws Exception{
 		//	Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
+		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
 		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);
-				Mem.set(d,pila.pop());
+				Mem.set(d,valor);
 				System.out.println(Mem.elementAt(d)+" "+d);
 			}
 			else{
