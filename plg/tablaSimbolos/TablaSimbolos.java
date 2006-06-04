@@ -2,6 +2,8 @@ package tablaSimbolos;
 
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Vector;
+
 
 /**
  * La clase <B>TablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
@@ -55,7 +57,7 @@ public class TablaSimbolos {
 	public void setTabla(Hashtable tabla) {
 		this.tabla = tabla;
 	}
-	
+
 	/**
 	 * El mtodo existeID discrimina si un identificador 'id' de tipo 't' existe en la tabla de smbolos, 
 	 * solo si existe su clave. La clave de cada identificador de un tipo es nica, no habr repeticiones.
@@ -196,4 +198,58 @@ public class TablaSimbolos {
 		System.out.println(e.getProps().getTipo().equals("ref"));
 		return e.getProps().getTipo().equals("ref") && !this.existeID(e.getId());
 	}
+	
+	public boolean compatibles (Atributos e1, Atributos e2)
+	{
+		Vector visitadas = new Vector();
+		return compatibles2 (visitadas, e1, e2);
+	}
+	/*
+	 * fun compatibles(e1,e2,ts)
+	visitadas ? ?
+	compatibles2(e1,e2)
+ffun*/
+
+/*fun compatibles2(e1,e2)
+	si <e1,e2> ? visitadas 
+		devuelve true
+	si no visitadas?visitadas?{<e1,e2>}
+	si (e1.t = e2.t = num) ? (e1.t = e2.t = bool)
+		devuelve true
+	si no si e1.t = ref 
+		devuelve compatibles2(ts[e1.id].tipo,e2)
+	si no si e2.t = ref 
+		devuelve compatibles2(e1,ts[e2.id].tipo)
+	si no si e1.t=e2.t=array ? e1.nelems=e2.nelems
+		devuelve compatibles2(e1.tbase,e2.tbase)
+	si no si e1.t = e2.t = puntero
+		devuelve compatible2(e1.tbase,e2.tbase)
+	si no 
+		devuelve false
+ffun */
+public boolean compatibles2 (Vector v, Atributos e1, Atributos e2)
+{
+	if (v.contains(e1) && v.contains(e2)){
+		return true;
+	}
+	else{
+		v.addElement(e1);
+		v.addElement(e2);
+	}
+	if ((e1.getTipo()==e2.getTipo() && e2.getTipo().equals("int"))
+			|| (e1.getTipo()==e2.getTipo() && e2.getTipo().equals("bool"))){
+		return true;
+	}
+	else if (e1.getTipo().equals("ref"))
+			return compatibles2 (v, e1.getTbase(), e2);
+		else if (e2.getTipo().equals("ref")) 
+			return compatibles2 (v, e1, e2.getTbase());	
+		else if (((e1.getTipo()==e2.getTipo() && e2.getTipo().equals("array")) && (e1.getElems() == e2.getElems())))
+					return compatibles2 (v, e1.getTbase(), e2.getTbase());
+			else if (e1.getTipo().equals("puntero") && e2.getTipo().equals("puntero"))
+					return compatibles2(v, e1.getTbase(), e2.getTbase());
+				else
+					return false;		
+}
+	
 }
