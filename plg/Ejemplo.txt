@@ -1,6 +1,6 @@
 int a;
-int c;
+lista = array [3] of int;
+pointer lista c;
 bool b#
 b := false;
-if (b); then a := 7;
-else c:= 7; 
+pointer c [1] := 5;

@@ -648,10 +648,11 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			a = Mem();
-			System.out.println("vulevo de mem "+tk.getLexema());
+			System.out.println("vuelvo de mem "+tk.getLexema());
 			//System.out.println(lexico.getLookahead().muestraToken());
 			//System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
 			tk = lexico.lexer();
+			System.out.println("Lo que leemos es: " + tk.getLexema());
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				System.out.println("voy a expC "+tk.getLexema());
 				atrDeExpC = ExpC();
@@ -1085,6 +1086,8 @@ public class Sintactico{
 		else {
 			if (lexico.reconoce(Tipos.TKIDEN)){
 				a = Mem();
+				codigo.genIns("apila-ind");
+				etq ++;
 			}
 			else if (lexico.reconoce(Tipos.TKMEMDIR)){
 				tk = lexico.lexer();
@@ -1109,118 +1112,130 @@ public class Sintactico{
 		return a;
 	}
 	
+	/** 
+	 * Resuelve un Fact en el que intervienen identificadores, tanto si es un identificador s?lo, como si es un puntero o un array.
+	 * @return Par El objeto Par con los atributos obtenidos de resolver el identificador y sus referencias.
+	 * @throws Exception En caso de producirse una excepci?n, ?sta se propaga.
+	 */
 	public Par Mem() throws Exception{
+		System.out.println("Pasamos por Mem");
 		
+		Atributos atrDeRMem;
 		Par a = new Par();
 		
-		Token tk = lexico.getLookahead();    //lexico.lexer();
-		Token tkAux = lexico.getNextToken();
-		System.out.println("EN MEM!!! Deberia leer un Iden, p. ej., y leo: " + tk.getLexema());
-		if (lexico.reconoce(Tipos.TKIDEN)){ // Esta comprobacion es superflua, pero la dejamos "por si acaso" :)
-			String iden = tk.getLexema();
-			
-			codigo.genIns("apila", TS.getDir(tk.getLexema()));
-			etq++;
-			
-			System.out.println("he generado la direccion "+tk.getLexema());
-			
-			a.getProps().setTam(TS.getProps(iden).getTam());
-			System.out.println("he cambiado tam "+tk.getLexema());
-			a.getProps().setTipo(TS.getProps(iden).getTipo());
-			
-			System.out.println("antes del while (aux)"+tkAux.getLexema());
-			while (tkAux.getCategoriaLexica() == Tipos.TKIDEN || tkAux.equals(new Token("[",Tipos.TKCAP)) || 
-					tkAux.equals(new Token("pointer",Tipos.TKPUNT))){
-				
-				tk = lexico.lexer();
-				
-				System.out.println("en el while "+tk.getLexema());
-				
-				if (lexico.reconoce(Tipos.TKCAP)){
-					System.out.println("En Mem, reconozco que es un array y lo trato.");
-					int n;
-					if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
-						tk = lexico.lexer(); //consumo la n
-						n = Integer.parseInt(tk.getLexema());
-						System.out.println("soy num");
-					}
-					else{
-						Par atrDeExp = Exp();
-						if (atrDeExp.getProps().getTipo().equals("int")){
-							System.out.println("soy exp");
-							n = Integer.parseInt(atrDeExp.getId());
-						}
-						else{
-							System.out.println("no soy");
-							a.getProps().setTipo("error");
-							throw new Exception("ERROR: El indice del array no es un entero");
-						}
-					}	
-					System.out.println("tam de a " + a.getProps().getElems());
-					System.out.println("tam de iden " + TS.getProps(iden).getElems());
-					if ( n > TS.getProps(iden).getElems()){
-						a.getProps().setTipo("error");
-						throw new Exception("ERROR: array overflow");
-					}
-					tk = lexico.lexer(); // consumo ]
-					System.out.println("el nuevo token" + tk.getLexema());
-					if (lexico.reconoce(Tipos.TKCCI)){
-						System.out.println("soy ]");
-						if (TS.existeID(iden) && ((TS.getProps(iden).getTipo()).equals("array"))){
-							System.out.println("la vida es bella");
-							a.getProps().setTipo(TS.getProps(iden).getTbase().getTipo());
-							System.out.println("la vida es bella 2? parte");
-							a.getProps().setTam(a.getProps().getTbase().getTam());
-							codigo.genIns("apila",a.getProps().getTam());
-							codigo.genIns("multiplica");
-							codigo.genIns("suma");
-							etq += 3;
-						}
-						a.getProps().getTbase().setTipo("error");
-					}
-					else{
-						System.out.println("no soy ]");
-						a.getProps().setTipo("error"); 
-					}
-				}
-				else if (lexico.reconoce(Tipos.TKPUNT)){
-					tk = lexico.lexer();
-					
-					a.getProps().setTipo(a.getProps().getTbase().getTipo());
-					a.getProps().setTam(a.getProps().getTbase().getTam());
-					
-					codigo.genIns("apila-ind");
-					etq ++;
-				}
-				else { 
-					System.out.println("EXPLOTO");
-					throw new Exception("BUM");
-				}
-				
-				a.getProps().setTipo(TS.getProps(tk.getLexema()).getTipo());
-				System.out.println("Solo por curiosidad:  dirID = " + TS.dirID(tk.getLexema()) + "  y getDir = " + TS.getDir(tk.getLexema()));
-				
-				tkAux = lexico.getNextToken();
-			}
-			System.out.println("salimos del while "+tk.getLexema());
-			if (tkAux.getCategoriaLexica() == Tipos.TKASIGN){
-				System.out.println("en el if "+tk.getLexema());
-				a.setClase(TS.getClase(tk.getLexema()));
-				a.setDir(TS.getDir(tk.getLexema()));
-				a.setProps(TS.getProps(tk.getLexema()));
-			}
-			else {
-				codigo.genIns("apila-ind");
-				etq ++;
-			}
-			System.out.println("salimos del if "+tk.getLexema());
+		Token tk = lexico.getLookahead();
+
+		if (!lexico.reconoce(Tipos.TKIDEN)){
+			a = null;
+			throw new Exception ("ERROR: Deberiamos haber leido un iden.");
 		}
-		else {  
-			System.out.println("en el else de muy abajo "+tk.getLexema());
-			System.out.println("No es un MEM. Error.");
+		System.out.println("Pasamos por Mem y es un IDEN: " + tk.getLexema());
+		
+		// Inicializamos a, para poder rellenarla recursivamente.
+		
+		System.out.println("Sacamos las cosas de la TS");
+		a.setProps(TS.getProps(tk.getLexema()));
+		a.setId(tk.getLexema());
+		a.setClase(TS.getClase(tk.getLexema()));
+		a.setDir(TS.getDir(tk.getLexema()));
+		System.out.println("Ya tenemos las cosas de la TS");
+		
+		// Apilamos la direcci?n del identificador 
+		//   --> Mirar c?mo resolvemos si al terminar es "Mem izq" o "Mem dcho" por si hay que generar alguna otra instrucci?n.
+		codigo.genIns("apila",TS.getDir(tk.getLexema()));
+		etq ++;
+		
+		// Llamamos a RMem, que resuelve la recursi?n.
+		atrDeRMem = RMem(a.getProps());
+		
+		System.out.println("Volvemos de RMem");
+		
+		if (!TS.getProps(tk.getLexema()).equals(atrDeRMem)){
 			a.getProps().setTipo("error");
-			throw new Exception("ERROR: Expresion derecha mal construida");
+			throw new Exception("ERROR: En 'Mem' no coinciden los tipos.  Revisar el identificador: " + tk.getLexema());
 		}
+		
+		// TODO Comprobar que a y atrDeRMem son iguales o que al menos el que tenemos que devolver es a y no atrDeRMem.
+		// TODO Hacer funcion recursiva que recorra a o atrDeRMem y devuelva el tipo del final en vez del ?rbol de tipos.
+		return a;
+	}
+	
+	public Atributos RMem(Atributos a) throws Exception{
+		Atributos atrDeRMem = null;
+		
+		Token tk = lexico.getNextToken();
+		
+		if (tk.getCategoriaLexica() == Tipos.TKPUNT){
+			tk = lexico.lexer();
+			System.out.println("Pasamos por RMem - Puntero");
+			if (  !(a.getTipo().equals("pointer")) && (!(a.getTipo().equals("ref")) || !((TS.ref(a)).equals("pointer")))){
+				a.setTipo("error");
+				throw new Exception("ERROR: En RMEM el tipo NO es un puntero, y le pedimos que lo sea //// QUITAR EXCEPCION");
+			}
+			
+			// Resolvemos el puntero:
+			codigo.genIns("apila-ind");
+			etq ++;
+			atrDeRMem = RMem(a.getTbase());
+		} 
+		else if (tk.getCategoriaLexica() == Tipos.TKCAP){
+			tk = lexico.lexer();
+			System.out.println("Pasamos por RMem - Array");
+			// Vemos que es un array:
+			if (  !(a.getTipo().equals("array")) && (!(a.getTipo().equals("ref")) || !((TS.ref(a)).equals("array")))){
+				a.setTipo("error");
+				throw new Exception("ERROR: En RMEM el tipo NO es un array, y le pedimos que lo sea //// QUITAR EXCEPCION");
+			}
+			// Nos vamos a donde apunta el array:
+			int n;
+			if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
+				tk = lexico.lexer(); //consumo la n
+				n = Integer.parseInt(tk.getLexema());
+			}
+			else{
+				Par atrDeExp = Exp();
+				if (atrDeExp.getProps().getTipo().equals("int")){
+					n = Integer.parseInt(atrDeExp.getId());
+				}
+				else{
+					System.out.println("no soy");
+					a.setTipo("error");
+					throw new Exception("ERROR: El indice del array no es un entero");
+				}
+			}	
+			if ( n > a.getElems()){
+				a.setTipo("error");
+				throw new Exception("ERROR: array overflow");
+			}
+			tk = lexico.lexer(); // consumo ]
+			System.out.println("el nuevo token" + tk.getLexema());
+			if (lexico.reconoce(Tipos.TKCCI)){
+				codigo.genIns("apila",a.getTam());
+				codigo.genIns("multiplica");
+				codigo.genIns("suma");
+				etq += 3;
+				
+				atrDeRMem = RMem(a.getTbase());
+			}
+			else{
+				a.setTipo("error"); 
+			}
+		}
+		else {
+			System.out.println("Pasamos por RMem - Landa");
+			a.setTipo("");
+			a.setTbase(null);
+			a.setTam(0);
+			a.setElems(0);
+			return a;
+		}
+		
+		// Comprobamos que los tipos son iguales.
+		if (!(a.getTbase().equals(atrDeRMem)) || a.getTipo().equals("error")){
+			a.setTipo("error");
+			throw new Exception("ERROR: RMEM Error en los tipos. /// EXCEPTION PARA QUITAR!!!!");
+		}
+		
 		return a;
 	}
 	
@@ -1296,4 +1311,118 @@ public class Sintactico{
 		codigo.genIns("neg");
 		etq ++;
 	}
+	
+	
+	/*Par a = new Par();
+	
+	Token tk = lexico.getLookahead();    //lexico.lexer();
+	Token tkAux = lexico.getNextToken();
+	System.out.println("EN MEM!!! Deberia leer un Iden, p. ej., y leo: " + tk.getLexema());
+	if (lexico.reconoce(Tipos.TKIDEN)){ // Esta comprobacion es superflua, pero la dejamos "por si acaso" :)
+		String iden = tk.getLexema();
+		
+		codigo.genIns("apila", TS.getDir(tk.getLexema()));
+		etq++;
+		
+		System.out.println("he generado la direccion "+tk.getLexema());
+		
+		a.getProps().setTam(TS.getProps(iden).getTam());
+		System.out.println("he cambiado tam "+tk.getLexema());
+		a.getProps().setTipo(TS.getProps(iden).getTipo());
+		
+		System.out.println("antes del while (aux)"+tkAux.getLexema());
+		while (tkAux.getCategoriaLexica() == Tipos.TKIDEN || tkAux.equals(new Token("[",Tipos.TKCAP)) || 
+				tkAux.equals(new Token("pointer",Tipos.TKPUNT))){
+			
+			tk = lexico.lexer();
+			
+			System.out.println("en el while "+tk.getLexema());
+			
+			if (lexico.reconoce(Tipos.TKCAP)){
+				System.out.println("En Mem, reconozco que es un array y lo trato.");
+				int n;
+				if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
+					tk = lexico.lexer(); //consumo la n
+					n = Integer.parseInt(tk.getLexema());
+					System.out.println("soy num");
+				}
+				else{
+					Par atrDeExp = Exp();
+					if (atrDeExp.getProps().getTipo().equals("int")){
+						System.out.println("soy exp");
+						n = Integer.parseInt(atrDeExp.getId());
+					}
+					else{
+						System.out.println("no soy");
+						a.getProps().setTipo("error");
+						throw new Exception("ERROR: El indice del array no es un entero");
+					}
+				}	
+				System.out.println("tam de a " + a.getProps().getElems());
+				System.out.println("tam de iden " + TS.getProps(iden).getElems());
+				if ( n > TS.getProps(iden).getElems()){
+					a.getProps().setTipo("error");
+					throw new Exception("ERROR: array overflow");
+				}
+				tk = lexico.lexer(); // consumo ]
+				System.out.println("el nuevo token" + tk.getLexema());
+				if (lexico.reconoce(Tipos.TKCCI)){
+					System.out.println("soy ]");
+					if (TS.existeID(iden) && ((TS.getProps(iden).getTipo()).equals("array"))){
+						System.out.println("la vida es bella");
+						a.getProps().setTipo(TS.getProps(iden).getTbase().getTipo());
+						System.out.println("la vida es bella 2? parte");
+						a.getProps().setTam(a.getProps().getTbase().getTam());
+						codigo.genIns("apila",a.getProps().getTam());
+						codigo.genIns("multiplica");
+						codigo.genIns("suma");
+						etq += 3;
+					}
+					a.getProps().getTbase().setTipo("error");
+				}
+				else{
+					System.out.println("no soy ]");
+					a.getProps().setTipo("error"); 
+				}
+			}
+			else if (lexico.reconoce(Tipos.TKPUNT)){
+				tk = lexico.lexer();
+				
+				a.getProps().setTipo(a.getProps().getTbase().getTipo());
+				a.getProps().setTam(a.getProps().getTbase().getTam());
+				
+				codigo.genIns("apila-ind");
+				etq ++;
+			}
+			else { 
+				System.out.println("EXPLOTO");
+				throw new Exception("BUM");
+			}
+			
+			a.getProps().setTipo(TS.getProps(tk.getLexema()).getTipo());
+			System.out.println("Solo por curiosidad:  dirID = " + TS.dirID(tk.getLexema()) + "  y getDir = " + TS.getDir(tk.getLexema()));
+			
+			tkAux = lexico.getNextToken();
+		}
+		System.out.println("salimos del while "+tk.getLexema());
+		if (tkAux.getCategoriaLexica() == Tipos.TKASIGN){
+			System.out.println("en el if "+tk.getLexema());
+			a.setClase(TS.getClase(tk.getLexema()));
+			a.setDir(TS.getDir(tk.getLexema()));
+			a.setProps(TS.getProps(tk.getLexema()));
+		}
+		else {
+			codigo.genIns("apila-ind");
+			etq ++;
+		}
+		System.out.println("salimos del if "+tk.getLexema());
+	}
+	else {  
+		System.out.println("en el else de muy abajo "+tk.getLexema());
+		System.out.println("No es un MEM. Error.");
+		a.getProps().setTipo("error");
+		throw new Exception("ERROR: Expresion derecha mal construida");
+	}
+	return a;*/
+	
 }

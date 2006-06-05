@@ -91,8 +91,16 @@ public class Atributos {
 	}
 	
 	public boolean equals(Atributos a){
-		return (this.elems == a.getElems() && this.tam == a.getTam() && this.tipo.equals(a.getTipo()) && 
-				this.tbase.getTipo().equals(a.getTbase().getTipo()));
+		boolean iguales = false;
+		
+		// TODO REVISAR ESTE EQUALS, hacerlo recursivo, y que pare cuando el tbase de alguno de los dos sea "", y si no son iguales, devuelva falso.
+		iguales = (this.elems == a.getElems() && this.tam == a.getTam() && this.tipo.equals(a.getTipo()));
+		if (a.getTbase() == null)
+			return (iguales && tbase == null);
+		else 
+			if (tbase == null)
+				return (iguales && a.getTbase() == null);
+			return (tbase.getTipo().equals(a.getTbase().getTipo()));
 	}
 
 }
