@@ -572,14 +572,22 @@ public class Sintactico{
 	public Par IAsig() throws Exception{
 		
 		Par  atrDeExpC = new Par();
-		Par a = null;
+		Par a = new Par();
+		Par atrDeMem;
 		boolean errDeIAsig = false; 
 		String lex = "";
 		Token tk;
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			a = Mem();
+			Token tk2= lexico.getNextToken();
+			if ((tk2.getCategoriaLexica()==Tipos.TKPUNT) || (tk2.getCategoriaLexica()==Tipos.TKCAP)){
+				atrDeMem = Mem();
+				a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
+			}
+			else{
+				a = Mem();
+			}
 			
 			//a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
 			
@@ -1051,7 +1059,6 @@ public class Sintactico{
 		
 		// TODO Comprobar que a y atrDeRMem son iguales o que al menos el que tenemos que devolver es a y no atrDeRMem.
 		// TODO Hacer funcion recursiva que recorra a o atrDeRMem y devuelva el tipo del final en vez del ?rbol de tipos.
-		
 		if (atrDeRMem != null){
 			if (atrDeRMem.getTipo().equals("")){
 				System.out.println(TS.getProps(tk.getLexema()));
