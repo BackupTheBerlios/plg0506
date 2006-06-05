@@ -271,10 +271,16 @@ public class MaquinaP {
 		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
 		System.out.println(Prog.size());
 		while (H==0){
+			System.out.println("Holas");
+			System.out.println("pc" + PC);
+			System.out.println("size" + Prog.size());
 			if(PC<Prog.size()){
 				System.out.println(muestraPila());
+				System.out.println("Hola 1");
 				i= (String)Prog.get(PC);
+				System.out.println("Hola 2");
 				linea = i.split(" ");
+				System.out.println("Hola 3");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
@@ -665,6 +671,7 @@ public class MaquinaP {
 				}
 			}
 			else{
+				System.out.println("Adioses");
 				eof();
 			}
 		}
@@ -703,7 +710,10 @@ public class MaquinaP {
 	 * PC <-- PC + 1
 	 */
 
-	public void suma(){
+	public void suma() throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Suma. La pila no contiene los datos necesarios.");
+		}
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()+s1.intValue());
@@ -719,7 +729,10 @@ public class MaquinaP {
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 */
-	public void resta(){
+	public void resta()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Resta. La pila no contiene los datos necesarios.");
+		}
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()-s1.intValue());
@@ -734,7 +747,10 @@ public class MaquinaP {
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 */
-	public void multiplica(){
+	public void multiplica()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Multiplica. La pila no contiene los datos necesarios.");
+		}
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()*s1.intValue());
@@ -749,7 +765,10 @@ public class MaquinaP {
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 */
-	public void divide(){
+	public void divide()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Divide. La pila no contiene los datos necesarios.");
+		}
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()/s1.intValue());
@@ -768,7 +787,6 @@ public class MaquinaP {
 	public void apila (int n){
 		ST=ST+1;
 		pila.push(new Integer (n));
-		System.out.println(pila.peek());
 		PC=PC+1;
 	}
 	
@@ -782,19 +800,12 @@ public class MaquinaP {
 	 */
 	public void apila_dir (int d) throws Exception{
 		ST = ST + 1; 
-		//System.out.println();
 		if (d >= 0){
 			if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
 				pila.push(Mem.elementAt(d));  
 				PC = PC + 1;
 			}
-			else{
-				System.out.println("-------------=================INICIO Depuracion de la MAQUINAP================----------");
-				System.out.println("Tama?o de la memoria:   Mem.size = " + Mem.size());
-				System.out.println("Apila-dir de " + d);
-				System.out.println("Y en la memoria tenemos:");
-				for (int z=0; z< Mem.size();z++)
-					System.out.println("Pos " + (z+1) + ":  " + String.valueOf(Mem.elementAt(z)));
+			else{				
 				throw new Exception("ERROR: Variable sin inicializar.");
 			}
 		}
@@ -814,17 +825,16 @@ public class MaquinaP {
 	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
+		if (ST<1){
+			throw new Exception("ERROR: Desapila_dir. La pila no contiene los datos necesarios.");
+		}
 		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);
 				Mem.set(d,pila.pop());
-				System.out.println(Mem.elementAt(d)+" "+d);
 			}
 			else{
-				System.out.println("La cima de la Pila es:  "+pila.peek());
 				Mem.set(d,pila.pop());
-				System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
-				//Mem.insertElementAt(pila.elementAt(ST),d);
 			}
 			ST = ST -1;
 			PC = PC + 1;
@@ -857,7 +867,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1 
 	 */
-	public void and(){
+	public void and() throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: And. La pila no contiene los datos necesarios.");
+		}
 		int a1 = ((Integer)pila.pop()).intValue();
 		int a2 =((Integer)pila.pop()).intValue();
 		if ((a1!=0)&&(a2!=0)){
@@ -866,7 +879,6 @@ public class MaquinaP {
 		else{
 			pila.push(new Integer(0));
 		}
-		System.out.println("La cima de la pila: "+pila.peek());
 		ST = ST -1;
 		PC = PC + 1;
 	}
@@ -878,7 +890,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1 
 	 */
-	public void or(){
+	public void or()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Or. La pila no contiene los datos necesarios.");
+		}
 		int o1= ((Integer)pila.pop()).intValue();
 		int o2=((Integer)pila.pop()).intValue();
 		if ((o1==0)&&(o2==0)){
@@ -897,7 +912,10 @@ public class MaquinaP {
 	 *				"false" en c.o.c
 	 *	PC <-- PC + 1 
 	 */
-	public void not(){
+	public void not()throws Exception{
+		if (ST<1){
+			throw new Exception("ERROR: Not. La pila no contiene los datos necesarios.");
+		}
 		int n=((Integer)pila.pop()).intValue();
 		if (n==0){
 			pila.push(new Integer(1));
@@ -913,7 +931,10 @@ public class MaquinaP {
 	 *	Pila[ST] <--  - Pila[ST]
 	 *	PC <-- PC + 1 
 	 */
-	public void neg(){
+	public void neg()throws Exception{
+		if (ST<1){
+			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
+		}
 		Integer n= (Integer)pila.pop();
 		pila.push(new Integer(-(n.intValue())));
 		PC = PC + 1;
@@ -926,7 +947,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
-	public void menor(){
+	public void menor()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Menor. La pila no contiene los datos necesarios.");
+		}
 		int c1= ((Integer)pila.pop()).intValue();
 		int c2 = ((Integer)pila.pop()).intValue();
 		if (c2<c1){
@@ -946,7 +970,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
-	public void menorIgual(){
+	public void menorIgual()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Menor o igual. Memoria sin inicializar.");
+		}
 		int c1= ((Integer)pila.pop()).intValue();
 		int c2=((Integer)pila.pop()).intValue(); 
 		if (c2<=c1){
@@ -966,7 +993,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
-	public void mayor(){
+	public void mayor()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Mayor. La pila no contiene los datos necesarios.");
+		}
 		int c1= ((Integer)pila.pop()).intValue();
 		int c2 = ((Integer)pila.pop()).intValue(); 
 		if (c2>c1){
@@ -986,7 +1016,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
-	public void mayorIgual(){
+	public void mayorIgual()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Mayor o igual. La pila no contiene los datos necesarios.");
+		}
 		int c1= ((Integer)pila.pop()).intValue();
 		int c2=((Integer)pila.pop()).intValue(); 
 		if (c2>=c1){
@@ -1006,7 +1039,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
-	public void igual(){
+	public void igual()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Igual. La pila no contiene los datos necesarios.");
+		}
 		int c1= ((Integer)pila.pop()).intValue();
 		int c2= ((Integer)pila.pop()).intValue();
 		if (c1==c2){
@@ -1026,7 +1062,10 @@ public class MaquinaP {
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
 	 */
-	public void distinto(){
+	public void distinto()throws Exception{
+		if (ST<2){
+			throw new Exception("ERROR: Distinto. La pila no contiene los datos necesarios.");
+		}
 		int c1= ((Integer)pila.pop()).intValue();
 		int c2 =((Integer)pila.pop()).intValue();
 		if (c1!=c2){
@@ -1049,7 +1088,7 @@ public class MaquinaP {
 		}
 		else{
 			PC =s;
-			eof(); ///////////////////////////////////////////////////////////////////////////////
+			eof(); 
 		}
 	}
 	
@@ -1059,7 +1098,10 @@ public class MaquinaP {
 	 *	sino PC <--PC+1 fsi
 	 *	ST <-- ST - 1	
 	 */
-	public void ir_f(int s){
+	public void ir_f(int s)throws Exception{
+		if (ST<1){
+			throw new Exception("ERROR: Salto sin definir.");
+		}
 		if (((Integer)pila.pop()).intValue()==0){
 			System.out.println("Paso bien");
 			PC = s;
@@ -1078,6 +1120,9 @@ public class MaquinaP {
 	 * y libera en el heap t celdas consecutivas a partir de d.
 	 */
 	public void delete (int t) throws Exception{
+		if (ST<1){
+			throw new Exception("ERROR: Memoria sin inicializar.");
+		}
 		int d= ((Integer)pila.pop()).intValue();
 		ST= ST-1;
 		heap.libera(d,t);
@@ -1105,6 +1150,9 @@ public class MaquinaP {
 		 @throws Exception
 	 */
 	public void apila_ind() throws Exception{
+		if (ST<1){
+			throw new Exception("ERROR: Memoria sin inicializar.");
+		}
 		int i = ((Integer)pila.pop()).intValue();
 		if ((i>=Mem.size())|| (i<0)){
 			throw new Exception("Posicion de memoria no inicializada");
@@ -1123,22 +1171,18 @@ public class MaquinaP {
 	public void desapila_ind() throws Exception{
 		//	Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
+		if (ST<2){
+			throw new Exception("ERROR: Desapila_ind. La pila no contiene los datos necesarios.");
+		}
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
-		System.out.println("D vale: " + d);
-		System.out.println("valor vale: " + valor);
-		System.out.println("El tama?o de la mem: " + Mem.size());
 		if (d >= 0){
 			if (d>=Mem.size()){
 				aumentoMem(d);
 				Mem.set(d,valor);
-				System.out.println(Mem.elementAt(d)+" "+d);
 			}
 			else{
-				//System.out.println("La cima de la Pila es:  "+pila.peek());
 				Mem.set(d,valor);
-				System.out.println("Lo que meto en memoria es: "+Mem.elementAt(d)+" "+d);
-				//Mem.insertElementAt(pila.elementAt(ST),d);
 			}
 			ST = ST-2;
 			PC = PC + 1;
@@ -1160,24 +1204,22 @@ public class MaquinaP {
 	 * @throws Exception
 	 */
 	public void mueve (int s) throws Exception{
-		if (pila.size()>2){ 
-			int o = ((Integer)pila.pop()).intValue();
-			int d = ((Integer)pila.pop()).intValue();
-			for (int i=0;i<s;i++){
-				if(d+i<Mem.size()-1){
-					Mem.set(d+i,Mem.get(o+i));
-				}
-				else{
-					aumentoMem(d+i);
-					Mem.set(d+i,Mem.get(o+i));
-				}
+		if (ST<2){
+			throw new Exception("ERROR: Mueve. La pila no contiene los datos necesarios.");
+		}
+		int o = ((Integer)pila.pop()).intValue();
+		int d = ((Integer)pila.pop()).intValue();
+		for (int i=0;i<s;i++){
+			if(d+i<Mem.size()-1){
+				Mem.set(d+i,Mem.get(o+i));
 			}
-			ST = ST-2;
-			PC = PC +1;
+			else{
+				aumentoMem(d+i);
+				Mem.set(d+i,Mem.get(o+i));
+			}
 		}
-		else{
-			throw new Exception("ERROR: La pila no contiene los datos necesarios.");
-		}
+		ST = ST-2;
+		PC = PC +1;
 	}
 	public String muestraPila(){
 		Stack aux = new Stack();
