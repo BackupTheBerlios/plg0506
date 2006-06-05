@@ -1341,10 +1341,6 @@ public class MaquinaP {
 					Mem.set(d+i,Mem.get(o+i));
 				}
 			}
-			else{
-				aumentoMem(d+i);
-				Mem.set(d+i,Mem.get(o+i));
-			}
 		}
 		ST = ST-2;
 		PC = PC +1;
