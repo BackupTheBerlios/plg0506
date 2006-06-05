@@ -531,10 +531,10 @@ public class Sintactico{
 		System.out.println(a.getProps().getTipo());
 		System.out.println("la referencia a puntero");
 		System.out.println(TS.ref(a.getProps()).getTipo());
-		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
+		if (TS.ref(a.getProps()).getTipo().equals("pointer")){
 			System.out.println("la rama buena");
 			if (a.getProps().getTipo().equals("ref")){
-				codigo.genIns("new",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+				codigo.genIns("new",TS.ref(a.getProps()).getTam());
 			}
 			else {
 				codigo.genIns("new",a.getProps().getTam());

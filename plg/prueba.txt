@@ -1,13 +1,17 @@
-tipo maria = pointer int;
-maria a;
+pointer int a;
+pointer bool b;
+int c;
 array [2] of bool d;
-bool b;
-tipo pepe = maria;
-pepe f
+tipo maria = bool;
+tipo pepe = pointer int;
+tipo ese = array [2] of bool;
+maria e;
+pepe f;
+ese g
 #
-b := true;
-d[1] := false;
-new a;
-a pointer := 3;
+new b;
+d[1] := true;
+b pointer := false;
+e := false;
 new f;
-f pointer := 500;
+f pointer := 7;
