@@ -71,28 +71,32 @@ public class Atributos {
 	}
 
 	public String toString(){
-		String aux;
-		aux = "( ";
-		aux = aux.concat(tipo);
-		aux = aux.concat(", ");
-		Integer n= new Integer (tam);
-		aux= aux.concat(n.toString());
-		aux = aux.concat(", ");
-		aux = aux.concat("(");
-		if (tbase!=null){
-			aux = aux.concat(tbase.getTipo());
+		if (this != null){	
+			String aux;
+			aux = "( ";
+			aux = aux.concat(tipo);
+			aux = aux.concat(", ");
+			Integer n= new Integer (tam);
+			aux= aux.concat(n.toString());
+			aux = aux.concat(", ");
+			aux = aux.concat("(");
+			if (tbase!=null){
+				aux = aux.concat(tbase.getTipo());
+			}
+			aux = aux.concat(") ");
+			aux = aux.concat(", ");
+			n= new Integer (elems);
+			aux = aux.concat(n.toString());
+			aux = aux.concat(" )");
+			return aux;
 		}
-		aux = aux.concat(") ");
-		aux = aux.concat(", ");
-		n= new Integer (elems);
-		aux = aux.concat(n.toString());
-		aux = aux.concat(" )");
-		return aux;
+		else {
+			return "null";
+		}
 	}
 	
 	public boolean equals(Atributos a){
 		boolean iguales = false;
-		
 		// TODO REVISAR ESTE EQUALS, hacerlo recursivo, y que pare cuando el tbase de alguno de los dos sea "", y si no son iguales, devuelva falso.
 		iguales = (this.elems == a.getElems() && this.tam == a.getTam() && this.tipo.equals(a.getTipo()));
 		if (a.getTbase() == null)

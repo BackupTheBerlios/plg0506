@@ -243,6 +243,7 @@ public class Sintactico{
 		a.getProps().setElems(atrDeTipo.getProps().getElems());
 		a.getProps().setTam(atrDeTipo.getProps().getTam());
 		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
+		a.getProps().setTbase(atrDeTipo.getProps().getTbase());
 		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo)){
 			a.getProps().setTipo("error");
 		}
