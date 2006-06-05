@@ -3,6 +3,7 @@
  */
 package maquinaP;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +34,7 @@ import javax.swing.JOptionPane;
  * @author Jon?s Andradas, Paloma de la Fuente, Leticia Garc?a y Silvia Mart?n
  * @see java.io.FileReader#FileReader(java.lang.String)
  */
+
 public class MaquinaP {
 
 	/*
@@ -58,6 +60,14 @@ public class MaquinaP {
 	private Heap heap;
 	private FileReader fichero;
 	private String pasos;
+	private static int longApilaRet = 5;
+	private static int longPrologo = 13;
+	private static int longEpilogo = 12;
+	private static int longInicioPaso = 3;
+	private static int longFinPaso = 1;
+	private static int longInicio = 4;
+	//private static int inicio_paso = funcionAux1();  
+	//private static int fin_paso = funcionAux2();
 	
 	/**
 	 * El constructor de la clase MaquinaP que s?lo tiene el buffer de lectura del fichero como parmetro de entrada.
@@ -87,6 +97,14 @@ public class MaquinaP {
 		Prog = damePrograma(fichero);
 		pasos="";
 	}
+	/*public void funcionAux1 (){
+		this.apila_dir(0);
+		this.apila(3);
+		this.suma();
+	}
+	public void funcionAux2 (){
+		pila.pop();
+	}*/
 	
 	/**
 	 * Accesor para el atributo de la clase, pasos. 
@@ -664,6 +682,101 @@ public class MaquinaP {
 						pasos= pasos.concat(" \n");
 					}
 					j++;
+				}////////////////////////////////////////////
+				else if (linea[0].compareTo("prologo")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
+					pasos= pasos.concat(" \n");
+					prologo((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("inicio")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
+					pasos= pasos.concat(" \n");
+					inicio((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("paso_parametro")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
+					pasos= pasos.concat(" \n");
+					paso_parametro((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("acceso_var")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
+					pasos= pasos.concat(" \n");
+					acceso_var((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
+				else if (linea[0].compareTo("apila_ret")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					apila_ret((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}else if (linea[0].compareTo("epilogo")==0){
+					System.out.println(linea[0]);
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(" \n");
+					epilogo((new Integer(Integer.parseInt(linea[1]))).intValue());
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
 				}
 				else{
 					error();
@@ -1216,14 +1329,17 @@ public class MaquinaP {
 	 * @throws Exception
 	 */
 	public void mueve (int s) throws Exception{
-		if (ST<1){
-			throw new Exception("ERROR: Mueve. La pila no contiene los datos necesarios.");
-		}
-		int o = ((Integer)pila.pop()).intValue();
-		int d = ((Integer)pila.pop()).intValue();
-		for (int i=0;i<s;i++){
-			if(d+i<Mem.size()-1){
-				Mem.set(d+i,Mem.get(o+i));
+		if (pila.size()>2){ 
+			int o = ((Integer)pila.pop()).intValue(); //pop desapilar
+			int d = ((Integer)pila.pop()).intValue(); //push apilar
+			for (int i=0;i<s;i++){
+				if(d+i<Mem.size()-1){ //Mem set cambia el elemento de la posición d+i por el elemento que le pasas. en este caso el elemento que devuelve mem.get(o+i)
+					Mem.set(d+i,Mem.get(o+i));
+				}
+				else{
+					aumentoMem(d+i);
+					Mem.set(d+i,Mem.get(o+i));
+				}
 			}
 			else{
 				aumentoMem(d+i);
@@ -1232,6 +1348,98 @@ public class MaquinaP {
 		}
 		ST = ST-2;
 		PC = PC +1;
+	}
+	
+	public void apila_ret (int ret) throws Exception{
+		//devuelve apila-dir(0) || apila(1) || suma || apila(ret) || desapila-ind	
+		if (ret >= 0){
+			this.apila_dir(0);
+			this.apila(1);
+			this.apila(ret);
+			this.desapila_ind();
+		}
+		else{
+			throw new Exception("ERROR: apila ret.");
+		}
+
+	}
+	public void prologo (int nivel, int tamlocales) throws Exception{
+		if (nivel >= 0){
+			this.apila_dir(0);
+			this.apila(2);
+			this.suma();
+			this.apila_dir(1 + nivel);
+			this.desapila_ind();
+			this.apila_dir(0);
+			this.apila(3);
+			this.suma();
+			this.desapila_dir(1+nivel);
+			this.apila_dir(0);
+			this.apila(tamlocales + 2);
+			this.suma();
+			this.desapila_dir(0);
+		}
+		else{
+			throw new Exception("ERROR: en prólogo.");
+		}
+
+	}
+	public void paso_parametro (int modoReal, int pformal) throws Exception{
+		//cuando useis esta función le pasáis directamente la dirección del parámetro con el que la llaméis
+		if (pformal >= 0){
+			this.apila(pformal);
+			this.suma();
+			this.desapila_ind();
+		}
+		else{
+			throw new Exception("ERROR: en paso parámetro.");
+		}
+
+	}
+	public void acceso_var (int infoID_nivel, int infoID_dir) throws Exception{
+		//infoID recibe el nivel del identificador y su dirección
+		if (infoID_nivel >= 0){
+			this.apila_dir(1 + infoID_nivel);
+			this.apila(infoID_dir);
+			this.suma();
+		}
+		else{
+			throw new Exception("ERROR: en acceso var.");
+		}
+	}
+	
+	public void inicio (int num_niveles, int tam_datos) throws Exception{
+		
+		if (num_niveles >= 0){
+			this.apila(1 + num_niveles);
+			this.desapila_dir(1);
+			this.apila(1 + num_niveles + tam_datos);
+			this.desapila_dir(0);
+		}
+		else{
+			throw new Exception("ERROR: en acceso var.");
+		}
+
+	}
+	public void epilogo (int nivel) throws Exception{
+		if (nivel >= 0){
+			this.apila_dir(1 + nivel);
+			this.apila(2);
+			this.resta();
+			this.apila_ind();
+			this.apila_dir(1 + nivel);
+			this.apila(3);
+			this.resta();
+			pila.push(pila.peek());
+			this.desapila_dir(0);
+			this.apila(2);
+			this.suma();
+			this.desapila_dir(1+nivel);
+		}
+		else{
+			throw new Exception("ERROR: en epílogo.");
+		}
+
 	}
 	public String muestraPila(){
 		Stack aux = new Stack();
