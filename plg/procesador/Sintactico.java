@@ -1117,7 +1117,7 @@ public class Sintactico{
 		etq ++;
 		
 		// Llamamos a RMem, que resuelve la recursi?n.
-		atrDeRMem = RMem(a.getProps());
+		atrDeRMem = RMem(a.getProps().getTbase());
 		
 		System.out.println("Volvemos de RMem");
 		
@@ -1149,10 +1149,10 @@ public class Sintactico{
 		if (tk.getCategoriaLexica() == Tipos.TKPUNT){
 			tk = lexico.lexer();
 			System.out.println("Pasamos por RMem - Puntero");
-			if (  !(a.getTipo().equals("pointer")) && (!(a.getTipo().equals("ref")) || !((TS.ref(a)).equals("pointer")))){
+			/*if (  !(a.getTipo().equals("pointer")) && (!(a.getTipo().equals("ref")) || !((TS.ref(a)).equals("pointer")))){
 				a.setTipo("error");
 				throw new Exception("ERROR: En RMEM el tipo NO es un puntero, y le pedimos que lo sea //// QUITAR EXCEPCION");
-			}
+			}*/
 			
 			// Resolvemos el puntero:
 			codigo.genIns("apila-ind");
@@ -1166,10 +1166,10 @@ public class Sintactico{
 			tk = lexico.lexer();
 			System.out.println("Pasamos por RMem - Array");
 			// Vemos que es un array:
-			if (  !(a.getTipo().equals("array")) && (!(a.getTipo().equals("ref")) || !((TS.ref(a)).equals("array")))){
+			/*if (  !(a.getTipo().equals("array")) && (!(a.getTipo().equals("ref")) || !((TS.ref(a)).equals("array")))){
 				a.setTipo("error");
 				throw new Exception("ERROR: En RMEM el tipo NO es un array, y le pedimos que lo sea //// QUITAR EXCEPCION");
-			}
+			}*/
 			// Nos vamos a donde apunta el array:
 			int n;
 			if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
