@@ -95,6 +95,7 @@ public class Sintactico{
 		Par atrDeDecs = Decs();
 		Par atrDeIs = Is();
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
+		if (errDeProg) System.out.println("Estoy en Prog y voy a petar");
 		return errDeProg;	
 	}
 	
@@ -303,6 +304,7 @@ public class Sintactico{
 			}
 			atrDeIs = Is();
 			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
+				System.out.println("Estoy en IS y voy a petar");
 				a.getProps().setTipo("error");
 			}
 			else {
@@ -609,7 +611,7 @@ public class Sintactico{
 				System.out.println(a.getProps().getTipo());
 				
 				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(a.getProps().getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
-				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
+				System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
 					System.out.println("no existe el iden "+tk.getLexema());
@@ -644,6 +646,7 @@ public class Sintactico{
 			}
 		}
 		if (errDeIAsig){
+			System.out.println("Toy entrando aqui");
 			a.getProps().setTipo("error");
 		}
 		return a;

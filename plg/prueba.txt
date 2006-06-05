@@ -1,8 +1,13 @@
-pointer int a;
+tipo maria = pointer int;
+maria a;
 array [2] of bool d;
-bool b
+bool b;
+tipo pepe = maria;
+pepe f
 #
 b := true;
 d[1] := false;
 new a;
 a pointer := 3;
+new f;
+f pointer := 500;
