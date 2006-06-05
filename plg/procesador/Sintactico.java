@@ -648,6 +648,9 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			a = Mem();
+			System.out.println("El tipo en iasig es :");
+			System.out.println(a.getProps().getTipo());
+			
 			System.out.println("vuelvo de mem "+tk.getLexema());
 			//System.out.println(lexico.getLookahead().muestraToken());
 			//System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
@@ -659,6 +662,9 @@ public class Sintactico{
 				System.out.println("vuelvo de expc "+tk.getLexema());
 				System.out.println("El tipo de ExpC es: " + atrDeExpC.getProps().getTipo());
 				System.out.println("El tipo de A es: " + a.getProps().getTipo());
+				System.out.println("El tipo en mem es :");
+				System.out.println(a.getProps().getTipo());
+				
 				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(a.getProps().getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
@@ -796,6 +802,9 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		System.out.println("El tipo en expc es :");
+		System.out.println(a.getProps().getTipo());
+		
 		return a;
 	}
 	
@@ -867,6 +876,9 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		System.out.println("El tipo en exp es :");
+		System.out.println(a.getProps().getTipo());
+		
 		return a;
 	}
 	
@@ -966,6 +978,9 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		System.out.println("El tipo en term es :");
+		System.out.println(a.getProps().getTipo());
+		
 		return a;
 	}
 	
@@ -1108,7 +1123,10 @@ public class Sintactico{
 					a.getProps().setTipo("error");
 				}
 			}
-		}	
+		}
+		System.out.println("El tipo en fact es :");
+		System.out.println(a.getProps().getTipo());
+		
 		return a;
 	}
 	
@@ -1135,6 +1153,8 @@ public class Sintactico{
 		
 		System.out.println("Sacamos las cosas de la TS");
 		a.setProps(TS.getProps(tk.getLexema()));
+		System.out.println("El tipo en mem es :");
+		System.out.println(a.getProps().getTipo());
 		a.setId(tk.getLexema());
 		a.setClase(TS.getClase(tk.getLexema()));
 		a.setDir(TS.getDir(tk.getLexema()));
@@ -1157,6 +1177,15 @@ public class Sintactico{
 		
 		// TODO Comprobar que a y atrDeRMem son iguales o que al menos el que tenemos que devolver es a y no atrDeRMem.
 		// TODO Hacer funcion recursiva que recorra a o atrDeRMem y devuelva el tipo del final en vez del ?rbol de tipos.
+		
+		if (atrDeRMem.getTipo().equals("")){
+			System.out.println(TS.getProps(tk.getLexema()));
+			a.setProps(TS.getProps(tk.getLexema()));
+		}
+		TS.muestra();
+		System.out.println("El tipo al final de mem es :");
+		System.out.println(a.getProps().getTipo());
+		
 		return a;
 	}
 	
