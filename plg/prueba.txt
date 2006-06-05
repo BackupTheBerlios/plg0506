@@ -2,6 +2,7 @@ pointer int a;
 array [2] of bool d;
 bool b
 #
-b:= true;
-
-
+b := true;
+d[1] := false;
+new a;
+a pointer := 3;
