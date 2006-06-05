@@ -649,16 +649,17 @@ public class Sintactico{
 		IAsig.etq = Exp.etq + 2*/
 		
 		Par  atrDeExpC = new Par();
-		Par atrDeMem;
-		Par a = new Par();
+		Par a = null;
 		boolean errDeIAsig = false; 
 		String lex = "";
 		Token tk;
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			atrDeMem = Mem();
-			a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
+			a = Mem();
+			
+			//a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
+			
 			System.out.println("El tipo en iasig es :");
 			System.out.println(a.getProps().getTipo());
 			
@@ -1127,12 +1128,12 @@ public class Sintactico{
 			System.out.println(TS.getProps(tk.getLexema()));
 			a.setProps(TS.getProps(tk.getLexema()));
 		}
-		else{
+		/*else{
 			if (!TS.getProps(tk.getLexema()).getTipo().equals(atrDeRMem.getTipo())){
 				a.getProps().setTipo("error");
 				throw new Exception("ERROR: En 'Mem' no coinciden los tipos.  Revisar el identificador: " + tk.getLexema());
 			}	
-		}
+		}*/
 		TS.muestra();
 		System.out.println("El tipo al final de mem es :");
 		System.out.println(a.getProps().getTipo());
@@ -1156,7 +1157,10 @@ public class Sintactico{
 			// Resolvemos el puntero:
 			codigo.genIns("apila-ind");
 			etq ++;
-			atrDeRMem = RMem(a.getTbase());
+			if (a.getTbase() == null)
+				return a;
+			else
+				atrDeRMem = RMem(a.getTbase());
 		} 
 		else if (tk.getCategoriaLexica() == Tipos.TKCAP){
 			tk = lexico.lexer();
@@ -1197,7 +1201,10 @@ public class Sintactico{
 				codigo.genIns("suma");
 				etq += 3;
 				
-				atrDeRMem = RMem(a.getTbase());
+				if (a.getTbase() == null)
+					return a;
+				else
+					atrDeRMem = RMem(a.getTbase());
 			}
 			else{
 				a.setTipo("error"); 
@@ -1217,7 +1224,7 @@ public class Sintactico{
 			throw new Exception("ERROR: RMEM Error en los tipos. /// EXCEPTION PARA QUITAR!!!!");
 		}
 		
-		return a;
+		return atrDeRMem;
 	}
 	
 	/**
