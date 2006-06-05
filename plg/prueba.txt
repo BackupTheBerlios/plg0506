@@ -1,5 +1,15 @@
-int a;
-bool b
+pointer int a;
+bool b;
+int c;
+array [2] of bool d;
+tipo maria = bool;
+tipo pepe = pointer int;
+tipo ese = array [2] of bool;
+maria e;
+pepe f;
+ese g
 #
-a := 1;
-b:=true;
+b := true;
+c := 1;
+
+
