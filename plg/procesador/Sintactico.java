@@ -1190,7 +1190,7 @@ public class Sintactico{
 	}
 	
 	public Atributos RMem(Atributos a) throws Exception{
-		Atributos atrDeRMem = null;
+		Atributos atrDeRMem = new Atributos();
 		
 		Token tk = lexico.getNextToken();
 		
@@ -1252,10 +1252,10 @@ public class Sintactico{
 		}
 		else {
 			System.out.println("Pasamos por RMem - Landa");
-			a.setTipo("");
-			a.setTbase(null);
-			a.setTam(0);
-			a.setElems(0);
+			atrDeRMem.setTipo("");
+			atrDeRMem.setTbase(null);
+			atrDeRMem.setTam(0);
+			atrDeRMem.setElems(0);
 			return a;
 		}
 		
@@ -1265,7 +1265,7 @@ public class Sintactico{
 			throw new Exception("ERROR: RMEM Error en los tipos. /// EXCEPTION PARA QUITAR!!!!");
 		}
 		
-		return a;
+		return atrDeRMem;
 	}
 	
 	/**
