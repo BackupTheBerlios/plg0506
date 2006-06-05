@@ -72,9 +72,7 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public void startParsing() throws Exception{
-		System.out.println("llamo a prog");
 		if (Prog()){
-			System.out.println("vuelvo de prog");
 			throw new Exception("El programa contiene errores de tipo");
 		}
 		TS.muestra();
@@ -94,12 +92,8 @@ public class Sintactico{
 		 */
 		etq = 0;
 		dir = 0;
-		System.out.println("llamo a decs");
 		Par atrDeDecs = Decs();
-		System.out.println("vuelvo de decs");
-		System.out.println("llamo a is");
 		Par atrDeIs = Is();
-		System.out.println("vuelvo de is");
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		return errDeProg;	
 	}
@@ -121,15 +115,10 @@ public class Sintactico{
 	 * Decs.pend = Dec.pend ??? (si Dec.props.clase = tipo entonces {Dec.id} 	si no ??????)
 	 */
 		Par a = new Par();
-		System.out.println("llamo a dec");
 		Par atrDeDec = Dec();
-		System.out.println("vuevlo de dec");
 		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir());
 		TS.muestra();
-		//System.out.println(atrDeDec.getId());
-		//System.out.println(atrDeDec.getProps().getTipo());
 		dir = dir + atrDeDec.getProps().getTam();
-		//System.out.println(dir);
 		if (atrDeDec.getProps().getTipo().equals("error")){
 			a.getProps().setTipo("error");
 		}
@@ -141,12 +130,7 @@ public class Sintactico{
 		else{
 			if (tk.equals(new Token(";", Tipos.TKPYCOMA))){
 				lexico.lexer(); //consumimos ;
-				//System.out.println("");
-				System.out.println("llamo a decs");
 				Par atrDeDecs = Decs();
-				System.out.println("vuelvo de decs");
-				//TS.agnadeID(atrDeDecs.getId(), atrDeDecs.getProps(), atrDeDecs.getClase(), atrDeDecs.getDir());
-				//TS.muestra();
 				if (atrDeDecs.getProps().getTipo().equals("error")){
 					a.getProps().setTipo("error");
 				}
@@ -175,9 +159,7 @@ public class Sintactico{
 		Par a = new Par();
 		Token tk = lexico.getNextToken();
 		if (tk.equals(new Token("tipo", Tipos.TKTIPO))){
-			System.out.println("llamo a dectipo");
 			Par atrDeDecTipo = DecTipo();
-			System.out.println("vuelvo de dectipo");
 			a.setId(atrDeDecTipo.getId());
 			a.setProps(atrDeDecTipo.getProps());
 			a.setClase("tipo");
@@ -185,9 +167,7 @@ public class Sintactico{
 			return a;
 		}
 		else {
-			System.out.println("llamo a decvar");
 			Par atrDeDecVar = DecVar();
-			System.out.println("vuelvo de decvar");
 			a.setId(atrDeDecVar.getId());
 			a.setProps(atrDeDecVar.getProps());
 			a.setClase("var");
@@ -230,12 +210,8 @@ public class Sintactico{
 		 * DecVar.pend = Tipo.pend
 		 */
 		Par a = new Par();
-		System.out.println("llamo a tipo");
 		Par atrDeTipo = Tipo();
-		System.out.println(atrDeTipo.getProps().getTipo());
-		System.out.println("vuelvo de tipo");
 		Token tk = lexico.lexer();
-		System.out.println(tk.muestraToken());
 		if (!lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
@@ -315,18 +291,14 @@ public class Sintactico{
 	 */
 	public Par Is() throws Exception{
 		Par atrDeIs;
-		Par atrDeI;
+		Par atrDeI; 
 		Par a = new Par();
-		boolean errDeIs = false;
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
-			// Simplemente ponemos el tipo a vac?o (no se me ocurr?a otra forma)
-			//errDeIs = false;
-			a.getProps().setTipo("");
+			a.getProps().setTipo(""); // terminamos con exito
 		}
 		else{
 			if (!lexico.reconoce(Tipos.TKPYCOMA)){
-				a.getProps().setTipo("error");
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
 			atrDeIs = Is();
@@ -334,9 +306,7 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 			else {
-				// Qu? props habr?a que meter... Las de I???
-				// O igualamos todo el par?  No s? c?mo juntar ambos pares.
-				a.setProps(atrDeIs.getProps());
+				a.getProps().setTipo("");
 			}
 			return a;	
 		}
@@ -350,12 +320,7 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Par I() throws Exception{
-		/*ahora puede ser ICompuesta, IIf
-		 * las ecs son:
-		 * - {I.err= ICompuesta.err; }
-		 * - {I.err= Iif.err;}*/
-		Par a = new Par();
-		Par atrDeIns = null;
+		Par atrDeIns;
 		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
@@ -378,32 +343,20 @@ public class Sintactico{
 			}	
 				
 		}
-		a = atrDeIns;
-		return a;
+		return atrDeIns;
 	}
 
-	/*
-	 * Aqu?? hay q a??adir ICompuesta:
-	 * ICompuesta ::= begin IsOpc end 
-	 * {ICompuesta.err=IsOpc.err; }
-	 */
 
 	public Par ICompuesta() throws Exception{
-		Par a = new Par();
 		Par atrDeIns = IsOpc();
 		if (!lexico.reconoce(Tipos.TKEND)){
-			a.getProps().setTipo("error");
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
 		lexico.lexer();
 		if (! (lexico.reconoce(Tipos.TKPYCOMA))){
-			a.getProps().setTipo("error");
 			throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
 		}
-		else {
-			a = atrDeIns;;
-		}	
-		return a;	
+		return atrDeIns;	
 	}
 	
 	/**
@@ -418,27 +371,23 @@ public class Sintactico{
 		boolean errDeIsOpc = false;
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
-			errDeIsOpc = true;	
+			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
-		else{
-			if (lexico.reconoce(Tipos.TKPYCOMA)){
-				Token tk;
-				tk = lexico.getNextToken();
-				if (tk.equals(new Token("end",Tipos.TKEND))){
-					tk = lexico.lexer();
-					a = atrDeI;
-					return a;
-				}
-				else{
-					atrDeIsOpc = IsOpc();
-					errDeIsOpc = (atrDeI.getProps().getTipo().equals("error") || atrDeIsOpc.getProps().getTipo().equals("error"));
-				}	
+		if (lexico.reconoce(Tipos.TKPYCOMA)){
+			Token tk;
+			tk = lexico.getNextToken();
+			if (tk.equals(new Token("end",Tipos.TKEND))){
+				tk = lexico.lexer();
+				a = atrDeI;
+				return a;
 			}
 			else{
-				errDeIsOpc=true;
-				a.getProps().setTipo("error"); // Como lanzamos excepcion, creo que si no lo pongo aqu?, no se rellena.
-				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Todo begin debe llevar end.");
-			}
+				atrDeIsOpc = IsOpc();
+				errDeIsOpc = (atrDeI.getProps().getTipo().equals("error") || atrDeIsOpc.getProps().getTipo().equals("error"));
+			}	
+		}
+		else{
+			throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Todo begin debe llevar end.");
 		}
 		if (errDeIsOpc) {
 			a.getProps().setTipo("error");
@@ -476,58 +425,46 @@ public class Sintactico{
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
-		else {
-			if (lexico.reconoce(Tipos.TKTHN)){
-				codigo.emite("ir-f");
-				etqs1 = etq; 
-				etq ++;
-				atrDeI = I();
-				codigo.emite("ir-a");
-				etqs2 = etq;
-				etq ++;
-				codigo.parchea(etqs1,etq);
-				atrDePElse = PElse();
-				codigo.parchea(etqs2,etq);
-				
-				if ( atrDeI.getProps().getTipo().equals("error") || atrDePElse.getProps().getTipo().equals("error") || atrDeExpC.getProps().getTipo().equals("error")){
-					a.getProps().setTipo("error");
-				}
-				else {
-					a = atrDeI; // por que de atrDeI???  o atrDePElse??  O como uno ambos?... :(
-				}
-			}
-			else{
+		if (lexico.reconoce(Tipos.TKTHN)){
+			codigo.emite("ir-f");
+			etqs1 = etq; 
+			etq ++;
+			atrDeI = I();
+			codigo.emite("ir-a");
+			etqs2 = etq;
+			etq ++;
+			codigo.parchea(etqs1,etq);
+			atrDePElse = PElse();
+			codigo.parchea(etqs2,etq);
+			if ( atrDeI.getProps().getTipo().equals("error") || atrDePElse.getProps().getTipo().equals("error") || atrDeExpC.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
-				return a;
-			}	
-			
-		}
-		return a;	
-	}
-	
-	/*
-	 * Pelse ::= else I() 
-	 * PElse ::= ?? {}
-	 */
-	
-	public Par PElse() throws Exception{
-		Par a = new Par();
-		Par atrDeIns;
-		if (lexico.reconoce(Tipos.TKPYCOMA)){
-			Token tk;
-			tk = lexico.getNextToken();
-			if (!tk.equals(new Token ("else",Tipos.TKELS))){
-				a.getProps().setTipo("");
-				return a;
 			}
-			lexico.lexer(); //consumimos else
-			atrDeIns = I();
-			a = atrDeIns;	
+			else {
+				a.getProps().setTipo(""); 
+			}
 		}
 		else{
 			a.getProps().setTipo("error");
 		}	
 		return a;	
+	}
+	
+	public Par PElse() throws Exception{
+		Par atrDeIns = new Par();
+		if (lexico.reconoce(Tipos.TKPYCOMA)){
+			Token tk;
+			tk = lexico.getNextToken();
+			if (!tk.equals(new Token ("else",Tipos.TKELS))){
+				atrDeIns.getProps().setTipo("");
+				return atrDeIns; //terminamos con exito
+			}
+			lexico.lexer(); //consumimos else
+			atrDeIns = I();
+		}
+		else{
+			atrDeIns.getProps().setTipo("error");
+		}	
+		return atrDeIns;	
 	}
 
 	/**	
@@ -572,7 +509,7 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 			else {
-				a = atrDeI; // Es lo "importante" y donde se van a modificar cosas...
+				a.getProps().setTipo("");
 			}
 		}
 		return a;	
@@ -581,8 +518,7 @@ public class Sintactico{
 	
 	public Par INew() throws Exception{
 		
-		Token tk = lexico.lexer(); //consumimo.s el iden
-		System.out.println("En INew leemos: " + tk.getLexema());
+		lexico.lexer(); //consumimo.s el iden
 		Par a = Mem();
 		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
 			if (a.getProps().getTipo().equals("ref")){
@@ -597,14 +533,12 @@ public class Sintactico{
 		else {
 			a.getProps().setTipo("error");
 		}
-		tk = lexico.lexer(); //consumimo.s el iden
-		System.out.println("FIN del INew leemos: " + tk.getLexema());
+		lexico.lexer(); //consumimo.s el iden
 		return a;
 	}
 	
 	public Par IDel() throws Exception{
-		Token tk = lexico.lexer(); //consumimo.s el iden
-		System.out.println("En IDel leemos: " + tk.getLexema());
+		lexico.lexer(); //consumimo.s el iden
 		Par a = Mem();
 		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
 			if (a.getProps().getTipo().equals("ref")){
@@ -618,8 +552,7 @@ public class Sintactico{
 		else {
 			a.getProps().setTipo("error");
 		}
-		tk = lexico.lexer(); //consumimo.s el iden
-		System.out.println("Fin del  IDELLLLL leemos: " + tk.getLexema());
+		lexico.lexer(); //consumimo.s el iden
 		return a;
 	}
 	
@@ -637,16 +570,6 @@ public class Sintactico{
 	 */
 
 	public Par IAsig() throws Exception{
-		
-		/*IAsig ::= Mem ':=' Exp
-		IAsig.cod = si compatible(Mem.tipo,<t:num>,Exp.tsh) ?
-				compatible(Mem.tipo,<t:bool>,Exp.tsh)
-					Mem.cod || Exp.cod || desapila-ind
-				si no 
-					Mem.cod || Exp.cod || mueve(Mem.tipo.tam)
-		Mem.etqh = IAsig.etqh
-		Exp.etqh = Mem.etq
-		IAsig.etq = Exp.etq + 2*/
 		
 		Par  atrDeExpC = new Par();
 		Par a = null;
@@ -732,6 +655,7 @@ public class Sintactico{
 		atrDeExp = Exp();
 		Par a = new Par();
 		atrDeRExpC = RExpC();
+		
 		System.out.println("El tipo de Exp es: " + atrDeExp.getProps().getTipo());
 		System.out.println("El tipo de RExpC es: " + atrDeRExpC.getProps().getTipo());
 		
@@ -750,6 +674,7 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		
 		System.out.println("El tipo en expc es :");
 		System.out.println(a.getProps().getTipo());
 		
@@ -808,8 +733,10 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
+		
 		System.out.println("El tipo de Term es: " + atrDeTerm.getProps().getTipo());
 		System.out.println("El tipo de RExp es: " + atrDeRExp.getProps().getTipo());
+		
 		if ( atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo())){
 			if (atrDeTerm.getProps().getTipo().equals("int"))
 					a.getProps().setTipo("int");
@@ -824,6 +751,7 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		
 		System.out.println("El tipo en exp es :");
 		System.out.println(a.getProps().getTipo());
 		
@@ -860,10 +788,9 @@ public class Sintactico{
 			if (numerico){
 				genOpAd(tk.getLexema());
 			} else if (booleano) {
-				genOpAd("or");    // O deber?amos cambiarlo por un genOpAd(tk.getLexema()) tambi?n??  CONSULTAR
+				genOpAd("or");    
 			}
 			atrDeRExp = RExp();
-			System.out.println("Rexp termina");
 			
 			if ( (atrDeTerm.getProps().getTipo().equals("error")) || (atrDeRExp.getProps().getTipo().equals("error")) ){
 				a.getProps().setTipo("error");
@@ -873,7 +800,6 @@ public class Sintactico{
 				}
 				else {
 					if (numerico){
-						System.out.println("numerico");
 						if ( atrDeRExp.getProps().getTipo().equals("int") && atrDeRExp.getProps().getTipo().equals(atrDeTerm.getProps().getTipo()) ){
 							a.getProps().setTipo("int");
 						} else {
@@ -881,7 +807,6 @@ public class Sintactico{
 						}
 					} 
 					else if (booleano){
-						System.out.println("bool");
 						if ( atrDeTerm.getProps().getTipo().equals("bool") && atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo()) ){
 							a.getProps().setTipo("bool");
 						} else {
@@ -909,6 +834,7 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
+		
 		System.out.println("El tipo de Fact es: " + atrDeFact.getProps().getTipo());
 		System.out.println("El tipo de RTerm es: " + atrDeRTerm.getProps().getTipo());
 		
@@ -926,6 +852,7 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		
 		System.out.println("El tipo en term es :");
 		System.out.println(a.getProps().getTipo());
 		
@@ -1071,6 +998,7 @@ public class Sintactico{
 				}
 			}
 		}
+		
 		System.out.println("El tipo en fact es :");
 		System.out.println(a.getProps().getTipo());
 		
@@ -1124,9 +1052,11 @@ public class Sintactico{
 		// TODO Comprobar que a y atrDeRMem son iguales o que al menos el que tenemos que devolver es a y no atrDeRMem.
 		// TODO Hacer funcion recursiva que recorra a o atrDeRMem y devuelva el tipo del final en vez del ?rbol de tipos.
 		
-		if (atrDeRMem.getTipo().equals("")){
-			System.out.println(TS.getProps(tk.getLexema()));
-			a.setProps(TS.getProps(tk.getLexema()));
+		if (atrDeRMem != null){
+			if (atrDeRMem.getTipo().equals("")){
+				System.out.println(TS.getProps(tk.getLexema()));
+				a.setProps(TS.getProps(tk.getLexema()));
+			}
 		}
 		/*else{
 			if (!TS.getProps(tk.getLexema()).getTipo().equals(atrDeRMem.getTipo())){
