@@ -271,16 +271,16 @@ public class MaquinaP {
 		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
 		System.out.println(Prog.size());
 		while (H==0){
-			System.out.println("Holas");
-			System.out.println("pc" + PC);
-			System.out.println("size" + Prog.size());
+			//System.out.println("Holas");
+			//System.out.println("pc" + PC);
+			//System.out.println("size" + Prog.size());
 			if(PC<Prog.size()){
 				System.out.println(muestraPila());
-				System.out.println("Hola 1");
+				//System.out.println("Hola 1");
 				i= (String)Prog.get(PC);
-				System.out.println("Hola 2");
+				//System.out.println("Hola 2");
 				linea = i.split(" ");
-				System.out.println("Hola 3");
+				//System.out.println("Hola 3");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
@@ -671,7 +671,7 @@ public class MaquinaP {
 				}
 			}
 			else{
-				System.out.println("Adioses");
+				//System.out.println("Adioses");
 				eof();
 			}
 		}
@@ -684,11 +684,23 @@ public class MaquinaP {
 	 * @return String con el contenido del vector Mamoria.
 	 */
 	public String resultadoMem(){
-		String s="Memoria:"+"\n";
+		String s="Memoria estatica:"+"\n";
 		for (int i=0;i<Mem.size();i++){
 			System.out.println(Mem.elementAt(i));
 			if(Mem.elementAt(i)!=null){
 				s= s.concat("posicion "+i+":  "+((Integer)Mem.elementAt(i)).toString());
+				s=s.concat(" \n");
+			}
+			else{
+				s=s.concat("posicion "+i+": "+" null");
+				s=s.concat(" \n");
+			}
+		}
+		s = s.concat("Memoria dinamica:"+"\n");
+		for (int i=0;i<heap.getHeap().size();i++){
+			System.out.println(heap.getHeap().elementAt(i));
+			if(heap.getHeap().elementAt(i)!=null){
+				s= s.concat("posicion "+i+":  "+((Integer)heap.getHeap().elementAt(i)).toString());
 				s=s.concat(" \n");
 			}
 			else{

@@ -110,14 +110,10 @@ public class Heap {
 		int b= ultimo+tam;
 		System.out.println("reservando");
 		for (int i=c+1;i<=b;i++){
-			System.out.println("a?ado null");
 			heap.addElement(null);
-			System.out.println("ocupados");
 			ocupados.addElement(new Integer(i));
-			System.out.println("floto y exploto");
 			ultimo=ultimo+1;
 			flotar(ocupados,i);
-			System.out.println("explote y flote");
 		}
 		return ultimo;
 	}
@@ -130,9 +126,14 @@ public class Heap {
 	 */
 	public void libera(int dir, int tam)throws Exception{
 		//cuando elimine una posicion o varias de ocupados llamo a monticulizar
-		for(int i=dir;i==dir+tam;i++){
+		System.out.println("Voy a liberar");
+		System.out.println(dir);
+		for(int i=dir;i<dir+tam;i++){
+			System.out.println("voy a poner el puntero a null");
 			heap.setElementAt(null,i);
+			System.out.println("Ahora voy a borrar la posicion de ocupados");
 			ocupados.removeElement(new Integer(i));
+			System.out.println("saldre de libera");
 		}
 		//quizas como son seguidos no hiciese falta
 		moticulizar();
