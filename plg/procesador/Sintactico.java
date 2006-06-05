@@ -581,6 +581,8 @@ public class Sintactico{
 	
 	public Par INew() throws Exception{
 		
+		Token tk = lexico.lexer(); //consumimo.s el iden
+		System.out.println("En INew leemos: " + tk.getLexema());
 		Par a = Mem();
 		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
 			if (a.getProps().getTipo().equals("ref")){
@@ -595,10 +597,14 @@ public class Sintactico{
 		else {
 			a.getProps().setTipo("error");
 		}
+		tk = lexico.lexer(); //consumimo.s el iden
+		System.out.println("FIN del INew leemos: " + tk.getLexema());
 		return a;
 	}
 	
 	public Par IDel() throws Exception{
+		Token tk = lexico.lexer(); //consumimo.s el iden
+		System.out.println("En IDel leemos: " + tk.getLexema());
 		Par a = Mem();
 		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
 			if (a.getProps().getTipo().equals("ref")){
@@ -612,6 +618,8 @@ public class Sintactico{
 		else {
 			a.getProps().setTipo("error");
 		}
+		tk = lexico.lexer(); //consumimo.s el iden
+		System.out.println("Fin del  IDELLLLL leemos: " + tk.getLexema());
 		return a;
 	}
 	
@@ -641,6 +649,7 @@ public class Sintactico{
 		IAsig.etq = Exp.etq + 2*/
 		
 		Par  atrDeExpC = new Par();
+		Par atrDeMem;
 		Par a = new Par();
 		boolean errDeIAsig = false; 
 		String lex = "";
@@ -648,7 +657,8 @@ public class Sintactico{
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			a = Mem();
+			atrDeMem = Mem();
+			a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
 			System.out.println("El tipo en iasig es :");
 			System.out.println(a.getProps().getTipo());
 			
@@ -689,71 +699,7 @@ public class Sintactico{
 				a.setId(lex);
 				a.getProps().setTipo(TS.getProps(lex).getTipo());
 				// O metemos en 'a' directamente a.setprops( TS.getProps(lex) )  tal cual?  O que otros atributos rellenamos si no?
-			}/*
-			else{
-				if (lexico.reconoce(Tipos.TKCAP)){
-					tk = lexico.lexer();
-					int n;
-					if (lexico.reconoce(Tipos.TKNUM)){
-						n= Integer.parseInt(tk.getLexema());
-					}
-					else{
-						atrDeExp = Exp();
-						if (atrDeExp.getProps().getTipo().equals("int")){
-							n = Integer.parseInt(atrDeExp.getId());
-						}	
-						else{
-							errDeIAsig = true;
-							a.getProps().setTipo("error");
-							throw new Exception("ERROR: Asignacisn Incorrecta. El formato correcto es \"identificador := Expresion;\".");
-						}
-					}
-					if (n > TS.getProps(lex).getTam()){
-						errDeIAsig = true;
-						a.getProps().setTipo("error");
-						throw new Exception("ERROR: array overflow");
-					}
-					tk = lexico.lexer();
-					if (lexico.reconoce(Tipos.TKCCI)){
-						tk = lexico.lexer();
-						if (lexico.reconoce(Tipos.TKASIGN)){
-							atrDeExpC = ExpC();
-							//System.out.println(lexico.getLookahead().muestraToken());
-							errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(TS.getProps(lex).getTbase())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")) );
-							//System.out.println(TS.getTBase(TS.getTipo(lex)));
-							//System.out.println("Estoy en IAsig - 2 -"+errDeIAsig);
-							//System.out.println(atrDeExpC.getTipo());
-							if (!(TS.existeID(lex))){
-								errDeIAsig = true;
-								a.getProps().setTipo("error");
-								throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
-							}
-							else{
-								codigo.genIns("desapila-dir",TS.getDir(lex)+(n)); // +(n-1)
-								etq ++;
-								
-								a.setId(lex);
-								a.getProps().setTipo(atrDeExpC.getProps().getTipo());
-							}
-						}
-						else{
-							errDeIAsig = true;
-							a.getProps().setTipo("error");
-							throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-						}
-					}
-					else{
-						errDeIAsig = true;
-						a.getProps().setTipo("error");
-						throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-					}
-				}
-				else{
-					errDeIAsig = true;
-					a.getProps().setTipo("error");
-					throw new Exception("ERROR: Asignacin incorrecta a una posicion del array. El formato correcto es \"identificador[num] := Expresion;\".");
-				}*/
-		
+			}
 		}
 		else{
 			if (! (lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKFF))){
@@ -1061,7 +1007,6 @@ public class Sintactico{
 	public Par Fact() throws Exception{
 		Par a = new Par();
 		Par atrDeExpC;
-		Par atrDeExp;
 		Par atrDeFact;
 		Token tk;
 		tk = lexico.lexer();
@@ -1153,7 +1098,11 @@ public class Sintactico{
 		// Inicializamos a, para poder rellenarla recursivamente.
 		
 		System.out.println("Sacamos las cosas de la TS");
-		a.setProps(TS.getProps(tk.getLexema()));
+		if (TS.getProps(tk.getLexema()).getTbase() != null)
+			System.out.println("EL TIPO BASE EN MEM ES: " + TS.getProps(tk.getLexema()).getTbase().getTipo());
+		else
+			System.out.println("El tipo base en Mem es NULL!!! AU AU AU AU");
+		a.setProps(new Atributos(TS.getProps(tk.getLexema())));
 		System.out.println("El tipo en mem es :");
 		System.out.println(a.getProps().getTipo());
 		a.setId(tk.getLexema());
@@ -1171,17 +1120,18 @@ public class Sintactico{
 		
 		System.out.println("Volvemos de RMem");
 		
-		if (!TS.getProps(tk.getLexema()).equals(atrDeRMem)){
-			a.getProps().setTipo("error");
-			throw new Exception("ERROR: En 'Mem' no coinciden los tipos.  Revisar el identificador: " + tk.getLexema());
-		}
-		
 		// TODO Comprobar que a y atrDeRMem son iguales o que al menos el que tenemos que devolver es a y no atrDeRMem.
 		// TODO Hacer funcion recursiva que recorra a o atrDeRMem y devuelva el tipo del final en vez del ?rbol de tipos.
 		
 		if (atrDeRMem.getTipo().equals("")){
 			System.out.println(TS.getProps(tk.getLexema()));
 			a.setProps(TS.getProps(tk.getLexema()));
+		}
+		else{
+			if (!TS.getProps(tk.getLexema()).getTipo().equals(atrDeRMem.getTipo())){
+				a.getProps().setTipo("error");
+				throw new Exception("ERROR: En 'Mem' no coinciden los tipos.  Revisar el identificador: " + tk.getLexema());
+			}	
 		}
 		TS.muestra();
 		System.out.println("El tipo al final de mem es :");
@@ -1191,7 +1141,7 @@ public class Sintactico{
 	}
 	
 	public Atributos RMem(Atributos a) throws Exception{
-		Atributos atrDeRMem = new Atributos();
+		Atributos atrDeRMem = null;
 		
 		Token tk = lexico.getNextToken();
 		
@@ -1221,6 +1171,8 @@ public class Sintactico{
 			if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
 				tk = lexico.lexer(); //consumo la n
 				n = Integer.parseInt(tk.getLexema());
+				codigo.genIns("apila",n);
+				etq ++;
 			}
 			else{
 				Par atrDeExp = Exp();
@@ -1238,7 +1190,7 @@ public class Sintactico{
 				throw new Exception("ERROR: array overflow");
 			}
 			tk = lexico.lexer(); // consumo ]
-			System.out.println("el nuevo token" + tk.getLexema());
+			System.out.println("el nuevo token " + tk.getLexema());
 			if (lexico.reconoce(Tipos.TKCCI)){
 				codigo.genIns("apila",a.getTam());
 				codigo.genIns("multiplica");
@@ -1253,10 +1205,9 @@ public class Sintactico{
 		}
 		else {
 			System.out.println("Pasamos por RMem - Landa");
-			atrDeRMem.setTipo("");
-			atrDeRMem.setTbase(null);
-			atrDeRMem.setTam(0);
-			atrDeRMem.setElems(0);
+			if (a == null){
+				System.out.println("ES NULL EL A");
+			}
 			return a;
 		}
 		
@@ -1266,7 +1217,7 @@ public class Sintactico{
 			throw new Exception("ERROR: RMEM Error en los tipos. /// EXCEPTION PARA QUITAR!!!!");
 		}
 		
-		return atrDeRMem;
+		return a;
 	}
 	
 	/**
@@ -1342,117 +1293,12 @@ public class Sintactico{
 		etq ++;
 	}
 	
-	
-	/*Par a = new Par();
-	
-	Token tk = lexico.getLookahead();    //lexico.lexer();
-	Token tkAux = lexico.getNextToken();
-	System.out.println("EN MEM!!! Deberia leer un Iden, p. ej., y leo: " + tk.getLexema());
-	if (lexico.reconoce(Tipos.TKIDEN)){ // Esta comprobacion es superflua, pero la dejamos "por si acaso" :)
-		String iden = tk.getLexema();
-		
-		codigo.genIns("apila", TS.getDir(tk.getLexema()));
-		etq++;
-		
-		System.out.println("he generado la direccion "+tk.getLexema());
-		
-		a.getProps().setTam(TS.getProps(iden).getTam());
-		System.out.println("he cambiado tam "+tk.getLexema());
-		a.getProps().setTipo(TS.getProps(iden).getTipo());
-		
-		System.out.println("antes del while (aux)"+tkAux.getLexema());
-		while (tkAux.getCategoriaLexica() == Tipos.TKIDEN || tkAux.equals(new Token("[",Tipos.TKCAP)) || 
-				tkAux.equals(new Token("pointer",Tipos.TKPUNT))){
-			
-			tk = lexico.lexer();
-			
-			System.out.println("en el while "+tk.getLexema());
-			
-			if (lexico.reconoce(Tipos.TKCAP)){
-				System.out.println("En Mem, reconozco que es un array y lo trato.");
-				int n;
-				if (lexico.getNextToken().getCategoriaLexica()==Tipos.TKNUM){
-					tk = lexico.lexer(); //consumo la n
-					n = Integer.parseInt(tk.getLexema());
-					System.out.println("soy num");
-				}
-				else{
-					Par atrDeExp = Exp();
-					if (atrDeExp.getProps().getTipo().equals("int")){
-						System.out.println("soy exp");
-						n = Integer.parseInt(atrDeExp.getId());
-					}
-					else{
-						System.out.println("no soy");
-						a.getProps().setTipo("error");
-						throw new Exception("ERROR: El indice del array no es un entero");
-					}
-				}	
-				System.out.println("tam de a " + a.getProps().getElems());
-				System.out.println("tam de iden " + TS.getProps(iden).getElems());
-				if ( n > TS.getProps(iden).getElems()){
-					a.getProps().setTipo("error");
-					throw new Exception("ERROR: array overflow");
-				}
-				tk = lexico.lexer(); // consumo ]
-				System.out.println("el nuevo token" + tk.getLexema());
-				if (lexico.reconoce(Tipos.TKCCI)){
-					System.out.println("soy ]");
-					if (TS.existeID(iden) && ((TS.getProps(iden).getTipo()).equals("array"))){
-						System.out.println("la vida es bella");
-						a.getProps().setTipo(TS.getProps(iden).getTbase().getTipo());
-						System.out.println("la vida es bella 2? parte");
-						a.getProps().setTam(a.getProps().getTbase().getTam());
-						codigo.genIns("apila",a.getProps().getTam());
-						codigo.genIns("multiplica");
-						codigo.genIns("suma");
-						etq += 3;
-					}
-					a.getProps().getTbase().setTipo("error");
-				}
-				else{
-					System.out.println("no soy ]");
-					a.getProps().setTipo("error"); 
-				}
-			}
-			else if (lexico.reconoce(Tipos.TKPUNT)){
-				tk = lexico.lexer();
-				
-				a.getProps().setTipo(a.getProps().getTbase().getTipo());
-				a.getProps().setTam(a.getProps().getTbase().getTam());
-				
-				codigo.genIns("apila-ind");
-				etq ++;
-			}
-			else { 
-				System.out.println("EXPLOTO");
-				throw new Exception("BUM");
-			}
-			
-			a.getProps().setTipo(TS.getProps(tk.getLexema()).getTipo());
-			System.out.println("Solo por curiosidad:  dirID = " + TS.dirID(tk.getLexema()) + "  y getDir = " + TS.getDir(tk.getLexema()));
-			
-			tkAux = lexico.getNextToken();
-		}
-		System.out.println("salimos del while "+tk.getLexema());
-		if (tkAux.getCategoriaLexica() == Tipos.TKASIGN){
-			System.out.println("en el if "+tk.getLexema());
-			a.setClase(TS.getClase(tk.getLexema()));
-			a.setDir(TS.getDir(tk.getLexema()));
-			a.setProps(TS.getProps(tk.getLexema()));
+	private String sacaTipo(Atributos atr){
+		if (atr.getTbase() == null){
+			return atr.getTipo();
 		}
 		else {
-			codigo.genIns("apila-ind");
-			etq ++;
+			return sacaTipo(atr.getTbase());
 		}
-		System.out.println("salimos del if "+tk.getLexema());
 	}
-	else {  
-		System.out.println("en el else de muy abajo "+tk.getLexema());
-		System.out.println("No es un MEM. Error.");
-		a.getProps().setTipo("error");
-		throw new Exception("ERROR: Expresion derecha mal construida");
-	}
-	return a;*/
-	
 }

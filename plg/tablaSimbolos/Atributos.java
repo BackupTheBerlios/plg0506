@@ -16,6 +16,17 @@ public class Atributos {
 		this.tam = 0;
 	}
 
+	public Atributos(Atributos a){
+		this.tipo = a.getTipo();
+		if (a.getTbase()==null){
+			this.tbase=null;
+		}
+		else {
+			this.tbase = new Atributos(a.getTbase());
+		}
+		this.elems = a.getElems();
+		this.tam = a.getTam();
+	}
 
 	public Atributos(String tipo, String tbase, int elems, int tam) {
 		super();

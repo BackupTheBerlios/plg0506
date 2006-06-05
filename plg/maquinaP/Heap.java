@@ -22,7 +22,7 @@ public class Heap {
 		super();
 		heap= new Vector(i);
 		ocupados= new Vector(i);
-		ultimo=0;
+		ultimo=-1;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -59,15 +59,31 @@ public class Heap {
 	private void flotar(Vector v, int u){
 		int i=u;
 		Integer aux;
-		Integer j=(Integer)ocupados.get(i);
-		Integer z=(Integer)ocupados.get(i/2);
-		while((i!=0)&& (j.intValue()<z.intValue())){
-			aux=j;
-			j= z;
-			z=aux;
-			ocupados.setElementAt(j,i);
-			ocupados.setElementAt(z,i/2);
-			i= i/2;
+		System.out.println("floating");
+		for (int m=0; m<ocupados.size();m++){
+			if (ocupados.elementAt(m) == null)
+				System.out.println("El elemento " + m +" es null");
+			else
+				System.out.println("El elemento "+ m + " es " + ocupados.elementAt(m));
+		}
+		System.out.println("Y U vale: " + u);
+		if (!ocupados.isEmpty()){
+			System.out.println("no soy vacio");
+			Integer j=(Integer)ocupados.get(i);
+			System.out.println("accedi a i");
+			Integer z=(Integer)ocupados.get(i/2);
+			System.out.println("enteritos nuevos");
+			while((i!=0)&& (j.intValue()<z.intValue())){
+				System.out.println("bucle de la muerte");
+				aux=j;
+				j= z;
+				z=aux;
+				System.out.println("ocupading");
+				ocupados.setElementAt(j,i);
+				ocupados.setElementAt(z,i/2);
+				i= i/2;
+				System.out.println("termino el bucle de la muerte");
+			}
 		}
 	}
 	
@@ -92,13 +108,18 @@ public class Heap {
 		}
 		int c=ultimo;
 		int b= ultimo+tam;
-		for (int i=c+1;i==b;i++){
+		System.out.println("reservando");
+		for (int i=c+1;i<=b;i++){
+			System.out.println("a?ado null");
 			heap.addElement(null);
+			System.out.println("ocupados");
 			ocupados.addElement(new Integer(i));
-			flotar(ocupados,i);
+			System.out.println("floto y exploto");
 			ultimo=ultimo+1;
+			flotar(ocupados,i);
+			System.out.println("explote y flote");
 		}
-		return c;
+		return ultimo;
 	}
 	
 	/**
