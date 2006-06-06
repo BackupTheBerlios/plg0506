@@ -289,17 +289,10 @@ public class MaquinaP {
 		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
 		System.out.println(Prog.size());
 		while (H==0){
-			//System.out.println("Holas");
-			//System.out.println("pc" + PC);
-			//System.out.println("size" + Prog.size());
 			if(PC<Prog.size()){
 				System.out.println(muestraPila());
-				//System.out.println("Hola 1");
 				i= (String)Prog.get(PC);
-				//System.out.println("Hola 2");
 				linea = i.split(" ");
-				if (PC==11)System.out.println("holaaaaaaaa "+linea[2]);
-				//System.out.println("Hola 3");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
@@ -785,7 +778,6 @@ public class MaquinaP {
 				}
 			}
 			else{
-				//System.out.println("Adioses");
 				eof();
 			}
 		}
@@ -844,7 +836,6 @@ public class MaquinaP {
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()+s1.intValue());
 		pila.push(s);
-		System.out.println("La cima de la pila es: "+ pila.peek());
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -1289,7 +1280,6 @@ public class MaquinaP {
 		if (tamMem>dir){
 			tamMem = dir;
 		}
-		System.out.println(pila.peek());
 		PC++;
 	}
 	
@@ -1340,8 +1330,8 @@ public class MaquinaP {
 		}
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
-		System.out.println("El tam es: "+ tamMem);
-		System.out.println(" La direccion es: "+ d);
+		//System.out.println("El tam es: "+ tamMem);
+		//System.out.println(" La direccion es: "+ d);
 		if (d<tamMem){	
 			if (d >= 0){
 				if (d>=Mem.size()){
@@ -1358,9 +1348,9 @@ public class MaquinaP {
 		}
 		else{ //memo dinamica
 			d=d-tamMem;
-			System.out.println(" La direccion es: "+ d);
+			//System.out.println(" La direccion es: "+ d);
 			if (d<heap.getHeap().size()){
-				System.out.println(heap.getHeap().size());
+				//System.out.println(heap.getHeap().size());
 				heap.setElementAt(d,valor);
 			}
 			else{
@@ -1493,7 +1483,7 @@ public class MaquinaP {
 	}
 	public String muestraPila(){
 		Stack aux = new Stack();
-		String pilas="La puta pila es: \n";
+		String pilas="El contenido de la pila es: \n";
 		while(!pila.isEmpty()){
 			Integer n = (Integer)pila.pop();
 			pilas= pilas.concat(n.toString());
