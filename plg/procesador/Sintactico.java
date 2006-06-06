@@ -95,7 +95,6 @@ public class Sintactico{
 		Par atrDeDecs = Decs();
 		Par atrDeIs = Is();
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
-		if (errDeProg) System.out.println("Estoy en Prog y voy a petar");
 		return errDeProg;	
 	}
 	
@@ -244,7 +243,7 @@ public class Sintactico{
 			a.getProps().setTipo("ref");
 			a.getProps().setTam(TS.getProps(tk.getLexema()).getTam());
 			a.getProps().setElems(TS.getProps(tk.getLexema()).getElems());
-			a.getProps().setTbase(TS.getProps(tk.getLexema()).getTbase());
+			a.getProps().setTbase(new Atributos(tk.getLexema(),"",0,1));
 		}
 		else if(lexico.reconoce(Tipos.TKARRAY)){
 			lexico.lexer(); //consumimos [
@@ -304,7 +303,6 @@ public class Sintactico{
 			}
 			atrDeIs = Is();
 			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
-				System.out.println("Estoy en IS y voy a petar");
 				a.getProps().setTipo("error");
 			}
 			else {
@@ -346,8 +344,6 @@ public class Sintactico{
 			}	
 				
 		}
-		System.out.println("tipo :");
-		System.out.println(atrDeIns.getProps().getTipo());
 		return atrDeIns;
 	}
 
@@ -591,6 +587,7 @@ public class Sintactico{
 		String lex = "";
 		Token tk;
 		tk = lexico.getLookahead();
+		// TODO ARREGLAR ESTO: ES UNA ?APA, y s?lo funciona en casos b?sicos. Si asignamos un array a otro, muere.
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			Token tk2= lexico.getNextToken();
@@ -599,6 +596,7 @@ public class Sintactico{
 				a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
 			}
 			else{
+				System.out.println("NO entro en la ?apa de Palo");
 				a = Mem();
 			}
 			
@@ -616,12 +614,14 @@ public class Sintactico{
 				//System.out.println("voy a expC "+tk.getLexema());
 				atrDeExpC = ExpC();
 				//System.out.println("vuelvo de expc "+tk.getLexema());
-				//System.out.println("El tipo de ExpC es: " + atrDeExpC.getProps().getTipo());
-				//System.out.println("El tipo de A es: " + a.getProps().getTipo());
+				System.out.println("El tipo de ExpC es: " + atrDeExpC.getProps().getTipo());
+				System.out.println("El tipo de " + tk.getLexema() + " es: " + TS.ref(a.getProps()).getTipo());
+				System.out.println("La TS es:");
+				TS.muestra();
 				//System.out.println("El tipo en mem es :");
 				//System.out.println(a.getProps().getTipo());
 				
-				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(a.getProps().getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
+				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
@@ -1085,8 +1085,9 @@ public class Sintactico{
 				throw new Exception("ERROR: En 'Mem' no coinciden los tipos.  Revisar el identificador: " + tk.getLexema());
 			}	
 		}*/
-		TS.muestra();
-		//System.out.println("El tipo al final de mem es :");
+		//TS.muestra();
+		System.out.println("El tipo al final de mem es: " + a.getProps().getTipo());
+		System.out.println("Y el tipo base es: " + a.getProps().getTbase().getTipo());
 		//System.out.println(a.getProps().getTipo());
 		
 		return a;

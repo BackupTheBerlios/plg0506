@@ -178,9 +178,13 @@ public class TablaSimbolos {
 	 */
 	
 	public Atributos ref(Atributos exp){
+		System.out.println("Dentro de REF:  " + exp);
 		if (exp.getTipo().equals("ref")){
 			String iden = exp.getTbase().getTipo();
-			if(this.existeID( iden )){
+			if (iden.equals("bool") || iden.equals("int")){
+				return exp.getTbase();
+			} 
+			else if(this.existeID( iden )){
 				return ref( this.getProps(iden) );
 			}
 			else{
@@ -196,7 +200,7 @@ public class TablaSimbolos {
 	
 	/*
 	 * fun referenciaErronea(e,ts)
-	 * 	devuelve e.t=ref ∧ ¬existeID(ts,e.id)
+	 * 	devuelve e.t=ref ??? ??existeID(ts,e.id)
 	 */
 	
 	public boolean referenciaErronea(Par e){
