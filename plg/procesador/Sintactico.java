@@ -94,6 +94,8 @@ public class Sintactico{
 		dir = 0;
 		Par atrDeDecs = Decs();
 		Par atrDeIs = Is();
+		System.out.println("El error de Decs es "+atrDeDecs.getProps().getTipo().equals("error"));
+		System.out.println("El error de Is es "+atrDeIs.getProps().getTipo().equals("error"));
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		return errDeProg;	
 	}
@@ -295,6 +297,7 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
+			System.out.println("Aqui llegamos???");
 			a.getProps().setTipo(""); // terminamos con exito
 		}
 		else{
@@ -304,6 +307,7 @@ public class Sintactico{
 			atrDeIs = Is();
 			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
+				System.out.println("Por aki pasamossssssssssssssssssssssssssssssssssssssssssssss");
 			}
 			else {
 				a.getProps().setTipo("");
@@ -622,7 +626,7 @@ public class Sintactico{
 				//System.out.println(a.getProps().getTipo());
 				
 				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
-				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
+				System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
 					//System.out.println("no existe el iden "+tk.getLexema());
@@ -657,7 +661,7 @@ public class Sintactico{
 			}
 		}
 		if (errDeIAsig){
-			//System.out.println("Toy entrando aqui");
+			System.out.println("Toy entrando aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 			a.getProps().setTipo("error");
 		}
 		return a;
@@ -1087,7 +1091,7 @@ public class Sintactico{
 		}*/
 		//TS.muestra();
 		System.out.println("El tipo al final de mem es: " + a.getProps().getTipo());
-		System.out.println("Y el tipo base es: " + a.getProps().getTbase().getTipo());
+		//System.out.println("Y el tipo base es: " + a.getProps().getTbase().getTipo());
 		//System.out.println(a.getProps().getTipo());
 		
 		return a;
