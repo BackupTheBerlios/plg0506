@@ -530,10 +530,10 @@ public class Sintactico{
 		if (TS.ref(a.getProps()).getTipo().equals("pointer")){
 			System.out.println("la rama buena");
 			if (a.getProps().getTipo().equals("ref")){
-				codigo.genIns("new",TS.ref(a.getProps()).getTam());
+				codigo.genIns("new",TS.ref(a.getProps()).getTam(), dir);
 			}
 			else {
-				codigo.genIns("new",a.getProps().getTam());
+				codigo.genIns("new",a.getProps().getTam(), dir);
 			}
 			codigo.genIns("desapila-ind");
 			etq += 2;
