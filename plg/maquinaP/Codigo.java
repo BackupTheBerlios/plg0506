@@ -83,8 +83,6 @@ public class Codigo {
 	
 	public void genIns(String instr, int num, int dir){
 		String i =instr + " " + num + " " + dir;
-		System.out.println("AUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUAUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
-		System.out.println(i);
 		cod.add(i);
 		/*i= i.concat("\n");
 		try{

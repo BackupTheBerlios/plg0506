@@ -178,13 +178,25 @@ public class TablaSimbolos {
 	 */
 	
 	public Atributos ref(Atributos exp){
-		System.out.println("Dentro de REF:  " + exp);
+		//System.out.println("Dentro de REF:  " + exp);
+		
+		/*String iden = exp.getTipo();
+		if (this.existeID(iden)){
+			return (this.getProps(iden));
+		}
+		else{
+			return exp;
+		}*/
+		
 		if (exp.getTipo().equals("ref")){
+			//System.out.println("Es una referencia.");
 			String iden = exp.getTbase().getTipo();
-			if (iden.equals("bool") || iden.equals("int")){
+			//System.out.println("Su iden del tbase es: " + iden);
+			if (iden.equals("bool") || iden.equals("int") || iden.equals("pointer") || iden.equals("array")){
 				return exp.getTbase();
 			} 
 			else if(this.existeID( iden )){
+				System.out.println("Ref recursivo.");
 				return ref( this.getProps(iden) );
 			}
 			else{
@@ -192,7 +204,13 @@ public class TablaSimbolos {
 				return a;
 			}
 		}
+		else if (existeID(exp.getTipo())){
+			System.out.println("Tengo el tipo en la TS");
+			return ref(getProps(exp.getTipo()));
+			
+		}
 		else{
+			//System.out.println("Dentro de REF, la EXP es  " + exp);
 			return exp;
 		}
 		

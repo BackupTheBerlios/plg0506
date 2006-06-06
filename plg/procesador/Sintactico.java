@@ -312,6 +312,9 @@ public class Sintactico{
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
 			atrDeIs = Is();
+			System.out.println("AtrDeI es: " + atrDeI.getProps());
+			System.out.println("Estamos en IS:  I tiene error: " + atrDeI.getProps().getTipo().equals("error"));
+			System.out.println("Estamos en IS:  IS tiene error: " + atrDeIs.getProps().getTipo().equals("error"));
 			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
 				//System.out.println("Por aki pasamossssssssssssssssssssssssssssssssssssssssssssss");
@@ -434,6 +437,7 @@ public class Sintactico{
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
+		System.out.println("EXPC: Tipo es " + atrDeExpC);
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
@@ -530,16 +534,17 @@ public class Sintactico{
 	
 	public Par INew() throws Exception{
 		
-		lexico.lexer(); //consumimo.s el iden
-		Par a = Mem();
-		//System.out.println("soy puntero");
-		//System.out.println(a.getProps().getTipo());
-		//System.out.println("soy referencia");
-		//System.out.println(a.getProps().getTipo());
-		//System.out.println("la referencia a puntero");
-		//System.out.println(TS.ref(a.getProps()).getTipo());
+		Token tk = lexico.lexer(); //consumimo.s el iden
+		// CODIGO EXPERIMENTAL
+		//Par a = Mem();
+		Par a = new Par();
+		a.setId(tk.getLexema());
+		a.setProps(TS.getProps(tk.getLexema()));
+		a.getProps().setTbase(Mem().getProps());
+		// FIN CODIGO EXPERIMENTAL
+
 		if (TS.ref(a.getProps()).getTipo().equals("pointer")){
-			//System.out.println("la rama buena");
+			System.out.println("la rama buena");
 			if (a.getProps().getTipo().equals("ref")){
 				codigo.genIns("new",TS.ref(a.getProps()).getTam(), dir);
 			}
@@ -550,7 +555,7 @@ public class Sintactico{
 			etq += 2;
 		}
 		else {
-			//System.out.println("la rama mala");
+			System.out.println("la rama mala");
 			a.getProps().setTipo("error");
 		}
 		lexico.lexer(); //consumimo.s el iden
@@ -558,13 +563,16 @@ public class Sintactico{
 	}
 	
 	public Par IDel() throws Exception{
-		lexico.lexer(); //consumimo.s el iden
-		Par a = Mem();
+		Token tk = lexico.lexer(); //consumimo.s el iden
+		Par a = new Par();
+		a.setId(tk.getLexema());
+		a.setProps(TS.getProps(tk.getLexema()));
+		a.getProps().setTbase(Mem().getProps());
 		codigo.genIns("apila-ind");
 		etq ++;
-		if (a.getProps().getTipo().equals("pointer") || (a.getProps().getTipo().equals("ref")) && TS.ref(a.getProps()).getTipo().equals("pointer)")){
+		if (TS.ref(a.getProps()).getTipo().equals("pointer")){
 			if (a.getProps().getTipo().equals("ref")){
-				codigo.genIns("delete",TS.getProps(a.getProps().getTbase().getTipo()).getTam());
+				codigo.genIns("delete",TS.ref(a.getProps()).getTam());
 			}
 			else {
 				codigo.genIns("delete",a.getProps().getTam());
@@ -595,7 +603,6 @@ public class Sintactico{
 		
 		Par  atrDeExpC = new Par();
 		Par a = new Par();
-		Par atrDeMem;
 		boolean errDeIAsig = false; 
 		String lex = "";
 		Token tk;
@@ -603,15 +610,15 @@ public class Sintactico{
 		// TODO ARREGLAR ESTO: ES UNA ?APA, y s?lo funciona en casos b?sicos. Si asignamos un array a otro, muere.
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			Token tk2= lexico.getNextToken();
-			if ((tk2.getCategoriaLexica()==Tipos.TKPUNT) || (tk2.getCategoriaLexica()==Tipos.TKCAP)){
+			//Token tk2= lexico.getNextToken();
+			/*if ((tk2.getCategoriaLexica()==Tipos.TKPUNT) || (tk2.getCategoriaLexica()==Tipos.TKCAP)){
 				atrDeMem = Mem();
 				a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
 			}
 			else{
 				//System.out.println("NO entro en la ?apa de Palo");
-				a = Mem();
-			}
+*/				a = Mem();
+			//}
 			
 			//a.getProps().setTipo(sacaTipo(atrDeMem.getProps()));
 			
@@ -621,20 +628,27 @@ public class Sintactico{
 			//System.out.println("vuelvo de mem "+tk.getLexema());
 			//System.out.println(lexico.getLookahead().muestraToken());
 			//System.out.println((TS.getTipo(lexico.getLookahead().getLexema())));
-			tk = lexico.lexer();
+			lexico.lexer(); //consumimos :=
 			//System.out.println("Lo que leemos es: " + tk.getLexema());
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				//System.out.println("voy a expC "+tk.getLexema());
 				atrDeExpC = ExpC();
 				//System.out.println("vuelvo de expc "+tk.getLexema());
 				System.out.println("El tipo de ExpC es: " + atrDeExpC.getProps().getTipo());
-				System.out.println("El tipo de " + tk.getLexema() + " es: " + TS.ref(a.getProps()).getTipo());
-				System.out.println("La TS es:");
-				TS.muestra();
+				System.out.println("El tipo de " + a.getId() + " es: " + TS.ref(a.getProps()).getTipo());
+				//Atributos tipos = TS.getProps(a.getProps().getTipo()); 
+				//System.out.println("El tipo de " + tk.getLexema() + " es: " + TS.ref(tipos));
+				//System.out.println("La TS es:");
+				//TS.muestra();
 				//System.out.println("El tipo en mem es :");
-				//System.out.println(a.getProps().getTipo());
+				System.out.println("a.getProps es:" + a.getProps());//.getTipo());
+				boolean tiposIguales = atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo());
+				System.out.println("TiposIguales es:  " + tiposIguales);
+				System.out.println("Existe el lex en la TS: " + TS.existeID(lex) + " porque el lex esta mal, porque es: " + lex);
+				System.out.println("Y sin embargo, el lex bueno es: " + a.getId());
+				System.out.println("El tipo de ExpC es error?  " + atrDeExpC.getProps().getTipo().equals("error"));
 				
-				errDeIAsig = (!(atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo())) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
+				errDeIAsig = (!(tiposIguales) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				//System.out.println("Estoy en IAsig - 1 -"+errDeIAsig);
 				//System.out.println(atrDeExpC.getTipo());
 				if (!(TS.existeID(lex))){
@@ -670,7 +684,7 @@ public class Sintactico{
 			}
 		}
 		if (errDeIAsig){
-			//System.out.println("Toy entrando aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+			System.out.println("errDeIAsig da error...");
 			a.getProps().setTipo("error");
 		}
 		return a;
@@ -1048,7 +1062,7 @@ public class Sintactico{
 	public Par Mem() throws Exception{
 		//System.out.println("Pasamos por Mem");
 		
-		Atributos atrDeRMem;
+		Atributos atrDeRMem = null;
 		Par a = new Par();
 		
 		Token tk = lexico.getLookahead();
@@ -1081,6 +1095,9 @@ public class Sintactico{
 		
 		// Llamamos a RMem, que resuelve la recursi?n.
 		atrDeRMem = RMem(a.getProps()/*.getTbase()*/);
+		//System.out.println("A la vuelta de RMEM tengo Tipo" + atrDeRMem.getTipo());
+		//System.out.println("A la vuelta de RMEM tengo Tipo " + atrDeRMem.getTipo());
+		//System.out.println("Y Tbase: " + atrDeRMem.getTbase().getTipo());
 		
 		//System.out.println("Volvemos de RMem");
 		
@@ -1091,6 +1108,7 @@ public class Sintactico{
 				//System.out.println(TS.getProps(tk.getLexema()));
 				a.setProps(TS.getProps(tk.getLexema()));
 			}
+			else a.setProps(atrDeRMem);
 		}
 		/*else{
 			if (!TS.getProps(tk.getLexema()).getTipo().equals(atrDeRMem.getTipo())){
@@ -1099,7 +1117,7 @@ public class Sintactico{
 			}	
 		}*/
 		//TS.muestra();
-		System.out.println("El tipo al final de mem es: " + a.getProps().getTipo());
+		//System.out.println("El tipo al final de mem es: " + a.getProps().getTipo());
 		//System.out.println("Y el tipo base es: " + a.getProps().getTbase().getTipo());
 		//System.out.println(a.getProps().getTipo());
 		
@@ -1123,7 +1141,7 @@ public class Sintactico{
 			codigo.genIns("apila-ind");
 			etq ++;
 			if (a.getTbase().getTbase() == null)
-				return a;
+				return a.getTbase();
 			else
 				atrDeRMem = RMem(a.getTbase());
 		} 
@@ -1156,7 +1174,7 @@ public class Sintactico{
 			}
 			System.out.println("n es " + n + " y el NumElems: " + a.getElems());
 			if ( n >= a.getElems()){
-				a.setTipo("error");
+				a.getTbase().setTipo("error");
 				throw new Exception("ERROR: array overflow");
 			}
 			tk = lexico.lexer(); // consumo ]
@@ -1167,6 +1185,11 @@ public class Sintactico{
 				codigo.genIns("suma");
 				etq += 3;
 				
+				System.out.println("Dentro del ARRAY, tengo el Tbase: " + a.getTbase().getTipo());
+				if (a.getTbase().getTbase() != null)
+					System.out.println("Dentro del ARRAY, tengo el Tbase del tbase: " + a.getTbase().getTbase().getTipo());
+				else
+					System.out.println("El Tbase del Tbase es null");
 				if (a.getTbase().getTbase() == null)
 					return a.getTbase();
 				else
@@ -1180,8 +1203,11 @@ public class Sintactico{
 			//System.out.println("Pasamos por RMem - Landa");
 			if (a.getTbase() == null){
 				System.out.println("ES NULL EL A");
+				return a;
 			}
-			return a.getTbase();
+			else{
+				return a.getTbase();
+			}
 		}
 		
 		// Comprobamos que los tipos son iguales.
@@ -1190,7 +1216,7 @@ public class Sintactico{
 			throw new Exception("ERROR: RMEM Error en los tipos. /// EXCEPTION PARA QUITAR!!!!");
 		}
 		
-		return atrDeRMem;
+		return atrDeRMem.getTbase();
 	}
 	
 	/**
