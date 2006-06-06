@@ -3,7 +3,6 @@
  */
 package maquinaP;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,6 +66,8 @@ public class MaquinaP {
 	private static int longInicioPaso = 3;
 	private static int longFinPaso = 1;
 	private static int longInicio = 4;
+	//private static int inicio_paso = funcionAux1();  
+	//private static int fin_paso = funcionAux2();
 	
 	/**
 	 * El constructor de la clase MaquinaP que s?lo tiene el buffer de lectura del fichero como parmetro de entrada.
@@ -836,6 +837,7 @@ public class MaquinaP {
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()+s1.intValue());
 		pila.push(s);
+		System.out.println("La cima de la pila es: "+ pila.peek());
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -970,11 +972,12 @@ public class MaquinaP {
 			else{
 				throw new Exception("ERROR: Puntero sin inicializar.");
 			}
+			
 		}
 		else{ //memo dinamica
 			d=d-tamMem;
 			if (d<heap.getHeap().size()){
-				heap.setElementAt(d,(Integer)pila.pop());
+				heap.setElementAt(d,((Integer)pila.pop()));
 			}
 			else{
 				throw new Exception("ERROR: Puntero sin inicializar.");
@@ -983,7 +986,7 @@ public class MaquinaP {
 		ST = ST -1;
 		PC = PC + 1;
 	}
-	
+
 	/**
 	 * (R8) EOF:
 	 *	H <-- 1
@@ -1351,7 +1354,7 @@ public class MaquinaP {
 			//System.out.println(" La direccion es: "+ d);
 			if (d<heap.getHeap().size()){
 				//System.out.println(heap.getHeap().size());
-				heap.setElementAt(d,valor);
+				heap.setElementAt(d, valor);
 			}
 			else{
 				throw new Exception("ERROR: Puntero sin inicializar.");
@@ -1377,7 +1380,7 @@ public class MaquinaP {
 			int o = ((Integer)pila.pop()).intValue(); //pop desapilar
 			int d = ((Integer)pila.pop()).intValue(); //push apilar
 			for (int i=0;i<s;i++){
-				if(d+i<Mem.size()-1){ //Mem set cambia el elemento de la posición d+i por el elemento que le pasas. en este caso el elemento que devuelve mem.get(o+i)
+				if(d+i<Mem.size()-1){ //Mem set cambia el elemento de la posicin d+i por el elemento que le pasas. en este caso el elemento que devuelve mem.get(o+i)
 					Mem.set(d+i,Mem.get(o+i));
 				}
 				else{
@@ -1420,24 +1423,24 @@ public class MaquinaP {
 			this.desapila_dir(0);
 		}
 		else{
-			throw new Exception("ERROR: en prólogo.");
+			throw new Exception("ERROR: en prlogo.");
 		}
 
 	}
 	public void paso_parametro (int modoReal, int pformal) throws Exception{
-		//cuando useis esta función le pasáis directamente la dirección del parámetro con el que la llaméis
+		//cuando useis esta funcin le pasis directamente la direccin del parmetro con el que la llamis
 		if (pformal >= 0){
 			this.apila(pformal);
 			this.suma();
 			this.desapila_ind();
 		}
 		else{
-			throw new Exception("ERROR: en paso parámetro.");
+			throw new Exception("ERROR: en paso parmetro.");
 		}
 
 	}
 	public void acceso_var (int infoID_nivel, int infoID_dir) throws Exception{
-		//infoID recibe el nivel del identificador y su dirección
+		//infoID recibe el nivel del identificador y su direccin
 		if (infoID_nivel >= 0){
 			this.apila_dir(1 + infoID_nivel);
 			this.apila(infoID_dir);
@@ -1477,7 +1480,7 @@ public class MaquinaP {
 			this.desapila_dir(1+nivel);
 		}
 		else{
-			throw new Exception("ERROR: en epílogo.");
+			throw new Exception("ERROR: en eplogo.");
 		}
 
 	}
