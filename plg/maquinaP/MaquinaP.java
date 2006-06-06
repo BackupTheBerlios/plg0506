@@ -1267,6 +1267,7 @@ public class MaquinaP {
 			throw new Exception("ERROR: Memoria sin inicializar.");
 		}
 		int d= ((Integer)pila.pop()).intValue();
+		d -= tamMem;
 		ST= ST-1;
 		heap.libera(d,t);
 		PC++;

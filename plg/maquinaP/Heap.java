@@ -91,7 +91,7 @@ public class Heap {
 	 * 
 	 *
 	 */
-	private void moticulizar(){
+	private void monticulizar(){
 		for(int j=1; j==ultimo;j++){
 			flotar(ocupados,j);
 		}
@@ -136,7 +136,7 @@ public class Heap {
 			System.out.println("saldre de libera");
 		}
 		//quizas como son seguidos no hiciese falta
-		moticulizar();
+		monticulizar();
 	}
 	
 	public int getElementAt(int d) throws Exception{

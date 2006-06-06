@@ -204,9 +204,9 @@ public class TablaSimbolos {
 	 */
 	
 	public boolean referenciaErronea(Par e){
-		System.out.println("En ref erroenes ref es");
-		System.out.println(e.getProps().getTipo());
-		System.out.println(e.getProps().getTipo().equals("ref"));
+		//System.out.println("En ref erroenes ref es");
+		//System.out.println(e.getProps().getTipo());
+		//System.out.println(e.getProps().getTipo().equals("ref"));
 		return e.getProps().getTipo().equals("ref") && !this.existeID(e.getId());
 	}
 	
@@ -247,8 +247,8 @@ public boolean compatibles2 (Vector v, Atributos e1, Atributos e2)
 		v.addElement(e1);
 		v.addElement(e2);
 	}
-	if ((e1.getTipo()==e2.getTipo() && e2.getTipo().equals("int"))
-			|| (e1.getTipo()==e2.getTipo() && e2.getTipo().equals("bool"))){
+	if ((e1.getTipo().equals(e2.getTipo()) && e2.getTipo().equals("int"))
+			|| (e1.getTipo().equals(e2.getTipo()) && e2.getTipo().equals("bool"))){
 		return true;
 	}
 	else if (e1.getTipo().equals("ref"))
@@ -260,7 +260,21 @@ public boolean compatibles2 (Vector v, Atributos e1, Atributos e2)
 			else if (e1.getTipo().equals("puntero") && e2.getTipo().equals("puntero"))
 					return compatibles2(v, e1.getTbase(), e2.getTbase());
 				else
-					return false;		
-}
-	
+					return false;
+	/*if (ref(e1).getTipo().equals(ref(e2).getTipo())) {
+		if (ref(e1).getTipo().equals("int") || ref(e1).getTipo().equals("bool")){
+			return true;
+		}
+		else if (ref(e1).getTipo().equals("array")){
+			return (ref(e1).getElems() == ref(e2).getElems() && ref(e1).getTam() == ref(e2).getTam() &&
+					compatibles(ref(e1).getTbase(),ref(e2).getTbase()));
+		}
+		else if (ref(e1).getTipo().equals("pointer")){
+			return (ref(e1).getTam() == ref(e2).getTam() &&	compatibles(ref(e1).getTbase(),ref(e2).getTbase()));
+		}
+	}
+	else {
+		return false;
+	}*/		
+	}
 }
