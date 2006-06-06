@@ -60,14 +60,13 @@ public class MaquinaP {
 	private Heap heap;
 	private FileReader fichero;
 	private String pasos;
+	private int tamMem;
 	private static int longApilaRet = 5;
 	private static int longPrologo = 13;
 	private static int longEpilogo = 12;
 	private static int longInicioPaso = 3;
 	private static int longFinPaso = 1;
 	private static int longInicio = 4;
-	//private static int inicio_paso = funcionAux1();  
-	//private static int fin_paso = funcionAux2();
 	
 	/**
 	 * El constructor de la clase MaquinaP que s?lo tiene el buffer de lectura del fichero como parmetro de entrada.
@@ -80,6 +79,7 @@ public class MaquinaP {
 		pila = new Stack();
 		PC = 0;
 		H = 0;
+		tamMem= Integer.MAX_VALUE;
 		ST = -1;
 		Mem= new Vector();
 		// el 1? entero indica el tam?o inicial, y el otro la capacidad de aumento
@@ -298,6 +298,7 @@ public class MaquinaP {
 				i= (String)Prog.get(PC);
 				//System.out.println("Hola 2");
 				linea = i.split(" ");
+				if (PC==11)System.out.println("holaaaaaaaa "+linea[2]);
 				//System.out.println("Hola 3");
 				if (linea[0].compareTo("apila")==0){
 					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
@@ -620,11 +621,11 @@ public class MaquinaP {
 					j++;
 				}
 				else if (linea[0].compareTo("new")==0){
-					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1]));
+					System.out.println(linea[0]+"  "+Integer.parseInt(linea[1])+"  "+Integer.parseInt(linea[2]));
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
+					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+"  "+Integer.parseInt(linea[2]));
 					pasos= pasos.concat(" \n");
-					new_o((new Integer(Integer.parseInt(linea[1]))).intValue());
+					new_o((new Integer(Integer.parseInt(linea[1]))).intValue(),(new Integer(Integer.parseInt(linea[2]))).intValue());
 					if (!pila.empty()){
 						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
 						pasos= pasos.concat(" \n");
@@ -925,17 +926,29 @@ public class MaquinaP {
 	 */
 	public void apila_dir (int d) throws Exception{
 		ST = ST + 1; 
-		if (d >= 0){
-			if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
-				pila.push(Mem.elementAt(d));  
-				PC = PC + 1;
+		if(d<tamMem){
+			if (d >= 0){
+				if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
+					pila.push(Mem.elementAt(d));  
+					PC = PC + 1;
+				}
+				else{				
+					throw new Exception("ERROR: Variable sin inicializar.");
+				}
 			}
-			else{				
-				throw new Exception("ERROR: Variable sin inicializar.");
+			else{
+				throw new Exception("ERROR: Puntero sin inicializar.");
 			}
 		}
-		else{
-			throw new Exception("ERROR: Puntero sin inicializar.");
+		else{ //memo dinamica
+			d=d-tamMem;
+			if (d<heap.getHeap().size()){
+				pila.push(new Integer(heap.getElementAt(d)));
+				PC = PC + 1;
+			}
+			else{
+				throw new Exception("ERROR: Puntero sin inicializar.");
+			}
 		}
 	}
 	
@@ -953,20 +966,31 @@ public class MaquinaP {
 		if (ST<0){
 			throw new Exception("ERROR: Desapila_dir. La pila no contiene los datos necesarios.");
 		}
-		if (d >= 0){
-			if (d>=Mem.size()){
-				aumentoMem(d);
-				Mem.set(d,pila.pop());
+		if (d<tamMem){
+			if (d >= 0){
+				if (d>=Mem.size()){
+					aumentoMem(d);
+					Mem.set(d,pila.pop());
+				}
+				else{
+					Mem.set(d,pila.pop());
+				}
 			}
 			else{
-				Mem.set(d,pila.pop());
+				throw new Exception("ERROR: Puntero sin inicializar.");
 			}
-			ST = ST -1;
-			PC = PC + 1;
 		}
-		else{
-			throw new Exception("ERROR: Puntero sin inicializar.");
+		else{ //memo dinamica
+			d=d-tamMem;
+			if (d<heap.getHeap().size()){
+				heap.setElementAt(d,(Integer)pila.pop());
+			}
+			else{
+				throw new Exception("ERROR: Puntero sin inicializar.");
+			}
 		}
+		ST = ST -1;
+		PC = PC + 1;
 	}
 	
 	/**
@@ -1258,10 +1282,13 @@ public class MaquinaP {
 	 * 
 	 * @throws Exception
 	 */
-	public void new_o(int i) throws Exception{
+	public void new_o(int i, int dir) throws Exception{
 		int j=heap.reserva(i);
 		ST=ST+1;
-		pila.push(new Integer (j));
+		pila.push(new Integer (j+dir));
+		if (tamMem>dir){
+			tamMem = dir;
+		}
 		System.out.println(pila.peek());
 		PC++;
 	}
@@ -1279,10 +1306,22 @@ public class MaquinaP {
 			throw new Exception("ERROR: Memoria sin inicializar.");
 		}
 		int i = ((Integer)pila.pop()).intValue();
-		if ((i>=Mem.size())|| (i<0)){
-			throw new Exception("Posicion de memoria no inicializada");
+		if (i<tamMem){
+			if ((i>=Mem.size())|| (i<0)){
+				throw new Exception("Posicion de memoria no inicializada");
+			}
+			pila.push(Mem.elementAt(i));
 		}
-		pila.push(Mem.elementAt(i));
+
+		else{ //memo dinamica
+			i=i-tamMem;
+			if (i<heap.getHeap().size()){
+				pila.push(new Integer(heap.getElementAt(i)));
+			}
+			else{
+				throw new Exception("ERROR: Puntero sin inicializar.");
+			}
+		}
 		PC = PC +1;
 	}
 	
@@ -1301,20 +1340,35 @@ public class MaquinaP {
 		}
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
-		if (d >= 0){
-			if (d>=Mem.size()){
-				aumentoMem(d);
-				Mem.set(d,valor);
+		System.out.println("El tam es: "+ tamMem);
+		System.out.println(" La direccion es: "+ d);
+		if (d<tamMem){	
+			if (d >= 0){
+				if (d>=Mem.size()){
+					aumentoMem(d);
+					Mem.set(d,valor);
+				}
+				else{
+					Mem.set(d,valor);
+				}
 			}
 			else{
-				Mem.set(d,valor);
+				throw new Exception("ERROR: Memoria sin inicializar.");
 			}
-			ST = ST-2;
-			PC = PC + 1;
 		}
-		else{
-			throw new Exception("ERROR: Memoria sin inicializar.");
+		else{ //memo dinamica
+			d=d-tamMem;
+			System.out.println(" La direccion es: "+ d);
+			if (d<heap.getHeap().size()){
+				System.out.println(heap.getHeap().size());
+				heap.setElementAt(d,valor);
+			}
+			else{
+				throw new Exception("ERROR: Puntero sin inicializar.");
+			}
 		}
+		ST = ST-2;
+		PC = PC + 1;
 	}
 	
 	/**

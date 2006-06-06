@@ -148,9 +148,10 @@ public class Heap {
 		}
 	}
 	
-	public void setElementAt(int d, int value) throws Exception{
-		if (!ocupados.contains(new Integer(d))){
-			heap.setElementAt(new Integer(value),d);
+	public void setElementAt(int d, Integer value) throws Exception{
+		System.out.println(ocupados.contains(new Integer(d)));
+		if (ocupados.contains(new Integer(d))){
+			heap.setElementAt(value,d);
 		}
 		else{
 			throw new Exception("Acceso de Memoria no valido");

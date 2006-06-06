@@ -81,6 +81,20 @@ public class Codigo {
 		}*/
 	}
 	
+	public void genIns(String instr, int num, int dir){
+		String i =instr + " " + num + " " + dir;
+		System.out.println("AUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUAUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+		System.out.println(i);
+		cod.add(i);
+		/*i= i.concat("\n");
+		try{
+			fichero.write(i.getBytes());
+		}
+		catch(java.io.IOException e){
+			JOptionPane.showMessageDialog(null,"No he podido escribir en el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+		}*/
+	}
+	
 	/**
 	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin que recibe como parmetro y un salto de lnea. 
 	 * Adems de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
