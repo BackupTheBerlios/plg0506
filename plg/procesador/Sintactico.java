@@ -97,6 +97,7 @@ public class Sintactico{
 		/*
 		 * 	Progs.err = Progs.err ??? Decs.pend ????????? 
 		 */
+		
 		etq = 0;
 		dir = 0;
 		Par atrDeDecs = Decs();
@@ -104,7 +105,7 @@ public class Sintactico{
 		//System.out.println("El error de Decs es "+atrDeDecs.getProps().getTipo().equals("error"));
 		//System.out.println("El error de Is es "+atrDeIs.getProps().getTipo().equals("error"));
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
-		return errDeProg;	
+		return errDeProg;
 	}
 	
 	/**
