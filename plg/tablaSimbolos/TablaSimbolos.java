@@ -46,13 +46,6 @@ public class TablaSimbolos {
 	public TablaSimbolos(Hashtable t, Vector params) throws Exception{
 		this.tabla = new Hashtable(t);
 		Enumeration e = t.keys();
-		while (e.hasMoreElements()){
-			Object aux = e.nextElement();
-			if ( ((Par)t.get(aux)).getClase().equals("proc") ){ //quitamos los procedimientos
-				tabla.remove(aux);
-			}
-		}
-		e = tabla.keys();
 		while (e.hasMoreElements()){ //cambiamos a solo lectura los q no son parámetros
 			Object aux = e.nextElement();
 			if ( ! params.contains(aux) ){
