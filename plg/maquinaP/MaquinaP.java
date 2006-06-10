@@ -60,12 +60,7 @@ public class MaquinaP {
 	private FileReader fichero;
 	private String pasos;
 	private int tamMem;
-	private static int longApilaRet = 5;
-	private static int longPrologo = 13;
-	private static int longEpilogo = 12;
-	private static int longInicioPaso = 3;
-	private static int longFinPaso = 1;
-	private static int longInicio = 4;
+
 	//private static int inicio_paso = funcionAux1();  
 	//private static int fin_paso = funcionAux2();
 	
@@ -678,92 +673,13 @@ public class MaquinaP {
 						pasos= pasos.concat(" \n");
 					}
 					j++;
-				}////////////////////////////////////////////
-				else if (linea[0].compareTo("prologo")==0){
-					System.out.println(linea[0]);
-					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
-					pasos= pasos.concat(" \n");
-					prologo((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
-					if (!pila.empty()){
-						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
-						pasos= pasos.concat(" \n");
-					}
-					else{
-						pasos= pasos.concat("La pila ahora esta vacia");
-						pasos= pasos.concat(" \n");
-					}
-					j++;
 				}
-				else if (linea[0].compareTo("inicio")==0){
-					System.out.println(linea[0]);
+				else if (linea[0].compareTo("copia")==0){
+					System.out.println(linea[0]+"  ");
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
+					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
-					inicio((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
-					if (!pila.empty()){
-						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
-						pasos= pasos.concat(" \n");
-					}
-					else{
-						pasos= pasos.concat("La pila ahora esta vacia");
-						pasos= pasos.concat(" \n");
-					}
-					j++;
-				}
-				else if (linea[0].compareTo("paso_parametro")==0){
-					System.out.println(linea[0]);
-					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
-					pasos= pasos.concat(" \n");
-					paso_parametro((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
-					if (!pila.empty()){
-						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
-						pasos= pasos.concat(" \n");
-					}
-					else{
-						pasos= pasos.concat("La pila ahora esta vacia");
-						pasos= pasos.concat(" \n");
-					}
-					j++;
-				}
-				else if (linea[0].compareTo("acceso_var")==0){
-					System.out.println(linea[0]);
-					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1])+" "+Integer.parseInt(linea[2]));
-					pasos= pasos.concat(" \n");
-					acceso_var((new Integer(Integer.parseInt(linea[1]))).intValue(), (new Integer(Integer.parseInt(linea[2]))).intValue());
-					if (!pila.empty()){
-						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
-						pasos= pasos.concat(" \n");
-					}
-					else{
-						pasos= pasos.concat("La pila ahora esta vacia");
-						pasos= pasos.concat(" \n");
-					}
-					j++;
-				}
-				else if (linea[0].compareTo("apila_ret")==0){
-					System.out.println(linea[0]);
-					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
-					pasos= pasos.concat(" \n");
-					apila_ret((new Integer(Integer.parseInt(linea[1]))).intValue());
-					if (!pila.empty()){
-						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
-						pasos= pasos.concat(" \n");
-					}
-					else{
-						pasos= pasos.concat("La pila ahora esta vacia");
-						pasos= pasos.concat(" \n");
-					}
-					j++;
-				}else if (linea[0].compareTo("epilogo")==0){
-					System.out.println(linea[0]);
-					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
-					pasos= pasos.concat(linea[0]+"  "+Integer.parseInt(linea[1]));
-					pasos= pasos.concat(" \n");
-					epilogo((new Integer(Integer.parseInt(linea[1]))).intValue());
+					copia();
 					if (!pila.empty()){
 						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
 						pasos= pasos.concat(" \n");
@@ -1492,161 +1408,19 @@ public class MaquinaP {
 		ST = ST-2;
 		PC = PC +1;
 	}
-	
-	/**
-	 * Metodo que salva la dirección de retorno de la prellamada de un procedimiento asociada a la invocación.
-	 * 
-	 *  (R27)apila_ret(ret):
-	 *  PC <-- PC + 1
-	 *  apila_dir(0)
-	 *  apila(1)
-	 *  suma
-	 *  apila(ret)
-	 *  desapila-ind
-	 *  
-	 * @param ret Direccion de la llamada
-	 * @throws Exception
-	 */
-	public void apila_ret (int ret) throws Exception{
-		//devuelve apila-dir(0) || apila(1) || suma || apila(ret) || desapila-ind	
-		if (ret >= 0){
-			//PC = PC +1; ////////////////////////////////////////////////////Duda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			this.apila_dir(0);
-			this.apila(1);
-			this.apila(ret);
-			this.desapila_ind();
-		}
-		else{
-			throw new Exception("ERROR: apila ret.");
-		}
-
-	}
-	
-	/**
-	 * Metodo que implementa el prólogo que de la estructura que describimos a continuación.
-	 * 
-	 * (R28)prologo(nivel,tamlocales):
-	 *  apila_dir(0)
-	 *  apila(2)
-	 *  suma()
-	 *  apila_dir(1 + nivel)
-	 *  desapila_ind()
-	 *  apila_dir(0)
-	 *  apila(3)
-	 *  suma()
-	 *  desapila_dir(1+nivel)
-	 *  apila_dir(0)
-	 *  apila(tamlocales + 2)
-	 *  suma()
-	 *  desapila_dir(0)
-	 *  
-	 * @param nivel
-	 * @param tamlocales
-	 * @throws Exception
-	 */
-	public void prologo (int nivel, int tamlocales) throws Exception{
-		if (nivel >= 0){
-			this.apila_dir(0);
-			this.apila(2);
-			this.suma();
-			this.apila_dir(1 + nivel);
-			this.desapila_ind();
-			this.apila_dir(0);
-			this.apila(3);
-			this.suma();
-			this.desapila_dir(1+nivel);
-			this.apila_dir(0);
-			this.apila(tamlocales + 2);
-			this.suma();
-			this.desapila_dir(0);
-		}
-		else{
-			throw new Exception("ERROR: en prologo.");
-		}
-
-	}
-	
 	/**
 	 * 
-	 * @param modoReal
-	 * @param pformal
 	 * @throws Exception
 	 */
-	public void paso_parametro (int modoReal, int pformal) throws Exception{
-		//cuando useis esta funcin le pasis directamente la direccin del parmetro con el que la llamis
-		if (pformal >= 0){
-			this.apila(pformal);
-			this.suma();
-			this.desapila_ind();
-		}
-		else{
-			throw new Exception("ERROR: en paso parmetro.");
-		}
-
-	}
-	
-	/**
-	 * 
-	 * @param infoID_nivel
-	 * @param infoID_dir
-	 * @throws Exception
-	 */
-	public void acceso_var (int infoID_nivel, int infoID_dir) throws Exception{
-		//infoID recibe el nivel del identificador y su direccin
-		if (infoID_nivel >= 0){
-			this.apila_dir(1 + infoID_nivel);
-			this.apila(infoID_dir);
-			this.suma();
-		}
-		else{
-			throw new Exception("ERROR: en acceso var.");
-		}
-	}
-	
-	/**
-	 * 
-	 * @param num_niveles
-	 * @param tam_datos
-	 * @throws Exception
-	 */
-	public void inicio (int num_niveles, int tam_datos) throws Exception{
-		
-		if (num_niveles >= 0){
-			this.apila(1 + num_niveles);
-			this.desapila_dir(1);
-			this.apila(1 + num_niveles + tam_datos);
-			this.desapila_dir(0);
-		}
-		else{
-			throw new Exception("ERROR: en acceso var.");
-		}
-
-	}
-	
-	/**
-	 * 
-	 * @param nivel
-	 * @throws Exception
-	 */
-	public void epilogo (int nivel) throws Exception{
-		if (nivel >= 0){
-			this.apila_dir(1 + nivel);
-			this.apila(2);
-			this.resta();
-			this.apila_ind();
-			this.apila_dir(1 + nivel);
-			this.apila(3);
-			this.resta();
+	public void copia () throws Exception {
+		if (ST >= 0){
 			pila.push(pila.peek());
-			this.desapila_dir(0);
-			this.apila(2);
-			this.suma();
-			this.desapila_dir(1+nivel);
+			ST = ST + 1;
+			PC = PC + 1;
 		}
 		else{
-			throw new Exception("ERROR: en eplogo.");
+			throw new Exception("ERROR en Copia: Pila vacía.");
 		}
-
 	}
 	
 	/**
