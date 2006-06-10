@@ -128,7 +128,7 @@ public class Atributos {
 		else 
 			if (tbase == null)
 				return (iguales && a.getTbase() == null);
-			return (tbase.getTipo().equals(a.getTbase().getTipo()));
+			return (tbase.getTipo().equals(a.getTbase().getTipo()));	
 	}
 
 }
