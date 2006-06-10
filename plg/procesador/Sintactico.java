@@ -371,6 +371,7 @@ public class Sintactico{
 			return a;
 		}
 		Par atrDeLFParams = LFParams();
+		System.out.println("VOlvemos de LFParams()");
 		tk = lexico.lexer(); //consumimos )
 		System.out.println("En fparams ) : " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPCI)){
@@ -385,15 +386,33 @@ public class Sintactico{
 	public Par LFParams() throws Exception{
 		Par a = new Par();
 		Par atrDeLFParams = null;
+		
 		Par atrDeFParam = FParam();
+		System.out.println("Volvemos de FParam. Se lo asignamos a 'a'");
 		a.getProps().getParams().add(atrDeFParam);
-		Token tk = lexico.lexer(); // Consumimos ","
+		a.getProps().setElems(a.getProps().getElems() + 1);
+		System.out.println("Ya lo hemos asignado.");
+		
+		Token tk = lexico.getNextToken();
+		if (tk.getCategoriaLexica() == Tipos.TKPCI){
+			System.out.println("Leo el ) y vuelvo.");
+			return a;
+		}
+		tk = lexico.lexer(); // Consumimos ","
 		System.out.println("En lfparams , : " + tk.getLexema());
+		
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			// Volvemos a llamar a LFParams
 			atrDeLFParams = LFParams();
-			a.getProps().getParams().addAll(atrDeLFParams.getProps().getParams());
-			a.setT(atrDeLFParams.getT());	
+			System.out.println("Antes del addAll");
+			if (! atrDeLFParams.getProps().getParams().isEmpty()){
+				a.getProps().getParams().addAll(atrDeLFParams.getProps().getParams());
+				a.setT(atrDeLFParams.getT());
+				a.getProps().setElems(a.getProps().getElems() + atrDeLFParams.getProps().getElems());
+			}
+		}
+		else {
+			throw new Exception("ERROR: Los parametros han de ir separados por comas.");
 		}
 		a.getT().agnadeID(atrDeFParam.getId(), atrDeFParam.getProps(),atrDeFParam.getClase(),atrDeFParam.getDir(),nivel);
 		return a;
@@ -409,6 +428,9 @@ public class Sintactico{
 			throw new Exception("ERROR: falta el identificador del parametro");
 		}
 		a.setId(tk.getLexema());
+		if (atrDeTipo.getProps() == null){
+			System.out.println("Los props despues de TIpo son null");
+		}
 		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
 		a.getProps().setTbase(new Atributos());
 		a.setNivel(nivel);
