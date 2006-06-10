@@ -37,6 +37,13 @@ public class Sintactico{
 	int dir;
 	int etq;
 	
+	private static int longApilaRet = 5;
+	private static int longPrologo = 13;
+	private static int longEpilogo = 12;
+	private static int longInicioPaso = 3;
+	private static int longFinPaso = 1;
+	private static int longAccesoVar = 4;
+	private static int longInicio = 4;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
