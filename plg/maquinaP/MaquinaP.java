@@ -1327,7 +1327,7 @@ public class MaquinaP {
 	public void desapila_ind() throws Exception{
 		//	Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
-		if (ST<2){
+		if (ST<1){
 			throw new Exception("ERROR: Desapila_ind. La pila no contiene los datos necesarios. \n Puede que algun puntero no este inicializado");
 		}
 		Integer valor=(Integer)pila.pop();
