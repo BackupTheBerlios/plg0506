@@ -403,11 +403,16 @@ Bloque ::= Is
 { cod = cod || Is.props}
 		 */
 		Par a  = new Par();
-		etq = 0;
-		dir = 0;
-		nivel = 0;
+		int etqs1;
+		int etqs2;
+		etqs1 = etq + longPrologo + 1;
 		Par atrDeDecs = Decs();
 		Par atrDeIs = Is();
+		
+		etq = etqs1 + longEpilogo +1;
+		etqs2 = 
+		dir = 0;
+		nivel = 0;
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		//return errDeProg;
 		return a;
