@@ -10,14 +10,15 @@ public class PruebaTS {
 	public static void main(String[] args) throws Exception{
 		TablaSimbolos t = new TablaSimbolos();
 		Atributos aux = new Atributos();
-		t.agnadeID("a", aux, "tipo", 0);
-		t.agnadeID("b", aux, "proc", 0);
-		t.agnadeID("c", aux, "var", 0);
-		t.agnadeID("d", aux, "var", 0);
-		t.agnadeID("a1", aux, "tipo", 0);
-		t.agnadeID("b1", aux, "proc", 0);
-		t.agnadeID("c1", aux, "var", 0);
-		t.agnadeID("d1", aux, "var", 0);
+		int w = 0;
+		t.agnadeID("a", aux, "tipo", 0, w);
+		t.agnadeID("b", aux, "proc", 0, w);
+		t.agnadeID("c", aux, "var", 0, w);
+		t.agnadeID("d", aux, "var", 0, w);
+		t.agnadeID("a1", aux, "tipo", 0, w);
+		t.agnadeID("b1", aux, "proc", 0, w);
+		t.agnadeID("c1", aux, "var", 0, w);
+		t.agnadeID("d1", aux, "var", 0, w);
 		System.out.println("La padre: ");
 		t.muestra();
 		Vector v = new Vector();
