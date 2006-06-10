@@ -1,7 +1,35 @@
+pointer int a;
+pointer bool b;
+int c;
 array [2] of bool d;
-pointer int k
+tipo maria = bool;
+tipo pepe = pointer int;
+tipo ese = array [2] of bool;
+maria e;
+pepe f;
+ese g;
+pointer int h;
+pointer int j;
+pointer int x;
+pointer int k 
 #
+
+d[1] := true;
+b pointer := false;
+e := false;
+new h;
+if d[1] then 
+	h pointer := -155;
+else
+	h pointer := 500;
+new j;
 new k;
-d[1] := false;
-if d[1] then
-	k pointer := -155;
+c := 1111;
+while c > 1100  do
+	c := c - 1;
+
+new a;
+a pointer := 1111;
+new x;
+delete a;
+

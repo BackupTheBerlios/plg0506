@@ -287,7 +287,6 @@ public class MaquinaP {
 		System.out.println(Prog.size());
 		while (H==0){
 			if(PC<Prog.size()){
-				System.out.println(muestraPila());
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
 				if (linea[0].compareTo("apila")==0){
@@ -754,7 +753,6 @@ public class MaquinaP {
 		Integer s2 = (Integer)pila.pop();
 		Integer s = new Integer(s2.intValue()+s1.intValue());
 		pila.push(s);
-		System.out.println("La cima de la pila es: "+ pila.peek());
 		ST = ST-1;
 		PC = PC + 1;
 	}
@@ -826,7 +824,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Metodo que apila un entero en la pila. Se aumenta en uno el tamaño de la pila y se apila el entero que recibe como
+	 * Metodo que apila un entero en la pila. Se aumenta en uno el tamao de la pila y se apila el entero que recibe como
 	 * parametro. Tambien se aumenta en uno el contador del programa.
 	 * 
 	 * ST <-- ST + 1 
@@ -881,7 +879,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Metodo que desapila la cima de la pila y lo guarda en la direccion de memoria que recibe como parametro. Se disminuye en uno el tamaño 
+	 * Metodo que desapila la cima de la pila y lo guarda en la direccion de memoria que recibe como parametro. Se disminuye en uno el tamao 
 	 * de la pila y se comprueba si es memoria dinamica o estatica. Tambien se aumenta en uno el contador del programa.
 	 * 
 	 * (R7) desapila-dir(d):
@@ -926,7 +924,7 @@ public class MaquinaP {
 	}
 
 	/**
-	 * Metodo que para la ejecucion de la máquina P cuando se recibe un final de fichero.
+	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de fichero.
 	 * 
 	 * (R8) EOF:
 	 *	H <-- 1
@@ -1203,7 +1201,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Metodo que realiza una operacion de salto del programa. Se comprueba que el salto no supere el tamaño del programa y se aumenta el contador
+	 * Metodo que realiza una operacion de salto del programa. Se comprueba que el salto no supere el tamao del programa y se aumenta el contador
 	 * del programa segun el valor que recibimos por parametro.
 	 * 
 	 * (R20) ir-a(s):
@@ -1222,7 +1220,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Metodo que realiza una operacion de salto condicional del programa. Se comprueba que el salto no supere el tamaño del programa y se aumenta 
+	 * Metodo que realiza una operacion de salto condicional del programa. Se comprueba que el salto no supere el tamao del programa y se aumenta 
 	 * el contador del programa segun el valor que recibimos por parametro, si la cima de la pila es un valor booleano cierto.
 	 * 
 	 * (R21) ir-f(s):
@@ -1419,7 +1417,7 @@ public class MaquinaP {
 			PC = PC + 1;
 		}
 		else{
-			throw new Exception("ERROR en Copia: Pila vacía.");
+			throw new Exception("ERROR en Copia: Pila vaca.");
 		}
 	}
 	
