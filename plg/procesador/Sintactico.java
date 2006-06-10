@@ -204,11 +204,12 @@ public class Sintactico{
 	public Par DecProc() throws Exception{
 		Par a = new Par();
 		Token tk = lexico.lexer(); // consumimos "proc"
+		System.out.println("En decProc proc:" + tk.getLexema());
 		if (! lexico.reconoce(Tipos.TKPROC)){
 			throw new Exception("ERROR: Deberiamos haber encontrado 'proc'.");
 		}
-		tk = lexico.lexer(); // Consumimos el tipo
-		System.out.println("En DecProc leemos: " + tk.getLexema());
+		tk = lexico.lexer(); // Consumimos el iden
+		System.out.println("En DecProc leemos iden: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
@@ -221,12 +222,14 @@ public class Sintactico{
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
-		lexico.lexer();
+		tk = lexico.lexer();
+		System.out.println("En decProc {:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLAP)){
 			throw new Exception("ERROR: Falta una llave de apertura");
 		}
 		Par atrDeBloque = Bloque();
-		lexico.lexer();
+		tk = lexico.lexer();
+		System.out.println("En decProc }:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
@@ -351,12 +354,15 @@ public class Sintactico{
 		}
 		tk = lexico.getNextToken();
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
+			lexico.lexer();
+			System.out.println("En FParams ) leemos: " + tk.getLexema());
 			System.out.println("Metodo sin parametros");
 			a.getProps().setElems(0);
 			return a;
 		}
 		Par atrDeLFParams = LFParams();
-		lexico.lexer(); //consumimos )
+		tk = lexico.lexer(); //consumimos )
+		System.out.println("En fparams ) : " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPCI)){
 			throw new Exception ("ERROR: Necesitas un )");
 		}
@@ -369,24 +375,17 @@ public class Sintactico{
 	public Par LFParams() throws Exception{
 		Par a = new Par();
 		Par atrDeLFParams = null;
-		
-		
 		Par atrDeFParam = FParam();
 		a.getProps().getParams().add(atrDeFParam);
-		
-		
 		Token tk = lexico.lexer(); // Consumimos ","
-		
+		System.out.println("En lfparams , : " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			// Volvemos a llamar a LFParams
 			atrDeLFParams = LFParams();
 			a.getProps().getParams().addAll(atrDeLFParams.getProps().getParams());
-			
 			a.setT(atrDeLFParams.getT());	
 		}
 		a.getT().agnadeID(atrDeFParam.getId(), atrDeFParam.getProps(),atrDeFParam.getClase(),atrDeFParam.getDir(),nivel);
-		
-		
 		return a;
 	}
 	
@@ -395,6 +394,7 @@ public class Sintactico{
 		Par a  = new Par();
 		Par atrDeTipo = Tipo();
 		Token tk = lexico.lexer();
+		System.out.println("En fparam iden : " + tk.getLexema());
 		if(! lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception("ERROR: falta el identificador del parametro");
 		}
@@ -412,7 +412,17 @@ public class Sintactico{
 		etqs1 = etq + longPrologo + 1;
 		etq = etqs1 + longEpilogo +1;
 		int auxDir = dir;
-		Par atrDeDecs = Decs();
+		Token tk = lexico.getNextToken();
+		System.out.println("En bloque # : " + tk.getLexema());
+		Par atrDeDecs;
+		if(tk.getCategoriaLexica()!=Tipos.TKCUA){
+			atrDeDecs = Decs();
+		}
+		else{
+			lexico.lexer();
+			atrDeDecs=new Par();
+			atrDeDecs.getProps().setTipo("");
+		}
 		int tamlocales = dir - auxDir;
 		codigo.prologo(nivel, tamlocales);
 		codigo.genIns("ir-a",inicio);
@@ -440,6 +450,9 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
+			a.getProps().setTipo(""); 
+		}
+		if (lexico.reconoce(Tipos.TKLLCI)){
 			a.getProps().setTipo(""); 
 		}
 		else{
