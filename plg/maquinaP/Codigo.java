@@ -73,25 +73,17 @@ public class Codigo {
 	public void genIns(String instr, int num){
 		String i =instr + " " + num;
 		cod.add(i);
-		/*i= i.concat("\n");
-		try{
-			fichero.write(i.getBytes());
-		}
-		catch(java.io.IOException e){
-			JOptionPane.showMessageDialog(null,"No he podido escribir en el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}*/
 	}
 	
+	/**
+	 * 
+	 * @param instr
+	 * @param num
+	 * @param dir
+	 */
 	public void genIns(String instr, int num, int dir){
 		String i =instr + " " + num + " " + dir;
 		cod.add(i);
-		/*i= i.concat("\n");
-		try{
-			fichero.write(i.getBytes());
-		}
-		catch(java.io.IOException e){
-			JOptionPane.showMessageDialog(null,"No he podido escribir en el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}*/
 	}
 	
 	/**
@@ -105,12 +97,6 @@ public class Codigo {
 		String i= instr;
 		cod.add(i);
 		i= i.concat("\n");
-		/*try{
-			fichero.write(i.getBytes());
-		}
-		catch(java.io.IOException e){	
-			JOptionPane.showMessageDialog(null,"No he podido escribir en el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}*/
 	}
 	
 	/**
@@ -135,26 +121,33 @@ public class Codigo {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param s
+	 */
 	public void emite(String s){
-		System.out.println("Estoy pasando por emite");
 		if (s.startsWith("ir-f")){
-			// Metemos s, para permitir los "ir-f NumInst"
-			//genIns("ir-f");
 			genIns(s);
 		}
 		if (s.startsWith("ir-a")){
-//			 Metemos s, para permitir los "ir-f NumInst"
-			//genIns("ir-a");
 			genIns(s);
 		}
 	}
 	
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 */
 	public void parchea(int a, int b){
 		String i = (String)cod.elementAt(a) + " " + b;
-		System.out.println("Estoy pasando por parche: cambio " + (String)cod.elementAt(a) + " por " + i);
 		cod.setElementAt(i,a);
 	}
 	
+	/**
+	 * 
+	 * @param ret
+	 */
 	public void apila_ret (int ret) {
 		this.genIns("apila-dir",0);
 		this.genIns("apila",1);
@@ -162,6 +155,11 @@ public class Codigo {
 		this.genIns("desapila-ind");
 	}
 	
+	/**
+	 * 
+	 * @param nivel
+	 * @param tamlocales
+	 */
 	public void prologo (int nivel, int tamlocales){
 		this.genIns("apila-dir",0);
 		this.genIns("apila", 2);
@@ -177,17 +175,24 @@ public class Codigo {
 		this.genIns("suma");
 		this.genIns("desapila_dir", 0);
 	}
+	
+	/**
+	 * 
+	 * @param pformal
+	 */
 	public void paso_parametro (int pformal) {
-		// a pforma hay que pasarle la dirección del parámetro formal
-		/*apila(pformal.dir) ||
-		suma || // dirección comienzo parámetro formal
-		desapila-ind*/
+		// a pforma hay que pasarle la direccin del parmetro formal
 		this.genIns("apila", pformal);
 		this.genIns("suma");
 		this.genIns("desapila_ind");
 
 	}
 	
+	/**
+	 * 
+	 * @param infoID_nivel
+	 * @param infoID_dir
+	 */
 	public void acceso_var (int infoID_nivel, int infoID_dir){
 		this.genIns("apila-dir", 1 + infoID_nivel);
 		this.genIns("apila", infoID_dir);
@@ -195,12 +200,22 @@ public class Codigo {
 		this.genIns("apila-ind");
 	}
 	
+	/**
+	 * 
+	 * @param num_niveles
+	 * @param tam_datos
+	 */
 	public void inicio (int num_niveles, int tam_datos) {
 		this.genIns("apila", 1 + num_niveles);
 		this.genIns("desapila-dir", 1);
 		this.genIns("apila", 1 + num_niveles + tam_datos);
 		this.genIns("desapila-dir", 0);
 	}
+	
+	/**
+	 * 
+	 * @param nivel
+	 */
 	public void epilogo (int nivel) {
 		this.genIns("apila-dir", 1 + nivel);
 		this.genIns("apila", 2);
@@ -215,10 +230,19 @@ public class Codigo {
 		this.genIns("suma");
 		this.genIns("desapila-dir", 1+nivel);
 	}	
+	
+	/**
+	 * 
+	 *
+	 */
 	public void fin_paso (){
 		this.genIns("desapila");
 	}
 	
+	/**
+	 * 
+	 *
+	 */
 	public void inicio_paso (){
 		this.genIns("apila-dir", 0);
 		this.genIns("apila", 3);
