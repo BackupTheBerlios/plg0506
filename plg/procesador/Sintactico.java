@@ -155,6 +155,7 @@ public class Sintactico{
 				return a;
 			}
 		}
+			
     }
 	
 	/**
@@ -216,7 +217,15 @@ public class Sintactico{
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
-		Bloque();
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKLLAP)){
+			throw new Exception("ERROR: Falta una llave de apertura");
+		}
+		Par atrDeBloque = Bloque();
+		lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKLLCI)){
+			throw new Exception("ERROR: Falta una llave de cierre");
+		}
 		nivel --;
 		return a;
 	}
@@ -391,30 +400,24 @@ public class Sintactico{
 	}
 	
 	public Par Bloque() throws Exception{
-		/*
-		 * Bloque ::= Decs # Is
-{etqs1 = etq + longPrologo + 1
-etq = etqs1 + longEpilogo + 1
-etqs2 = cod
-cod = etqs2 || prologo(Bloque.nh,Decs.dir) || ira(
-Decs.etq) ||
-etqs2 || epilogo (Bloque.nh) || irind}
-Bloque ::= Is
-{ cod = cod || Is.props}
-		 */
 		Par a  = new Par();
 		int etqs1;
-		int etqs2;
+		int inicio = etq;
 		etqs1 = etq + longPrologo + 1;
-		Par atrDeDecs = Decs();
-		Par atrDeIs = Is();
-		
 		etq = etqs1 + longEpilogo +1;
-		etqs2 = 
-		dir = 0;
-		nivel = 0;
-		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
-		//return errDeProg;
+		int auxDir = dir;
+		Par atrDeDecs = Decs();
+		int tamlocales = dir - auxDir;
+		codigo.prologo(nivel, tamlocales);
+		codigo.genIns("ir-a",inicio);
+		Par atrDeIs = Is();
+		codigo.epilogo(nivel);
+		codigo.genIns("ir-ind");
+		dir = auxDir;
+		boolean err = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error");
+		if (err){
+			throw new Exception ("ERROR: porcedimietno erroneo");
+		}
 		return a;
 	}
 	/**
