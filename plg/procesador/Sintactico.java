@@ -351,6 +351,31 @@ public class Sintactico{
 	}
 	
 	
+	public Par LFParams() throws Exception{
+		Par a = new Par();
+		Par atrDeLFParams = null;
+		
+		
+		Par atrDeFParam = FParam();
+		a.getProps().getParams().add(atrDeFParam);
+		
+		
+		Token tk = lexico.lexer(); // Consumimos ","
+		
+		if (lexico.reconoce(Tipos.TKCOMA)){
+			// Volvemos a llamar a LFParams
+			atrDeLFParams = LFParams();
+			a.getProps().getParams().addAll(atrDeLFParams.getProps().getParams());
+			
+			a.setT(atrDeLFParams.getT());	
+		}
+		a.getT().agnadeID(atrDeFParam.getId(), atrDeFParam.getProps(),atrDeFParam.getClase(),atrDeFParam.getDir(),nivel);
+		
+		
+		return a;
+	}
+	
+	
 	public Par FParam() throws Exception{
 		Par a  = new Par();
 		Par atrDeTipo = Tipo();

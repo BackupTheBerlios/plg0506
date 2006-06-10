@@ -143,6 +143,7 @@ public class Lexico {
 			case '*':	return new Token("*",Tipos.TKMULT);
 			case '/':	return new Token("/",Tipos.TKDIV);
 			case ';':	return new Token(";",Tipos.TKPYCOMA);
+			case ',':	return new Token(",",Tipos.TKCOMA);
 			case '=':	return new Token("=",Tipos.TKIG);
 			case '#':	return new Token("#",Tipos.TKCUA);
 			

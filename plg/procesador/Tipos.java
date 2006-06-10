@@ -202,10 +202,29 @@ public class Tipos {
 	 * Valor para reconocer la palabra proc.
 	 */
 	public static final int TKPROC		= 38;
+	
+	/**
+	 * Valor para reconocer el caracter '['
+	 */
 	public static final int TKCAP		= 39;
+	
+	/**
+	 * Valor para reconocer el caracter ']'
+	 */
 	public static final int TKCCI		= 40;
+	
+	/**
+	 * Valor para reconocer la palabra "new".
+	 */
 	public static final int TKNEW		= 41;
+	
+	/**
+	 * Valor para reconocer la palabra "del".
+	 */
 	public static final int TKDEL		= 42;
 	
-	
+	/**
+	 * Valor para reconocer el caracter ','
+	 */
+	public static final int TKCOMA		= 43;
 }
