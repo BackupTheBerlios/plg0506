@@ -1,11 +1,14 @@
 package tablaSimbolos;
 
+import java.util.Vector;
+
 public class Atributos {
 	
 	String tipo;
 	Atributos tbase;
 	int elems;
 	int tam;
+	Vector params;
 	
 	
 	public Atributos() {
@@ -14,6 +17,7 @@ public class Atributos {
 		this.tbase = null;
 		this.elems = 0;
 		this.tam = 0;
+		this.params = new Vector();
 	}
 
 	public Atributos(Atributos a){
@@ -26,20 +30,22 @@ public class Atributos {
 		}
 		this.elems = a.getElems();
 		this.tam = a.getTam();
+		this.params = a.getParams();
 	}
 
-	public Atributos(String tipo, String tbase, int elems, int tam) {
+	public Atributos(String tipo, String tbase, int elems, int tam, Vector params) {
 		super();
 		// TODO Auto-generated constructor stub
 		this.tipo = tipo;
 		if (tbase != ""){
-			this.tbase = new Atributos(tbase,"",0,0);
+			this.tbase = new Atributos(tbase,"",0,0, new Vector());
 		}
 		else{
 			tbase = null;
 		}
 		this.elems = elems;
 		this.tam = tam;
+		this.params = params;
 	}
 
 	public int getElems() {
@@ -50,7 +56,14 @@ public class Atributos {
 	public void setElems(int elems) {
 		this.elems = elems;
 	}
+	
+	public Vector getParams() {
+		return params;
+	}
 
+	public void setParams(Vector params) {
+		this.params = params;
+	}
 
 	public Atributos getTbase() {
 		return tbase;
@@ -96,6 +109,8 @@ public class Atributos {
 			aux = aux.concat(", ");
 			n= new Integer (elems);
 			aux = aux.concat(n.toString());
+			aux = aux.concat(", ");
+			aux = aux.concat(params.toString());
 			aux = aux.concat(" )");
 			return aux;
 		}

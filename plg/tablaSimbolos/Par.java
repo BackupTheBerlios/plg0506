@@ -22,6 +22,7 @@ public class Par {
 	String clase;
 	int dir;
 	int nivel;
+	TablaSimbolos t;
 	
 	/**
 	 * 
@@ -34,6 +35,7 @@ public class Par {
 		this.clase = "";
 		this.dir = 0;
 		this.nivel = 0;
+		this.t = null;
 	}
 
 	/**
@@ -50,8 +52,19 @@ public class Par {
 		this.clase = clase;
 		this.dir = dir;
 		this.nivel = n;
+		this.t = null;
 	}
 
+	public Par(String id, Atributos props, String clase, int dir, int n, TablaSimbolos ts) throws Exception{
+		super();
+		this.id = id;
+		this.props = props;
+		this.clase = clase;
+		this.dir = dir;
+		this.nivel = n;
+		this.t = new TablaSimbolos (ts.getTabla());
+	}
+	
 	/**
 	 * Accesor el atributo de la clase id.
 	 * @return String con el nombre del identificador.
@@ -99,6 +112,14 @@ public class Par {
 	}
 	
 	
+	public TablaSimbolos getT() {
+		return t;
+	}
+
+	public void setT(TablaSimbolos t) {
+		this.t = t;
+	}
+
 	/**
 	 * @return Returns the nivel.
 	 */

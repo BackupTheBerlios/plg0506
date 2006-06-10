@@ -218,7 +218,7 @@ public class TablaSimbolos {
 				return ref( this.getProps(iden) );
 			}
 			else{
-				Atributos a = new Atributos("err","",0,0);
+				Atributos a = new Atributos("err","",0,0, new Vector());
 				return a;
 			}
 		}
