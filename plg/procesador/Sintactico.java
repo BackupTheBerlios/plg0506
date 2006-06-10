@@ -614,12 +614,19 @@ public class Sintactico{
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
+			if (! TS.getClase(lex).equals("var")){
+				throw new Exception ("ERROR: Solo se puede asignar a variables en modo lectura - escritura");
+			}
 			a = Mem();
 			tk = lexico.lexer(); //consumimos :=
 			System.out.println("En IAsig leemos" + tk.getLexema());
 			
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
+				System.out.println("Tipo de var: "+ a.getProps().getTipo());
+				System.out.println("Tipo de var con ref: "+ TS.ref(a.getProps()).getTipo());
+				System.out.println("Tipo de ExpC: "+ atrDeExpC.getProps().getTipo());
+				
 				boolean tiposIguales = atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo());
 				errDeIAsig = (!(tiposIguales) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				if (!(TS.existeID(lex))){
@@ -1105,14 +1112,17 @@ public class Sintactico{
 				throw new Exception("ERROR: array overflow");
 			}
 			tk = lexico.lexer(); // consumo ]
-			System.out.println("En RMem ] leemos" + tk.getLexema());
 			
 			if (lexico.reconoce(Tipos.TKCCI)){
 				codigo.genIns("apila",a.getTbase().getTam());
 				codigo.genIns("multiplica");
 				codigo.genIns("suma");
 				etq += 3;
-
+				if (a.getTipo().equals("ref")){
+					Atributos aux = TS.ref(a);
+					a = aux;
+				}
+				
 				if (a.getTbase().getTbase() == null)
 					return a.getTbase();
 				else
@@ -1123,9 +1133,7 @@ public class Sintactico{
 			}
 		}
 		else {
-			//System.out.println("Pasamos por RMem - Landa");
 			if (a.getTbase() == null){
-				System.out.println("ES NULL EL A");
 				return a;
 			}
 			else{
