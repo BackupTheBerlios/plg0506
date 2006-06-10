@@ -1,7 +1,7 @@
 package procesador;
 
 import java.io.RandomAccessFile;
-
+import java.util.Vector;
 import maquinaP.Codigo;
 import tablaSimbolos.TablaSimbolos;
 import tablaSimbolos.Par;
@@ -36,6 +36,7 @@ public class Sintactico{
 	TablaSimbolos TS;
 	int dir;
 	int etq;
+	int nivel;
 	
 	private static int longApilaRet = 5;
 	private static int longPrologo = 13;
@@ -100,6 +101,7 @@ public class Sintactico{
 		
 		etq = 0;
 		dir = 0;
+		nivel = 0;
 		Par atrDeDecs = Decs();
 		Par atrDeIs = Is();
 		//System.out.println("El error de Decs es "+atrDeDecs.getProps().getTipo().equals("error"));
@@ -127,6 +129,7 @@ public class Sintactico{
 		Par a = new Par();
 		Par atrDeDec = Dec(); 
 		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+		TS.muestra();
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
 		}
@@ -177,7 +180,17 @@ public class Sintactico{
 			a.setDir(0);
 			return a;
 		}
-		else {
+		else if (tk.equals(new Token("proc", Tipos.TKPROC))){
+			Par atrDeDecProc = DecProc();
+			a.setId(atrDeDecProc.getId());
+			a.setProps(atrDeDecProc.getProps());
+			a.setClase("proc");
+			a.setDir(0);
+			a.setNivel(atrDeDecProc.getNivel());
+			atrDeDecProc.getT().muestra();
+			return a;
+		}
+		else{	
 			Par atrDeDecVar = DecVar();
 			a.setId(atrDeDecVar.getId());
 			a.setProps(atrDeDecVar.getProps());
@@ -185,6 +198,35 @@ public class Sintactico{
 			a.setDir(dir);
 			return a;
 		}
+	}
+	
+	public Par DecProc() throws Exception{
+		Par a = new Par();
+		lexico.lexer(); // consumimos tipo
+		Token tk = lexico.lexer();
+		if (!lexico.reconoce(Tipos.TKIDEN)){
+			throw new Exception ("ERROR: Necesitas un identificador");
+		}
+		a.setId(tk.getLexema());
+		lexico.lexer(); //consumimos (
+		if (!lexico.reconoce(Tipos.TKPAP)){
+			throw new Exception ("ERROR: Necesitas un (");
+		}
+		a.setNivel(nivel);
+		nivel ++;
+		Par atrDeFParams = FParams();
+		lexico.lexer(); //consumimos )
+		if (!lexico.reconoce(Tipos.TKPCI)){
+			throw new Exception ("ERROR: Necesitas un )");
+		}
+		TablaSimbolos ts = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
+		a.setT(ts);
+		a.getProps().setTam(0);
+		a.getProps().setElems(atrDeFParams.getProps().getElems());
+		a.getProps().setParams(atrDeFParams.getProps().getParams());
+		Bloque();
+		nivel --;
+		return a;
 	}
 	
 	public Par DecTipo() throws Exception{
@@ -233,7 +275,6 @@ public class Sintactico{
 		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
 		a.getProps().setTbase(atrDeTipo.getProps().getTbase());
 		
-		System.out.println("En " + a.getId() + "  Elems: " + a.getProps().getElems() + " y TAM: " + a.getProps().getTam());
 		if (TS.existeID(tk.getLexema()) || TS.referenciaErronea(atrDeTipo)){
 			a.getProps().setTipo("error");
 		}
@@ -257,7 +298,7 @@ public class Sintactico{
 			a.getProps().setTipo("ref");
 			a.getProps().setTam(TS.getProps(tk.getLexema()).getTam());
 			a.getProps().setElems(TS.getProps(tk.getLexema()).getElems());
-			a.getProps().setTbase(new Atributos(tk.getLexema(),"",0,1));
+			a.getProps().setTbase(new Atributos(tk.getLexema(),"",0,1, new Vector()));
 		}
 		else if(lexico.reconoce(Tipos.TKARRAY)){
 			lexico.lexer(); //consumimos [
@@ -293,6 +334,24 @@ public class Sintactico{
 			a.getProps().setElems(atrDeTipo.getProps().getElems());
 			a.getProps().setTam(atrDeTipo.getProps().getTam() * a.getProps().getElems());
 		}
+		return a;
+	}
+	
+	public Par FParams(){
+		/*
+		 * FParams ::= ( LFParams )
+		 * {Fparams.props.params = LFParams.props.params
+		 * LFParams.props.i= 0;
+		 * cod = cod || “(“ || LFParams.props.params || “)”}
+		 * FParams ::= λ
+		 * {FParams.props.params = []}
+		 */
+		Par a  = new Par();
+		
+		return a;
+	}
+	public Par Bloque(){
+		Par a  = new Par();
 		return a;
 	}
 	/**
@@ -634,7 +693,7 @@ public class Sintactico{
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
-					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1)) || TS.compatibles(a.getProps(), new Atributos("bool","",0,1))){
+					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1, new Vector())) || TS.compatibles(a.getProps(), new Atributos("bool","",0,1, new Vector()))){
 							codigo.genIns("desapila-ind");
 							etq ++;		
 					}
