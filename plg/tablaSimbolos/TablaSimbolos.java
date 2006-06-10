@@ -214,7 +214,7 @@ public class TablaSimbolos {
 				return exp.getTbase();
 			} 
 			else if(this.existeID( iden )){
-				System.out.println("Ref recursivo.");
+				//System.out.println("Ref recursivo.");
 				return ref( this.getProps(iden) );
 			}
 			else{
@@ -223,12 +223,12 @@ public class TablaSimbolos {
 			}
 		}
 		else if (existeID(exp.getTipo())){
-			System.out.println("Tengo el tipo en la TS");
+			//System.out.println("Tengo el tipo en la TS");
 			return ref(getProps(exp.getTipo()));
 			
 		}
 		else{
-			//System.out.println("Dentro de REF, la EXP es  " + exp);
+			//System.out.println("No sabemos deshacer la referencia y es:" + exp);
 			return exp;
 		}
 		

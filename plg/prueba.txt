@@ -7,11 +7,28 @@ tipo pepe = pointer int;
 tipo ese = array [2] of bool;
 maria e;
 pepe f;
-ese g
+ese g;
+pointer int h;
+pointer int j;
+pointer int x;
+pointer int k 
 #
 new b;
 d[1] := true;
 b pointer := false;
 e := false;
-new f;
-f pointer := 7;
+new h;
+if d[1] then
+	h pointer := -155;
+else
+	h pointer := 500;
+new j;
+new k;
+c := 1111;
+while c > 1100 do
+	c := c - 1;
+
+new a;
+a pointer := 1111;
+new x;
+delete a;
