@@ -60,6 +60,7 @@ public class TablaSimbolos {
 			}
 		}
 	}
+	
 	/**
 	 * Accesor para el atributo de la clase tabla.
 	 * @return Hashtable recibida por parmetro y a la que se inicializa la nueva tabla creada.

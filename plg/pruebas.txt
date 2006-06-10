@@ -1,0 +1,7 @@
+array [2] of bool d;
+pointer int k
+#
+new k;
+d[1] := false;
+if d[1] then
+	k pointer := -155;
