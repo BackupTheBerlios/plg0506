@@ -73,6 +73,16 @@ public class Par {
 		this.nivel = n;
 		this.t = new TablaSimbolos (ts.getTabla());
 	}
+
+	public Par(Par a) throws Exception{
+		super();
+		this.id = a.getId();
+		this.props = a.getProps();
+		this.clase = a.getClase();
+		this.dir = a.getDir();
+		this.nivel = a.getNivel();
+		this.t = a.getT();
+	}
 	
 	/**
 	 * Accesor el atributo de la clase id.

@@ -128,8 +128,14 @@ public class Sintactico{
 	 */
 		Par a = new Par();
 		Par atrDeDec = Dec(); 
-		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
-		TS.muestra();
+		if (nivel == 0){
+			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+			TS.muestra();
+		}
+		else{
+			atrDeDec.getT().agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+			TS.muestra();
+		}
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
 		}
@@ -188,6 +194,8 @@ public class Sintactico{
 			a.setClase("proc");
 			a.setDir(0);
 			a.setNivel(atrDeDecProc.getNivel());
+			a.setT(atrDeDecProc.getT());
+			System.out.println("La ts hija");
 			atrDeDecProc.getT().muestra();
 			return a;
 		}
@@ -222,7 +230,7 @@ public class Sintactico{
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
-		/*
+		/*DEBUGGING
 		tk = lexico.lexer();
 		System.out.println("En decProc {:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLAP)){
@@ -233,7 +241,8 @@ public class Sintactico{
 		System.out.println("En decProc }:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
-		}*/
+		}
+		*/
 		nivel --;
 		return a;
 	}
@@ -355,7 +364,7 @@ public class Sintactico{
 		}
 		tk = lexico.getNextToken();
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
-			tk = lexico.lexer(); 
+			lexico.lexer();
 			System.out.println("En FParams ) leemos: " + tk.getLexema());
 			System.out.println("Metodo sin parametros");
 			a.getProps().setElems(0);
@@ -376,15 +385,9 @@ public class Sintactico{
 	public Par LFParams() throws Exception{
 		Par a = new Par();
 		Par atrDeLFParams = null;
-		
-		Token tk = lexico.getNextToken();
-		if (tk.getCategoriaLexica() == Tipos.TKPCI){
-			return a;
-		}
 		Par atrDeFParam = FParam();
 		a.getProps().getParams().add(atrDeFParam);
-		
-		tk = lexico.lexer(); // Consumimos ","
+		Token tk = lexico.lexer(); // Consumimos ","
 		System.out.println("En lfparams , : " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			// Volvemos a llamar a LFParams
@@ -763,7 +766,6 @@ public class Sintactico{
 		String lex = "";
 		Token tk;
 		tk = lexico.getLookahead();
-		System.out.println("Entro en IASIG y leo: " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			if (! TS.getClase(lex).equals("var")){

@@ -44,14 +44,22 @@ public class TablaSimbolos {
 	}
 
 	public TablaSimbolos(Hashtable t, Vector params) throws Exception{
-		this.tabla = new Hashtable(t);
+		this.tabla = new Hashtable();
 		Enumeration e = t.keys();
+		while (e.hasMoreElements()){ //copiamos
+			Object aux = e.nextElement();
+			Par elem = new Par ((Par)t.get(aux));
+			this.tabla.put(elem.getId(),elem);
+		}
+		e = t.keys();
 		while (e.hasMoreElements()){ //cambiamos a solo lectura los q no son parámetros
 			Object aux = e.nextElement();
 			if ( ! params.contains(aux) ){
-				((Par)t.get(aux)).setClase("valor");
+				((Par)tabla.get(aux)).setClase("valor");
 			}
 		}
+		System.out.println("en el constructor chachi");
+		this.muestra();
 	}
 	
 	/**
