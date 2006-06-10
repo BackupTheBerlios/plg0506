@@ -109,6 +109,7 @@ public class Par {
 		aux = aux.concat(",");
 		aux = aux.concat((new Integer(dir)).toString());
 		aux = aux.concat(")");
+		aux = aux.concat("\n");
 		return aux;
 	}
 }

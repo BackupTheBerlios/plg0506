@@ -43,6 +43,23 @@ public class TablaSimbolos {
 		this.tabla = new Hashtable(tabla);
 	}
 
+	public TablaSimbolos(Hashtable t, Vector params) throws Exception{
+		this.tabla = new Hashtable(t);
+		Enumeration e = t.keys();
+		while (e.hasMoreElements()){
+			Object aux = e.nextElement();
+			if ( ((Par)t.get(aux)).getClase().equals("proc") ){ //quitamos los procedimientos
+				tabla.remove(aux);
+			}
+		}
+		e = tabla.keys();
+		while (e.hasMoreElements()){ //cambiamos a solo lectura los q no son parámetros
+			Object aux = e.nextElement();
+			if ( ! params.contains(aux) ){
+				((Par)t.get(aux)).setClase("valor");
+			}
+		}
+	}
 	/**
 	 * Accesor para el atributo de la clase tabla.
 	 * @return Hashtable recibida por parmetro y a la que se inicializa la nueva tabla creada.
