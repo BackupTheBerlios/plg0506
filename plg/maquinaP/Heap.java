@@ -138,7 +138,12 @@ public class Heap {
 		//quizas como son seguidos no hiciese falta
 		monticulizar();
 	}
-	
+	/**
+	 * 
+	 * @param d
+	 * @return
+	 * @throws Exception
+	 */
 	public int getElementAt(int d) throws Exception{
 		if (ocupados.contains(new Integer(d))){
 			return ((Integer)heap.get(d)).intValue();
@@ -148,6 +153,12 @@ public class Heap {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param d
+	 * @param value
+	 * @throws Exception
+	 */
 	public void setElementAt(int d, Integer value) throws Exception{
 		System.out.println(ocupados.contains(new Integer(d)));
 		if (ocupados.contains(new Integer(d))){

@@ -1332,6 +1332,7 @@ public class MaquinaP {
 	
 	/**
 	 * Metodo que desapila una direccion de comienzo (d) de la cima de la pila, y libera de la memoria dinamica t celdas consecutivas a partir de d.
+	 * Tambien se aumenta en uno el contador del programa.
 	 * 
 	 * (R22) delete (d)
 	 *  d<-- Pila[ST]
@@ -1353,8 +1354,16 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Metodo que reserva
-	 * 
+	 * Metodo que reserva un numero (i) de celdas en la memoria segun recibe por parametro. Una vez reservadas las celdas en la memoria dinamica
+	 * se apila en la pila la direccion mas el tamano de la memoria estatica en la cima de la pila. Tambien se aumenta en uno el contador del 
+	 * programa. 
+	 *  
+	 * (R23) new (i, dir)
+	 *  d <-- heap.reserva(i)
+	 *  ST <-- ST + 1
+	 *  Pila[ST] <-- d + tamDir
+	 *  PC <-- PC +1
+	 *  
 	 * @throws Exception
 	 * @param i Entero que indica el numero de celdas que hay que reservar.
 	 * @param dir Valor que hay que sumar a la direccion donde se reservo espacio, para poder indicar despues que es memoria dinamica.
@@ -1370,12 +1379,15 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Para acceder a las partes de las estructuras es necesario dotar a la m?quina de capacidad de direccionamiento indirecto. Esto implica las siguientes operaciones:
-
-		? apila-ind: Interpreta el valor d en la cima de la pila como un n?mero de celda en la memoria, y substituye dicho valor por el almacenado en dicha celda.
-			Pila[ST] ? Mem[Pila[ST]]	
-			PC ? PC+1
-		 @throws Exception
+	 * Metodo que desapila la cima de la pila y lo trata como una direccion de la memoria, y substituye dicho valor por el almacenado en dicha celda.
+	 * Se comprueba primero si la direccion de memoria obtenida es de la memoria dinamica o de la estatica y se obtiene el contenido de la celda 
+	 * correcto. Tambien se aumenta en uno el contador del programa.
+	 * 
+	 * (R24)apila-ind(): 
+	 *	Pila[ST] <-- Mem[Pila[ST]]	
+	 *	PC <-- PC+1
+	 *	
+	 * @throws Exception
 	 */
 	public void apila_ind() throws Exception{
 		if (ST<0){
@@ -1402,10 +1414,14 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * ? despila-ind: Desapila el valor de la cima v y la subcima d, interpreta d como un n?mero de celda en la memoria, y almacena v en dicha celda.
-			Mem[Pila[ST]] ? Pila[ST-1]
-			ST?ST-2
-			PC ? PC+1
+	 * Metodo que desapila el valor de la cima (v) y de la subcima (d), interpreta d como un numero de celda en la memoria(comprobando si es memoria
+	 * dinamica o estatica), y almacena v en dicha celda. Se disminuye en dos(ST) el tamano de la pila y tambien se aumenta en uno el contador del 
+	 * programa(PC).
+	 * 
+	 * (R25)despila-ind(): 
+	 *  Mem[Pila[ST]] <-- Pila[ST-1]
+	 *  ST<-- ST - 2
+	 *  PC <-- PC + 1
 	 *  @throws Exception
 	 */
 	public void desapila_ind() throws Exception{
@@ -1416,8 +1432,6 @@ public class MaquinaP {
 		}
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
-		//System.out.println("El tam es: "+ tamMem);
-		//System.out.println(" La direccion es: "+ d);
 		if (d<tamMem){	
 			if (d >= 0){
 				if (d>=Mem.size()){
@@ -1434,9 +1448,7 @@ public class MaquinaP {
 		}
 		else{ //memo dinamica
 			d=d-tamMem;
-			//System.out.println(" La direccion es: "+ d);
 			if (d<heap.getHeap().size()){
-				//System.out.println(heap.getHeap().size());
 				heap.setElementAt(d, valor);
 			}
 			else{
@@ -1448,14 +1460,18 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que desapila de la cima la direccion origen (o) y en la subcima la direccion destino (d), y realiza el movimiento de s celdas desde 
+	 * o a d. Comprueba antes que las direcciones pertenezcan a memoria dinamica o estatica. Se disminuye en dos(ST) el tamano de la pila y 
+	 * tambien se aumenta en uno el contador del programa (PC).
 	 * 
-	 * mueve(s). Dicha instrucci?n encuentra en la cima la direcci?n origen o y en la subcima la direcci?n destino d, y realiza el movimiento de s celdas desde o a s.
-		para i?0 hasta s-1 hacer
-		Mem[Pila[ST-1]+i] ? Mem[Pila[ST]+i]
-		ST?ST-2
-		PC ? PC+1
+	 * (R26)mueve(s): 
+	 * para i=0 hasta s-1 hacer
+	 * 		Mem[Pila[ST-1]+i] <-- Mem[Pila[ST]+i]
+	 * fpara
+	 * ST <-- ST-2
+	 * PC <-- PC+1
 	 * 
-	 * @param s
+	 * @param s Parametro que indica el numero de celdas que hay que trasladar.
 	 * @throws Exception
 	 */
 	public void mueve (int s) throws Exception{
@@ -1463,7 +1479,8 @@ public class MaquinaP {
 			int o = ((Integer)pila.pop()).intValue(); //pop desapilar
 			int d = ((Integer)pila.pop()).intValue(); //push apilar
 			for (int i=0;i<s;i++){
-				if(d+i<Mem.size()-1){ //Mem set cambia el elemento de la posicin d+i por el elemento que le pasas. en este caso el elemento que devuelve mem.get(o+i)
+				if(d+i<Mem.size()-1){ //Mem set cambia el elemento de la posicin d+i por el elemento que le pasas. 
+					//en este caso el elemento que devuelve mem.get(o+i)
 					Mem.set(d+i,Mem.get(o+i));
 				}
 				else{
@@ -1476,9 +1493,24 @@ public class MaquinaP {
 		PC = PC +1;
 	}
 	
+	/**
+	 * Metodo que salva la dirección de retorno de la prellamada de un procedimiento asociada a la invocación.
+	 * 
+	 *  (R27)apila_ret(ret):
+	 *  PC <-- PC + 1
+	 *  apila_dir(0)
+	 *  apila(1)
+	 *  suma
+	 *  apila(ret)
+	 *  desapila-ind
+	 *  
+	 * @param ret Direccion de la llamada
+	 * @throws Exception
+	 */
 	public void apila_ret (int ret) throws Exception{
 		//devuelve apila-dir(0) || apila(1) || suma || apila(ret) || desapila-ind	
 		if (ret >= 0){
+			//PC = PC +1; ////////////////////////////////////////////////////Duda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			this.apila_dir(0);
 			this.apila(1);
 			this.apila(ret);
@@ -1489,6 +1521,29 @@ public class MaquinaP {
 		}
 
 	}
+	
+	/**
+	 * Metodo que implementa el prólogo que de la estructura que describimos a continuación.
+	 * 
+	 * (R28)prologo(nivel,tamlocales):
+	 *  apila_dir(0)
+	 *  apila(2)
+	 *  suma()
+	 *  apila_dir(1 + nivel)
+	 *  desapila_ind()
+	 *  apila_dir(0)
+	 *  apila(3)
+	 *  suma()
+	 *  desapila_dir(1+nivel)
+	 *  apila_dir(0)
+	 *  apila(tamlocales + 2)
+	 *  suma()
+	 *  desapila_dir(0)
+	 *  
+	 * @param nivel
+	 * @param tamlocales
+	 * @throws Exception
+	 */
 	public void prologo (int nivel, int tamlocales) throws Exception{
 		if (nivel >= 0){
 			this.apila_dir(0);
@@ -1506,10 +1561,17 @@ public class MaquinaP {
 			this.desapila_dir(0);
 		}
 		else{
-			throw new Exception("ERROR: en prlogo.");
+			throw new Exception("ERROR: en prologo.");
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @param modoReal
+	 * @param pformal
+	 * @throws Exception
+	 */
 	public void paso_parametro (int modoReal, int pformal) throws Exception{
 		//cuando useis esta funcin le pasis directamente la direccin del parmetro con el que la llamis
 		if (pformal >= 0){
@@ -1522,6 +1584,13 @@ public class MaquinaP {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @param infoID_nivel
+	 * @param infoID_dir
+	 * @throws Exception
+	 */
 	public void acceso_var (int infoID_nivel, int infoID_dir) throws Exception{
 		//infoID recibe el nivel del identificador y su direccin
 		if (infoID_nivel >= 0){
@@ -1534,6 +1603,12 @@ public class MaquinaP {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param num_niveles
+	 * @param tam_datos
+	 * @throws Exception
+	 */
 	public void inicio (int num_niveles, int tam_datos) throws Exception{
 		
 		if (num_niveles >= 0){
@@ -1547,6 +1622,12 @@ public class MaquinaP {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @param nivel
+	 * @throws Exception
+	 */
 	public void epilogo (int nivel) throws Exception{
 		if (nivel >= 0){
 			this.apila_dir(1 + nivel);
@@ -1567,6 +1648,11 @@ public class MaquinaP {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public String muestraPila(){
 		Stack aux = new Stack();
 		String pilas="El contenido de la pila es: \n";
