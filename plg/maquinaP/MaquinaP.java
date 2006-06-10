@@ -44,7 +44,7 @@ public class MaquinaP {
 	 * H: Indica si la m?quina esta en ejecuci?n, parada por error, o acabo su ejecuci?n.
 	 * ST: Puntero a la cima de la pila.
 	 * Prog:Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
-	 * c?digo del programa.
+	 * codigo del programa.
 	 * Mem: Memoria de datos estatica.
 	 * heap:Memoria de datos din?mica.
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
@@ -61,9 +61,6 @@ public class MaquinaP {
 	private String pasos;
 	private int tamMem;
 
-	//private static int inicio_paso = funcionAux1();  
-	//private static int fin_paso = funcionAux2();
-	
 	/**
 	 * El constructor de la clase MaquinaP que s?lo tiene el buffer de lectura del fichero como parmetro de entrada.
 	 * @param f Recibe como par?metro la ruta del fichero a ejecutar para poder inicializar todo.
@@ -71,14 +68,12 @@ public class MaquinaP {
 	 */	
 	public MaquinaP(String f) {
 		super();
-		// TODO Auto-generated constructor stub
 		pila = new Stack();
 		PC = 0;
 		H = 0;
 		tamMem= Integer.MAX_VALUE;
 		ST = -1;
 		Mem= new Vector();
-		// el 1? entero indica el tam?o inicial, y el otro la capacidad de aumento
 		heap= new Heap(50);
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
@@ -93,15 +88,6 @@ public class MaquinaP {
 		Prog = damePrograma(fichero);
 		pasos="";
 	}
-	
-	/*public void funcionAux1 (){
-		this.apila_dir(0);
-		this.apila(3);
-		this.suma();
-	}
-	public void funcionAux2 (){
-		pila.pop();
-	}*/
 	
 	/**
 	 * Accesor para el atributo de la clase, pasos. 
@@ -338,7 +324,7 @@ public class MaquinaP {
 					j++;
 				}
 				else if (linea[0].compareTo("suma")==0){
-					System.out.print(linea[0]+"  ");
+					System.out.println(linea[0]+"  ");
 					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
 					pasos= pasos.concat(linea[0]+"  ");
 					pasos= pasos.concat(" \n");
@@ -1341,8 +1327,8 @@ public class MaquinaP {
 	public void desapila_ind() throws Exception{
 		//	Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
-		if (ST<1){
-			throw new Exception("ERROR: Desapila_ind. La pila no contiene los datos necesarios.");
+		if (ST<2){
+			throw new Exception("ERROR: Desapila_ind. La pila no contiene los datos necesarios. \n Puede que algun puntero no este inicializado");
 		}
 		Integer valor=(Integer)pila.pop();
 		int d = ((Integer)pila.pop()).intValue();
@@ -1406,7 +1392,9 @@ public class MaquinaP {
 		ST = ST-2;
 		PC = PC +1;
 	}
+
 	/**
+	 * Metodo que duplica la cima de la pila. 
 	 * 
 	 * @throws Exception
 	 */
@@ -1422,8 +1410,9 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que obtiene el contenido de la pila en un String para ver su contenido.
 	 * 
-	 * @return
+	 * @return String con el contenido de la Pila
 	 */
 	public String muestraPila(){
 		Stack aux = new Stack();
