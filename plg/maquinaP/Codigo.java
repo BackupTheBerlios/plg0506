@@ -3,6 +3,7 @@ package maquinaP;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.String;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -154,4 +155,73 @@ public class Codigo {
 		cod.setElementAt(i,a);
 	}
 	
+	public void apila_ret (int ret) {
+		this.genIns("apila-dir",0);
+		this.genIns("apila",1);
+		this.genIns("apila", ret);
+		this.genIns("desapila-ind");
+	}
+	
+	public void prologo (int nivel, int tamlocales){
+		this.genIns("apila-dir",0);
+		this.genIns("apila", 2);
+		this.genIns("suma");
+		this.genIns("apila-dir",1 + nivel);
+		this.genIns("desapila-ind");
+		this.genIns("apila-dir", 0);
+		this.genIns("apila", 3);
+		this.genIns("suma");
+		this.genIns("desapila-dir", 1 + nivel);
+		this.genIns("apila-dir", 0);
+		this.genIns("apila", tamlocales + 2);
+		this.genIns("suma");
+		this.genIns("desapila_dir", 0);
+	}
+	public void paso_parametro (int pformal) {
+		// a pforma hay que pasarle la dirección del parámetro formal
+		/*apila(pformal.dir) ||
+		suma || // dirección comienzo parámetro formal
+		desapila-ind*/
+		this.genIns("apila", pformal);
+		this.genIns("suma");
+		this.genIns("desapila_ind");
+
+	}
+	
+	public void acceso_var (int infoID_nivel, int infoID_dir){
+		this.genIns("apila-dir", 1 + infoID_nivel);
+		this.genIns("apila", infoID_dir);
+		this.genIns("suma");
+		this.genIns("apila-ind");
+	}
+	
+	public void inicio (int num_niveles, int tam_datos) {
+		this.genIns("apila", 1 + num_niveles);
+		this.genIns("desapila-dir", 1);
+		this.genIns("apila", 1 + num_niveles + tam_datos);
+		this.genIns("desapila-dir", 0);
+	}
+	public void epilogo (int nivel) {
+		this.genIns("apila-dir", 1 + nivel);
+		this.genIns("apila", 2);
+		this.genIns("resta");
+		this.genIns("apila-ind");
+		this.genIns("apila-dir", 1 + nivel);
+		this.genIns("apila", 3);
+		this.genIns("resta");
+		this.genIns("copia");
+		this.genIns("desapila-dir",0);
+		this.genIns("apila",2);
+		this.genIns("suma");
+		this.genIns("desapila-dir", 1+nivel);
+	}	
+	public void fin_paso (){
+		this.genIns("desapila");
+	}
+	
+	public void inicio_paso (){
+		this.genIns("apila-dir", 0);
+		this.genIns("apila", 3);
+		this.genIns("suma");
+	}
 }
