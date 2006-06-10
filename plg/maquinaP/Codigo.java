@@ -74,12 +74,11 @@ public class Codigo {
 		String i =instr + " " + num;
 		cod.add(i);
 	}
-	
 	/**
-	 * 
-	 * @param instr
-	 * @param num
-	 * @param dir
+	 * Método que genera el código de una instrucción
+	 * @param instr String con la instrucción
+	 * @param num Entero que indica el número de línea
+	 * @param dir entero que indica la dirección
 	 */
 	public void genIns(String instr, int num, int dir){
 		String i =instr + " " + num + " " + dir;
@@ -120,10 +119,9 @@ public class Codigo {
 			JOptionPane.showMessageDialog(null,"No he podido cerrar el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
 	/**
-	 * 
-	 * @param s
+	 * Método que genera el código necesario para hacer ir-f o ir-a
+	 * @param s String contiene el código ir-f o ir-a
 	 */
 	public void emite(String s){
 		if (s.startsWith("ir-f")){
@@ -133,11 +131,10 @@ public class Codigo {
 			genIns(s);
 		}
 	}
-	
 	/**
-	 * 
-	 * @param a
-	 * @param b
+	 * Método que parchea la dirección a sumándole la dirección de b
+	 * @param a int a parchear
+	 * @param b int necesario para hacer el parcheo
 	 */
 	public void parchea(int a, int b){
 		String i = (String)cod.elementAt(a) + " " + b;
@@ -145,8 +142,8 @@ public class Codigo {
 	}
 	
 	/**
-	 * 
-	 * @param ret
+	 * método que genera el código que salva la dirección de retorno de la prellamada asociada a la invocación
+	 * @param ret entero con la dirección 
 	 */
 	public void apila_ret (int ret) {
 		this.genIns("apila-dir",0);
@@ -154,11 +151,13 @@ public class Codigo {
 		this.genIns("apila", ret);
 		this.genIns("desapila-ind");
 	}
-	
 	/**
-	 * 
-	 * @param nivel
-	 * @param tamlocales
+	 * método que que genera el código de lo siguiente:
+	 * - Salva el valor anterior del display asociado con el procedimiento.
+	 * – Fija el valor del display para la activación actual.
+	 * – Reserva de espacio para los datos locales
+	 * @param nivel entero con el nivel de anidamiento del prólogo
+	 * @param tamlocales entero que contiene el tamaño de las variables locales al procedimiento
 	 */
 	public void prologo (int nivel, int tamlocales){
 		this.genIns("apila-dir",0);
@@ -177,21 +176,20 @@ public class Codigo {
 	}
 	
 	/**
-	 * 
-	 * @param pformal
+	 * método que genera el código para poder realizar el paso del parámetro formal
+	 *
+	 *	 * @param pformal entero con el parámetro formal
 	 */
 	public void paso_parametro (int pformal) {
-		// a pforma hay que pasarle la direccin del parmetro formal
 		this.genIns("apila", pformal);
 		this.genIns("suma");
 		this.genIns("desapila_ind");
 
 	}
-	
 	/**
-	 * 
-	 * @param infoID_nivel
-	 * @param infoID_dir
+	 * método que genera el código para poder acceder a la información de la variable
+	 * @param infoID_nivel entero con el nivel de la variable
+	 * @param infoID_dir entero con la dirección de la variable
 	 */
 	public void acceso_var (int infoID_nivel, int infoID_dir){
 		this.genIns("apila-dir", 1 + infoID_nivel);
@@ -199,11 +197,10 @@ public class Codigo {
 		this.genIns("suma");
 		this.genIns("apila-ind");
 	}
-	
 	/**
-	 * 
-	 * @param num_niveles
-	 * @param tam_datos
+	 * método que genera el código para hacer el inicio relativo a los procedimientos
+	 * @param num_niveles entero con el número de niveles de anidamiento del procedimiento
+	 * @param tam_datos entero con el tamaño de los parámetros que recibe el procedimiento
 	 */
 	public void inicio (int num_niveles, int tam_datos) {
 		this.genIns("apila", 1 + num_niveles);
@@ -211,10 +208,9 @@ public class Codigo {
 		this.genIns("apila", 1 + num_niveles + tam_datos);
 		this.genIns("desapila-dir", 0);
 	}
-	
 	/**
-	 * 
-	 * @param nivel
+	 * método que genera el código relativo al epílogo
+	 * @param nivel entero con el nivel de anidamiento del parámetro
 	 */
 	public void epilogo (int nivel) {
 		this.genIns("apila-dir", 1 + nivel);
@@ -230,17 +226,15 @@ public class Codigo {
 		this.genIns("suma");
 		this.genIns("desapila-dir", 1+nivel);
 	}	
-	
 	/**
-	 * 
+	 * método que implementa las posiciones de destino en el registro de activación
 	 *
 	 */
 	public void fin_paso (){
 		this.genIns("desapila");
 	}
-	
 	/**
-	 * 
+	 * método que implementa las posiciones de destino en el registro de activación
 	 *
 	 */
 	public void inicio_paso (){
