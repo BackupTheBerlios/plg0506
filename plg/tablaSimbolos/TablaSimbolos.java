@@ -92,14 +92,22 @@ public class TablaSimbolos {
 		else
 			return null;
 	}
-	
+	/**
+	 * Accesor de la dirección de un identificador en la tabla de símbolos
+	 * @param id String con el identificador
+	 * @return el entero con la dirección
+	 */
 	public int getDir(String id){
 		if (this.tabla.containsKey(id))
 			return ((Par)this.tabla.get(id)).getDir();// Devolver la dir...
 		else
 			return -1;
 	}
-
+	/**
+	 * Accesor de la clase de un identificador en la tabla de símbolos
+	 * @param id String con el identificador
+	 * @return String con el nombre de la clase del identificador
+	 */
 	public String getClase(String id){
 		if (this.tabla.containsKey(id))
 			return ((Par)this.tabla.get(id)).getClase();// Devolver la clase...
@@ -187,7 +195,10 @@ public class TablaSimbolos {
 	 * 	si no devuelve exp
 	 * ffun
 	 */
-	
+	/**
+	 * Método que resuelve la referencia de tipos de identificadores.
+	 * Recibe como parámetro exp que es del tipo Atributos
+	 */
 	public Atributos ref(Atributos exp){
 		//System.out.println("Dentro de REF:  " + exp);
 		
@@ -231,14 +242,21 @@ public class TablaSimbolos {
 	 * fun referenciaErronea(e,ts)
 	 * 	devuelve e.t=ref ??? ??existeID(ts,e.id)
 	 */
-	
+	/**
+	 * Método que devuelve el booleano correspondiente a evaluar la condición de si el Par que se le pasa como parámetro es un referencia errónea
+	 */
 	public boolean referenciaErronea(Par e){
 		//System.out.println("En ref erroenes ref es");
 		//System.out.println(e.getProps().getTipo());
 		//System.out.println(e.getProps().getTipo().equals("ref"));
 		return e.getProps().getTipo().equals("ref") && !this.existeID(e.getId());
 	}
-	
+	/**
+	 * Función que devuelve el booleano correspondiente a evaluar si dos Atributos son compatibles
+	 * @param e1 Atributo
+	 * @param e2 Atributo
+	 * @return Booleano
+	 */
 	public boolean compatibles (Atributos e1, Atributos e2)
 	{
 		Vector visitadas = new Vector();
@@ -267,6 +285,14 @@ ffun*/
 	si no 
 		devuelve false
 ffun */
+	/**
+	 * Función auxliar para implementar la función compatibles
+	 * @param v Vector
+	 * @param e1 Atributos
+	 * @param e2 Atributos
+	 * @return el entero que dice si son compatibles
+	 */
+
 public boolean compatibles2 (Vector v, Atributos e1, Atributos e2)
 {
 	if (v.contains(e1) && v.contains(e2)){

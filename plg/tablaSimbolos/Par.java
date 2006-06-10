@@ -54,7 +54,16 @@ public class Par {
 		this.nivel = n;
 		this.t = null;
 	}
-
+/**
+ * Constructor de la clase Par con valores de inicializacin recibidos por parmetro
+ * @param id
+ * @param props
+ * @param clase
+ * @param dir
+ * @param n
+ * @param ts
+ * @throws Exception
+ */
 	public Par(String id, Atributos props, String clase, int dir, int n, TablaSimbolos ts) throws Exception{
 		super();
 		this.id = id;
@@ -93,29 +102,47 @@ public class Par {
 	public void setProps(Atributos props) {
 		this.props = props;
 	}
-
+	/**
+	 * Accesor el atributo de la clase clae.
+	 * @return String con el clase del identificador.
+	 */
 	public String getClase() {
 		return clase;
 	}
-
+	/**
+	 * Mutador el atributo de la clase clase.
+	 * @param clase String con el nombre del identificador.
+	 */
 	public void setClase(String clase) {
 		this.clase = clase;
 	}
 
-	
+	/**
+	 * Accesor el atributo de la clase dir.
+	 * @return entero con la dirección del identificador.
+	 */
 	public int getDir() {
 		return dir;
 	}
-
+	/**
+	 * Mutador de la dirección
+	 * @param dir entero con la dirección.
+	 */
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
 	
-	
+	/**
+	 * Accesor de la tabla de símbolos
+	 * @return Tabla de símbolos
+	 */
 	public TablaSimbolos getT() {
 		return t;
 	}
-
+	/**
+	 * Mutador el atributo de la tabla de símbolos
+	 * @param t TablaSímbolos
+	 */
 	public void setT(TablaSimbolos t) {
 		this.t = t;
 	}
