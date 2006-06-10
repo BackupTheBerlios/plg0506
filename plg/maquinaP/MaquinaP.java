@@ -98,6 +98,7 @@ public class MaquinaP {
 		Prog = damePrograma(fichero);
 		pasos="";
 	}
+	
 	/*public void funcionAux1 (){
 		this.apila_dir(0);
 		this.apila(3);
@@ -279,7 +280,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * M?todo que ejecuta la M?quina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
+	 * M?todo que ejecuta la Maquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
 	 *
 	 */
 	public void ejecuta() throws Exception{
@@ -785,8 +786,8 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * M?todo que devuelve un String con el contenido de la Memoria. 
-	 * Se usa para ver el contenido final de la memoria para despues de ejecutar la m?quina P.
+	 * Metodo que devuelve un String con el contenido de la Memoria. 
+	 * Se usa para ver el contenido final de la memoria despues de ejecutar la maquina P.
 	 * 
 	 * @return String con el contenido del vector Mamoria.
 	 */
@@ -819,8 +820,8 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * M?todo que realiza una operaci?n suma. Se desapilan los dos primeros elementos de la pila y se suman.  Despues se apila 
-	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habr? un elemento menos. Tambi?n se aumenta en uno 
+	 * Metodo que realiza una operacion de suma. Se desapilan los dos primeros elementos de la pila y se suman.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
 	 * el contador del programa.
 	 * 
 	 * (R1) suma:
@@ -843,6 +844,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de resta. Se desapilan los dos primeros elementos de la pila y se restan.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R2) resta:
 	 *	Pila[ST-1] <-- Pila[ST-1] - Pila[ST]
 	 *	ST <-- ST -1 
@@ -861,6 +866,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de multiplicacion. Se desapilan los dos primeros elementos de la pila y se multiplican.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R3) multiplica:
 	 *	Pila[ST-1] <-- Pila[ST-1] * Pila[ST]  
 	 *	ST <-- ST -1 
@@ -879,6 +888,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de division. Se desapilan los dos primeros elementos de la pila y se dividen.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R4) divide:
 	 *	Pila[ST-1] <-- Pila[ST-1] / Pila[ST]  
 	 *	ST <-- ST -1 
@@ -897,8 +910,11 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que apila un entero en la pila. Se aumenta en uno el tamaño de la pila y se apila el entero que recibe como
+	 * parametro. Tambien se aumenta en uno el contador del programa.
+	 * 
 	 * ST <-- ST + 1 
-	 * Pila[ST] <-- n  Si utilizo una pila no puedo hacer eso exactamente...
+	 * Pila[ST] <-- n
 	 * PC <-- PC + 1
 	 * 
 	 * @param n
@@ -910,6 +926,9 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que apila en la cima de la pila el valor que contiene la direccion de memoria que recibe como parametro. Se comprueba antes 
+	 * si la direccion de memoria pertenece a memoria estatica o memoria dinamica. Tambien se aumenta en uno el contador del programa.
+	 * 
 	 * (R6) apila-dir(d):
 	 *	ST <-- ST + 1 
 	 *	Pila[ST] <-- Mem[d]  
@@ -921,7 +940,7 @@ public class MaquinaP {
 		ST = ST + 1; 
 		if(d<tamMem){
 			if (d >= 0){
-				if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ // Donde pone >=, pon?a <=
+				if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ 
 					pila.push(Mem.elementAt(d));  
 					PC = PC + 1;
 				}
@@ -940,12 +959,15 @@ public class MaquinaP {
 				PC = PC + 1;
 			}
 			else{
-				throw new Exception("ERROR: Puntero sin inicializar.");
+				throw new Exception("ERROR: Memoria sin inicializar.");
 			}
 		}
 	}
 	
 	/**
+	 * Metodo que desapila la cima de la pila y lo guarda en la direccion de memoria que recibe como parametro. Se disminuye en uno el tamaño 
+	 * de la pila y se comprueba si es memoria dinamica o estatica. Tambien se aumenta en uno el contador del programa.
+	 * 
 	 * (R7) desapila-dir(d):
 	 *	Mem[d] <-- Pila[ST]
 	 *	ST <-- ST -1 
@@ -988,6 +1010,8 @@ public class MaquinaP {
 	}
 
 	/**
+	 * Metodo que para la ejecucion de la máquina P cuando se recibe un final de fichero.
+	 * 
 	 * (R8) EOF:
 	 *	H <-- 1
 	 */
@@ -996,6 +1020,8 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que indica a la pila que pare la ejecucion con un error.
+	 * 
 	 * (R9) En cualquier otro caso, la m?quina entra en estado de error y se detiene la ejecuci?n.
 	 * H <-- -1
 	 */
@@ -1004,6 +1030,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion and. Se desapilan los dos primeros elementos de la pila y se realiza una and.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R13) And:
 	 *	Pila[ST - 1] <-- "true" si Pila[ST ? 1] ? "false" & Pila[ST] ? "false"
 	 *		"false" en cualquier otro caso
@@ -1027,6 +1057,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion or. Se desapilan los dos primeros elementos de la pila y se realiza la operacion.  Despues se apila 
+	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R14) Or:
 	 *	Pila[ST - 1] <-- "false" si Pila[ST ? 1] ? "false" & Pila[ST] ? "false"
 	 *		"true" en c.o.c.
@@ -1050,6 +1084,9 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de negacion. Se desapila la cima de la pila y se realiza una negacion.  Despues se apila 
+	 * en la cima el resultado. Tambien se aumenta en uno el contador del programa.
+	 * 
 	 * (R15) Not:
 	 *	Pila[ST] <-- "true" si Pila[ST] = "false"
 	 *				"false" en c.o.c
@@ -1070,6 +1107,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion negacion de un entero. Se desapilan los dos primeros elementos de la pila y se realiza una and.  
+	 * Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta 
+	 * en uno el contador del programa.
+	 * 
 	 * (R16) Neg:
 	 *	Pila[ST] <--  - Pila[ST]
 	 *	PC <-- PC + 1 
@@ -1084,6 +1125,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de menor con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la operacion.
+	 * Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
+	 * el contador del programa.
+	 * 
 	 * (R17) Menor:
 	 *	Pila[ST ? 1] <-- "true" si Pila[ST - 1] < Pila[ST]
 	 *					"false" en c.o.c
@@ -1107,6 +1152,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de menor o igual con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la 
+	 * operacion.  Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se 
+	 * aumenta en uno el contador del programa.
+	 * 
 	 * (R18) MenorIgual:
 	 *	Pila[ST ? 1] <-- "true" si Pila[ST ? 1] ? Pila[ST]
 	 *			"false" en c.o.c
@@ -1130,6 +1179,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de myor con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la 
+	 * operacion.  Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se 
+	 * aumenta en uno el contador del programa.
+	 * 
 	 * (R19) Mayor:
 	 *	Pila[ST ? 1] <-- "true" si Pila[ST ? 1] > Pila[ST]
 	 *			"false" en c.o.c
@@ -1153,6 +1206,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de mayor o igual con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la 
+	 * operacion.  Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se 
+	 * aumenta en uno el contador del programa.
+	 * 
 	 * (R20) MayorIgual:
 	 *	Pila[ST ? 1] <-- "true" si Pila[ST ? 1] ? Pila[ST]
 	 *			"false" en c.o.c
@@ -1176,6 +1233,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de igual con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la 
+	 * operacion.  Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se 
+	 * aumenta en uno el contador del programa.
+	 * 
 	 * (R21) Igual:
 	 *	Pila[ST ? 1] <-- "true" si Pila[ST ? 1] = Pila[ST]
 	 *			"false" en c.o.c
@@ -1199,6 +1260,10 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de distinto con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la 
+	 * operacion.  Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se 
+	 * aumenta en uno el contador del programa.
+	 * 
 	 * (R22) Distinto:
 	 *	Pila[ST ? 1] <-- "true" si Pila[ST ? 1] ? Pila[ST]
 	 *			"false" en c.o.c
@@ -1222,8 +1287,13 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de salto del programa. Se comprueba que el salto no supere el tamaño del programa y se aumenta el contador
+	 * del programa segun el valor que recibimos por parametro.
+	 * 
 	 * (R20) ir-a(s):
 	 * PC <-- s
+	 * 
+	 * @param s Numero de instrucciones que ha de saltar y no ejecutar la maquinaP
 	 */
 	public void ir_a(int s){
 		if (s<Prog.size()){
@@ -1236,10 +1306,15 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que realiza una operacion de salto condicional del programa. Se comprueba que el salto no supere el tamaño del programa y se aumenta 
+	 * el contador del programa segun el valor que recibimos por parametro, si la cima de la pila es un valor booleano cierto.
+	 * 
 	 * (R21) ir-f(s):
 	 *	si Pila[ST] = 0 PC <-- s
 	 *	sino PC <--PC+1 fsi
 	 *	ST <-- ST - 1	
+	 *
+	 * @param s Numero de instrucciones que ha de saltar y no ejecutar la maquinaP
 	 */
 	public void ir_f(int s)throws Exception{
 		if (ST<0){
@@ -1256,11 +1331,15 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * (R22) libera(d)
+	 * Metodo que desapila una direccion de comienzo (d) de la cima de la pila, y libera de la memoria dinamica t celdas consecutivas a partir de d.
+	 * 
+	 * (R22) delete (d)
+	 *  d<-- Pila[ST]
 	 *  Mem[d] <-- null
 	 *  PC <-- PC +1
-	 * del(t): Desapila una direcci?n de comienzo d de la cima de la pila, 
-	 * y libera en el heap t celdas consecutivas a partir de d.
+	 *  ST <-- ST - 1
+	 *  
+	 *  @param t Tamano de celdas que hay que liberar
 	 */
 	public void delete (int t) throws Exception{
 		if (ST<0){
@@ -1274,8 +1353,11 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que reserva
 	 * 
 	 * @throws Exception
+	 * @param i Entero que indica el numero de celdas que hay que reservar.
+	 * @param dir Valor que hay que sumar a la direccion donde se reservo espacio, para poder indicar despues que es memoria dinamica.
 	 */
 	public void new_o(int i, int dir) throws Exception{
 		int j=heap.reserva(i);
