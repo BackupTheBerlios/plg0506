@@ -203,8 +203,12 @@ public class Sintactico{
 	
 	public Par DecProc() throws Exception{
 		Par a = new Par();
-		lexico.lexer(); // consumimos tipo
-		Token tk = lexico.lexer();
+		Token tk = lexico.lexer(); // consumimos "proc"
+		if (! lexico.reconoce(Tipos.TKPROC)){
+			throw new Exception("ERROR: Deberiamos haber encontrado 'proc'.");
+		}
+		tk = lexico.lexer(); // Consumimos el tipo
+		System.out.println("En DecProc leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
@@ -341,11 +345,13 @@ public class Sintactico{
 	public Par FParams() throws Exception{
 		Par a  = new Par();
 		Token tk = lexico.lexer();//consumimos ( 
+		System.out.println("En FParams ( leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
 		}
 		tk = lexico.getNextToken();
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
+			System.out.println("Metodo sin parametros");
 			a.getProps().setElems(0);
 			return a;
 		}

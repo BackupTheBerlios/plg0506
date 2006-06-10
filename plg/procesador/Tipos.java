@@ -227,4 +227,14 @@ public class Tipos {
 	 * Valor para reconocer el caracter ','
 	 */
 	public static final int TKCOMA		= 43;
+	
+	/**
+	 * Valor para reconocer el caracter '{'
+	 */
+	public static final int TKLLAP		= 44;
+	
+	/**
+	 * Valor para reconocer el caracter '}'
+	 */
+	public static final int TKLLCI		= 45;
 }
