@@ -125,8 +125,8 @@ public class Sintactico{
 	 * Decs.pend = Dec.pend ??? (si Dec.props.clase = tipo entonces {Dec.id} 	si no ??????)
 	 */
 		Par a = new Par();
-		Par atrDeDec = Dec();
-		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir());
+		Par atrDeDec = Dec(); 
+		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
 		}
