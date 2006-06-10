@@ -16,8 +16,7 @@ public class Heap {
 	private int ultimo;
 	
 	/**
-	 * 
-	 * @param i
+	 * constructor de heap con un parámetro entero
 	 */
 	public Heap(int i) {
 		super();
@@ -27,6 +26,7 @@ public class Heap {
 	}
 	
 	/**
+	 * Accesor del heap
 	 * @return Returns the heap.
 	 */
 	public Vector getHeap() {
@@ -34,6 +34,7 @@ public class Heap {
 	}
 	
 	/**
+	 * Mutador del heap
 	 * @param heap The heap to set.
 	 */
 	public void setHeap(Vector heap) {
@@ -41,6 +42,7 @@ public class Heap {
 	}
 	
 	/**
+	 * Accesor de ocupados
 	 * @return Returns the ocupados.
 	 */
 	public Vector getOcupados() {
@@ -48,6 +50,7 @@ public class Heap {
 	}
 	
 	/**
+	 * Mutador de ocupados
 	 * @param ocupados The ocupados to set.
 	 */
 	public void setOcupados(Vector ocupados) {
@@ -55,7 +58,7 @@ public class Heap {
 	}
 	
 	/**
-	 * 
+	 * método que coloca un elemento el montículo
 	 * @param v
 	 * @param u
 	 */
@@ -86,8 +89,8 @@ public class Heap {
 		}
 	}
 	/**
-	 * 
-	 * @param tam
+	 * método que reserva un tam de memoria
+	 * @param tam entero que indica la cantidad de memoria que se quiere reservar
 	 * @return
 	 * @throws Exception
 	 */
@@ -121,7 +124,7 @@ public class Heap {
 	}
 	
 	/**
-	 * 
+	 * método que devuelve la dirección de memoria de un elemento
 	 * @param d
 	 * @return
 	 * @throws Exception
@@ -136,7 +139,7 @@ public class Heap {
 	}
 	
 	/**
-	 * 
+	 * Método que modifica el contenido de una posición de memoria
 	 * @param d
 	 * @param value
 	 * @throws Exception
