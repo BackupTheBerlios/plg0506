@@ -208,17 +208,9 @@ public class Sintactico{
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
 		a.setId(tk.getLexema());
-		lexico.lexer(); //consumimos (
-		if (!lexico.reconoce(Tipos.TKPAP)){
-			throw new Exception ("ERROR: Necesitas un (");
-		}
 		a.setNivel(nivel);
 		nivel ++;
 		Par atrDeFParams = FParams();
-		lexico.lexer(); //consumimos )
-		if (!lexico.reconoce(Tipos.TKPCI)){
-			throw new Exception ("ERROR: Necesitas un )");
-		}
 		TablaSimbolos ts = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
 		a.setT(ts);
 		a.getProps().setTam(0);
@@ -337,21 +329,62 @@ public class Sintactico{
 		return a;
 	}
 	
-	public Par FParams(){
-		/*
-		 * FParams ::= ( LFParams )
-		 * {Fparams.props.params = LFParams.props.params
-		 * LFParams.props.i= 0;
-		 * cod = cod || “(“ || LFParams.props.params || “)”}
-		 * FParams ::= λ
-		 * {FParams.props.params = []}
-		 */
+	public Par FParams() throws Exception{
 		Par a  = new Par();
-		
+		Token tk = lexico.lexer();//consumimos ( 
+		if (!lexico.reconoce(Tipos.TKPAP)){
+			throw new Exception ("ERROR: Necesitas un (");
+		}
+		tk = lexico.getNextToken();
+		if (tk.equals(new Token(")", Tipos.TKPCI))){
+			a.getProps().setElems(0);
+			return a;
+		}
+		Par atrDeLFParams = LFParams();
+		lexico.lexer(); //consumimos )
+		if (!lexico.reconoce(Tipos.TKPCI)){
+			throw new Exception ("ERROR: Necesitas un )");
+		}
+		a.getProps().setParams(atrDeLFParams.getProps().getParams());
+		a.getProps().setElems(atrDeLFParams.getProps().getElems());
 		return a;
 	}
-	public Par Bloque(){
+	
+	
+	public Par FParam() throws Exception{
 		Par a  = new Par();
+		Par atrDeTipo = Tipo();
+		Token tk = lexico.lexer();
+		if(! lexico.reconoce(Tipos.TKIDEN)){
+			throw new Exception("ERROR: falta el identificador del parametro");
+		}
+		a.setId(tk.getLexema());
+		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
+		a.getProps().setTbase(new Atributos());
+		a.setNivel(nivel);
+		return a;
+	}
+	
+	public Par Bloque() throws Exception{
+		/*
+		 * Bloque ::= Decs # Is
+{etqs1 = etq + longPrologo + 1
+etq = etqs1 + longEpilogo + 1
+etqs2 = cod
+cod = etqs2 || prologo(Bloque.nh,Decs.dir) || ira(
+Decs.etq) ||
+etqs2 || epilogo (Bloque.nh) || irind}
+Bloque ::= Is
+{ cod = cod || Is.props}
+		 */
+		Par a  = new Par();
+		etq = 0;
+		dir = 0;
+		nivel = 0;
+		Par atrDeDecs = Decs();
+		Par atrDeIs = Is();
+		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
+		//return errDeProg;
 		return a;
 	}
 	/**
