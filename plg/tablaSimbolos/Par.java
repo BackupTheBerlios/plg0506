@@ -21,6 +21,7 @@ public class Par {
 	Atributos props;
 	String clase;
 	int dir;
+	int nivel;
 	
 	/**
 	 * 
@@ -32,6 +33,7 @@ public class Par {
 		this.props = new Atributos();
 		this.clase = "";
 		this.dir = 0;
+		this.nivel = 0;
 	}
 
 	/**
@@ -41,12 +43,13 @@ public class Par {
 	 * @param tipo String con el tipo del identificador.
 	 *  
 	 */
-	public Par(String id, Atributos props, String clase, int dir) {
+	public Par(String id, Atributos props, String clase, int dir, int n) {
 		super();
 		this.id = id;
 		this.props = props;
 		this.clase = clase;
 		this.dir = dir;
+		this.nivel = n;
 	}
 
 	/**
@@ -95,6 +98,21 @@ public class Par {
 		this.dir = dir;
 	}
 	
+	
+	/**
+	 * @return Returns the nivel.
+	 */
+	public int getNivel() {
+		return nivel;
+	}
+
+	/**
+	 * @param nivel The nivel to set.
+	 */
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
+	}
+
 	/**
 	 * El mtodo toString pasa a String la clase Par para poder mostrarla por pantalla.
 	 * @return String que contiene un par para poderlo mostrar por pantalla.
