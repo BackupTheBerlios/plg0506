@@ -37,6 +37,7 @@ public class Sintactico{
 	int dir;
 	int etq;
 	int nivel;
+	int nmax;
 	
 	private static int longApilaRet = 5;
 	private static int longPrologo = 13;
@@ -96,14 +97,25 @@ public class Sintactico{
 	 */	
 	public boolean Prog() throws Exception{
 		/*
-		 * 	Progs.err = Progs.err ??? Decs.pend ????????? 
+		 * 	Prog ::= Decs && Is
+Proc.cod = inicio(Decs.n,Decs.dir) ||
+ir-a(Decs.etq) || Decs.cod ||
+Is.cod || stop
+Is.etqh = Is.etq
+Decs.etqh = longInicio + 1
+Is.etqh = Decs.etq
 		 */
 		
 		etq = 0;
 		dir = 0;
 		nivel = 0;
+		int etqs = etq;
+		codigo.genIns("ir-a");
+		etq ++;
 		Par atrDeDecs = Decs();
+		codigo.parchea(etqs,etq);
 		Par atrDeIs = Is();
+		
 		//System.out.println("El error de Decs es "+atrDeDecs.getProps().getTipo().equals("error"));
 		//System.out.println("El error de Is es "+atrDeIs.getProps().getTipo().equals("error"));
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
@@ -130,15 +142,16 @@ public class Sintactico{
 		System.out.println("Estoy en Decs y llamo a dec");
 		Par atrDeDec = Dec(); 
 		System.out.println("A?ado");
-		if (nivel == 0){
+		//if (nivel == 0){
 			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
 			TS.muestra();
-		}
-		else{
+		//}
+		/*else{
+			System.out.println("hola");
 			atrDeDec.getT().agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
 			System.out.println("La hija:");
 			atrDeDec.getT().muestra();
-		}
+		}*/
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
 		}
@@ -234,9 +247,13 @@ public class Sintactico{
 		a.setId(tk.getLexema());
 		a.setNivel(nivel);
 		nivel ++;
+		if (nivel>nmax){
+			nmax=nivel;
+		}
 		Par atrDeFParams = FParams();
-		TablaSimbolos ts = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
-		a.setT(ts);
+		TablaSimbolos tsAux = new TablaSimbolos(TS.getTabla());
+		TS = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
+		a.setT(TS);
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
@@ -252,6 +269,7 @@ public class Sintactico{
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
 		nivel --;
+		TS = tsAux;
 		System.out.println("salgo de decproc");
 		return a;
 	}
@@ -366,6 +384,7 @@ public class Sintactico{
 	
 	public Par FParams() throws Exception{
 		Par a  = new Par();
+		a.setT(new TablaSimbolos());
 		Token tk = lexico.lexer();//consumimos ( 
 		System.out.println("En FParams ( leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPAP)){
@@ -471,6 +490,7 @@ public class Sintactico{
 		int tamlocales = dir - auxDir;
 		codigo.prologo(nivel, tamlocales);
 		codigo.genIns("ir-a",inicio);
+		TS.muestra();
 		System.out.println("En Bloque me voy a Is");
 		Par atrDeIs = Is();
 		System.out.println("En Bloque vuelvo de Is");
