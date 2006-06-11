@@ -129,7 +129,7 @@ public class Sintactico{
 		Par a = new Par();
 		System.out.println("Estoy en Decs y llamo a dec");
 		Par atrDeDec = Dec(); 
-		System.out.println("Añado");
+		System.out.println("A?ado");
 		if (nivel == 0){
 			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
 			TS.muestra();
@@ -237,6 +237,7 @@ public class Sintactico{
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
 		a.setNivel(nivel);
+		/*
 		tk = lexico.lexer();
 		System.out.println("En decProc {:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLAP)){
@@ -247,7 +248,7 @@ public class Sintactico{
 		System.out.println("En decProc }:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
-		}
+		}*/
 		nivel --;
 		return a;
 	}
@@ -496,7 +497,7 @@ public class Sintactico{
 			System.out.println("Leo EOF");
 			a.getProps().setTipo(""); 
 		}
-		if (lexico.reconoce(Tipos.TKLLCI)){
+		else if (lexico.reconoce(Tipos.TKLLCI)){
 			System.out.println("Leo Llave de Cierre");
 			a.getProps().setTipo(""); 
 		}
@@ -529,7 +530,7 @@ public class Sintactico{
 		System.out.println("\n\nHacemos cosas.");
 		Par atrDeIns;
 		Token tk = lexico.lexer();
-		//System.out.println("En I leemos" + tk.getLexema());
+		System.out.println("En I leemos" + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
 		}
@@ -548,6 +549,7 @@ public class Sintactico{
 			}
 			else{
 					atrDeIns = IAsig();
+					System.out.println("Al final de IAsig tenemos un: " +lexico.getLookahead().getLexema());
 			}	
 				
 		}
@@ -814,7 +816,7 @@ public class Sintactico{
 			}
 			a = Mem();
 			tk = lexico.lexer(); //consumimos :=
-			//System.out.println("En IAsig leemos" + tk.getLexema());
+			System.out.println("En IAsig := leemos" + tk.getLexema());
 			
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
