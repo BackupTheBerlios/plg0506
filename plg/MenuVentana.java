@@ -731,13 +731,11 @@ public class MenuVentana extends JFrame{
 	    }
 	    catch (FileNotFoundException ex) {
 	    	JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage()+
-	    			"\n","Error",JOptionPane.ERROR_MESSAGE);  
-	    	ex.printStackTrace();
+	    			"\n","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		catch (IOException ex){
 			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage()+
-    			"\n","Error",JOptionPane.ERROR_MESSAGE);  
-		    ex.printStackTrace();
+    			"\n","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		return s;
 	}

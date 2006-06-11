@@ -1,6 +1,16 @@
-int a;
-lista = array [3] of int;
-pointer lista c;
-bool b#
-b := false;
-pointer c [1] := 5;
+pointer int a;
+pointer bool b;
+int c;
+array [2] of bool d;
+tipo maria = bool;
+tipo pepe = pointer int;
+tipo ese = array [2] of bool;
+maria e;
+pepe f;
+ese g
+#
+new b;
+d[1] := true;
+b pointer := false;
+e := false;
+new f;
