@@ -410,6 +410,37 @@ Is.etqh = Decs.etq
 		return a;
 	}
 	
+	public Par AParams() throws Exception{
+		Par a  = new Par();
+		a.setT(new TablaSimbolos());
+		Token tk = lexico.lexer();//consumimos ( 
+		System.out.println("En AParams ( leemos: " + tk.getLexema());
+		if (!lexico.reconoce(Tipos.TKPAP)){
+			throw new Exception ("ERROR: Necesitas un (");
+		}
+		tk = lexico.getNextToken();
+		if (tk.equals(new Token(")", Tipos.TKPCI))){
+			lexico.lexer();
+			System.out.println("En AParams ) leemos: " + tk.getLexema());
+			System.out.println("Metodo sin parametros");
+			a.getProps().setElems(0);
+			return a;
+		}
+		Par atrDeLAParams = LAParams();
+		System.out.println("VOlvemos de LAParams()");
+		tk = lexico.lexer(); //consumimos )
+		System.out.println("En Aparams ) : " + tk.getLexema());
+		if (!lexico.reconoce(Tipos.TKPCI)){
+			throw new Exception ("ERROR: Necesitas un )");
+		}
+		a.getProps().setParams(atrDeLAParams.getProps().getParams());
+		a.getProps().setElems(atrDeLAParams.getProps().getElems());
+		/*if (! (atrDeLAParams.getProps().getParams().size() == a.getProps().getParams().size())){
+			throw new Exception ("ERROR: El número de parámetros no se corresponde");
+		}*/
+		return a;
+	}
+	
 	
 	public Par LFParams() throws Exception{
 		Par a = new Par();
@@ -449,6 +480,43 @@ Is.etqh = Decs.etq
 		return a;
 	}
 	
+	public Par LAParams() throws Exception{
+		Par a = new Par();
+		a.setT(new TablaSimbolos())	;
+		Par atrDeLAParams = null;
+		
+		Par atrDeLAParam = LAParam();
+		System.out.println("Volvemos de LAParam. Se lo asignamos a 'a'");
+		a.getProps().getParams().add(atrDeLAParam);
+		a.getProps().setElems(a.getProps().getElems() + 1);
+		System.out.println("Ya lo hemos asignado.");
+		
+		Token tk = lexico.getNextToken();
+		if (tk.getCategoriaLexica() == Tipos.TKPCI){
+			System.out.println("Leo el ) y vuelvo.");
+			return a;
+		}
+		tk = lexico.lexer(); // Consumimos ","
+		System.out.println("En laparams , : " + tk.getLexema());
+		
+		if (lexico.reconoce(Tipos.TKCOMA)){
+			// Volvemos a llamar a LFParams
+			atrDeLAParams = LAParams();
+			System.out.println("Antes del addAll");
+			if (! atrDeLAParams.getProps().getParams().isEmpty()){
+				a.getProps().getParams().addAll(atrDeLAParams.getProps().getParams());
+				a.setT(atrDeLAParams.getT());
+				a.getProps().setElems(a.getProps().getElems() + atrDeLAParams.getProps().getElems());
+			}
+		}
+		else {
+			throw new Exception("ERROR: Los parametros han de ir separados por comas.");
+		}
+		if (a.getT() == null)
+			System.out.println("ES NULL");
+		a.getT().agnadeID(atrDeLAParam.getId(), atrDeLAParam.getProps(),atrDeLAParam.getClase(),atrDeLAParam.getDir(),nivel);
+		return a;
+	}
 	
 	public Par FParam() throws Exception{
 		Par a  = new Par();
@@ -465,6 +533,30 @@ Is.etqh = Decs.etq
 		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
 		a.getProps().setTbase(new Atributos());
 		a.setNivel(nivel);
+		return a;
+	}
+	
+	public Par LAParam() throws Exception{
+		Par a  = new Par();
+		//Par atr = ExpC();
+		a = ExpC ();
+		
+		
+		/* Dejo comentado lo que hacía FParam creo que con LAParam, esto ya sería suficiente
+		 * Token tk = lexico.lexer();
+		System.out.println("En aparam iden : " + tk.getLexema());
+		 * if(! lexico.reconoce(Tipos.TKIDEN)){
+			throw new Exception("ERROR: falta el identificador del parametro");
+		}
+		a.setId(tk.getLexema());
+		if (atr.getProps() == null){
+			System.out.println("Los props despues de ExpC son null");
+		}
+		a.getProps().setTipo(atr.getProps().getTipo());
+		a.getProps().setTbase(new Atributos());
+		a.setNivel(nivel);
+		 */
+				
 		return a;
 	}
 	
