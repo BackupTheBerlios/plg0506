@@ -339,7 +339,6 @@ public class MenuVentana extends JFrame{
 							}
 							catch (Exception e1) {
 								JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-								e1.printStackTrace();
 							}
 						}
 						else{
