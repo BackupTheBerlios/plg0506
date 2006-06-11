@@ -9,11 +9,11 @@ public class Atributos {
 	int elems;
 	int tam;
 	Vector params;
+	
 	/**
-	 * Contructor sin parámetros para la clase Atributos 
+	 * Contructor sin parmetros para la clase Atributos 
 	 *
 	 */
-	
 	public Atributos() {
 		super();
 		this.tipo = "";
@@ -22,6 +22,7 @@ public class Atributos {
 		this.tam = 0;
 		this.params = new Vector();
 	}
+	
 	/**
 	 * Contructor por copia para la clase Atributos
 	 *
@@ -38,13 +39,13 @@ public class Atributos {
 		this.tam = a.getTam();
 		this.params = a.getParams();
 	}
+	
 	/**
-	 * Contructor con parámetros para la clase Atributos
+	 * Contructor con parmetros para la clase Atributos
 	 *
 	 */
 	public Atributos(String tipo, String tbase, int elems, int tam, Vector params) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.tipo = tipo;
 		if (tbase != ""){
 			this.tbase = new Atributos(tbase,"",0,0, new Vector());
@@ -56,52 +57,56 @@ public class Atributos {
 		this.tam = tam;
 		this.params = params;
 	}
-/**
- * Accesor para elems de Atributos
- * @return el número de elementos
- */
+	
+	/**
+	 * Accesor para elems de Atributos
+	 * @return el nmero de elementos
+	 */
 	public int getElems() {
 		return elems;
 	}
 
-/**
- * Mutador para los elems
- * @param elems entero con el número de elementos
- */
+	/**
+	 * Mutador para los elems
+	 * @param elems entero con el nmero de elementos
+	 */
 	public void setElems(int elems) {
 		this.elems = elems;
 	}
+	
 	/**
-	 * Accesor para los parámetros
+	 * Accesor para los parmetros
 	 * @return params
 	 */
 	
 	public Vector getParams() {
 		return params;
 	}
+	
 	/**
-	 * Mutador para los parámetros
-	 * @param params Vector que contiene los parámetros
+	 * Mutador para los parmetros
+	 * @param params Vector que contiene los parmetros
 	 */
-
 	public void setParams(Vector params) {
 		this.params = params;
 	}
-/**
- * Accesor para el tipo base 
- * @return el tipo base que es del tipo Atributos
- */
+	
+	/**
+	 * 	Accesor para el tipo base 
+	 * 	@return el tipo base que es del tipo Atributos
+	 */
 	public Atributos getTbase() {
 		return tbase;
 	}
 
 	/**
 	 * Mutador para el tipo base
-	 * @param params recibe el tipo base de tipo Atributos como parámetros
+	 * @param params recibe el tipo base de tipo Atributos como parmetros
 	 */
 	public void setTbase(Atributos tbase) {
 		this.tbase = tbase;
 	}
+	
 	/**
 	 * Accesor para el tipo  
 	 * @return el tipo que es del tipo String
@@ -116,25 +121,27 @@ public class Atributos {
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
-	} 
+	}
+	
 	/**
-	 * Accesor para el tamaño
-	 * @return el tamaño que es de tipo entero
+	 * Accesor para el tamao
+	 * @return el tamao que es de tipo entero
 	 */
 	public int getTam() {
 		return tam;
 	}
 
 	/**
-	 * Mutador para el tamaño
-	 * @param params recibe el tamaño de tipo entero parámetros
+	 * Mutador para el tamao
+	 * @param params recibe el tamao de tipo entero parmetros
 	 */
 	public void setTam(int tam) {
 		this.tam = tam;
 	}
-/**
- * Método que convierte en un String la lista de Atributos
- */
+	
+	/**
+	 * Mtodo que convierte en un String la lista de Atributos
+	 */
 	public String toString(){
 		if (this != null){	
 			String aux;
@@ -161,8 +168,9 @@ public class Atributos {
 			return "null";
 		}
 	}
+	
 	/**
-	 * Método que devuelve un booleano con la igualdad de los atributos
+	 * Mtodo que devuelve un booleano con la igualdad de los atributos
 	 * @param a Atributo con el que queremos comparar la igualdad
 	 * @return booleano con la igual de los atributos
 	 */
@@ -177,5 +185,4 @@ public class Atributos {
 				return (iguales && a.getTbase() == null);
 			return (tbase.getTipo().equals(a.getTbase().getTipo()));	
 	}
-
 }
