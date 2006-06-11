@@ -54,16 +54,17 @@ public class Par {
 		this.nivel = n;
 		this.t = null;
 	}
-/**
- * Constructor de la clase Par con valores de inicializacin recibidos por parmetro
- * @param id
- * @param props
- * @param clase
- * @param dir
- * @param n
- * @param ts
- * @throws Exception
- */
+	
+	/**
+	 * Constructor de la clase Par con valores de inicializacin recibidos por parmetro
+	 * @param id
+	 * @param props
+	 * @param clase
+	 * @param dir
+	 * @param n
+	 * @param ts
+	 * @throws Exception
+	 */
 	public Par(String id, Atributos props, String clase, int dir, int n, TablaSimbolos ts) throws Exception{
 		super();
 		this.id = id;
@@ -74,6 +75,11 @@ public class Par {
 		this.t = new TablaSimbolos (ts.getTabla());
 	}
 
+	/**
+	 * 
+	 * @param a
+	 * @throws Exception
+	 */
 	public Par(Par a) throws Exception{
 		super();
 		this.id = a.getId();
@@ -91,6 +97,7 @@ public class Par {
 	public String getId() {
 		return id;
 	}
+	
 	/**
 	 * Mutador el atributo de la clase id.
 	 * @param id String con el nombre del identificador.
@@ -98,6 +105,7 @@ public class Par {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	/**
 	 * Accesor el atributo de la clase props.
 	 * @return String con el props del identificador.
@@ -105,6 +113,7 @@ public class Par {
 	public Atributos getProps() {
 		return props;
 	}
+	
 	/**
 	 * Mutador el atributo de la clase props.
 	 * @param props String con el props del identificador.
@@ -112,6 +121,7 @@ public class Par {
 	public void setProps(Atributos props) {
 		this.props = props;
 	}
+	
 	/**
 	 * Accesor el atributo de la clase clae.
 	 * @return String con el clase del identificador.
@@ -119,6 +129,7 @@ public class Par {
 	public String getClase() {
 		return clase;
 	}
+	
 	/**
 	 * Mutador el atributo de la clase clase.
 	 * @param clase String con el nombre del identificador.
@@ -129,29 +140,31 @@ public class Par {
 
 	/**
 	 * Accesor el atributo de la clase dir.
-	 * @return entero con la dirección del identificador.
+	 * @return entero con la direccin del identificador.
 	 */
 	public int getDir() {
 		return dir;
 	}
+	
 	/**
-	 * Mutador de la dirección
-	 * @param dir entero con la dirección.
+	 * Mutador de la direccin
+	 * @param dir entero con la direccin.
 	 */
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
 	
 	/**
-	 * Accesor de la tabla de símbolos
-	 * @return Tabla de símbolos
+	 * Accesor de la tabla de smbolos
+	 * @return Tabla de smbolos
 	 */
 	public TablaSimbolos getT() {
 		return t;
 	}
+
 	/**
-	 * Mutador el atributo de la tabla de símbolos
-	 * @param t TablaSímbolos
+	 * Mutador el atributo de la tabla de smbolos
+	 * @param t TablaSmbolos
 	 */
 	public void setT(TablaSimbolos t) {
 		this.t = t;

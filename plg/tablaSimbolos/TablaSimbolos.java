@@ -43,8 +43,6 @@ public class TablaSimbolos {
 	}
 
 	public TablaSimbolos(Hashtable t, Vector params) throws Exception{
-		System.out.println("En el constr. chulo: ");
-		System.out.println(params.toString());
 		this.tabla = new Hashtable();
 		Enumeration e = t.keys();
 		while (e.hasMoreElements()){ //copiamos
@@ -52,22 +50,6 @@ public class TablaSimbolos {
 			Par elem = new Par ((Par)t.get(aux));
 			this.tabla.put(elem.getId(),elem);
 		}
-		/*System.out.println("copiamos en el constructor chachi");
-		this.muestra();
-		e = t.keys();
-		System.out.println("Las claves: ");
-		System.out.println(e.toString());
-		while (e.hasMoreElements()){ //cambiamos a solo lectura los q no son parámetros
-			Object aux = e.nextElement();
-			System.out.println("La clave actual:");
-			System.out.println(aux.toString());
-			System.out.println("En el constr. chulo antes de cambiar: ");
-			System.out.println(params.toString());
-			if ( ! params.contains(((Par)aux).getId()) ){
-				System.out.println("Cambiamos:" + aux.toString());
-				((Par)tabla.get(aux)).setClase("valor");
-			}
-		}*/
 		e = t.keys();
 		while (e.hasMoreElements()){ //copiamos
 			Object aux = e.nextElement();
@@ -75,18 +57,12 @@ public class TablaSimbolos {
 				((Par)this.tabla.get(aux)).setClase("valor");
 			}
 		}
-		System.out.println("en el constructor chachi puestos todos a valor");
-		this.muestra();
 		for (int i = 0; i<params.size(); i++){
 			String aux = ((Par)params.elementAt(i)).getId();
-			System.out.println("Elemento es;" + aux);
 			if (this.existeID(aux)){
-				System.out.println("y está");
 				((Par)this.tabla.get(aux)).setClase("var");
 			}	
 		}
-		System.out.println("en el constructor chachi");
-		this.muestra();
 	}
 	
 	/**
@@ -96,6 +72,7 @@ public class TablaSimbolos {
 	public Hashtable getTabla() {
 		return tabla;
 	}
+	
 	/**
 	 * Mutador para el atributo de la clase tabla.
 	 * @param tabla Hashtable recibida por parmetro y a la que se inicializa la nueva tabla creada.
@@ -111,8 +88,7 @@ public class TablaSimbolos {
 	 * @param id String que almacena el nombre del identificador 
 	 * @return Booleano que indica la existencia o no de este valor en la tabla.
 	 */
-	public boolean existeID(String id){
-		
+	public boolean existeID(String id){	
 		return this.tabla.containsKey(id);
 	}
 	
@@ -127,6 +103,7 @@ public class TablaSimbolos {
 		else
 			return null;
 	}
+	
 	/**
 	 * Accesor de la direccin de un identificador en la tabla de smbolos
 	 * @param id String con el identificador
@@ -221,39 +198,17 @@ public class TablaSimbolos {
 		return i;
 	}	
 	
-	/*
-	 * fun ref!(exp,ts)
-	 * 	si exp.t = ref entonces
-	 * 		si existeID(ts,exp.id)
-	 * 			devuelve ref!(ts[exp.id].tipo,ts)
-	 * 		si no <t:err>
-	 * 	si no devuelve exp
-	 * ffun
-	 */
 	/**
 	 * Mtodo que resuelve la referencia de tipos de identificadores.
 	 * Recibe como parmetro exp que es del tipo Atributos
 	 */
 	public Atributos ref(Atributos exp){
-		//System.out.println("Dentro de REF:  " + exp);
-		
-		/*String iden = exp.getTipo();
-		if (this.existeID(iden)){
-			return (this.getProps(iden));
-		}
-		else{
-			return exp;
-		}*/
-		
 		if (exp.getTipo().equals("ref")){
-			//System.out.println("Es una referencia.");
 			String iden = exp.getTbase().getTipo();
-			//System.out.println("Su iden del tbase es: " + iden);
 			if (iden.equals("bool") || iden.equals("int") || iden.equals("pointer") || iden.equals("array")){
 				return exp.getTbase();
 			} 
 			else if(this.existeID( iden )){
-				//System.out.println("Ref recursivo.");
 				return ref( this.getProps(iden) );
 			}
 			else{
@@ -262,28 +217,19 @@ public class TablaSimbolos {
 			}
 		}
 		else if (existeID(exp.getTipo())){
-			//System.out.println("Tengo el tipo en la TS");
 			return ref(getProps(exp.getTipo()));
 			
 		}
 		else{
-			//System.out.println("No sabemos deshacer la referencia y es:" + exp);
 			return exp;
 		}
 		
 	}
 	
-	/*
-	 * fun referenciaErronea(e,ts)
-	 * 	devuelve e.t=ref ??? ??existeID(ts,e.id)
-	 */
 	/**
 	 * Mtodo que devuelve el booleano correspondiente a evaluar la condicin de si el Par que se le pasa como parmetro es un referencia errnea
 	 */
 	public boolean referenciaErronea(Par e){
-		//System.out.println("En ref erroenes ref es");
-		//System.out.println(e.getProps().getTipo());
-		//System.out.println(e.getProps().getTipo().equals("ref"));
 		return e.getProps().getTipo().equals("ref") && !this.existeID(e.getId());
 	}
 	/**
@@ -297,29 +243,7 @@ public class TablaSimbolos {
 		Vector visitadas = new Vector();
 		return compatibles2 (visitadas, e1, e2);
 	}
-	/*
-	 * fun compatibles(e1,e2,ts)
-	visitadas ? ?
-	compatibles2(e1,e2)
-ffun*/
-
-/*fun compatibles2(e1,e2)
-	si <e1,e2> ? visitadas 
-		devuelve true
-	si no visitadas?visitadas?{<e1,e2>}
-	si (e1.t = e2.t = num) ? (e1.t = e2.t = bool)
-		devuelve true
-	si no si e1.t = ref 
-		devuelve compatibles2(ts[e1.id].tipo,e2)
-	si no si e2.t = ref 
-		devuelve compatibles2(e1,ts[e2.id].tipo)
-	si no si e1.t=e2.t=array ? e1.nelems=e2.nelems
-		devuelve compatibles2(e1.tbase,e2.tbase)
-	si no si e1.t = e2.t = puntero
-		devuelve compatible2(e1.tbase,e2.tbase)
-	si no 
-		devuelve false
-ffun */
+	
 	/**
 	 * Funcin auxliar para implementar la funcin compatibles
 	 * @param v Vector
@@ -328,43 +252,28 @@ ffun */
 	 * @return el entero que dice si son compatibles
 	 */
 
-public boolean compatibles2 (Vector v, Atributos e1, Atributos e2)
-{
-	if (v.contains(e1) && v.contains(e2)){
-		return true;
-	}
-	else{
-		v.addElement(e1);
-		v.addElement(e2);
-	}
-	if ((e1.getTipo().equals(e2.getTipo()) && e2.getTipo().equals("int"))
-			|| (e1.getTipo().equals(e2.getTipo()) && e2.getTipo().equals("bool"))){
-		return true;
-	}
-	else if (e1.getTipo().equals("ref"))
-			return compatibles2 (v, e1.getTbase(), e2);
-		else if (e2.getTipo().equals("ref")) 
-			return compatibles2 (v, e1, e2.getTbase());	
-		else if (((e1.getTipo()==e2.getTipo() && e2.getTipo().equals("array")) && (e1.getElems() == e2.getElems())))
-					return compatibles2 (v, e1.getTbase(), e2.getTbase());
-			else if (e1.getTipo().equals("puntero") && e2.getTipo().equals("puntero"))
-					return compatibles2(v, e1.getTbase(), e2.getTbase());
-				else
-					return false;
-	/*if (ref(e1).getTipo().equals(ref(e2).getTipo())) {
-		if (ref(e1).getTipo().equals("int") || ref(e1).getTipo().equals("bool")){
+	public boolean compatibles2 (Vector v, Atributos e1, Atributos e2)
+	{
+		if (v.contains(e1) && v.contains(e2)){
 			return true;
 		}
-		else if (ref(e1).getTipo().equals("array")){
-			return (ref(e1).getElems() == ref(e2).getElems() && ref(e1).getTam() == ref(e2).getTam() &&
-					compatibles(ref(e1).getTbase(),ref(e2).getTbase()));
+		else{
+			v.addElement(e1);
+			v.addElement(e2);
 		}
-		else if (ref(e1).getTipo().equals("pointer")){
-			return (ref(e1).getTam() == ref(e2).getTam() &&	compatibles(ref(e1).getTbase(),ref(e2).getTbase()));
+		if ((e1.getTipo().equals(e2.getTipo()) && e2.getTipo().equals("int"))
+				|| (e1.getTipo().equals(e2.getTipo()) && e2.getTipo().equals("bool"))){
+			return true;
 		}
-	}
-	else {
-		return false;
-	}*/		
+		else if (e1.getTipo().equals("ref"))
+				return compatibles2 (v, e1.getTbase(), e2);
+			else if (e2.getTipo().equals("ref")) 
+				return compatibles2 (v, e1, e2.getTbase());	
+			else if (((e1.getTipo()==e2.getTipo() && e2.getTipo().equals("array")) && (e1.getElems() == e2.getElems())))
+						return compatibles2 (v, e1.getTbase(), e2.getTbase());
+				else if (e1.getTipo().equals("puntero") && e2.getTipo().equals("puntero"))
+						return compatibles2(v, e1.getTbase(), e2.getTbase());
+					else
+						return false;
 	}
 }
