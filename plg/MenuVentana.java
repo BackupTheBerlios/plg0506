@@ -24,7 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 /**
- * La clase <B>MenuVentana</B> contiene todos los elementos gráficos del compilador. Extiende de la clase JFrame, contiene JPanel,
+ * La clase <B>MenuVentana</B> contiene todos los elementos gr?ficos del compilador. Extiende de la clase JFrame, contiene JPanel,
  * JTextField, JTextPane y JButton. 
  * <P>La clase Lexico cuenta con los siguientes tipos de atributos:
  * <UL><LI><CODE>JPanel:</CODE> Para poder luego poner mas cosas dentro con diferentes Layaout.</LI>
@@ -34,10 +34,10 @@ import java.awt.Dimension;
  * <LI><CODE>JScrollPane:</CODE> Panel que contiene barras cuando son necesarias.</LI>
  * <LI><CODE>JTextPane:</CODE> Panel de texto, usado para mostrar texto.</LI>
  * <LI><CODE>JLabel:</CODE> Etiquetas para mostrar texto en los paneles.</LI>
- * <LI><CODE>File:</CODE> Ficheros usados para el analisis y para la ejecución.</LI>
+ * <LI><CODE>File:</CODE> Ficheros usados para el analisis y para la ejecuci?n.</LI>
  * </UL></P>
  * 
- * @author Jonás Andradas, Paloma de la Fuente, Leticia García y Silvia Martín
+ * @author Jon?s Andradas, Paloma de la Fuente, Leticia Garc?a y Silvia Mart?n
  *
  */
 
@@ -88,7 +88,7 @@ public class MenuVentana extends JFrame{
 	}
 	
 	/**
-	 * Este método inicializa el JFrame que extiende. Le cambia el titulo, el tamaño, la visibilidad y otras propiedades.
+	 * Este m?todo inicializa el JFrame que extiende. Le cambia el titulo, el tama?o, la visibilidad y otras propiedades.
 	 */
 	public void initialize() {
         this.setTitle("Practica Plg");
@@ -106,7 +106,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método inicializa el atributo jPanel	
+	 * Este m?todo inicializa el atributo jPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -126,7 +126,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método inicializa el jButton que hace la compilación del programa. Si no hay un fichero que compilar mostrara
+	 * Este m?todo inicializa el jButton que hace la compilaci?n del programa. Si no hay un fichero que compilar mostrara
 	 * un error.	
 	 * 	
 	 * @return javax.swing.JButton	
@@ -187,7 +187,7 @@ public class MenuVentana extends JFrame{
 
 	
 	/**
-	 * Este método inicializa jPanel1. En este panel se encuentran los jLabel que inidican el "Archivo a compilar" y el "Archivo a 
+	 * Este m?todo inicializa jPanel1. En este panel se encuentran los jLabel que inidican el "Archivo a compilar" y el "Archivo a 
 	 * ejecutar"	
 	 * 	
 	 * @return javax.swing.JPanel	
@@ -215,7 +215,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método devuelve jPanel2. Lo inicializa y guarda sus componentes según el Layaout adecuado.	
+	 * Este m?todo devuelve jPanel2. Lo inicializa y guarda sus componentes seg?n el Layaout adecuado.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -237,7 +237,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método devuelve el jPanel21. Lo inicializa y adecua su tamaño.	
+	 * Este m?todo devuelve el jPanel21. Lo inicializa y adecua su tama?o.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -254,7 +254,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel22. Lo inicializa y adecua su tamaño	
+	 * This method initializes jPanel22. Lo inicializa y adecua su tama?o	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -271,14 +271,14 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * This method initializes jPanel23. Lo inicializa y guarda sus componentes según el Layaout adecuado.	
+	 * This method initializes jPanel23. Lo inicializa y guarda sus componentes seg?n el Layaout adecuado.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getJPanel23() {
 		if (jPanel23 == null) {
 			jLabelE = new JLabel();
-			jLabelE.setText("Resultado de la Ejecución");
+			jLabelE.setText("Resultado de la Ejecuci?n");
 			jPanel23 = new JPanel();
 			int h= this.jPanel2.getHeight()/3;
 			int w= this.jPanel2.getWidth();
@@ -294,7 +294,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método inicializa y devuelve jButton1. El boton correspondiente a la acción de 
+	 * Este m?todo inicializa y devuelve jButton1. El boton correspondiente a la acci?n de 
 	 * ejecutar, sino hay un fichero adecuado mostrara un error.	
 	 * 	
 	 * @return javax.swing.JButton	
@@ -338,7 +338,8 @@ public class MenuVentana extends JFrame{
 								jTextPaneE.setText(pasos+"\n"+resultado);
 							}
 							catch (Exception e1) {
-								JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);	
+								JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+								e1.printStackTrace();
 							}
 						}
 						else{
@@ -355,7 +356,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método devuelve jPanel3. Lo inicializa y guarda sus componentes según el Layaout adecuado.	
+	 * Este m?todo devuelve jPanel3. Lo inicializa y guarda sus componentes seg?n el Layaout adecuado.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -377,7 +378,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este metodo devuelve jPanel31. Lo inicializa y adecua su tamaño.	
+	 * Este metodo devuelve jPanel31. Lo inicializa y adecua su tama?o.	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -394,7 +395,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método devuelve jPanel33. Lo inicializa y guarda sus componentes según el Layaout adecuado.
+	 * Este m?todo devuelve jPanel33. Lo inicializa y guarda sus componentes seg?n el Layaout adecuado.
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -407,7 +408,7 @@ public class MenuVentana extends JFrame{
 			jPanel33.setSize(d);
 			jPanel33.setPreferredSize(d);
 			jLabelC = new JLabel();
-			jLabelC.setText("          Resultado de la Compilación");
+			jLabelC.setText("          Resultado de la Compilaci?n");
 			jLabelC.setSize(d);
 			jLabelC.setPreferredSize(d);
 			jPanel33.add(jLabelC, null);
@@ -416,7 +417,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método devuelve jPanel32. Lo inicializa y guarda sus componentes según el Layaout adecuado.
+	 * Este m?todo devuelve jPanel32. Lo inicializa y guarda sus componentes seg?n el Layaout adecuado.
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -433,7 +434,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método devuelve jPanel11. Lo inicializa y adecua el tamaño.
+	 * Este m?todo devuelve jPanel11. Lo inicializa y adecua el tama?o.
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
@@ -450,7 +451,7 @@ public class MenuVentana extends JFrame{
 	}
 
 	/**
-	 * Este método inicializa el jSplitPane. 	
+	 * Este m?todo inicializa el jSplitPane. 	
 	 * 	
 	 * @return javax.swing.JSplitPane	
 	 */
@@ -774,7 +775,7 @@ public class MenuVentana extends JFrame{
 	}
 	
 	/**
-	 * Este método sirve para cerrar la ventana. Llamando al método adecuado de JFrame.
+	 * Este m?todo sirve para cerrar la ventana. Llamando al m?todo adecuado de JFrame.
 	 */
 	private void cerrarVentana(){
 		this.dispose();

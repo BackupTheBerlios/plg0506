@@ -385,6 +385,7 @@ public class Sintactico{
 	
 	public Par LFParams() throws Exception{
 		Par a = new Par();
+		a.setT(new TablaSimbolos())	;
 		Par atrDeLFParams = null;
 		
 		Par atrDeFParam = FParam();
@@ -414,6 +415,8 @@ public class Sintactico{
 		else {
 			throw new Exception("ERROR: Los parametros han de ir separados por comas.");
 		}
+		if (a.getT() == null)
+			System.out.println("ES NULL");
 		a.getT().agnadeID(atrDeFParam.getId(), atrDeFParam.getProps(),atrDeFParam.getClase(),atrDeFParam.getDir(),nivel);
 		return a;
 	}
@@ -482,20 +485,25 @@ public class Sintactico{
 		Par a = new Par();
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
+			System.out.println("Leo EOF");
 			a.getProps().setTipo(""); 
 		}
 		if (lexico.reconoce(Tipos.TKLLCI)){
+			System.out.println("Leo Llave de Cierre");
 			a.getProps().setTipo(""); 
 		}
 		else{
 			if (!lexico.reconoce(Tipos.TKPYCOMA)){
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
+			System.out.println("Llamo a Is Recursivamente");
 			atrDeIs = Is();
+			System.out.println("Vuelvo de Is_1, a Is_0.");
 			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
 			}
 			else {
+				System.out.println("Hemos terminado");
 				a.getProps().setTipo("");
 			}
 			return a;	
@@ -510,6 +518,7 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Par I() throws Exception{
+		System.out.println("\n\nHacemos cosas.");
 		Par atrDeIns;
 		Token tk = lexico.lexer();
 		//System.out.println("En I leemos" + tk.getLexema());
@@ -782,6 +791,7 @@ public class Sintactico{
 
 	public Par IAsig() throws Exception{
 		
+		System.out.print("Entramos en IAsig ----->");
 		Par  atrDeExpC = new Par();
 		Par a = new Par();
 		boolean errDeIAsig = false; 
@@ -790,6 +800,7 @@ public class Sintactico{
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
+			System.out.println("Y Hemos le?do: " + lex);
 			if (! TS.getClase(lex).equals("var")){
 				throw new Exception ("ERROR: Solo se puede asignar a variables en modo lectura - escritura");
 			}
