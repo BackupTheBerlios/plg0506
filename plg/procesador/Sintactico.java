@@ -532,8 +532,17 @@ Is.etqh = Decs.etq
 		if (atrDeTipo.getProps() == null){
 			System.out.println("Los props despues de TIpo son null");
 		}
-		a.getProps().setTipo(atrDeTipo.getProps().getTipo());
-		a.getProps().setTbase(new Atributos());
+		/* 
+		 * Anyadido por Jonas. Domingo 11, 18:39
+		 * 
+		 */
+		a.setProps(atrDeTipo.getProps());
+		
+		/*
+		 * Comentado por Jonas. Domingo 11, 18:39
+		 * a.getProps().setTipo(atrDeTipo.getProps().getTipo());
+		 * a.getProps().setTbase(new Atributos());
+		 */
 		a.setNivel(nivel);
 		return a;
 	}
