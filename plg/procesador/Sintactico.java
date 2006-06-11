@@ -39,13 +39,13 @@ public class Sintactico{
 	int nivel;
 	int nmax;
 	
-	private static int longApilaRet = 5;
+	//private static int longApilaRet = 5;
 	private static int longPrologo = 13;
 	private static int longEpilogo = 12;
-	private static int longInicioPaso = 3;
-	private static int longFinPaso = 1;
-	private static int longAccesoVar = 4;
-	private static int longInicio = 4;
+	//private static int longInicioPaso = 3;
+	//private static int longFinPaso = 1;
+	//private static int longAccesoVar = 4;
+	//private static int longInicio = 4;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -96,16 +96,6 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	public boolean Prog() throws Exception{
-		/*
-		 * 	Prog ::= Decs && Is
-Proc.cod = inicio(Decs.n,Decs.dir) ||
-ir-a(Decs.etq) || Decs.cod ||
-Is.cod || stop
-Is.etqh = Is.etq
-Decs.etqh = longInicio + 1
-Is.etqh = Decs.etq
-		 */
-		
 		etq = 0;
 		dir = 0;
 		nivel = 0;
@@ -115,9 +105,6 @@ Is.etqh = Decs.etq
 		Par atrDeDecs = Decs();
 		codigo.parchea(etqs,etq);
 		Par atrDeIs = Is();
-		
-		//System.out.println("El error de Decs es "+atrDeDecs.getProps().getTipo().equals("error"));
-		//System.out.println("El error de Is es "+atrDeIs.getProps().getTipo().equals("error"));
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		return errDeProg;
 	}
@@ -131,27 +118,12 @@ Is.etqh = Decs.etq
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Par Decs() throws Exception{
-	/*
-	 * Decs ::= Decs; Dec
-	 * Decso.pend = Decs1.pend ??? Dec.pend ???	(si Dec.props.clase = tipo entonces {Dec.id} si no ??? ) 
-	 * 
-	 * Decs ::= Dec
-	 * Decs.pend = Dec.pend ??? (si Dec.props.clase = tipo entonces {Dec.id} 	si no ??????)
-	 */
 		Par a = new Par();
-		System.out.println("Estoy en Decs y llamo a dec");
+		//System.out.println("Estoy en Decs y llamo a dec");
 		Par atrDeDec = Dec(); 
-		System.out.println("A?ado");
-		//if (nivel == 0){
-			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
-			TS.muestra();
-		//}
-		/*else{
-			System.out.println("hola");
-			atrDeDec.getT().agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
-			System.out.println("La hija:");
-			atrDeDec.getT().muestra();
-		}*/
+		//System.out.println("A?ado");
+		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+		TS.muestra();
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
 		}
@@ -161,7 +133,6 @@ Is.etqh = Decs.etq
 		Token tk = lexico.getNextToken();
 		if (tk.equals(new Token("#", Tipos.TKCUA))){
 			lexico.lexer(); //consumimos #
-			System.out.println("salgo de decs");
 			return a;
 		}
 		else{
@@ -171,12 +142,10 @@ Is.etqh = Decs.etq
 				if (atrDeDecs.getProps().getTipo().equals("error")){
 					a.getProps().setTipo("error");
 				}
-				System.out.println("salgo de decs2");
 				return a;
 			}
 			else{
 				a.getProps().setTipo("error");
-				System.out.println("salgo de decs3");
 				return a;
 			}
 		}
@@ -189,17 +158,9 @@ Is.etqh = Decs.etq
 	 * @throws Exception
 	 */
 	public Par Dec() throws Exception{
-		/*
-		 * Dec ::= DecTipo 
-		 * Dec.pend = DecTipo.pend
-		 * 
-		 * Dec ::= DecVar
-		 * Dec.pend = DecVar.pend
-		 */
 		Par a = new Par();
 		Token tk = lexico.getNextToken();
 		if (tk.equals(new Token("tipo", Tipos.TKTIPO))){
-			System.out.println("Estoy en dec y llamo a dectipo");
 			Par atrDeDecTipo = DecTipo();
 			a.setId(atrDeDecTipo.getId());
 			a.setProps(atrDeDecTipo.getProps());
@@ -208,7 +169,6 @@ Is.etqh = Decs.etq
 			return a;
 		}
 		else if (tk.equals(new Token("proc", Tipos.TKPROC))){
-			System.out.println("Estoy en dec y llamo a dec proc");
 			Par atrDeDecProc = DecProc();
 			a.setId(atrDeDecProc.getId());
 			a.setProps(atrDeDecProc.getProps());
@@ -216,13 +176,9 @@ Is.etqh = Decs.etq
 			a.setDir(0);
 			a.setNivel(atrDeDecProc.getNivel());
 			a.setT(atrDeDecProc.getT());
-			System.out.println("La ts hija");
-			atrDeDecProc.getT().muestra();
-			System.out.println("salgo de dec");
 			return a;
 		}
 		else{	
-			System.out.println("Estoy en dec y llamo a decvar");
 			Par atrDeDecVar = DecVar();
 			a.setId(atrDeDecVar.getId());
 			a.setProps(atrDeDecVar.getProps());
@@ -235,12 +191,10 @@ Is.etqh = Decs.etq
 	public Par DecProc() throws Exception{
 		Par a = new Par();
 		Token tk = lexico.lexer(); // consumimos "proc"
-		System.out.println("En decProc proc:" + tk.getLexema());
 		if (! lexico.reconoce(Tipos.TKPROC)){
 			throw new Exception("ERROR: Deberiamos haber encontrado 'proc'.");
 		}
 		tk = lexico.lexer(); // Consumimos el iden
-		System.out.println("En DecProc leemos iden: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception ("ERROR: Necesitas un identificador");
 		}
@@ -252,8 +206,6 @@ Is.etqh = Decs.etq
 		}
 		Par atrDeFParams = FParams();
 		TablaSimbolos tsAux = new TablaSimbolos(TS.getTabla());
-		System.out.println("En la llamada");
-		System.out.println(atrDeFParams.getProps().getParams());
 		TS = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
 		a.setT(TS);
 		a.getProps().setTam(0);
@@ -261,25 +213,19 @@ Is.etqh = Decs.etq
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
 		a.setNivel(nivel);
 		tk = lexico.lexer();
-		System.out.println("En decProc {:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLAP)){
 			throw new Exception("ERROR: Falta una llave de apertura");
 		}
-		Par atrDeBloque = Bloque();
-		System.out.println("En decProc }:" + tk.getLexema());
+		Bloque();
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
 		nivel --;
 		TS = tsAux;
-		System.out.println("salgo de decproc");
 		return a;
 	}
 	
 	public Par DecTipo() throws Exception{
-		/*	
-		 * Dec.pend = DecTipo.pend
-		 */
 		Par a = new Par();
 		lexico.lexer(); // consumimos tipo
 		Token tk = lexico.lexer();
@@ -298,6 +244,7 @@ Is.etqh = Decs.etq
 		a.getProps().setTbase(atrDeTipo.getProps());
 		return a;
 	}	
+	
 	/**
 	 * Procesa una declaracisn de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
 	 * y su nombre, de la forma: 
@@ -329,9 +276,6 @@ Is.etqh = Decs.etq
 	}	
 	
 	public Par Tipo() throws Exception{
-		/* Tipo ::= pointer Tipo
-		Tipoo.pend = Tipo1.pend
-		 */
 		Par a = new Par();
 		Token tk = lexico.lexer(); // cosumimos int, bool, iden, array o pointer
 		if (lexico.reconoce(Tipos.TKINT) || lexico.reconoce(Tipos.TKBOOL)){
@@ -388,22 +332,17 @@ Is.etqh = Decs.etq
 		Par a  = new Par();
 		a.setT(new TablaSimbolos());
 		Token tk = lexico.lexer();//consumimos ( 
-		System.out.println("En FParams ( leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
 		}
 		tk = lexico.getNextToken();
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
 			lexico.lexer();
-			System.out.println("En FParams ) leemos: " + tk.getLexema());
-			System.out.println("Metodo sin parametros");
 			a.getProps().setElems(0);
 			return a;
 		}
 		Par atrDeLFParams = LFParams();
-		System.out.println("VOlvemos de LFParams()");
 		tk = lexico.lexer(); //consumimos )
-		System.out.println("En fparams ) : " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPCI)){
 			throw new Exception ("ERROR: Necesitas un )");
 		}
@@ -416,30 +355,22 @@ Is.etqh = Decs.etq
 		Par a  = new Par();
 		a.setT(new TablaSimbolos());
 		Token tk = lexico.lexer();//consumimos ( 
-		System.out.println("En AParams ( leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
 		}
 		tk = lexico.getNextToken();
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
 			lexico.lexer();
-			System.out.println("En AParams ) leemos: " + tk.getLexema());
-			System.out.println("Metodo sin parametros");
 			a.getProps().setElems(0);
 			return a;
 		}
 		Par atrDeLAParams = LAParams();
-		System.out.println("VOlvemos de LAParams()");
 		tk = lexico.lexer(); //consumimos )
-		System.out.println("En Aparams ) : " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPCI)){
 			throw new Exception ("ERROR: Necesitas un )");
 		}
 		a.getProps().setParams(atrDeLAParams.getProps().getParams());
 		a.getProps().setElems(atrDeLAParams.getProps().getElems());
-		/*if (! (atrDeLAParams.getProps().getParams().size() == a.getProps().getParams().size())){
-			throw new Exception ("ERROR: El nmero de parmetros no se corresponde");
-		}*/
 		return a;
 	}
 	
@@ -450,23 +381,17 @@ Is.etqh = Decs.etq
 		Par atrDeLFParams = null;
 		
 		Par atrDeFParam = FParam();
-		System.out.println("Volvemos de FParam. Se lo asignamos a 'a'");
 		a.getProps().getParams().add(atrDeFParam);
 		a.getProps().setElems(a.getProps().getElems() + 1);
-		System.out.println("Ya lo hemos asignado.");
 		
 		Token tk = lexico.getNextToken();
 		if (tk.getCategoriaLexica() == Tipos.TKPCI){
-			System.out.println("Leo el ) y vuelvo.");
 			return a;
 		}
 		tk = lexico.lexer(); // Consumimos ","
-		System.out.println("En lfparams , : " + tk.getLexema());
 		
 		if (lexico.reconoce(Tipos.TKCOMA)){
-			// Volvemos a llamar a LFParams
 			atrDeLFParams = LFParams();
-			System.out.println("Antes del addAll");
 			if (! atrDeLFParams.getProps().getParams().isEmpty()){
 				a.getProps().getParams().addAll(atrDeLFParams.getProps().getParams());
 				a.setT(atrDeLFParams.getT());
@@ -476,8 +401,6 @@ Is.etqh = Decs.etq
 		else {
 			throw new Exception("ERROR: Los parametros han de ir separados por comas.");
 		}
-		if (a.getT() == null)
-			System.out.println("ES NULL");
 		a.getT().agnadeID(atrDeFParam.getId(), atrDeFParam.getProps(),atrDeFParam.getClase(),atrDeFParam.getDir(),nivel);
 		return a;
 	}
@@ -488,23 +411,17 @@ Is.etqh = Decs.etq
 		Par atrDeLAParams = null;
 		
 		Par atrDeLAParam = LAParam();
-		System.out.println("Volvemos de LAParam. Se lo asignamos a 'a'");
 		a.getProps().getParams().add(atrDeLAParam);
 		a.getProps().setElems(a.getProps().getElems() + 1);
-		System.out.println("Ya lo hemos asignado.");
 		
 		Token tk = lexico.getNextToken();
 		if (tk.getCategoriaLexica() == Tipos.TKPCI){
-			System.out.println("Leo el ) y vuelvo.");
 			return a;
 		}
 		tk = lexico.lexer(); // Consumimos ","
-		System.out.println("En laparams , : " + tk.getLexema());
 		
 		if (lexico.reconoce(Tipos.TKCOMA)){
-			// Volvemos a llamar a LFParams
 			atrDeLAParams = LAParams();
-			System.out.println("Antes del addAll");
 			if (! atrDeLAParams.getProps().getParams().isEmpty()){
 				a.getProps().getParams().addAll(atrDeLAParams.getProps().getParams());
 				a.setT(atrDeLAParams.getT());
@@ -514,8 +431,6 @@ Is.etqh = Decs.etq
 		else {
 			throw new Exception("ERROR: Los parametros han de ir separados por comas.");
 		}
-		if (a.getT() == null)
-			System.out.println("ES NULL");
 		a.getT().agnadeID(atrDeLAParam.getId(), atrDeLAParam.getProps(),atrDeLAParam.getClase(),atrDeLAParam.getDir(),nivel);
 		return a;
 	}
@@ -524,44 +439,32 @@ Is.etqh = Decs.etq
 		Par a  = new Par();
 		Par atrDeTipo = Tipo();
 		Token tk = lexico.lexer();
-		System.out.println("En fparam iden : " + tk.getLexema());
 		if(! lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception("ERROR: falta el identificador del parametro");
 		}
 		a.setId(tk.getLexema());
 		if (atrDeTipo.getProps() == null){
-			System.out.println("Los props despues de TIpo son null");
 		}
-		/* 
-		 * Anyadido por Jonas. Domingo 11, 18:39
-		 * 
-		 */
 		a.setProps(atrDeTipo.getProps());
 		
-		/*
-		 * Comentado por Jonas. Domingo 11, 18:39
-		 * a.getProps().setTipo(atrDeTipo.getProps().getTipo());
-		 * a.getProps().setTbase(new Atributos());
-		 */
 		a.setNivel(nivel);
 		return a;
 	}
 	
 	public Par LAParam() throws Exception{
 		Par a  = new Par();
-		//Par atr = ExpC();
 		a = ExpC ();
 		
 		
 		/* Dejo comentado lo que haca FParam creo que con LAParam, esto ya sera suficiente
 		 * Token tk = lexico.lexer();
-		System.out.println("En aparam iden : " + tk.getLexema());
+		//System.out.println("En aparam iden : " + tk.getLexema());
 		 * if(! lexico.reconoce(Tipos.TKIDEN)){
 			throw new Exception("ERROR: falta el identificador del parametro");
 		}
 		a.setId(tk.getLexema());
 		if (atr.getProps() == null){
-			System.out.println("Los props despues de ExpC son null");
+			//System.out.println("Los props despues de ExpC son null");
 		}
 		a.getProps().setTipo(atr.getProps().getTipo());
 		a.getProps().setTbase(new Atributos());
@@ -579,10 +482,8 @@ Is.etqh = Decs.etq
 		etq = etqs1 + longEpilogo +1;
 		int auxDir = dir;
 		Token tk = lexico.getNextToken();
-		System.out.println("En bloque # : " + tk.getLexema());
 		Par atrDeDecs;
 		if(tk.getCategoriaLexica()!=Tipos.TKCUA){
-			System.out.println("Tenemos decsen bloque");
 			atrDeDecs = Decs();
 		}
 		else{
@@ -593,10 +494,7 @@ Is.etqh = Decs.etq
 		int tamlocales = dir - auxDir;
 		codigo.prologo(nivel, tamlocales);
 		codigo.genIns("ir-a",inicio);
-		TS.muestra();
-		System.out.println("En Bloque me voy a Is");
 		Par atrDeIs = Is();
-		System.out.println("En Bloque vuelvo de Is");
 		codigo.epilogo(nivel);
 		codigo.genIns("ir-ind");
 		dir = auxDir;
@@ -604,7 +502,6 @@ Is.etqh = Decs.etq
 		if (err){
 			throw new Exception ("ERROR: porcedimietno erroneo");
 		}
-		System.out.println("salgo de bloque");
 		return a;
 	}
 	/**
@@ -621,25 +518,20 @@ Is.etqh = Decs.etq
 		Par a = new Par();
 		atrDeI = I();
 		if (lexico.reconoce(Tipos.TKFF)){
-			System.out.println("Leo EOF");
 			a.getProps().setTipo(""); 
 		}
 		else if (lexico.reconoce(Tipos.TKLLCI)){
-			System.out.println("Leo Llave de Cierre");
 			a.getProps().setTipo(""); 
 		}
 		else{
 			if (!lexico.reconoce(Tipos.TKPYCOMA)){
 				throw new Exception("ERROR: Secuencia de Instrucciones Incorrecta. Cada instruccion ha de ir separada de la siguiente por un \";\"");
 			}
-			System.out.println("Llamo a Is Recursivamente");
 			atrDeIs = Is();
-			System.out.println("Vuelvo de Is_1, a Is_0.");
 			if (atrDeI.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
 			}
 			else {
-				System.out.println("Hemos terminado");
 				a.getProps().setTipo("");
 			}
 			return a;	
@@ -654,10 +546,8 @@ Is.etqh = Decs.etq
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public Par I() throws Exception{
-		System.out.println("\n\nHacemos cosas.");
 		Par atrDeIns;
-		Token tk = lexico.lexer();
-		System.out.println("En I leemos" + tk.getLexema());
+		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
 			atrDeIns = ICompuesta();
 		}
@@ -675,12 +565,9 @@ Is.etqh = Decs.etq
 				atrDeIns = IDel();
 			}
 			else{
-					atrDeIns = IAsig();
-					System.out.println("Al final de IAsig tenemos un: " +lexico.getLookahead().getLexema());
-			}	
-				
+				atrDeIns = IAsig();
+			}		
 		}
-		System.out.println("Salgo de I");
 		return atrDeIns;
 	}
 
@@ -691,12 +578,10 @@ Is.etqh = Decs.etq
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
 		if (lexico.reconoce(Tipos.TKLLCI)){
-			System.out.println("Leo Llave de Cierre");
 			atrDeIns.getProps().setTipo("");
 			return atrDeIns;
 		}
-		Token tk = lexico.lexer();
-		//System.out.println("En ICompuesta leemos" + tk.getLexema());
+		lexico.lexer();
 		if (! (lexico.reconoce(Tipos.TKPYCOMA))){
 			throw new Exception("ERROR: end sin ;. El formato correcto es \"begin ... end;\".");
 		}
@@ -718,7 +603,6 @@ Is.etqh = Decs.etq
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
 		if (lexico.reconoce(Tipos.TKLLCI)){
-			System.out.println("Leo Llave de Cierre");
 			a.getProps().setTipo("");
 			return a;
 		}
@@ -728,7 +612,6 @@ Is.etqh = Decs.etq
 			tk = lexico.getNextToken();
 			if (tk.equals(new Token("end",Tipos.TKEND))){
 				tk = lexico.lexer();
-				//System.out.println("En IsOpc leemos" + tk.getLexema());
 				a = atrDeI;
 				return a;
 			}
@@ -773,12 +656,10 @@ Is.etqh = Decs.etq
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
-		//System.out.println("EXPC: Tipo es " + atrDeExpC);
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
 		if (lexico.reconoce(Tipos.TKLLCI)){
-			System.out.println("Leo Llave de Cierre");
 			a.getProps().setTipo("");
 			return a;
 		}
@@ -816,7 +697,6 @@ Is.etqh = Decs.etq
 				return atrDeIns; //terminamos con exito
 			}
 			tk = lexico.lexer();
-			//System.out.println("En PElse leemos" + tk.getLexema());
 			atrDeIns = I();
 		}
 		else{
@@ -878,8 +758,6 @@ Is.etqh = Decs.etq
 	public Par INew() throws Exception{
 		
 		Token tk = lexico.lexer(); //consumimo.s el iden
-		//System.out.println("En INew leemos" + tk.getLexema());
-		
 		Par a = new Par();
 		a.setId(tk.getLexema());
 		a.setProps(TS.getProps(tk.getLexema()));
@@ -898,14 +776,11 @@ Is.etqh = Decs.etq
 			a.getProps().setTipo("error");
 		}
 		tk = lexico.lexer();
-		//System.out.println("En INew al final leemos" + tk.getLexema());
-		
 		return a;
 	}
 	
 	public Par IDel() throws Exception{
 		Token tk = lexico.lexer(); //consumimo.s el iden
-		//System.out.println("En IDel leemos" + tk.getLexema());
 		Par a = new Par();
 		a.setId(tk.getLexema());
 		a.setProps(TS.getProps(tk.getLexema()));
@@ -924,9 +799,7 @@ Is.etqh = Decs.etq
 		else {
 			a.getProps().setTipo("error");
 		}
-		tk = lexico.lexer();
-		//System.out.println("En IDel al final leemos" + tk.getLexema());
-		
+		tk = lexico.lexer();	
 		return a;
 	}
 	
@@ -945,7 +818,6 @@ Is.etqh = Decs.etq
 
 	public Par IAsig() throws Exception{
 		
-		System.out.println("Entramos en IAsig ----->");
 		Par  atrDeExpC = new Par();
 		Par a = new Par();
 		boolean errDeIAsig = false; 
@@ -953,26 +825,18 @@ Is.etqh = Decs.etq
 		Token tk;
 		tk = lexico.getLookahead();
 		if (lexico.reconoce(Tipos.TKLLCI)){
-			System.out.println("Leo Llave de Cierre");
 			a.getProps().setTipo("");
 			return a;
 		}		
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			System.out.println("Y Hemos le?do: " + lex);
 			if (! TS.getClase(lex).equals("var")){
 				throw new Exception ("ERROR: Solo se puede asignar a variables en modo lectura - escritura");
 			}
 			a = Mem();
 			tk = lexico.lexer(); //consumimos :=
-			//System.out.println("En IAsig leemos" + tk.getLexema());
-			
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
-				//System.out.println("Tipo de var: "+ a.getProps().getTipo());
-				//System.out.println("Tipo de var con ref: "+ TS.ref(a.getProps()).getTipo());
-				//System.out.println("Tipo de ExpC: "+ atrDeExpC.getProps().getTipo());
-				
 				boolean tiposIguales = atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo());
 				errDeIAsig = (!(tiposIguales) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
 				if (!(TS.existeID(lex))){
@@ -1024,9 +888,6 @@ Is.etqh = Decs.etq
 		Par a = new Par();
 		atrDeRExpC = RExpC();
 		
-		//System.out.println("El tipo de Exp es: " + atrDeExp.getProps().getTipo());
-		//System.out.println("El tipo de RExpC es: " + atrDeRExpC.getProps().getTipo());
-		
 		if ( atrDeExp.getProps().getTipo().equals(atrDeRExpC.getProps().getTipo())){
 			if (atrDeExp.getProps().getTipo().equals("int"))
 					a.getProps().setTipo("bool");
@@ -1042,10 +903,6 @@ Is.etqh = Decs.etq
 				a.getProps().setTipo("error");
 			}
 		}
-		
-		//System.out.println("El tipo en expc es :");
-		//System.out.println(a.getProps().getTipo());
-		
 		return a;
 	}
 	
@@ -1103,9 +960,6 @@ Is.etqh = Decs.etq
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
 		
-		//System.out.println("El tipo de Term es: " + atrDeTerm.getProps().getTipo());
-		//System.out.println("El tipo de RExp es: " + atrDeRExp.getProps().getTipo());
-		
 		if ( atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo())){
 			if (atrDeTerm.getProps().getTipo().equals("int"))
 					a.getProps().setTipo("int");
@@ -1120,9 +974,6 @@ Is.etqh = Decs.etq
 				a.getProps().setTipo("error");
 			}
 		}
-		
-		//System.out.println("El tipo en exp es :");
-		//System.out.println(a.getProps().getTipo());
 		
 		return a;
 	}
@@ -1209,9 +1060,6 @@ Is.etqh = Decs.etq
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
 		
-		//System.out.println("El tipo de Fact es: " + atrDeFact.getProps().getTipo());
-		//System.out.println("El tipo de RTerm es: " + atrDeRTerm.getProps().getTipo());
-		
 		if ( atrDeFact.getProps().getTipo().compareTo(atrDeRTerm.getProps().getTipo()) == 0){
 			if (atrDeFact.getProps().getTipo().compareTo("int") == 0)
 					a.getProps().setTipo("int");
@@ -1226,9 +1074,6 @@ Is.etqh = Decs.etq
 				a.getProps().setTipo("error");
 			}
 		}
-		
-		//System.out.println("El tipo en term es :");
-		//System.out.println(a.getProps().getTipo());
 		
 		return a;
 	}
@@ -1248,7 +1093,6 @@ Is.etqh = Decs.etq
 			return a;
 		}
 		Token tk = lexico.lexer();
-		//System.out.println("En RTerm leemos" + tk.getLexema());
 		
 		if (lexico.reconoce(Tipos.TKFF)){
 			a.getProps().setTipo("error");
@@ -1318,7 +1162,6 @@ Is.etqh = Decs.etq
 		Par atrDeFact;
 		Token tk;
 		tk = lexico.lexer();
-		//System.out.println("En Fact leemos " + tk.getLexema());
 		
 		if (lexico.reconoce(Tipos.TKNUM)){
 			a.getProps().setTipo("int");
@@ -1356,18 +1199,10 @@ Is.etqh = Decs.etq
 		}
 		else {
 			if (lexico.reconoce(Tipos.TKIDEN)){
-				//System.out.println("En fact reconocemos un iden vamos a Mem");
 				a = Mem();
 				codigo.genIns("apila-ind");
 				etq ++;
 			}
-			/*else if (lexico.reconoce(Tipos.TKMEMDIR)){
-				tk = lexico.lexer();
-				System.out.println("En Memdir leemos" + tk.getLexema());
-				
-				codigo.genIns("apila",TS.getDir(tk.getLexema()));
-				etq ++;
-			}*/
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
 					atrDeExpC = ExpC();
@@ -1378,7 +1213,7 @@ Is.etqh = Decs.etq
 						a.getProps().setTipo("error");
 					}
 				}
-				else{ //Paloma y Silvia
+				else{ 
 					if (lexico.getNextToken().getCategoriaLexica()== Tipos.TKCCI){
 						a.getProps().setTipo("");
 						return a;
@@ -1390,9 +1225,6 @@ Is.etqh = Decs.etq
 			}
 		}
 		
-		//System.out.println("El tipo en fact es :");
-		//System.out.println(a.getProps().getTipo());
-		
 		return a;
 	}
 	
@@ -1402,7 +1234,6 @@ Is.etqh = Decs.etq
 	 * @throws Exception En caso de producirse una excepci?n, ?sta se propaga.
 	 */
 	public Par Mem() throws Exception{
-		//System.out.println("Pasamos por Mem");
 		
 		Atributos atrDeRMem = null;
 		Par a = new Par();
@@ -1414,8 +1245,6 @@ Is.etqh = Decs.etq
 			throw new Exception ("ERROR: Deberiamos haber leido un iden.");
 		}
 		a.setProps(new Atributos(TS.getProps(tk.getLexema())));
-		//System.out.println("El tipo en mem es :");
-		//System.out.println(a.getProps().getTipo());
 		a.setId(tk.getLexema());
 		a.setClase(TS.getClase(tk.getLexema()));
 		a.setDir(TS.getDir(tk.getLexema()));
@@ -1439,9 +1268,6 @@ Is.etqh = Decs.etq
 		
 		if (tk.getCategoriaLexica() == Tipos.TKPUNT){
 			tk = lexico.lexer();
-			//System.out.println("En RMem leemos" + tk.getLexema());
-			
-			// Resolvemos el puntero:
 			codigo.genIns("apila-ind");
 			etq ++;
 			if (a.getTbase().getTbase() == null)
@@ -1451,8 +1277,7 @@ Is.etqh = Decs.etq
 		} 
 		else if (tk.getCategoriaLexica() == Tipos.TKCAP){
 			tk = lexico.lexer();
-			//System.out.println("En RMem [ leemos" + tk.getLexema());
-			Par atrDeExp = Exp();
+			Exp();
 			tk = lexico.lexer(); // consumo ]
 			
 			if (lexico.reconoce(Tipos.TKCCI)){
@@ -1565,12 +1390,12 @@ Is.etqh = Decs.etq
 		etq ++;
 	}
 	
-	private String sacaTipo(Atributos atr){
+	/*private String sacaTipo(Atributos atr){
 		if (atr.getTbase() == null){
 			return atr.getTipo();
 		}
 		else {
 			return sacaTipo(atr.getTbase());
 		}
-	}
+	}*/
 }
