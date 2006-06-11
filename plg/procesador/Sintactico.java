@@ -127,14 +127,17 @@ public class Sintactico{
 	 * Decs.pend = Dec.pend ??? (si Dec.props.clase = tipo entonces {Dec.id} 	si no ??????)
 	 */
 		Par a = new Par();
+		System.out.println("Estoy en Decs y llamo a dec");
 		Par atrDeDec = Dec(); 
+		System.out.println("Añado");
 		if (nivel == 0){
 			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
 			TS.muestra();
 		}
 		else{
 			atrDeDec.getT().agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
-			TS.muestra();
+			System.out.println("La hija:");
+			atrDeDec.getT().muestra();
 		}
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
@@ -180,6 +183,7 @@ public class Sintactico{
 		Par a = new Par();
 		Token tk = lexico.getNextToken();
 		if (tk.equals(new Token("tipo", Tipos.TKTIPO))){
+			System.out.println("Estoy en dec y llamo a dectipo");
 			Par atrDeDecTipo = DecTipo();
 			a.setId(atrDeDecTipo.getId());
 			a.setProps(atrDeDecTipo.getProps());
@@ -188,6 +192,7 @@ public class Sintactico{
 			return a;
 		}
 		else if (tk.equals(new Token("proc", Tipos.TKPROC))){
+			System.out.println("Estoy en dec y llamo a dec proc");
 			Par atrDeDecProc = DecProc();
 			a.setId(atrDeDecProc.getId());
 			a.setProps(atrDeDecProc.getProps());
@@ -200,6 +205,7 @@ public class Sintactico{
 			return a;
 		}
 		else{	
+			System.out.println("Estoy en dec y llamo a decvar");
 			Par atrDeDecVar = DecVar();
 			a.setId(atrDeDecVar.getId());
 			a.setProps(atrDeDecVar.getProps());
@@ -230,7 +236,7 @@ public class Sintactico{
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
-		/*DEBUGGING
+		a.setNivel(nivel);
 		tk = lexico.lexer();
 		System.out.println("En decProc {:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLAP)){
@@ -242,7 +248,6 @@ public class Sintactico{
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
-		*/
 		nivel --;
 		return a;
 	}
@@ -451,6 +456,7 @@ public class Sintactico{
 		System.out.println("En bloque # : " + tk.getLexema());
 		Par atrDeDecs;
 		if(tk.getCategoriaLexica()!=Tipos.TKCUA){
+			System.out.println("Tenemos decsen bloque");
 			atrDeDecs = Decs();
 		}
 		else{
@@ -461,7 +467,9 @@ public class Sintactico{
 		int tamlocales = dir - auxDir;
 		codigo.prologo(nivel, tamlocales);
 		codigo.genIns("ir-a",inicio);
+		System.out.println("En Bloque me voy a Is");
 		Par atrDeIs = Is();
+		System.out.println("En Bloque vuelvo de Is");
 		codigo.epilogo(nivel);
 		codigo.genIns("ir-ind");
 		dir = auxDir;
