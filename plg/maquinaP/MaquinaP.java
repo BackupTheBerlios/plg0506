@@ -1325,8 +1325,8 @@ public class MaquinaP {
 	 *  @throws Exception
 	 */
 	public void desapila_ind() throws Exception{
-		//	Primero comprobamos que la memoria sea suficiente.
-		//Sino lo es aumentamos el tama?o del vector.
+		// Primero comprobamos que la memoria sea suficiente.
+		// Sino lo es aumentamos el tama?o del vector.
 		if (ST<1){
 			throw new Exception("ERROR: Desapila_ind. La pila no contiene los datos necesarios. \n Puede que algun puntero no este inicializado");
 		}
@@ -1379,7 +1379,8 @@ public class MaquinaP {
 			int o = ((Integer)pila.pop()).intValue(); //pop desapilar
 			int d = ((Integer)pila.pop()).intValue(); //push apilar
 			for (int i=0;i<s;i++){
-				if(d+i<Mem.size()-1){ //Mem set cambia el elemento de la posicin d+i por el elemento que le pasas. 
+				if(d+i<Mem.size()-1){ 
+					//Mem set cambia el elemento de la posicin d+i por el elemento que le pasas. 
 					//en este caso el elemento que devuelve mem.get(o+i)
 					Mem.set(d+i,Mem.get(o+i));
 				}

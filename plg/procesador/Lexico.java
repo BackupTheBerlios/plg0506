@@ -52,6 +52,7 @@ public class Lexico {
 	public int getLinea() {
 		return linea;
 	}
+	
 	/**
 	 * Mutador para el atributo de la clase linea. 
 	 * @param linea Entero que controla la lnea del cdigo donde se detecta el error.
@@ -59,6 +60,7 @@ public class Lexico {
 	public void setLinea(int linea) {
 		this.linea = linea;
 	}
+	
 	/**
 	 * Accesor para el atributo de la clase posicion. 
 	 * @return Entero que marca la posicin en la que se est leyendo dentro de una lnea.
@@ -66,6 +68,7 @@ public class Lexico {
 	public int getPosicion() {
 		return posicion;
 	}
+	
 	/**
 	 * Mutador para el atributo de la clase posicion. 
 	 * @param posicion Entero que marcara la posicin en la que se est leyendo dentro de una lnea.
@@ -81,6 +84,7 @@ public class Lexico {
 	public Token getLookahead() {
 		return lookahead;
 	}
+	
 	/**
 	 * Mutador para el atributo de la clase lookahead. 
 	 * @param lookahead Token para modificar el token actual que almacena los caracteres de preanlisis.
@@ -88,6 +92,7 @@ public class Lexico {
 	public void setLookahead(Token lookahead) {
 		this.lookahead = lookahead;
 	}
+	
 	/**
 	 * Accesor para el atributo de la clase fuente. 
 	 * @return RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar
@@ -95,6 +100,7 @@ public class Lexico {
 	public RandomAccessFile getFuente() {
 		return fuente;
 	}
+	
 	/**
 	 * Mutador para el atributo de la clase fuente. 
 	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar
@@ -973,10 +979,10 @@ public class Lexico {
 								return new Token (aux,Tipos.TKIDEN);
 							}
 						}
-						/*
-						 * Si detectamos 'p' hay que discernir si es 'proc', la palabra reservada 'pointer' o es un identificador.
-						 * Para leer identificadores, usamos leerCaracter().  
-						 */
+			/*
+			 * Si detectamos 'p' hay que discernir si es 'proc', la palabra reservada 'pointer' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
 			case 'p':	a = (char)fuente.read();
 						posicion ++;
 						if (a =='r'){

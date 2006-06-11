@@ -1,13 +1,13 @@
 
 package procesador; 
 /**
- * La clase <B>Token</B> define los atributos y métodos relacionados con los token que usan nuestro lenguaje.
+ * La clase <B>Token</B> define los atributos y mtodos relacionados con los token que usan nuestro lenguaje.
  * 
  * <P>Cuenta con los siguientes atributos:
- * <UL><LI><CODE>categoriaLexica:</CODE> entero que indica a que categoría léxica pertenece el token.</LI>
+ * <UL><LI><CODE>categoriaLexica:</CODE> entero que indica a que categora lxica pertenece el token.</LI>
  * <LI><CODE>lexema:</CODE> string que representa la parte lex del Token.</LI></UL></P>
  * 
- * @author Paloma de la Fuente, Jonás Andradas, Leticia García y Silvia Martín
+ * @author Paloma de la Fuente, Jons Andradas, Leticia Garca y Silvia Martn
  *
  */
 public class Token {
@@ -22,7 +22,7 @@ public class Token {
 	private String lexema;
 	
 	/**
-	 * Constructor de la clase sin parametros. Inicializa lexema a vacío y categoría léxica a un valor que no indica nada.
+	 * Constructor de la clase sin parametros. Inicializa lexema a vaco y categora lxica a un valor que no indica nada.
 	 */
 	public Token() {
 		lexema = "";
@@ -43,18 +43,20 @@ public class Token {
 
 	/**
 	 * Accesor el atributo de la clase categoriaLexica.
-	 * @return Entero que indica a que categoría léxica pertenece el token.
+	 * @return Entero que indica a que categora lxica pertenece el token.
 	 */
 	public int getCategoriaLexica() {
 		return categoriaLexica;
 	}
+	
 	/**
 	 * Mutador el atributo de la clase categoriaLexica.
-	 * @param categoriaLexica Entero que indica a que categoría léxica pertenece el token.
+	 * @param categoriaLexica Entero que indica a que categora lxica pertenece el token.
 	 */
 	public void setCategoriaLexica(int categoriaLexica) {
 		this.categoriaLexica = categoriaLexica;
 	}
+	
 	/**
 	 * Accesor el atributo de la clase lexema.
 	 * @return String que representa la parte lex del Token.
@@ -62,6 +64,7 @@ public class Token {
 	public String getLexema() {
 		return lexema;
 	}
+	
 	/**
 	 * Mutador el atributo de la clase lexema.
 	 * @param lexema String que representa la parte lex del Token.
@@ -72,7 +75,7 @@ public class Token {
 	
 	/**
 	 * 
-	 * El método equals compara el Token que recibe como parámetro consigo mismo. Son iguales si tienen la misma categoría léxica y el mismo lexema.
+	 * El mtodo equals compara el Token que recibe como parmetro consigo mismo. Son iguales si tienen la misma categora lxica y el mismo lexema.
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 * @param tk Token con el que se quiere comparar si son iguales. 
 	 * @return Booleano que nos indica la igualdad o no de los dos Tokens.
@@ -96,7 +99,7 @@ public class Token {
 	}
 	
 	/**
-	 * El método muestraToken pasa un token a String para poderlo mostrar por pantalla.
+	 * El mtodo muestraToken pasa un token a String para poderlo mostrar por pantalla.
 	 * 
 	 * @return String para poder mostrar el contenido de Token.
 	 */

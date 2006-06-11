@@ -16,7 +16,7 @@ public class Heap {
 	private int ultimo;
 	
 	/**
-	 * constructor de heap con un parámetro entero
+	 * constructor de heap con un parmetro entero
 	 */
 	public Heap(int i) {
 		super();
@@ -58,7 +58,7 @@ public class Heap {
 	}
 	
 	/**
-	 * método que coloca un elemento el montículo
+	 * mtodo que coloca un elemento el montculo
 	 * @param v
 	 * @param u
 	 */
@@ -89,7 +89,7 @@ public class Heap {
 		}
 	}
 	/**
-	 * método que reserva un tam de memoria
+	 * mtodo que reserva un tam de memoria
 	 * @param tam entero que indica la cantidad de memoria que se quiere reservar
 	 * @return
 	 * @throws Exception
@@ -124,7 +124,7 @@ public class Heap {
 	}
 	
 	/**
-	 * método que devuelve la dirección de memoria de un elemento
+	 * mtodo que devuelve la direccin de memoria de un elemento
 	 * @param d
 	 * @return
 	 * @throws Exception
@@ -139,13 +139,12 @@ public class Heap {
 	}
 	
 	/**
-	 * Método que modifica el contenido de una posición de memoria
+	 * Mtodo que modifica el contenido de una posicin de memoria
 	 * @param d
 	 * @param value
 	 * @throws Exception
 	 */
 	public void setElementAt(int d, Integer value) throws Exception{
-		System.out.println(ocupados.contains(new Integer(d)));
 		if (ocupados.contains(new Integer(d))){
 			heap.setElementAt(value,d);
 		}
