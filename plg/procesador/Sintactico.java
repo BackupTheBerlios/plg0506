@@ -252,6 +252,8 @@ Is.etqh = Decs.etq
 		}
 		Par atrDeFParams = FParams();
 		TablaSimbolos tsAux = new TablaSimbolos(TS.getTabla());
+		System.out.println("En la llamada");
+		System.out.println(atrDeFParams.getProps().getParams());
 		TS = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
 		a.setT(TS);
 		a.getProps().setTam(0);
@@ -436,7 +438,7 @@ Is.etqh = Decs.etq
 		a.getProps().setParams(atrDeLAParams.getProps().getParams());
 		a.getProps().setElems(atrDeLAParams.getProps().getElems());
 		/*if (! (atrDeLAParams.getProps().getParams().size() == a.getProps().getParams().size())){
-			throw new Exception ("ERROR: El número de parámetros no se corresponde");
+			throw new Exception ("ERROR: El nmero de parmetros no se corresponde");
 		}*/
 		return a;
 	}
@@ -542,7 +544,7 @@ Is.etqh = Decs.etq
 		a = ExpC ();
 		
 		
-		/* Dejo comentado lo que hacía FParam creo que con LAParam, esto ya sería suficiente
+		/* Dejo comentado lo que haca FParam creo que con LAParam, esto ya sera suficiente
 		 * Token tk = lexico.lexer();
 		System.out.println("En aparam iden : " + tk.getLexema());
 		 * if(! lexico.reconoce(Tipos.TKIDEN)){

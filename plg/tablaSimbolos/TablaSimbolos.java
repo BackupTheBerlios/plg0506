@@ -4,7 +4,6 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
 
-
 /**
  * La clase <B>TablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
  * <P>Esta clase cuenta con el siguiente atributo:
@@ -44,6 +43,8 @@ public class TablaSimbolos {
 	}
 
 	public TablaSimbolos(Hashtable t, Vector params) throws Exception{
+		System.out.println("En el constr. chulo: ");
+		System.out.println(params.toString());
 		this.tabla = new Hashtable();
 		Enumeration e = t.keys();
 		while (e.hasMoreElements()){ //copiamos
@@ -51,12 +52,38 @@ public class TablaSimbolos {
 			Par elem = new Par ((Par)t.get(aux));
 			this.tabla.put(elem.getId(),elem);
 		}
+		/*System.out.println("copiamos en el constructor chachi");
+		this.muestra();
 		e = t.keys();
+		System.out.println("Las claves: ");
+		System.out.println(e.toString());
 		while (e.hasMoreElements()){ //cambiamos a solo lectura los q no son par√°metros
 			Object aux = e.nextElement();
-			if ( ! params.contains(aux) ){
+			System.out.println("La clave actual:");
+			System.out.println(aux.toString());
+			System.out.println("En el constr. chulo antes de cambiar: ");
+			System.out.println(params.toString());
+			if ( ! params.contains(((Par)aux).getId()) ){
+				System.out.println("Cambiamos:" + aux.toString());
 				((Par)tabla.get(aux)).setClase("valor");
 			}
+		}*/
+		e = t.keys();
+		while (e.hasMoreElements()){ //copiamos
+			Object aux = e.nextElement();
+			if (((Par)this.tabla.get(aux)).getClase().equals("var")){
+				((Par)this.tabla.get(aux)).setClase("valor");
+			}
+		}
+		System.out.println("en el constructor chachi puestos todos a valor");
+		this.muestra();
+		for (int i = 0; i<params.size(); i++){
+			String aux = ((Par)params.elementAt(i)).getId();
+			System.out.println("Elemento es;" + aux);
+			if (this.existeID(aux)){
+				System.out.println("y est√°");
+				((Par)this.tabla.get(aux)).setClase("var");
+			}	
 		}
 		System.out.println("en el constructor chachi");
 		this.muestra();
@@ -101,9 +128,9 @@ public class TablaSimbolos {
 			return null;
 	}
 	/**
-	 * Accesor de la direcciÛn de un identificador en la tabla de sÌmbolos
+	 * Accesor de la direccin de un identificador en la tabla de smbolos
 	 * @param id String con el identificador
-	 * @return el entero con la direcciÛn
+	 * @return el entero con la direccin
 	 */
 	public int getDir(String id){
 		if (this.tabla.containsKey(id))
@@ -112,7 +139,7 @@ public class TablaSimbolos {
 			return -1;
 	}
 	/**
-	 * Accesor de la clase de un identificador en la tabla de sÌmbolos
+	 * Accesor de la clase de un identificador en la tabla de smbolos
 	 * @param id String con el identificador
 	 * @return String con el nombre de la clase del identificador
 	 */
@@ -204,8 +231,8 @@ public class TablaSimbolos {
 	 * ffun
 	 */
 	/**
-	 * MÈtodo que resuelve la referencia de tipos de identificadores.
-	 * Recibe como par·metro exp que es del tipo Atributos
+	 * Mtodo que resuelve la referencia de tipos de identificadores.
+	 * Recibe como parmetro exp que es del tipo Atributos
 	 */
 	public Atributos ref(Atributos exp){
 		//System.out.println("Dentro de REF:  " + exp);
@@ -251,7 +278,7 @@ public class TablaSimbolos {
 	 * 	devuelve e.t=ref ??? ??existeID(ts,e.id)
 	 */
 	/**
-	 * MÈtodo que devuelve el booleano correspondiente a evaluar la condiciÛn de si el Par que se le pasa como par·metro es un referencia errÛnea
+	 * Mtodo que devuelve el booleano correspondiente a evaluar la condicin de si el Par que se le pasa como parmetro es un referencia errnea
 	 */
 	public boolean referenciaErronea(Par e){
 		//System.out.println("En ref erroenes ref es");
@@ -260,7 +287,7 @@ public class TablaSimbolos {
 		return e.getProps().getTipo().equals("ref") && !this.existeID(e.getId());
 	}
 	/**
-	 * FunciÛn que devuelve el booleano correspondiente a evaluar si dos Atributos son compatibles
+	 * Funcin que devuelve el booleano correspondiente a evaluar si dos Atributos son compatibles
 	 * @param e1 Atributo
 	 * @param e2 Atributo
 	 * @return Booleano
@@ -294,7 +321,7 @@ ffun*/
 		devuelve false
 ffun */
 	/**
-	 * FunciÛn auxliar para implementar la funciÛn compatibles
+	 * Funcin auxliar para implementar la funcin compatibles
 	 * @param v Vector
 	 * @param e1 Atributos
 	 * @param e2 Atributos
