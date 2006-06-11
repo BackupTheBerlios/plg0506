@@ -3,7 +3,6 @@ package maquinaP;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.String;
-import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
