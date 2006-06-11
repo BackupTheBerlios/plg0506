@@ -148,6 +148,7 @@ public class Sintactico{
 		Token tk = lexico.getNextToken();
 		if (tk.equals(new Token("#", Tipos.TKCUA))){
 			lexico.lexer(); //consumimos #
+			System.out.println("salgo de decs");
 			return a;
 		}
 		else{
@@ -157,10 +158,12 @@ public class Sintactico{
 				if (atrDeDecs.getProps().getTipo().equals("error")){
 					a.getProps().setTipo("error");
 				}
+				System.out.println("salgo de decs2");
 				return a;
 			}
 			else{
 				a.getProps().setTipo("error");
+				System.out.println("salgo de decs3");
 				return a;
 			}
 		}
@@ -202,6 +205,7 @@ public class Sintactico{
 			a.setT(atrDeDecProc.getT());
 			System.out.println("La ts hija");
 			atrDeDecProc.getT().muestra();
+			System.out.println("salgo de dec");
 			return a;
 		}
 		else{	
@@ -237,19 +241,18 @@ public class Sintactico{
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
 		a.setNivel(nivel);
-		/*
 		tk = lexico.lexer();
 		System.out.println("En decProc {:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLAP)){
 			throw new Exception("ERROR: Falta una llave de apertura");
 		}
 		Par atrDeBloque = Bloque();
-		tk = lexico.lexer();
 		System.out.println("En decProc }:" + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
-		}*/
+		}
 		nivel --;
+		System.out.println("salgo de decproc");
 		return a;
 	}
 	
@@ -478,6 +481,7 @@ public class Sintactico{
 		if (err){
 			throw new Exception ("ERROR: porcedimietno erroneo");
 		}
+		System.out.println("salgo de bloque");
 		return a;
 	}
 	/**
@@ -553,6 +557,7 @@ public class Sintactico{
 			}	
 				
 		}
+		System.out.println("Salgo de I");
 		return atrDeIns;
 	}
 
@@ -561,6 +566,11 @@ public class Sintactico{
 		Par atrDeIns = IsOpc();
 		if (!lexico.reconoce(Tipos.TKEND)){
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
+		}
+		if (lexico.reconoce(Tipos.TKLLCI)){
+			System.out.println("Leo Llave de Cierre");
+			atrDeIns.getProps().setTipo("");
+			return atrDeIns;
 		}
 		Token tk = lexico.lexer();
 		//System.out.println("En ICompuesta leemos" + tk.getLexema());
@@ -584,6 +594,12 @@ public class Sintactico{
 		if (lexico.reconoce(Tipos.TKFF)){
 			throw new Exception("ERROR: begin sin end.  El formato correcto es \"begin ... end;\".");
 		}
+		if (lexico.reconoce(Tipos.TKLLCI)){
+			System.out.println("Leo Llave de Cierre");
+			a.getProps().setTipo("");
+			return a;
+		}
+		
 		if (lexico.reconoce(Tipos.TKPYCOMA)){
 			Token tk;
 			tk = lexico.getNextToken();
@@ -638,7 +654,12 @@ public class Sintactico{
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
-		if (lexico.reconoce(Tipos.TKTHN)){
+		if (lexico.reconoce(Tipos.TKLLCI)){
+			System.out.println("Leo Llave de Cierre");
+			a.getProps().setTipo("");
+			return a;
+		}
+		else if (lexico.reconoce(Tipos.TKTHN)){
 			codigo.emite("ir-f");
 			etqs1 = etq; 
 			etq ++;
@@ -702,6 +723,7 @@ public class Sintactico{
 		int etqb = etq;
 		int etqs;
 		atrDeExpC = ExpC();
+
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del while ha de ser una expresion booleana.");
 		}
@@ -761,7 +783,6 @@ public class Sintactico{
 	public Par IDel() throws Exception{
 		Token tk = lexico.lexer(); //consumimo.s el iden
 		//System.out.println("En IDel leemos" + tk.getLexema());
-		
 		Par a = new Par();
 		a.setId(tk.getLexema());
 		a.setProps(TS.getProps(tk.getLexema()));
@@ -801,13 +822,18 @@ public class Sintactico{
 
 	public Par IAsig() throws Exception{
 		
-		System.out.print("Entramos en IAsig ----->");
+		System.out.println("Entramos en IAsig ----->");
 		Par  atrDeExpC = new Par();
 		Par a = new Par();
 		boolean errDeIAsig = false; 
 		String lex = "";
 		Token tk;
 		tk = lexico.getLookahead();
+		if (lexico.reconoce(Tipos.TKLLCI)){
+			System.out.println("Leo Llave de Cierre");
+			a.getProps().setTipo("");
+			return a;
+		}		
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
 			System.out.println("Y Hemos le?do: " + lex);
@@ -816,7 +842,7 @@ public class Sintactico{
 			}
 			a = Mem();
 			tk = lexico.lexer(); //consumimos :=
-			System.out.println("En IAsig := leemos" + tk.getLexema());
+			//System.out.println("En IAsig leemos" + tk.getLexema());
 			
 			if (lexico.reconoce(Tipos.TKASIGN)){
 				atrDeExpC = ExpC();
