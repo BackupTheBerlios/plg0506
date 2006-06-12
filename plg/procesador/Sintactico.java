@@ -97,12 +97,15 @@ public class Sintactico{
 	 */	
 	public boolean Prog() throws Exception{
 		etq = 0;
+		System.out.println("etq: " + etq);
 		dir = 0;
 		nivel = 0;
 		int etqs = etq;
 		codigo.genIns("ir-a");
 		etq ++;
+		System.out.println("etq: " + etq);
 		Par atrDeDecs = Decs();
+		System.out.println("Tras decs etq: " + etq);
 		codigo.parchea(etqs,etq);
 		System.out.println("Termino decs");
 		Par atrDeIs = Is();
@@ -480,7 +483,7 @@ public class Sintactico{
 		int etqs1;
 		int inicio = etq;
 		etqs1 = etq + longPrologo + 1;
-		etq = etqs1 + longEpilogo +1;
+		System.out.println("etq: " + etq);
 		int auxDir = dir;
 		Token tk = lexico.getNextToken();
 		Par atrDeDecs;
@@ -497,6 +500,8 @@ public class Sintactico{
 		codigo.genIns("ir-a",inicio);
 		Par atrDeIs = Is();
 		codigo.epilogo(nivel);
+		etq = etqs1 + longEpilogo +1;
+		System.out.println("etq: " + etq);
 		codigo.genIns("ir-ind");
 		dir = auxDir;
 		boolean err = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error");
@@ -675,6 +680,7 @@ public class Sintactico{
 			codigo.emite("ir-f");
 			etqs1 = etq; 
 			etq ++;
+			System.out.println("etq: " + etq);
 			System.out.println("I del If");
 			atrDeI = I();
 			System.out.println("Fin I del If");
@@ -682,6 +688,7 @@ public class Sintactico{
 			System.out.println("Fin emite del If");
 			etqs2 = etq;
 			etq ++;
+			System.out.println("etq: " + etq);
 			System.out.println("Inicio parchea del If");
 			codigo.parchea(etqs1,etq);
 			System.out.println("Fin parchea del If");
@@ -750,9 +757,11 @@ public class Sintactico{
 				codigo.emite("ir-f");
 				etqs = etq; 
 				etq ++;
+				System.out.println("etq: " + etq);
 				atrDeI = I();
 				codigo.emite("ir-a " + etqb);
 				etq ++;
+				System.out.println("etq: " + etq);
 				codigo.parchea(etqs,etq);
 			}
 			else{
@@ -786,6 +795,7 @@ public class Sintactico{
 			}
 			codigo.genIns("desapila-ind");
 			etq += 2;
+			System.out.println("etq: " + etq);
 		}
 		else {
 			a.getProps().setTipo("error");
@@ -802,6 +812,7 @@ public class Sintactico{
 		a.getProps().setTbase(Mem().getProps());
 		codigo.genIns("apila-ind");
 		etq ++;
+		System.out.println("etq: " + etq);
 		if (TS.ref(a.getProps()).getTipo().equals("pointer")){
 			if (a.getProps().getTipo().equals("ref")){
 				codigo.genIns("delete",TS.ref(a.getProps()).getTam());
@@ -810,6 +821,7 @@ public class Sintactico{
 				codigo.genIns("delete",a.getProps().getTam());
 			}
 			etq ++;
+			System.out.println("etq: " + etq);
 		}
 		else {
 			a.getProps().setTipo("error");
@@ -865,11 +877,13 @@ public class Sintactico{
 						System.out.println("Compatibles");
 							codigo.genIns("desapila-ind");
 							etq ++;		
+							System.out.println("etq: " + etq);
 					}
 					else {
 						System.out.println("No compatibles");
 						codigo.genIns("mueve",a.getProps().getTam());
 						etq ++;
+						System.out.println("etq: " + etq);
 					}
 				}	
 				a.setId(lex);
@@ -1193,6 +1207,7 @@ public class Sintactico{
 			a.getProps().setTipo("int");
 			codigo. genIns("apila", Integer.parseInt(tk.getLexema()) );
 			etq ++;
+			System.out.println("etq: " + etq);
 		} 
 		else if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
 			a.getProps().setTipo("bool");
@@ -1203,6 +1218,7 @@ public class Sintactico{
 				cod = 1;
 			codigo.genIns("apila", cod);
 			etq ++;
+			System.out.println("etq: " + etq);
 		} else if (lexico.reconoce(Tipos.TKNOT) || lexico.reconoce(Tipos.TKRESTA)) {  // es un OpUn
 			boolean numerico = lexico.reconoce(Tipos.TKRESTA); // numerico != true ==> booleano = true
 			atrDeFact = Fact();
@@ -1228,6 +1244,7 @@ public class Sintactico{
 				a = Mem();
 				codigo.genIns("apila-ind");
 				etq ++;
+				System.out.println("etq: " + etq);
 			}
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
@@ -1276,7 +1293,7 @@ public class Sintactico{
 		a.setDir(TS.getDir(tk.getLexema()));
 		codigo.genIns("apila",TS.getDir(tk.getLexema()));
 		etq ++;
-		
+		System.out.println("etq: " + etq);
 		atrDeRMem = RMem(a.getProps()/*.getTbase()*/);
 		if (atrDeRMem != null){
 			if (atrDeRMem.getTipo().equals("")){
@@ -1296,6 +1313,7 @@ public class Sintactico{
 			tk = lexico.lexer();
 			codigo.genIns("apila-ind");
 			etq ++;
+			System.out.println("etq: " + etq);
 			if (a.getTbase().getTbase() == null)
 				return a.getTbase();
 			else
@@ -1311,6 +1329,7 @@ public class Sintactico{
 				codigo.genIns("multiplica");
 				codigo.genIns("suma");
 				etq += 3;
+				System.out.println("etq: " + etq);
 				if (a.getTipo().equals("ref")){
 					Atributos aux = TS.ref(a);
 					a = aux;
@@ -1357,6 +1376,7 @@ public class Sintactico{
 		else
 			codigo.genIns("or");
 		etq ++;
+		System.out.println("etq: " + etq);
 	}
 	
 	/**
@@ -1373,6 +1393,7 @@ public class Sintactico{
 		else 
 			codigo.genIns("and");
 		etq ++;
+		System.out.println("etq: " + etq);
 	}
 	
 	/**
@@ -1400,6 +1421,7 @@ public class Sintactico{
 				codigo.genIns("distinto");
 		}
 		etq ++;
+		System.out.println("etq: " + etq);
 	}
 
 	/**
@@ -1409,11 +1431,13 @@ public class Sintactico{
 	public void genOpNot(){
 		codigo.genIns("not");
 		etq ++;
+		System.out.println("etq: " + etq);
 	}
 	
 	public void genOpNega(){
 		codigo.genIns("neg");
 		etq ++;
+		System.out.println("etq: " + etq);
 	}
 	
 	/*private String sacaTipo(Atributos atr){
