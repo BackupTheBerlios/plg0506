@@ -487,6 +487,8 @@ public class Sintactico{
 		int auxDir = dir;
 		Token tk = lexico.getNextToken();
 		Par atrDeDecs;
+		codigo.genIns("ir-a");
+		etq++;
 		if(tk.getCategoriaLexica()!=Tipos.TKCUA){
 			atrDeDecs = Decs();
 		}
@@ -496,8 +498,8 @@ public class Sintactico{
 			atrDeDecs.getProps().setTipo("");
 		}
 		int tamlocales = dir - auxDir;
+		codigo.parchea(inicio,etq);
 		codigo.prologo(nivel, tamlocales);
-		codigo.genIns("ir-a",inicio);
 		etq= etqs1;
 		Par atrDeIs = Is();
 		codigo.epilogo(nivel);
