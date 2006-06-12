@@ -1,12 +1,14 @@
-int b;
-int d;
-tipo maria = int;
-proc pepe (int b){
-maria c
+proc inic (int c){
+int i;
+array [1] of bool d
 #
-c := 1;
-b:= 5;
+i := 1;
+d[1] := true;
+if d[1] then 
+    i := -155;
+else
+    i := 500;
 };
-int a
+bool a
 #
-a := 5;
+a := false;

@@ -498,9 +498,10 @@ public class Sintactico{
 		int tamlocales = dir - auxDir;
 		codigo.prologo(nivel, tamlocales);
 		codigo.genIns("ir-a",inicio);
+		etq= etqs1;
 		Par atrDeIs = Is();
 		codigo.epilogo(nivel);
-		etq = etqs1 + longEpilogo +1;
+		etq = etq + longEpilogo +1;
 		System.out.println("etq: " + etq);
 		codigo.genIns("ir-ind");
 		dir = auxDir;
