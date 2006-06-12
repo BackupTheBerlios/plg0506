@@ -675,6 +675,22 @@ public class MaquinaP {
 					}
 					j++;
 				}
+				else if (linea[0].compareTo("ir-ind")==0){
+					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
+					ir_ind();
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
 				else{
 					error();
 					j++;
@@ -1406,7 +1422,21 @@ public class MaquinaP {
 			PC = PC + 1;
 		}
 		else{
-			throw new Exception("ERROR en Copia: Pila vaca.");
+			throw new Exception("ERROR en Copia: Pila vacia.");
+		}
+	}
+	
+	/**
+	 * Metodo que desplaza el contador del programa a la intruccion que indica el entero almacenado en la cima de la pila
+	 * @throws Exception
+	 */
+	public void ir_ind() throws Exception{
+		if (ST >= 0){
+			ST = ST - 1;
+			PC = ((Integer)pila.pop()).intValue();
+		}
+		else{
+			throw new Exception("ERROR: Pila vacia.");
 		}
 	}
 	
