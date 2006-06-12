@@ -201,10 +201,8 @@ public class Codigo {
 	 * @param num_niveles entero con el número de niveles de anidamiento del procedimiento
 	 * @param tam_datos entero con el tamaño de los parámetros que recibe el procedimiento
 	 */
-	public void inicio (int num_niveles, int tam_datos) {
-		this.genIns("apila", 1 + num_niveles);
-		this.genIns("desapila-dir", 1);
-		this.genIns("apila", 1 + num_niveles + tam_datos);
+	public void inicio () {
+		this.genIns("apila");
 		this.genIns("desapila-dir", 0);
 	}
 	/**

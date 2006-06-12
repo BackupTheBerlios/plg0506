@@ -45,7 +45,7 @@ public class Sintactico{
 	private static int longInicioPaso = 3;
 	private static int longFinPaso = 1;
 	//private static int longAccesoVar = 4;
-	//private static int longInicio = 4;
+	private static int longInicio = 2;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -98,14 +98,18 @@ public class Sintactico{
 	public boolean Prog() throws Exception{
 		etq = 0;
 		System.out.println("etq: " + etq);
-		dir = 0;
+		dir = 1;
 		nivel = 0;
+		int etqs2=etq;
+		codigo.inicio();
+		etq = etq + longInicio;
 		int etqs = etq;
 		codigo.genIns("ir-a");
 		etq ++;
 		System.out.println("etq: " + etq);
 		Par atrDeDecs = Decs();
 		System.out.println("Tras decs etq: " + etq);
+		codigo.parchea(etqs2,dir+1); // como es tamDatos+2 y tamDatos= dir-1
 		codigo.parchea(etqs,etq);
 		System.out.println("Termino decs");
 		Par atrDeIs = Is();
@@ -421,31 +425,25 @@ AParams.props.i = 0
 	
 	public Par LAParams() throws Exception{
 		Par a = new Par();
-		a.setT(new TablaSimbolos()); //????????????????????'
-		Par atrDeLAParams = null;
 		
-		Par atrDeLAParam = AParam();
-		a.getProps().getParams().add(atrDeLAParam);
-		a.getProps().setElems(a.getProps().getElems() + 1);
+		Par atrDeAParam = AParam();
+		/*a.getProps().getParams().add(atrDeAParam);
+		a.getProps().setElems(a.getProps().getElems() +1);
+		codigo.genIns("copia");
+		codigo.genIns("flip");
+		codigo.paso_parametro(1);
+		etq = 1;*/
+		/*
+		LAParams ::= AParam, LAParams
+		LAParams0.cod = LAParams1.cod || copia || AParam.cod || flip ||
+		pasoParametro(AParam, LAParams0.props.params[LAParams0.props.nparams])
+		LAParams1.etqh = LAParams0.etqh
+		AParam.etqh = LAParams1.etq
+		LAParams0.etq = LAParams1.etq + 2 + longPasoParametro(AParam,
+		LAParams0.fparams[LAParams0.nparams])
+		LAParams ::= AParam
+		*/
 		
-		Token tk = lexico.getNextToken();
-		if (tk.getCategoriaLexica() == Tipos.TKPCI){
-			return a;
-		}
-		tk = lexico.lexer(); // Consumimos ","
-		
-		if (lexico.reconoce(Tipos.TKCOMA)){
-			atrDeLAParams = LAParams();
-			if (! atrDeLAParams.getProps().getParams().isEmpty()){
-				a.getProps().getParams().addAll(atrDeLAParams.getProps().getParams());
-				a.setT(atrDeLAParams.getT());
-				a.getProps().setElems(a.getProps().getElems() + atrDeLAParams.getProps().getElems());
-			}
-		}
-		else {
-			throw new Exception("ERROR: Los parametros han de ir separados por comas.");
-		}
-		a.getT().agnadeID(atrDeLAParam.getId(), atrDeLAParam.getProps(),atrDeLAParam.getClase(),atrDeLAParam.getDir(),nivel);
 		return a;
 	}
 	

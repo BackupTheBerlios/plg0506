@@ -691,6 +691,22 @@ public class MaquinaP {
 					}
 					j++;
 				}
+				else if (linea[0].compareTo("flip")==0){
+					System.out.println(linea[0]+"  ");
+					pasos= pasos.concat("El numero de instruccion es: ("+PC+") - ");
+					pasos= pasos.concat(linea[0]+"  ");
+					pasos= pasos.concat(" \n");
+					flip();
+					if (!pila.empty()){
+						pasos= pasos.concat("La cima de la pila cambio, ahora es: "+ pila.peek());
+						pasos= pasos.concat(" \n");
+					}
+					else{
+						pasos= pasos.concat("La pila ahora esta vacia");
+						pasos= pasos.concat(" \n");
+					}
+					j++;
+				}
 				else{
 					error();
 					j++;
@@ -1419,6 +1435,23 @@ public class MaquinaP {
 		if (ST >= 0){
 			pila.push(pila.peek());
 			ST = ST + 1;
+			PC = PC + 1;
+		}
+		else{
+			throw new Exception("ERROR en Copia: Pila vacia.");
+		}
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public void flip () throws Exception {
+		if (ST >= 1){
+			Integer i = (Integer) pila.pop();
+			Integer j = (Integer) pila.pop();
+			pila.push(i);
+			pila.push(j);
 			PC = PC + 1;
 		}
 		else{
