@@ -104,6 +104,7 @@ public class Sintactico{
 		etq ++;
 		Par atrDeDecs = Decs();
 		codigo.parchea(etqs,etq);
+		System.out.println("Termino decs");
 		Par atrDeIs = Is();
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		return errDeProg;
@@ -549,22 +550,28 @@ public class Sintactico{
 		Par atrDeIns;
 		lexico.lexer();
 		if (lexico.reconoce(Tipos.TKBEG)){
+			System.out.println("Begin");
 			atrDeIns = ICompuesta();
 		}
 		else{
 			if (lexico.reconoce(Tipos.TKIF)){
+				System.out.println("If");
 				atrDeIns = IIf();
 			}
 			else if(lexico.reconoce(Tipos.TKWHL)){
+				System.out.println("While");
 					atrDeIns = IWhile();
 			}
 			else if (lexico.reconoce(Tipos.TKNEW)){
+				System.out.println("New");
 				atrDeIns = INew();
 			}
 			else if (lexico.reconoce(Tipos.TKDEL)){
+				System.out.println("Del");
 				atrDeIns = IDel();
 			}
 			else{
+				System.out.println("IAsig");
 				atrDeIns = IAsig();
 			}		
 		}
@@ -656,6 +663,7 @@ public class Sintactico{
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
+		System.out.println("Fin ExpC del If");
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
@@ -667,12 +675,19 @@ public class Sintactico{
 			codigo.emite("ir-f");
 			etqs1 = etq; 
 			etq ++;
+			System.out.println("I del If");
 			atrDeI = I();
+			System.out.println("Fin I del If");
 			codigo.emite("ir-a");
+			System.out.println("Fin emite del If");
 			etqs2 = etq;
 			etq ++;
+			System.out.println("Inicio parchea del If");
 			codigo.parchea(etqs1,etq);
+			System.out.println("Fin parchea del If");
+			System.out.println("PElse del If");
 			atrDePElse = PElse();
+			System.out.println("Fin PElse del If");
 			codigo.parchea(etqs2,etq);
 			if ( atrDeI.getProps().getTipo().equals("error") || atrDePElse.getProps().getTipo().equals("error") || atrDeExpC.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
@@ -830,6 +845,7 @@ public class Sintactico{
 		}		
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
+			System.out.println("Lexema: " + lex);
 			if (! TS.getClase(lex).equals("var")){
 				throw new Exception ("ERROR: Solo se puede asignar a variables en modo lectura - escritura");
 			}
@@ -839,22 +855,26 @@ public class Sintactico{
 				atrDeExpC = ExpC();
 				boolean tiposIguales = atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo());
 				errDeIAsig = (!(tiposIguales) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
+				System.out.println("errDeIAsig: " + errDeIAsig);
 				if (!(TS.existeID(lex))){
 					errDeIAsig = true;
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
 					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1, new Vector())) || TS.compatibles(a.getProps(), new Atributos("bool","",0,1, new Vector()))){
+						System.out.println("Compatibles");
 							codigo.genIns("desapila-ind");
 							etq ++;		
 					}
 					else {
+						System.out.println("No compatibles");
 						codigo.genIns("mueve",a.getProps().getTam());
 						etq ++;
 					}
 				}	
 				a.setId(lex);
 				a.getProps().setTipo(TS.getProps(lex).getTipo());
+				System.out.println("Fin IAsig");
 			}
 		}
 		else{
@@ -870,6 +890,7 @@ public class Sintactico{
 		if (errDeIAsig){
 			a.getProps().setTipo("error");
 		}
+		System.out.println("Salimos de IAsig");
 		return a;
 	}
 
@@ -884,6 +905,7 @@ public class Sintactico{
 	public Par ExpC() throws Exception{
 		Par atrDeExp;
 		Par atrDeRExpC;
+		System.out.println("ExpC");
 		atrDeExp = Exp();
 		Par a = new Par();
 		atrDeRExpC = RExpC();
@@ -903,6 +925,7 @@ public class Sintactico{
 				a.getProps().setTipo("error");
 			}
 		}
+		System.out.println("Termino ExpC");
 		return a;
 	}
 	
@@ -918,6 +941,7 @@ public class Sintactico{
 		Par atrDeExp;
 		Par atrDeRExpC;
 		Par a = new Par();
+		System.out.println("RExpC");
 		if (lexico.reconoce(Tipos.TKFF)){
 			a.getProps().setTipo("error");
 			return a;
@@ -944,6 +968,7 @@ public class Sintactico{
 			} 
 		} 
 		a.getProps().setTipo("");
+		System.out.println("Termino RExpC");
 		return a;
 	}
 	
@@ -957,6 +982,7 @@ public class Sintactico{
 		Par atrDeTerm;
 		Par atrDeRExp;
 		Par a = new Par();
+		System.out.println("Exp");
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
 		
