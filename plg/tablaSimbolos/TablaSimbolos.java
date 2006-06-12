@@ -51,17 +51,21 @@ public class TablaSimbolos {
 			this.tabla.put(elem.getId(),elem);
 		}
 		e = t.keys();
-		while (e.hasMoreElements()){ //copiamos
+		while (e.hasMoreElements()){ //los pasamos a valor
 			Object aux = e.nextElement();
 			if (((Par)this.tabla.get(aux)).getClase().equals("var")){
 				((Par)this.tabla.get(aux)).setClase("valor");
 			}
 		}
-		for (int i = 0; i<params.size(); i++){
-			String aux = ((Par)params.elementAt(i)).getId();
-			if (this.existeID(aux)){
+		for (int i = 0; i<params.size(); i++){ //si los del vector están en la ts
+			Par p = (Par)params.elementAt(i);
+			String aux = p.getId();
+			if (this.existeID(aux)){ //los ponemos a ver
 				((Par)this.tabla.get(aux)).setClase("var");
 			}	
+			else{ //sino los añadimos
+				this.agnadeID(p.getId(),p.getProps(),"var",p.getDir(),p.getNivel());
+			}
 		}
 	}
 	
