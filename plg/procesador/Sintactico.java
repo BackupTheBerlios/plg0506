@@ -39,11 +39,11 @@ public class Sintactico{
 	int nivel;
 	int nmax;
 	
-	//private static int longApilaRet = 5;
+	private static int longApilaRet = 5;
 	private static int longPrologo = 13;
 	private static int longEpilogo = 12;
-	//private static int longInicioPaso = 3;
-	//private static int longFinPaso = 1;
+	private static int longInicioPaso = 3;
+	private static int longFinPaso = 1;
 	//private static int longAccesoVar = 4;
 	//private static int longInicio = 4;
 	/**
@@ -354,15 +354,24 @@ public class Sintactico{
 		a.getProps().setElems(atrDeLFParams.getProps().getElems());
 		return a;
 	}
-	
+	/*
+	 * AParams ::= LAParams
+cod = iniciopaso
+|| genIns(LAParams) || finpaso
+etq = etq + longInicioPaso
+etq = etq + longFinPaso
+AParams ::= λ
+AParams.props.i = 0
+	 */
 	public Par AParams() throws Exception{
 		Par a  = new Par();
-		a.setT(new TablaSimbolos());
+		codigo.inicio_paso();
+		etq = etq + longInicioPaso; 
 		Token tk = lexico.lexer();//consumimos ( 
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
 		}
-		tk = lexico.getNextToken();
+		tk = lexico.getNextToken(); 
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
 			lexico.lexer();
 			a.getProps().setElems(0);
@@ -373,9 +382,9 @@ public class Sintactico{
 		if (!lexico.reconoce(Tipos.TKPCI)){
 			throw new Exception ("ERROR: Necesitas un )");
 		}
-		a.getProps().setParams(atrDeLAParams.getProps().getParams());
-		a.getProps().setElems(atrDeLAParams.getProps().getElems());
-		return a;
+		codigo.fin_paso();
+		etq = etq + longFinPaso;
+		return atrDeLAParams;
 	}
 	
 	
@@ -409,12 +418,13 @@ public class Sintactico{
 		return a;
 	}
 	
+	
 	public Par LAParams() throws Exception{
 		Par a = new Par();
-		a.setT(new TablaSimbolos())	;
+		a.setT(new TablaSimbolos()); //????????????????????'
 		Par atrDeLAParams = null;
 		
-		Par atrDeLAParam = LAParam();
+		Par atrDeLAParam = AParam();
 		a.getProps().getParams().add(atrDeLAParam);
 		a.getProps().setElems(a.getProps().getElems() + 1);
 		
@@ -455,26 +465,9 @@ public class Sintactico{
 		return a;
 	}
 	
-	public Par LAParam() throws Exception{
+	public Par AParam() throws Exception{
 		Par a  = new Par();
 		a = ExpC ();
-		
-		
-		/* Dejo comentado lo que haca FParam creo que con LAParam, esto ya sera suficiente
-		 * Token tk = lexico.lexer();
-		//System.out.println("En aparam iden : " + tk.getLexema());
-		 * if(! lexico.reconoce(Tipos.TKIDEN)){
-			throw new Exception("ERROR: falta el identificador del parametro");
-		}
-		a.setId(tk.getLexema());
-		if (atr.getProps() == null){
-			//System.out.println("Los props despues de ExpC son null");
-		}
-		a.getProps().setTipo(atr.getProps().getTipo());
-		a.getProps().setTbase(new Atributos());
-		a.setNivel(nivel);
-		 */
-				
 		return a;
 	}
 	
@@ -579,8 +572,15 @@ public class Sintactico{
 				atrDeIns = IDel();
 			}
 			else{
-				System.out.println("IAsig");
-				atrDeIns = IAsig();
+				Token tk = lexico.getNextToken(); 
+				if (tk.equals(new Token ("(", Tipos.TKCAP))){
+					System.out.println("ICall");
+					atrDeIns = ICall();
+				}
+				else{
+					System.out.println("IAsig");
+					atrDeIns = IAsig();
+				}	
 			}		
 		}
 		return atrDeIns;
@@ -911,6 +911,27 @@ public class Sintactico{
 		return a;
 	}
 
+	/**
+	 * ICall ::= iden AParamsa
+	 * cod = apilaret(
+	 * etq) //Deberá parchearse || genIns(AParams)||ira(TS[iden.lex].inicio)
+	 * etq = etq + longApilaRet
+	 * etq = etq + 1
+	 */
+	 public Par ICall() throws Exception{
+		 Par a = new Par();
+		 int etqs1= etq; // no se yo
+		 String lex = lexico.getLookahead().getLexema(); // iden
+		 codigo.genIns("apila-ret", etqs1); // no se yo
+		 etq ++;
+		 Par atrDeAParams = AParams();
+		 codigo.parchea (etqs1,atrDeAParams.getDir()); //no se yo 
+		 codigo.genIns("ir-a", TS.getDir(lex));
+		 etq = etq + longApilaRet +1;
+		 a.setProps(atrDeAParams.getProps());
+		 a.setId(lex);
+		 return a;
+	 }
 	
 	/**
 	 * Procesa y desarrolla una Expresisn de Comparacisn, ExpC, llamando a Exp y a RExpC, 
