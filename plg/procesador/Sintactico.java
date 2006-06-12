@@ -482,7 +482,6 @@ public class Sintactico{
 		Par a  = new Par();
 		int etqs1;
 		int inicio = etq;
-		etqs1 = etq + longPrologo + 1;
 		System.out.println("etq: " + etq);
 		int auxDir = dir;
 		Token tk = lexico.getNextToken();
@@ -499,6 +498,7 @@ public class Sintactico{
 		}
 		int tamlocales = dir - auxDir;
 		codigo.parchea(inicio,etq);
+		etqs1 = etq + longPrologo;
 		codigo.prologo(nivel, tamlocales);
 		etq= etqs1;
 		Par atrDeIs = Is();
