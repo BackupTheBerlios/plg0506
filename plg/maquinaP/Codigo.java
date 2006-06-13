@@ -158,8 +158,12 @@ public class Codigo {
 	 * @param nivel entero con el nivel de anidamiento del pr?logo
 	 * @param tamlocales entero que contiene el tama?o de las variables locales al procedimiento
 	 */
-	public void prologo (int nivel, int tamlocales){
-		this.genIns("apila-dir",0);
+	public void prologo (int tamlocales){
+		/*devuelve apila( t a m l o c a l e s ) ||
+          desapila-dir(0)                 // establecido nuevo cp*/
+		this.genIns("apila", tamlocales);
+		this.genIns("desapila_dir", 0);
+		/*this.genIns("apila-dir",0);
 		this.genIns("apila", 2);
 		this.genIns("suma");
 		this.genIns("apila-dir",1 + nivel);
@@ -171,7 +175,7 @@ public class Codigo {
 		this.genIns("apila-dir", 0);
 		this.genIns("apila", tamlocales + 2);
 		this.genIns("suma");
-		this.genIns("desapila_dir", 0);
+		this.genIns("desapila_dir", 0);*/
 	}
 	
 	/**
@@ -201,16 +205,42 @@ public class Codigo {
 	 * @param num_niveles entero con el n?mero de niveles de anidamiento del procedimiento
 	 * @param tam_datos entero con el tama?o de los par?metros que recibe el procedimiento
 	 */
-	public void inicio () {
-		this.genIns("apila");
+	public void inicio (int tamdatos) {
+		/*fun inicio(tamDatos)
+		 apila(tamDatos+2)
+		 desapila-dir(0)
+		 ffun
+		 cons l o n f I n i c i o = 2*/
+		this.genIns("apila", tamdatos + 2);
 		this.genIns("desapila-dir", 0);
+		/*this.genIns("apila");
+		this.genIns("desapila-dir", 0);*/
 	}
 	/**
 	 * m?todo que genera el c?digo relativo al ep?logo
 	 * @param nivel entero con el nivel de anidamiento del par?metro
 	 */
-	public void epilogo (int nivel) {
-		this.genIns("apila-dir", 1 + nivel);
+	public void epilogo (int tamlocales) {
+		/*fun epilogo(tamlocales)
+ devuelve apila-dir(0)                     ||
+          apila( t a m l o c a l e s + 2 ) ||
+          resta                            ||
+          copia                            ||
+          desapila-dir(0)                  || // reestablecido cp
+          apila(1)                         ||
+          suma                             ||
+          apila-ind                           // apilada dirección retorno
+ffun
+cons longEpilogo = 8*/
+		this.genIns("apila-dir", 0);
+		this.genIns("apila", tamlocales + 2);
+		this.genIns("resta");
+		this.genIns("copia");
+		this.genIns("desapila-dir",0);
+		this.genIns("apila",1);
+		this.genIns("suma");
+		this.genIns("desapila-ind");
+		/*this.genIns("apila-dir", 1 + nivel);
 		this.genIns("apila", 2);
 		this.genIns("resta");
 		this.genIns("apila-ind");
@@ -221,7 +251,7 @@ public class Codigo {
 		this.genIns("desapila-dir",0);
 		this.genIns("apila",2);
 		this.genIns("suma");
-		this.genIns("desapila-dir", 1+nivel);
+		this.genIns("desapila-dir", 1+nivel);*/
 	}	
 	/**
 	 * m?todo que implementa las posiciones de destino en el registro de activaci?n
