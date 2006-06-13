@@ -222,7 +222,7 @@ public class Codigo {
           desapila-dir(0)                  || // reestablecido cp
           apila(1)                         ||
           suma                             ||
-          apila-ind                           // apilada dirección retorno
+          apila-ind                           // apilada direccin retorno
 ffun
 cons longEpilogo = 8*/
 		this.genIns("apila-dir", 0);

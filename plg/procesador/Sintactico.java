@@ -398,8 +398,8 @@ AParams.props.i = 0
 	 */
 	public Par AParams() throws Exception{
 		Par a  = new Par();
-		codigo.inicio_paso();
-		etq = etq + longInicioPaso; 
+		//codigo.inicio_paso();
+		etq = etq + longInicioPaso;
 		Token tk = lexico.lexer();//consumimos ( 
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
@@ -419,8 +419,8 @@ AParams.props.i = 0
 		}
 		tk = lexico.lexer(); // Consumimos )
 		System.out.println("Y unas l?neas m?s abajo, leemos: " + tk.getLexema());
-		codigo.fin_paso();
-		etq = etq + longFinPaso;
+		//codigo.fin_paso();
+		//etq = etq + longFinPaso;
 		return atrDeLAParams;
 	}
 	
@@ -965,6 +965,9 @@ AParams.props.i = 0
 		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
+		 if (!TS.compatibles(atrDeAParams.getProps(), TS.getProps(lex))){
+			 throw new Exception("ERROR: la llamada al procedimiento no es comaprtible con el procedimiento.");
+		 }
 		 System.out.println("Antes de llamar a parchea en el ICall ");
 		 codigo.parchea (etqs1,etq);
 		 System.out.println("Antes de llamar a TS en el ICall ");
