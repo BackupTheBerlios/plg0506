@@ -132,7 +132,7 @@ public class Sintactico{
 		Par atrDeDec = Dec(); 
 		//System.out.println("A?ado");
 		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
-		System.out.println("La TS que tengo despues de añadir en Decs, añado: " + atrDeDec.getId());
+		System.out.println("La TS que tengo despues de aadir en Decs, aado: " + atrDeDec.getId());
 		TS.muestra();
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
@@ -215,12 +215,15 @@ public class Sintactico{
 			nmax=nivel;
 		}
 		Par atrDeFParams = FParams();
-		System.out.println("La TS padre, creo: ");
+		System.out.println("La TS padre: ");
 		TS.muestra();
 		TablaSimbolos tsAux = new TablaSimbolos(TS.getTabla());
+		System.out.println("La TS copia: ");
+		TS.muestra();
+		
 		TS = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
 		a.setT(TS);
-		System.out.println("La TS hijo, creo: ");
+		System.out.println("La TS hijo: ");
 		TS.muestra();
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
@@ -230,23 +233,25 @@ public class Sintactico{
 		if (!lexico.reconoce(Tipos.TKLLAP)){
 			throw new Exception("ERROR: Falta una llave de apertura");
 		}
-		//Codigo de Palo de prueba
 		a.setDir(etq);
 		a.setClase("proc");
-		TS.agnadeID(a.getId(), a.getProps(), a.getClase(), a.getDir(),a.getNivel());
+		TS.agnadeID(a.getId(), a.getProps(),a.getClase(), a.getDir(),a.getNivel());
 		System.out.println("La TS hijo, creo despues de codigo Palo: ");
 		TS.muestra();
 		System.out.println("La dir de instrucciones que teno ahora es: "+ etq);
 		//FinCodigo de Palo
 		Bloque();
 		System.out.println("La dir de instrucciones que tenodespues de bloque es: "+ etq);
-		System.out.println("La TS hijo, creo despues de bloque: ");
+		System.out.println("La TS hijo despues de bloque: ");
 		TS.muestra();
+		a.setT(TS);
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
 		nivel --;
 		TS = tsAux;
+		System.out.println("La TS padre despues de bloque: ");
+		TS.muestra();
 		return a;
 	}
 	
@@ -947,6 +952,10 @@ AParams.props.i = 0
 		 codigo.genIns("apila-ret", etqs1);
 		 etq ++;
 		 TablaSimbolos TSAux = new TablaSimbolos(TS.getTabla());
+		 System.out.println("La TS en ICall antes de cambiarla");
+		 TS.muestra();
+		 System.out.println("La TS en ICall despuÃ©s de cambiarla");
+		 TS.muestra(); 
 		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
@@ -954,6 +963,8 @@ AParams.props.i = 0
 		 codigo.parchea (etqs1,etq);
 		 System.out.println("Antes de llamar a TS en el ICall ");
 		 System.out.println("Antes de llamar a TS en el ICall "+ lex );
+		 System.out.println("La TS en ICall");
+		 TS.muestra();
 		 System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
 		 codigo.genIns("ir-a", TS.getDir(lex));
 		 etq = etq + longApilaRet +1;

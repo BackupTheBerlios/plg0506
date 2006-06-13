@@ -1,10 +1,6 @@
+int x;
 proc inic (int c){
 	int i;
-	proc hola(int i){
-		int b
-		#
-		b := i;
-	};
 	array [1] of bool d
 	#
 	i := 1;
@@ -17,4 +13,5 @@ proc inic (int c){
 bool a
 #
 a := false;
-inic(5);
+inic ( 5 );
+
