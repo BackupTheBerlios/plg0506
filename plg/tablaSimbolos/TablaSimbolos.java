@@ -108,6 +108,13 @@ public class TablaSimbolos {
 			return null;
 	}
 	
+	public TablaSimbolos getTS(String id){
+		if (this.tabla.containsKey(id))
+			return ((Par)this.tabla.get(id)).getT();
+		else
+			return null;
+	}
+	
 	/**
 	 * Accesor de la direccin de un identificador en la tabla de smbolos
 	 * @param id String con el identificador

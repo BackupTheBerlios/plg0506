@@ -922,7 +922,7 @@ AParams.props.i = 0
 		 codigo.genIns("apila-ret", etqs1);
 		 etq ++;
 		 TablaSimbolos TSAux = new TablaSimbolos(TS.getTabla());
-		 TS = new TablaSimbolos(TS.getTabla(), TS.getProps(lex).getParams());
+		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
 		 codigo.parchea (etqs1,etq);  
@@ -930,6 +930,7 @@ AParams.props.i = 0
 		 etq = etq + longApilaRet +1;
 		 a.setProps(atrDeAParams.getProps());
 		 a.setId(lex);
+		 TS = TSAux;
 		 return a;
 	 }
 	
