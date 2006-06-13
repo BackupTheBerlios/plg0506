@@ -232,6 +232,7 @@ public class Sintactico{
 		}
 		//Codigo de Palo de prueba
 		a.setDir(etq);
+		a.setClase("proc");
 		TS.agnadeID(a.getId(), a.getProps(), a.getClase(), a.getDir(),a.getNivel());
 		System.out.println("La TS hijo, creo despues de codigo Palo: ");
 		TS.muestra();
