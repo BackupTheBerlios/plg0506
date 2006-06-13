@@ -1008,11 +1008,15 @@ AParams.props.i = 0
 			else if (atrDeExp.getProps().getTipo().equals("bool"))
 					a.getProps().setTipo("bool");
 			else a.getProps().setTipo("error");
+			a.getProps().setTam(1);
+			a.getProps().setElems(1);
 		}
 		else{
 			
 			if (atrDeRExpC.getProps().getTipo().equals("")){
 				a.getProps().setTipo(atrDeExp.getProps().getTipo());
+				a.getProps().setTam(atrDeExp.getProps().getTam());
+				a.getProps().setElems(atrDeExp.getProps().getElems());
 			}else{
 				a.getProps().setTipo("error");
 			}
@@ -1079,15 +1083,23 @@ AParams.props.i = 0
 		atrDeRExp = RExp();
 		
 		if ( atrDeTerm.getProps().getTipo().equals(atrDeRExp.getProps().getTipo())){
-			if (atrDeTerm.getProps().getTipo().equals("int"))
+			if (atrDeTerm.getProps().getTipo().equals("int")){
 					a.getProps().setTipo("int");
-			else if (atrDeTerm.getProps().getTipo().equals("bool"))
+					a.getProps().setElems(1);
+					a.getProps().setTam(1);
+			}
+			else if (atrDeTerm.getProps().getTipo().equals("bool")){
 					a.getProps().setTipo("bool");
+					a.getProps().setElems(1);
+					a.getProps().setTam(1);
+			}
 			else a.getProps().setTipo("error");
 		}
 		else{
 			if (atrDeRExp.getProps().getTipo().equals("")){
 				a.getProps().setTipo(atrDeTerm.getProps().getTipo());
+				a.getProps().setElems(atrDeTerm.getProps().getElems());
+				a.getProps().setTam(atrDeTerm.getProps().getTam());
 			}else{
 				a.getProps().setTipo("error");
 			}
@@ -1179,20 +1191,28 @@ AParams.props.i = 0
 		atrDeRTerm = RTerm();
 		
 		if ( atrDeFact.getProps().getTipo().compareTo(atrDeRTerm.getProps().getTipo()) == 0){
-			if (atrDeFact.getProps().getTipo().compareTo("int") == 0)
+			if (atrDeFact.getProps().getTipo().compareTo("int") == 0){
 					a.getProps().setTipo("int");
-			else if (atrDeFact.getProps().getTipo().compareTo("bool") == 0)
+					a.getProps().setElems(1);
+					a.getProps().setTam(1);
+			}
+			else if (atrDeFact.getProps().getTipo().compareTo("bool") == 0){
 					a.getProps().setTipo("bool");
+					a.getProps().setElems(1);
+					a.getProps().setTam(1);
+			}
 			else a.getProps().setTipo("error");
 		}
 		else{
 			if (atrDeRTerm.getProps().getTipo().equals("")){
 				a.getProps().setTipo(atrDeFact.getProps().getTipo());
+				a.getProps().setElems(atrDeFact.getProps().getElems());
+				a.getProps().setTam(atrDeFact.getProps().getTam());
 			}else{
 				a.getProps().setTipo("error");
 			}
 		}
-		
+		System.out.println("Term :" + a.toString());
 		return a;
 	}
 	
@@ -1283,12 +1303,16 @@ AParams.props.i = 0
 		
 		if (lexico.reconoce(Tipos.TKNUM)){
 			a.getProps().setTipo("int");
+			a.getProps().setElems(1);
+			a.getProps().setTam(1);
 			codigo. genIns("apila", Integer.parseInt(tk.getLexema()) );
 			etq ++;
 			System.out.println("etq: " + etq);
 		} 
 		else if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
 			a.getProps().setTipo("bool");
+			a.getProps().setElems(1);
+			a.getProps().setTam(1);
 			int cod;
 			if (tk.getLexema().equals("false"))
 				cod = 0;
@@ -1305,6 +1329,9 @@ AParams.props.i = 0
 				genOpNega();
 				if (atrDeFact.getProps().getTipo().equals("int")){
 					a.getProps().setTipo(atrDeFact.getProps().getTipo());
+					a.getProps().setElems(1);
+					a.getProps().setTam(1);
+					
 				}else{
 					a.getProps().setTipo("error");
 				}
@@ -1312,6 +1339,8 @@ AParams.props.i = 0
 				genOpNot();
 				if (atrDeFact.getProps().getTipo().equals("bool")){
 					a.getProps().setTipo(atrDeFact.getProps().getTipo());
+					a.getProps().setElems(1);
+					a.getProps().setTam(1);
 				}else{
 					a.getProps().setTipo("error");
 				}
@@ -1345,7 +1374,7 @@ AParams.props.i = 0
 				}
 			}
 		}
-		
+		System.out.println("Fact :" + a.toString());
 		return a;
 	}
 	
