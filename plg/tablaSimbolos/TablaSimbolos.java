@@ -278,6 +278,26 @@ public class TablaSimbolos {
 	}
 	
 	/**
+	 * Funcin que devuelve el booleano correspondiente a evaluar si los Atributos que contienen los vectores son compatibles.
+	 * @param e1 Vector
+	 * @param e2 Vector
+	 * @return Booleano
+	 */
+	public boolean compatibles (Vector e1, Vector e2)
+	{
+		boolean compatible=true;
+		int i=0;
+		if (e1.size()!=e2.size()) return false;
+		while (!e1.isEmpty()){
+			if (!compatibles (((Par)e1.get(i)).getProps(), ((Par)e2.get(i)).getProps())){
+				return false;
+			}
+			i++;
+		}
+		return compatible;
+	}
+	
+	/**
 	 * Funcin auxliar para implementar la funcin compatibles
 	 * @param v Vector
 	 * @param e1 Atributos
