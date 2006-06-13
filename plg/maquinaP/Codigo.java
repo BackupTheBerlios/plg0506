@@ -182,7 +182,7 @@ public class Codigo {
 	public void paso_parametro (int pformal) {
 		this.genIns("apila", pformal);
 		//this.genIns("suma");
-		this.genIns("desapila_ind");
+		this.genIns("desapila-ind");
 
 	}
 	/**
