@@ -157,7 +157,6 @@ public class Codigo {
 	 * - Salva el valor anterior del display asociado con el procedimiento.
 	 * - Fija el valor del display para la activación actual.
 	 * - Reserva de espacio para los datos locales
-	 * @param nivel entero con el nivel de anidamiento del prólogo
 	 * @param tamlocales entero que contiene el tamaño de las variables locales al procedimiento
 	 */
 	public void prologo (int tamlocales){
@@ -189,8 +188,7 @@ public class Codigo {
 	
 	/**
 	 * Método que genera el código para hacer el inicio relativo a los procedimientos
-	 * @param num_niveles entero con el número de niveles de anidamiento del procedimiento
-	 * @param tam_datos entero con el tamaño de los parámetros que recibe el procedimiento
+	 * 
 	 */
 	public void inicio () {
 		this.genIns("apila");
@@ -198,7 +196,7 @@ public class Codigo {
 	}
 	/**
 	 * Método que genera el código relativo al epílogo
-	 * @param nivel entero con el nivel de anidamiento del parámetro
+	 * @param tamlocales entero con el tamaño de las locales
 	 */
 	public void epilogo (int tamlocales) {
 

@@ -174,7 +174,7 @@ public class Sintactico{
 	
 	/**
 	 * 
-	 * @return
+	 * @return Par
 	 * @throws Exception
 	 */
 	public Par Dec() throws Exception{
@@ -648,7 +648,7 @@ AParams.props.i = 0
 	
 	/**
 	 * 
-	 * @return
+	 * @return PAr
 	 * @throws Exception
 	 */
 	public Par IsOpc() throws Exception{

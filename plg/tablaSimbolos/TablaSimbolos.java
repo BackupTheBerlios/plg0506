@@ -169,7 +169,7 @@ public class TablaSimbolos {
 	 * @param dir
 	 * @param nivel
 	 * @param TS
-	 * @return
+	 * @return boolean
 	 * @throws Exception
 	 */
 	public boolean agnadeID(String id, Atributos t, String clase, int dir, int nivel, TablaSimbolos TS) throws Exception{

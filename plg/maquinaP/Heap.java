@@ -91,7 +91,7 @@ public class Heap {
 	/**
 	 * mtodo que reserva un tam de memoria
 	 * @param tam entero que indica la cantidad de memoria que se quiere reservar
-	 * @return
+	 * @return int
 	 * @throws Exception
 	 */
 	public int reserva(int tam)throws Exception{
@@ -126,7 +126,7 @@ public class Heap {
 	/**
 	 * mtodo que devuelve la direccin de memoria de un elemento
 	 * @param d
-	 * @return
+	 * @return int
 	 * @throws Exception
 	 */
 	public int getElementAt(int d) throws Exception{

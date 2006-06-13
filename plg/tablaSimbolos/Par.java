@@ -42,7 +42,7 @@ public class Par {
 	 * Constructor de la clase Par con valores de inicializacin recibidos por parmetro
 	 * 
 	 * @param id String con el nombre del identificador.
-	 * @param tipo String con el tipo del identificador.
+	 * @param clase String con la clase del identificador.
 	 *  
 	 */
 	public Par(String id, Atributos props, String clase, int dir, int n) {

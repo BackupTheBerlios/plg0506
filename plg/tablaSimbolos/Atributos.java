@@ -101,7 +101,7 @@ public class Atributos {
 
 	/**
 	 * Mutador para el tipo base
-	 * @param params recibe el tipo base de tipo Atributos como parmetros
+	 * @param Atributos recibe el tipo base de tipo Atributos como parmetros
 	 */
 	public void setTbase(Atributos tbase) {
 		this.tbase = tbase;
@@ -117,7 +117,7 @@ public class Atributos {
 
 	/**
 	 * Mutador para el tipo 
-	 * @param params recibe el tipo de tipo String
+	 * @param tipo recibe el tipo de tipo String
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
@@ -133,7 +133,7 @@ public class Atributos {
 
 	/**
 	 * Mutador para el tamao
-	 * @param params recibe el tamao de tipo entero parmetros
+	 * @param tam recibe el tamao de tipo entero parmetros
 	 */
 	public void setTam(int tam) {
 		this.tam = tam;
