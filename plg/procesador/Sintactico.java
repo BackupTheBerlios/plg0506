@@ -918,12 +918,12 @@ AParams.props.i = 0
 	 */
 	 public Par ICall() throws Exception{
 		 Par a = new Par();
-		 int etqs1= etq; // no se yo
+		 int etqs1= etq; 
 		 String lex = lexico.getLookahead().getLexema(); // iden
-		 codigo.genIns("apila-ret", etqs1); // no se yo
+		 codigo.genIns("apila-ret", etqs1);
 		 etq ++;
 		 Par atrDeAParams = AParams();
-		 codigo.parchea (etqs1,atrDeAParams.getDir()); //no se yo 
+		 codigo.parchea (etqs1,etq);  
 		 codigo.genIns("ir-a", TS.getDir(lex));
 		 etq = etq + longApilaRet +1;
 		 a.setProps(atrDeAParams.getProps());
