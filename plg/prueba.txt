@@ -13,5 +13,4 @@ proc inic (int c){
 bool a
 #
 a := false;
-inic ( 5 );
 

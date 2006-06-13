@@ -40,8 +40,8 @@ public class Sintactico{
 	int nmax;
 	
 	private static int longApilaRet = 4;
-	private static int longPrologo = 13;
-	//private static int longPrologo = 2;
+	//private static int longPrologo = 13;
+	private static int longPrologo = 2;
 	private static int longEpilogo = 8;
 	//private static int longEpilogo = 12;
 	private static int longInicioPaso = 3;

@@ -205,16 +205,9 @@ public class Codigo {
 	 * @param num_niveles entero con el n?mero de niveles de anidamiento del procedimiento
 	 * @param tam_datos entero con el tama?o de los par?metros que recibe el procedimiento
 	 */
-	public void inicio (int tamdatos) {
-		/*fun inicio(tamDatos)
-		 apila(tamDatos+2)
-		 desapila-dir(0)
-		 ffun
-		 cons l o n f I n i c i o = 2*/
-		this.genIns("apila", tamdatos + 2);
+	public void inicio () {
+		this.genIns("apila");
 		this.genIns("desapila-dir", 0);
-		/*this.genIns("apila");
-		this.genIns("desapila-dir", 0);*/
 	}
 	/**
 	 * m?todo que genera el c?digo relativo al ep?logo
