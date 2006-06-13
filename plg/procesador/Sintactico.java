@@ -46,6 +46,7 @@ public class Sintactico{
 	private static int longFinPaso = 1;
 	//private static int longAccesoVar = 4;
 	private static int longInicio = 2;
+	private static int longPasoParametro = 3;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -364,7 +365,7 @@ cod = iniciopaso
 || genIns(LAParams) || finpaso
 etq = etq + longInicioPaso
 etq = etq + longFinPaso
-AParams ::= λ
+AParams ::= ??
 AParams.props.i = 0
 	 */
 	public Par AParams() throws Exception{
@@ -425,27 +426,25 @@ AParams.props.i = 0
 	
 	public Par LAParams() throws Exception{
 		Par a = new Par();
+		Par atrDeLAParams = null;
 		
 		Par atrDeAParam = AParam();
-		/*a.getProps().getParams().add(atrDeAParam);
-		a.getProps().setElems(a.getProps().getElems() +1);
-		codigo.genIns("copia");
-		codigo.genIns("flip");
-		codigo.paso_parametro(1);
-		etq = 1;*/
-		/*
-		LAParams ::= AParam, LAParams
-		LAParams0.cod = LAParams1.cod || copia || AParam.cod || flip ||
-		pasoParametro(AParam, LAParams0.props.params[LAParams0.props.nparams])
-		LAParams1.etqh = LAParams0.etqh
-		AParam.etqh = LAParams1.etq
-		LAParams0.etq = LAParams1.etq + 2 + longPasoParametro(AParam,
-		LAParams0.fparams[LAParams0.nparams])
-		LAParams ::= AParam
-		*/
 		
+		Token tk = lexico.getLookahead();
+		System.out.println("Llevamos le?do un: " + tk.getLexema());
+		if (lexico.reconoce(Tipos.TKCOMA)){
+			codigo.genIns("copia");
+			etq ++;
+			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
+			// TODO No usamos el atrDeRLAParams para nada... Deber?amos unirlo a "a".
+			codigo.genIns("flip");
+			etq ++;
+		}
+		codigo.paso_parametro(atrDeAParam.getDir());
+		etq += 2 + longPasoParametro;
 		return a;
 	}
+	
 	
 	public Par FParam() throws Exception{
 		Par a  = new Par();
@@ -912,7 +911,7 @@ AParams.props.i = 0
 	/**
 	 * ICall ::= iden AParamsa
 	 * cod = apilaret(
-	 * etq) //Deberá parchearse || genIns(AParams)||ira(TS[iden.lex].inicio)
+	 * etq) //Deber?? parchearse || genIns(AParams)||ira(TS[iden.lex].inicio)
 	 * etq = etq + longApilaRet
 	 * etq = etq + 1
 	 */
@@ -922,6 +921,9 @@ AParams.props.i = 0
 		 String lex = lexico.getLookahead().getLexema(); // iden
 		 codigo.genIns("apila-ret", etqs1);
 		 etq ++;
+		 TablaSimbolos TSAux = new TablaSimbolos(TS.getTabla());
+		 TS = new TablaSimbolos(TS.getTabla(), TS.getProps(lex).getParams());
+		 a.setT(TS);
 		 Par atrDeAParams = AParams();
 		 codigo.parchea (etqs1,etq);  
 		 codigo.genIns("ir-a", TS.getDir(lex));
