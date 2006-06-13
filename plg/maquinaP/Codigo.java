@@ -10,10 +10,10 @@ import javax.swing.JOptionPane;
 /**
  * La clase <B>Codigo</B> se encarga de manejar el cdigo generado por las instrucciones del lenguaje.
  * <P>Tiene dos atributos:
- * <UL><LI><CODE>cod:</CODE> string donde se almacena el cdigo del lenguaje objeto, que es el cdigo de la mquina P. Como la mquina P de momento no existe, este el contenido de este atributo se mostrar por pantalla.</LI></UL>
- * <UL><LI><CODE>fichero:</CODE> Es el fichero donde vamos a guardar las instrucciones que podra ejecutar la mquinaP. Se guarda con extensin '.obj'</LI></UL></P>
+ * <UL><LI><CODE>cod:</CODE> string donde se almacena el código del lenguaje objeto, que es el código de la máquina P. Como la mquina P de momento no existe, este el contenido de este atributo se mostrar por pantalla.</LI></UL>
+ * <UL><LI><CODE>fichero:</CODE> Es el fichero donde vamos a guardar las instrucciones que podra ejecutar la máquinaP. Se guarda con extensin '.obj'</LI></UL></P>
  * 
- * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
+ * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martín
  *
  */
 public class Codigo {
@@ -28,9 +28,9 @@ public class Codigo {
 	FileOutputStream fichero;
 	
 	/**
-	 * El constructor de la clase Codigo no tiene parmetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vaca.
+	 * El constructor de la clase Codigo no tiene parmetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vacía.
 	 * 
-	 * @param f String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
+	 * @param f String que guarda la ruta del fichero donde se almacenara el código. Este se almacena en el mismo directorio que se encuentra el código fuente.
 	 */
 	public Codigo(String f){		
 		cod = new Vector();
@@ -47,7 +47,7 @@ public class Codigo {
 		}
 	}
 	/**
-	 * Accesor para el atributo cod de la clase Cdigo. 
+	 * Accesor para el atributo cod de la clase Código. 
 	 * @return Devuelve el codigo generado hasta ese momento
 	 */
 	public Vector getCod() {
@@ -55,18 +55,18 @@ public class Codigo {
 	}
 
 	/**
-	 * Este mtodo inicializa el atributo cod con la cadena vaca. No cuenta con parmetros de entrada ni de salida. No devuelve nada.
+	 * Este método inicializa el atributo cod con la cadena vacía. No cuenta con parámetros de entrada ni de salida. No devuelve nada.
 	 */
 	public void inicializaCodigo(){
 		cod = new Vector();
 	}
 	
 	/**
-	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin y el nmero de lnea que recibe como parmetro. 
-	 * Adems de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
+	 * Método que modifica el contenido del atributo cod agregándole la instrucción y el número de línea que recibe como parámetro. 
+	 * Además de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
 	 * 
-	 * @param instr String con la instruccin que ha codificado.
-	 * @param num Entero indica el nmero de lnea.
+	 * @param instr String con la instrucción que ha codificado.
+	 * @param num Entero indica el número de lnea.
 	 * 
 	 */
 	public void genIns(String instr, int num){
@@ -74,10 +74,10 @@ public class Codigo {
 		cod.add(i);
 	}
 	/**
-	 * M?todo que genera el c?digo de una instrucci?n
-	 * @param instr String con la instrucci?n
-	 * @param num Entero que indica el n?mero de l?nea
-	 * @param dir entero que indica la direcci?n
+	 * Método que genera el código de una instrucción
+	 * @param instr String con la instrucción
+	 * @param num Entero que indica el número de línea
+	 * @param dir entero que indica la dirección
 	 */
 	public void genIns(String instr, int num, int dir){
 		String i =instr + " " + num + " " + dir;
@@ -85,8 +85,8 @@ public class Codigo {
 	}
 	
 	/**
-	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin que recibe como parmetro y un salto de lnea. 
-	 * Adems de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
+	 * Método que modifica el contenido del atributo cod agregándole la instrucción que recibe como parámetro y un salto de línea. 
+	 * Además de modificar el fichero donde se almacena el codigo generado para que lo ejecute la mquinaP. No devuelve nada.
 	 * 
 	 * @param instr String con la instruccion que ha codificado.
 	 * 
@@ -98,7 +98,7 @@ public class Codigo {
 	}
 	
 	/**
-	 * Mtodo que imprime por pantalla el contenido del atributo cod. No tiene parmetros de entrada ni de salida.
+	 * Método que imprime por pantalla el contenido del atributo cod. No tiene parmetros de entrada ni de salida.
 	 * 
 	 */
 	public void muestraCodigo(){		
@@ -119,8 +119,8 @@ public class Codigo {
 		}
 	}
 	/**
-	 * M?todo que genera el c?digo necesario para hacer ir-f o ir-a
-	 * @param s String contiene el c?digo ir-f o ir-a
+	 * Método que genera el código necesario para hacer ir-f o ir-a
+	 * @param s String contiene el código ir-f o ir-a
 	 */
 	public void emite(String s){
 		if (s.startsWith("ir-f")){
@@ -131,7 +131,7 @@ public class Codigo {
 		}
 	}
 	/**
-	 * M?todo que parchea la direcci?n a sum?ndole la direcci?n de b
+	 * Método que parchea la dirección a sumándole la dirección de b
 	 * @param a int a parchear
 	 * @param b int necesario para hacer el parcheo
 	 */
@@ -142,8 +142,8 @@ public class Codigo {
 	}
 	
 	/**
-	 * m?todo que genera el c?digo que salva la direcci?n de retorno de la prellamada asociada a la invocaci?n
-	 * @param ret entero con la direcci?n 
+	 * Método que genera el código que salva la dirección de retorno de la prellamada asociada a la invocación
+	 * @param ret entero con la dirección 
 	 */
 	public void apila_ret (int ret) {
 		this.genIns("apila-dir",0);
@@ -153,35 +153,20 @@ public class Codigo {
 		this.genIns("desapila-ind");
 	}
 	/**
-	 * m?todo que que genera el c?digo de lo siguiente:
+	 * Método que que genera el código de lo siguiente:
 	 * - Salva el valor anterior del display asociado con el procedimiento.
-	 * ? Fija el valor del display para la activaci?n actual.
-	 * ? Reserva de espacio para los datos locales
-	 * @param nivel entero con el nivel de anidamiento del pr?logo
-	 * @param tamlocales entero que contiene el tama?o de las variables locales al procedimiento
+	 * - Fija el valor del display para la activación actual.
+	 * - Reserva de espacio para los datos locales
+	 * @param nivel entero con el nivel de anidamiento del prólogo
+	 * @param tamlocales entero que contiene el tamaño de las variables locales al procedimiento
 	 */
 	public void prologo (int tamlocales){
-		/*devuelve apila( t a m l o c a l e s ) ||
-          desapila-dir(0)                 // establecido nuevo cp*/
 		this.genIns("apila", tamlocales);
 		this.genIns("desapila_dir", 0);
-		/*this.genIns("apila-dir",0);
-		this.genIns("apila", 2);
-		this.genIns("suma");
-		this.genIns("apila-dir",1 + nivel);
-		this.genIns("desapila-ind");
-		this.genIns("apila-dir", 0);
-		this.genIns("apila", 3);
-		this.genIns("suma");
-		this.genIns("desapila-dir", 1 + nivel);
-		this.genIns("apila-dir", 0);
-		this.genIns("apila", tamlocales + 2);
-		this.genIns("suma");
-		this.genIns("desapila_dir", 0);*/
 	}
 	
 	/**
-	 * m?todo que genera el c?digo para poder realizar el paso del par?metro formal
+	 * Método que genera el código para poder realizar el paso del parámetro formal
 	 *
 	 *	 * @param pformal entero con el par?metro formal
 	 */
@@ -189,44 +174,34 @@ public class Codigo {
 		this.genIns("apila", pformal);
 		//this.genIns("suma");
 		this.genIns("desapila-ind");
-
 	}
 	/**
-	 * m?todo que genera el c?digo para poder acceder a la informaci?n de la variable
+	 * Método que genera el código para poder acceder a la información de la variable
 	 * @param infoID_nivel entero con el nivel de la variable
-	 * @param infoID_dir entero con la direcci?n de la variable
+	 * @param infoID_dir entero con la dirección de la variable
 	 */
-	public void acceso_var (int infoID_nivel, int infoID_dir){
+	/*public void acceso_var (int infoID_nivel, int infoID_dir){
 		this.genIns("apila-dir", 1 + infoID_nivel);
 		this.genIns("apila", infoID_dir);
 		this.genIns("suma");
-		this.genIns("apila-ind");
-	}
+		this.genIns("apila-ind");}*/
+	
+	
 	/**
-	 * m?todo que genera el c?digo para hacer el inicio relativo a los procedimientos
-	 * @param num_niveles entero con el n?mero de niveles de anidamiento del procedimiento
-	 * @param tam_datos entero con el tama?o de los par?metros que recibe el procedimiento
+	 * Método que genera el código para hacer el inicio relativo a los procedimientos
+	 * @param num_niveles entero con el número de niveles de anidamiento del procedimiento
+	 * @param tam_datos entero con el tamaño de los parámetros que recibe el procedimiento
 	 */
 	public void inicio () {
 		this.genIns("apila");
 		this.genIns("desapila-dir", 0);
 	}
 	/**
-	 * m?todo que genera el c?digo relativo al ep?logo
-	 * @param nivel entero con el nivel de anidamiento del par?metro
+	 * Método que genera el código relativo al epílogo
+	 * @param nivel entero con el nivel de anidamiento del parámetro
 	 */
 	public void epilogo (int tamlocales) {
-		/*fun epilogo(tamlocales)
- devuelve apila-dir(0)                     ||
-          apila( t a m l o c a l e s + 2 ) ||
-          resta                            ||
-          copia                            ||
-          desapila-dir(0)                  || // reestablecido cp
-          apila(1)                         ||
-          suma                             ||
-          apila-ind                           // apilada direccin retorno
-ffun
-cons longEpilogo = 8*/
+
 		this.genIns("apila-dir", 0);
 		this.genIns("apila", tamlocales + 2);
 		this.genIns("resta");
@@ -235,28 +210,17 @@ cons longEpilogo = 8*/
 		this.genIns("apila",1);
 		this.genIns("suma");
 		this.genIns("desapila-ind");
-		/*this.genIns("apila-dir", 1 + nivel);
-		this.genIns("apila", 2);
-		this.genIns("resta");
-		this.genIns("apila-ind");
-		this.genIns("apila-dir", 1 + nivel);
-		this.genIns("apila", 3);
-		this.genIns("resta");
-		this.genIns("copia");
-		this.genIns("desapila-dir",0);
-		this.genIns("apila",2);
-		this.genIns("suma");
-		this.genIns("desapila-dir", 1+nivel);*/
+		
 	}	
 	/**
-	 * m?todo que implementa las posiciones de destino en el registro de activaci?n
+	 * Método que implementa las posiciones de destino en el registro de activación
 	 *
 	 */
 	public void fin_paso (){
 		this.genIns("desapila");
 	}
 	/**
-	 * m?todo que implementa las posiciones de destino en el registro de activaci?n
+	 * Método que implementa las posiciones de destino en el registro de activación
 	 *
 	 */
 	public void inicio_paso (){
