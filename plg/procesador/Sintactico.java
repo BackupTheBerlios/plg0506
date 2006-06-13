@@ -87,7 +87,7 @@ public class Sintactico{
 		if (Prog()){
 			throw new Exception("El programa contiene errores de tipo");
 		}
-		TS.muestra();
+		//TS.muestra();
 		codigo.muestraCodigo();
 	}
 
@@ -100,23 +100,24 @@ public class Sintactico{
 	 */	
 	public boolean Prog() throws Exception{
 		etq = 0;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 		dir = 1;
 		nivel = 0;
 		int etqs2=etq;
-		System.out.println("etqs2: " + etqs2);
+		////System.out.println("etqs2: " + etqs2);
 		codigo.inicio();
 		etq = etq + longInicio;
 		int etqs = etq;
-		System.out.println("etqs: " + etqs);
+		//System.out.println("etqs: " + etqs);
 		codigo.genIns("ir-a");
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 		Par atrDeDecs = Decs();
-		System.out.println("Tras decs etq: " + etq);
+		TS.muestra();
+		//System.out.println("Tras decs etq: " + etq);
 		codigo.parchea(etqs2,dir+1); // como es tamDatos+2 y tamDatos= dir-1
 		codigo.parchea(etqs,etq);
-		System.out.println("Termino decs");
+		//System.out.println("Termino decs");
 		Par atrDeIs = Is();
 		boolean errDeProg = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error"); 
 		return errDeProg;
@@ -132,17 +133,17 @@ public class Sintactico{
 	 */
 	public Par Decs() throws Exception{
 		Par a = new Par();
-		//System.out.println("Estoy en Decs y llamo a dec");
+		////System.out.println("Estoy en Decs y llamo a dec");
 		Par atrDeDec = Dec(); 
-		//System.out.println("A?ado");
+		////System.out.println("A?ado");
 		if (!atrDeDec.getClase().equals("proc")){
 			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
 		}
 		else{
 			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel(),atrDeDec.getT());
 		}
-		System.out.println("La TS que tengo despues de aadir en Decs, aado: " + atrDeDec.getId());
-		TS.muestra();
+		//System.out.println("La TS que tengo despues de aadir en Decs, aado: " + atrDeDec.getId());
+		//TS.muestra();
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
 		}
@@ -224,16 +225,16 @@ public class Sintactico{
 			nmax=nivel;
 		}
 		Par atrDeFParams = FParams();
-		System.out.println("La TS padre: ");
-		TS.muestra();
+		//System.out.println("La TS padre: ");
+		//TS.muestra();
 		TablaSimbolos tsAux = new TablaSimbolos(TS.getTabla());
-		System.out.println("La TS copia: ");
-		TS.muestra();
+		System.out.println(" Esto es un proc ");
+		//TS.muestra();
 		
 		TS = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
 		a.setT(TS);
-		System.out.println("La TS hijo: ");
-		TS.muestra();
+		//System.out.println("La TS hijo: ");
+		//TS.muestra();
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
@@ -245,22 +246,22 @@ public class Sintactico{
 		a.setDir(etq);
 		a.setClase("proc");
 		TS.agnadeID(a.getId(), a.getProps(),a.getClase(), a.getDir(),a.getNivel());
-		System.out.println("La TS hijo, creo despues de codigo Palo: ");
-		TS.muestra();
-		System.out.println("La dir de instrucciones que teno ahora es: "+ etq);
+		//System.out.println("La TS hijo, creo despues de codigo Palo: ");
+		//TS.muestra();
+		//System.out.println("La dir de instrucciones que teno ahora es: "+ etq);
 		//FinCodigo de Palo
 		Bloque();
-		System.out.println("La dir de instrucciones que tenodespues de bloque es: "+ etq);
-		System.out.println("La TS hijo despues de bloque: ");
-		TS.muestra();
+		//System.out.println("La dir de instrucciones que tenodespues de bloque es: "+ etq);
+		//System.out.println("La TS hijo despues de bloque: ");
+		//TS.muestra();
 		a.setT(TS);
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
 		nivel --;
 		TS = tsAux;
-		System.out.println("La TS padre despues de bloque: ");
-		TS.muestra();
+		//System.out.println("La TS padre despues de bloque: ");
+		//TS.muestra();
 		return a;
 	}
 	
@@ -407,7 +408,7 @@ AParams.props.i = 0
 			throw new Exception ("ERROR: Necesitas un (");
 		}
 		tk = lexico.getNextToken();
-		System.out.println("El Token en AParams es: " + tk.getLexema());
+		//System.out.println("El Token en AParams es: " + tk.getLexema());
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
 			lexico.lexer();
 			a.getProps().setElems(0);
@@ -415,12 +416,12 @@ AParams.props.i = 0
 		}
 		Par atrDeLAParams = LAParams();
 		tk = lexico.getLookahead(); // leemos )
-		System.out.println("Volvemos de LAParams, y estamos en AParams. Leemos: " + tk.getLexema());
+		//System.out.println("Volvemos de LAParams, y estamos en AParams. Leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPCI)){
 			throw new Exception ("ERROR: Necesitas un )");
 		}
 		tk = lexico.lexer(); // Consumimos )
-		System.out.println("Y unas l?neas m?s abajo, leemos: " + tk.getLexema());
+		//System.out.println("Y unas l?neas m?s abajo, leemos: " + tk.getLexema());
 		//codigo.fin_paso();
 		//etq = etq + longFinPaso;
 		return atrDeLAParams;
@@ -464,8 +465,9 @@ AParams.props.i = 0
 		Par atrDeAParam = AParam();
 		a.getProps().getParams().add(atrDeAParam);
 		a.getProps().setElems(a.getProps().getElems() + 1);
+		System.out.println("LAParams: " + a.getProps().toString());
 		Token tk = lexico.getLookahead();
-		System.out.println("Llevamos le?do un: " + tk.getLexema());
+		System.out.println("Llevamos leido un: " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			codigo.genIns("copia");
 			etq ++;
@@ -473,6 +475,7 @@ AParams.props.i = 0
 			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
 			System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaa 2");
 			a.getProps().getParams().addAll(atrDeLAParams.getProps().getParams());
+			System.out.println("LAParams 2: " + a.getProps().toString());
 			codigo.genIns("flip");
 			etq ++;
 		}
@@ -508,10 +511,10 @@ AParams.props.i = 0
 		Par a  = new Par();
 		int etqs1;
 		int inicio = etq;
-		System.out.println("inicio: " + inicio);
-		System.out.println("etq: " + etq);
+		//System.out.println("inicio: " + inicio);
+		//System.out.println("etq: " + etq);
 		int auxDir = dir;
-		//System.out.println();
+		////System.out.println();
 		Token tk = lexico.getNextToken();
 		Par atrDeDecs;
 		codigo.genIns("ir-a");
@@ -524,18 +527,18 @@ AParams.props.i = 0
 			atrDeDecs=new Par();
 			atrDeDecs.getProps().setTipo("");
 		}
-		System.out.println("La TS que tengo en bloque: ");
-		TS.muestra();
+		//System.out.println("La TS que tengo en bloque: ");
+		//TS.muestra();
 		int tamlocales = dir - auxDir;
 		codigo.parchea(inicio,etq);
 		etqs1 = etq + longPrologo;
-		System.out.println("tamlocales: " + tamlocales);
+		//System.out.println("tamlocales: " + tamlocales);
 		codigo.prologo(tamlocales);
 		etq= etqs1;
 		Par atrDeIs = Is();
 		codigo.epilogo(nivel);
 		etq = etq + longEpilogo +1;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 		codigo.genIns("ir-ind");
 		dir = auxDir;
 		boolean err = atrDeDecs.getProps().getTipo().equals("error") || atrDeIs.getProps().getTipo().equals("error");
@@ -588,37 +591,37 @@ AParams.props.i = 0
 	public Par I() throws Exception{
 		Par atrDeIns;
 		Token t = lexico.lexer();
-		System.out.println("token "+ t.getLexema());
+		//System.out.println("token "+ t.getLexema());
 		if (lexico.reconoce(Tipos.TKBEG)){
-			System.out.println("Begin");
+			//System.out.println("Begin");
 			atrDeIns = ICompuesta();
 		}
 		else{
 			if (lexico.reconoce(Tipos.TKIF)){
-				System.out.println("If");
+				//System.out.println("If");
 				atrDeIns = IIf();
 			}
 			else if(lexico.reconoce(Tipos.TKWHL)){
-				System.out.println("While");
+				//System.out.println("While");
 					atrDeIns = IWhile();
 			}
 			else if (lexico.reconoce(Tipos.TKNEW)){
-				System.out.println("New");
+				//System.out.println("New");
 				atrDeIns = INew();
 			}
 			else if (lexico.reconoce(Tipos.TKDEL)){
-				System.out.println("Del");
+				//System.out.println("Del");
 				atrDeIns = IDel();
 			}
 			else{
 				Token tk = lexico.getNextToken(); 
-				System.out.println("token "+ tk.getLexema());
+				//System.out.println("token "+ tk.getLexema());
 				if (tk.equals(new Token ("(", Tipos.TKPAP))){
-					System.out.println("ICall");
+					//System.out.println("ICall");
 					atrDeIns = ICall();
 				}
 				else{
-					System.out.println("IAsig");
+					//System.out.println("IAsig");
 					atrDeIns = IAsig();
 				}	
 			}		
@@ -711,7 +714,7 @@ AParams.props.i = 0
 		int etqs1;
 		int etqs2;
 		atrDeExpC = ExpC();
-		System.out.println("Fin ExpC del If");
+		//System.out.println("Fin ExpC del If");
 		if (!atrDeExpC.getProps().getTipo().equals("bool")){
 			throw new Exception("ERROR: La condicion del If ha de ser una expresion booleana.");
 		}
@@ -723,21 +726,21 @@ AParams.props.i = 0
 			codigo.emite("ir-f");
 			etqs1 = etq; 
 			etq ++;
-			System.out.println("etq: " + etq);
-			System.out.println("I del If");
+			//System.out.println("etq: " + etq);
+			//System.out.println("I del If");
 			atrDeI = I();
-			System.out.println("Fin I del If");
+			//System.out.println("Fin I del If");
 			codigo.emite("ir-a");
-			System.out.println("Fin emite del If");
+			//System.out.println("Fin emite del If");
 			etqs2 = etq;
 			etq ++;
-			System.out.println("etq: " + etq);
-			System.out.println("Inicio parchea del If");
+			//System.out.println("etq: " + etq);
+			//System.out.println("Inicio parchea del If");
 			codigo.parchea(etqs1,etq);
-			System.out.println("Fin parchea del If");
-			System.out.println("PElse del If");
+			//System.out.println("Fin parchea del If");
+			//System.out.println("PElse del If");
 			atrDePElse = PElse();
-			System.out.println("Fin PElse del If");
+			//System.out.println("Fin PElse del If");
 			codigo.parchea(etqs2,etq);
 			if ( atrDeI.getProps().getTipo().equals("error") || atrDePElse.getProps().getTipo().equals("error") || atrDeExpC.getProps().getTipo().equals("error")){
 				a.getProps().setTipo("error");
@@ -800,11 +803,11 @@ AParams.props.i = 0
 				codigo.emite("ir-f");
 				etqs = etq; 
 				etq ++;
-				System.out.println("etq: " + etq);
+				//System.out.println("etq: " + etq);
 				atrDeI = I();
 				codigo.emite("ir-a " + etqb);
 				etq ++;
-				System.out.println("etq: " + etq);
+				//System.out.println("etq: " + etq);
 				codigo.parchea(etqs,etq);
 			}
 			else{
@@ -838,7 +841,7 @@ AParams.props.i = 0
 			}
 			codigo.genIns("desapila-ind");
 			etq += 2;
-			System.out.println("etq: " + etq);
+			//System.out.println("etq: " + etq);
 		}
 		else {
 			a.getProps().setTipo("error");
@@ -855,7 +858,7 @@ AParams.props.i = 0
 		a.getProps().setTbase(Mem().getProps());
 		codigo.genIns("apila-ind");
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 		if (TS.ref(a.getProps()).getTipo().equals("pointer")){
 			if (a.getProps().getTipo().equals("ref")){
 				codigo.genIns("delete",TS.ref(a.getProps()).getTam());
@@ -864,7 +867,7 @@ AParams.props.i = 0
 				codigo.genIns("delete",a.getProps().getTam());
 			}
 			etq ++;
-			System.out.println("etq: " + etq);
+			//System.out.println("etq: " + etq);
 		}
 		else {
 			a.getProps().setTipo("error");
@@ -900,7 +903,7 @@ AParams.props.i = 0
 		}		
 		if (lexico.reconoce(Tipos.TKIDEN)){
 			lex = tk.getLexema();
-			System.out.println("Lexema: " + lex);
+			//System.out.println("Lexema: " + lex);
 			if (! TS.getClase(lex).equals("var")){
 				throw new Exception ("ERROR: Solo se puede asignar a variables en modo lectura - escritura");
 			}
@@ -910,28 +913,28 @@ AParams.props.i = 0
 				atrDeExpC = ExpC();
 				boolean tiposIguales = atrDeExpC.getProps().getTipo().equals(TS.ref(a.getProps()).getTipo());
 				errDeIAsig = (!(tiposIguales) || !(TS.existeID(lex)) || (atrDeExpC.getProps().getTipo().equals("error")));
-				System.out.println("errDeIAsig: " + errDeIAsig);
+				//System.out.println("errDeIAsig: " + errDeIAsig);
 				if (!(TS.existeID(lex))){
 					errDeIAsig = true;
 					throw new Exception("ERROR: Identificador no declarado. \nEl identificador ha de estar declarado en la seccion de Declaraciones antes de que se le pueda asignar un valor.");
 				}
 				else{
 					if (TS.compatibles(a.getProps(), new Atributos("int","",0,1, new Vector())) || TS.compatibles(a.getProps(), new Atributos("bool","",0,1, new Vector()))){
-						System.out.println("Compatibles");
+						//System.out.println("Compatibles");
 							codigo.genIns("desapila-ind");
 							etq ++;		
-							System.out.println("etq: " + etq);
+							//System.out.println("etq: " + etq);
 					}
 					else {
-						System.out.println("No compatibles");
+						//System.out.println("No compatibles");
 						codigo.genIns("mueve",a.getProps().getTam());
 						etq ++;
-						System.out.println("etq: " + etq);
+						//System.out.println("etq: " + etq);
 					}
 				}	
 				a.setId(lex);
 				a.getProps().setTipo(TS.getProps(lex).getTipo());
-				System.out.println("Fin IAsig");
+				//System.out.println("Fin IAsig");
 			}
 		}
 		else{
@@ -947,7 +950,7 @@ AParams.props.i = 0
 		if (errDeIAsig){
 			a.getProps().setTipo("error");
 		}
-		System.out.println("Salimos de IAsig");
+		//System.out.println("Salimos de IAsig");
 		return a;
 	}
 
@@ -963,33 +966,34 @@ AParams.props.i = 0
 		 int etqs1= etq; 
 		 String lex = lexico.getLookahead().getLexema(); // iden
 		 codigo.apila_ret(etqs1);
-		 System.out.println("etqs1 :" + etqs1);
+		 //System.out.println("etqs1 :" + etqs1);
 		 etq= etq + longApilaRet;
 		 TablaSimbolos TSAux = new TablaSimbolos(TS.getTabla());
-		 System.out.println("La TS en ICall antes de cambiarla");
-		 TS.muestra();
-		 System.out.println("La TS en ICall después de cambiarla");
-		 TS.muestra(); 
+		 //System.out.println("La TS en ICall antes de cambiarla");
+		 //TS.muestra();
+		 //System.out.println("La TS en ICall después de cambiarla");
+		 //TS.muestra(); 
 		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
+		 System.out.println(" Params en icall ");
 		 System.out.println(atrDeAParams.getProps());
 		 System.out.println(TS.getProps(lex));
 		 if (!TS.compatibles(atrDeAParams.getProps().getParams(), TS.getProps(lex).getParams())){
 			 throw new Exception("ERROR: la llamada al procedimiento no es comaprtible con el procedimiento.");
 		 }
-		 System.out.println("Antes de llamar a parchea en el ICall ");
+		 //System.out.println("Antes de llamar a parchea en el ICall ");
 		 codigo.parchea (etqs1+2,etq);
-		 System.out.println("Antes de llamar a TS en el ICall ");
-		 System.out.println("Antes de llamar a TS en el ICall "+ lex );
-		 System.out.println("La TS en ICall");
-		 TS.muestra();
-		 System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
+		 //System.out.println("Antes de llamar a TS en el ICall ");
+		 //System.out.println("Antes de llamar a TS en el ICall "+ lex );
+		 //System.out.println("La TS en ICall");
+		 //TS.muestra();
+		 //System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
 		 codigo.genIns("ir-a", TS.getDir(lex));
-		 System.out.println("TS.getDir(lex) :" + TS.getDir(lex));
+		 //System.out.println("TS.getDir(lex) :" + TS.getDir(lex));
 		 etq = etq + 1;
 		 a.setProps(atrDeAParams.getProps());
-		 System.out.println("Terminamos el ICall");
+		 //System.out.println("Terminamos el ICall");
 		 a.setId(lex);
 		 TS = TSAux;
 		 return a;
@@ -1005,7 +1009,7 @@ AParams.props.i = 0
 	public Par ExpC() throws Exception{
 		Par atrDeExp;
 		Par atrDeRExpC;
-		System.out.println("ExpC");
+		//System.out.println("ExpC");
 		atrDeExp = Exp();
 		Par a = new Par();
 		atrDeRExpC = RExpC();
@@ -1029,7 +1033,7 @@ AParams.props.i = 0
 				a.getProps().setTipo("error");
 			}
 		}
-		System.out.println("Termino ExpC");
+		//System.out.println("Termino ExpC");
 		return a;
 	}
 	
@@ -1045,7 +1049,7 @@ AParams.props.i = 0
 		Par atrDeExp;
 		Par atrDeRExpC;
 		Par a = new Par();
-		System.out.println("RExpC");
+		//System.out.println("RExpC");
 		if (lexico.reconoce(Tipos.TKFF)){
 			a.getProps().setTipo("error");
 			return a;
@@ -1076,7 +1080,7 @@ AParams.props.i = 0
 			} 
 		} 
 		a.getProps().setTipo("");
-		System.out.println("Termino RExpC");
+		//System.out.println("Termino RExpC");
 		return a;
 	}
 	
@@ -1090,7 +1094,7 @@ AParams.props.i = 0
 		Par atrDeTerm;
 		Par atrDeRExp;
 		Par a = new Par();
-		System.out.println("Exp");
+		//System.out.println("Exp");
 		atrDeTerm = Term();
 		atrDeRExp = RExp();
 		
@@ -1130,7 +1134,7 @@ AParams.props.i = 0
 		Par atrDeTerm = new Par();
 		Par atrDeRExp;
 		Par a = new Par();
-		System.out.println("RExp");
+		//System.out.println("RExp");
 		if (lexico.reconoce(Tipos.TKFF)){
 			a.getProps().setTipo("error");
 			return a;
@@ -1204,7 +1208,7 @@ AParams.props.i = 0
 		Par atrDeFact;
 		Par atrDeRTerm;
 		Par a = new Par();
-		System.out.println("Term");
+		//System.out.println("Term");
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
 		
@@ -1230,7 +1234,7 @@ AParams.props.i = 0
 				a.getProps().setTipo("error");
 			}
 		}
-		System.out.println("Term :" + a.toString());
+		//System.out.println("Term :" + a.toString());
 		return a;
 	}
 	
@@ -1244,7 +1248,7 @@ AParams.props.i = 0
 		Par atrDeFact;
 		Par atrDeRTerm;
 		Par a = new Par();
-		System.out.println("RTerm");
+		//System.out.println("RTerm");
 		if (lexico.getNextToken().getCategoriaLexica()== Tipos.TKCCI){
 			a.getProps().setTipo("");
 			return a;
@@ -1331,7 +1335,7 @@ AParams.props.i = 0
 			a.getProps().setTam(1);
 			codigo. genIns("apila", Integer.parseInt(tk.getLexema()) );
 			etq ++;
-			System.out.println("etq: " + etq);
+			//System.out.println("etq: " + etq);
 		} 
 		else if (lexico.reconoce(Tipos.TKTRUE) || lexico.reconoce(Tipos.TKFALSE)){
 			a.getProps().setTipo("bool");
@@ -1344,7 +1348,7 @@ AParams.props.i = 0
 				cod = 1;
 			codigo.genIns("apila", cod);
 			etq ++;
-			System.out.println("etq: " + etq);
+			//System.out.println("etq: " + etq);
 		} else if (lexico.reconoce(Tipos.TKNOT) || lexico.reconoce(Tipos.TKRESTA)) {  // es un OpUn
 			boolean numerico = lexico.reconoce(Tipos.TKRESTA); // numerico != true ==> booleano = true
 			atrDeFact = Fact();
@@ -1375,7 +1379,7 @@ AParams.props.i = 0
 				a = Mem();
 				codigo.genIns("apila-ind");
 				etq ++;
-				System.out.println("etq: " + etq);
+				//System.out.println("etq: " + etq);
 			}
 			else {
 				if (lexico.reconoce(Tipos.TKPAP)){
@@ -1398,7 +1402,7 @@ AParams.props.i = 0
 				}
 			}
 		}
-		System.out.println("Fact :" + a.toString());
+		//System.out.println("Fact :" + a.toString());
 		return a;
 	}
 	
@@ -1422,10 +1426,10 @@ AParams.props.i = 0
 		a.setId(tk.getLexema());
 		a.setClase(TS.getClase(tk.getLexema()));
 		a.setDir(TS.getDir(tk.getLexema()));
-		System.out.println("TS.getDir(tk.getLexema()) " + TS.getDir(tk.getLexema()));
+		//System.out.println("TS.getDir(tk.getLexema()) " + TS.getDir(tk.getLexema()));
 		codigo.genIns("apila",TS.getDir(tk.getLexema()));
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 		atrDeRMem = RMem(a.getProps()/*.getTbase()*/);
 		if (atrDeRMem != null){
 			if (atrDeRMem.getTipo().equals("")){
@@ -1445,7 +1449,7 @@ AParams.props.i = 0
 			tk = lexico.lexer();
 			codigo.genIns("apila-ind");
 			etq ++;
-			System.out.println("etq: " + etq);
+			//System.out.println("etq: " + etq);
 			if (a.getTbase().getTbase() == null)
 				return a.getTbase();
 			else
@@ -1461,7 +1465,7 @@ AParams.props.i = 0
 				codigo.genIns("multiplica");
 				codigo.genIns("suma");
 				etq += 3;
-				System.out.println("etq: " + etq);
+				//System.out.println("etq: " + etq);
 				if (a.getTipo().equals("ref")){
 					Atributos aux = TS.ref(a);
 					a = aux;
@@ -1508,7 +1512,7 @@ AParams.props.i = 0
 		else
 			codigo.genIns("or");
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 	}
 	
 	/**
@@ -1525,7 +1529,7 @@ AParams.props.i = 0
 		else 
 			codigo.genIns("and");
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 	}
 	
 	/**
@@ -1553,7 +1557,7 @@ AParams.props.i = 0
 				codigo.genIns("distinto");
 		}
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 	}
 
 	/**
@@ -1563,13 +1567,13 @@ AParams.props.i = 0
 	public void genOpNot(){
 		codigo.genIns("not");
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 	}
 	
 	public void genOpNega(){
 		codigo.genIns("neg");
 		etq ++;
-		System.out.println("etq: " + etq);
+		//System.out.println("etq: " + etq);
 	}
 	
 	/*private String sacaTipo(Atributos atr){
