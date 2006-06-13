@@ -286,13 +286,12 @@ public class TablaSimbolos {
 	public boolean compatibles (Vector e1, Vector e2)
 	{
 		boolean compatible=true;
-		int i=0;
+		int i;
 		if (e1.size()!=e2.size()) return false;
-		while (!e1.isEmpty()){
+		for (i=0 ; i< e1.size(); i++){
 			if (!compatibles (((Par)e1.get(i)).getProps(), ((Par)e2.get(i)).getProps())){
 				return false;
 			}
-			i++;
 		}
 		return compatible;
 	}

@@ -968,7 +968,7 @@ AParams.props.i = 0
 		 Par atrDeAParams = AParams();
 		 System.out.println(atrDeAParams.getProps());
 		 System.out.println(TS.getProps(lex));
-		 if (!TS.compatibles(atrDeAParams.getProps(), TS.getProps(lex))){
+		 if (!TS.compatibles(atrDeAParams.getProps().getParams(), TS.getProps(lex).getParams())){
 			 throw new Exception("ERROR: la llamada al procedimiento no es comaprtible con el procedimiento.");
 		 }
 		 System.out.println("Antes de llamar a parchea en el ICall ");
