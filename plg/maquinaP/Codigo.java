@@ -148,6 +148,7 @@ public class Codigo {
 	public void apila_ret (int ret) {
 		this.genIns("apila-dir",0);
 		this.genIns("apila",1);
+		this.genIns("suma");
 		this.genIns("apila");//, ret
 		this.genIns("desapila-ind");
 	}

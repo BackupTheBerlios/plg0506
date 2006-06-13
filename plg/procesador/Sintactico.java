@@ -39,7 +39,7 @@ public class Sintactico{
 	int nivel;
 	int nmax;
 	
-	private static int longApilaRet = 4;
+	private static int longApilaRet = 5;
 	//private static int longPrologo = 13;
 	private static int longPrologo = 2;
 	private static int longEpilogo = 8;
@@ -101,7 +101,7 @@ public class Sintactico{
 	public boolean Prog() throws Exception{
 		etq = 0;
 		//System.out.println("etq: " + etq);
-		dir = 1;
+		dir = 2;
 		nivel = 0;
 		int etqs2=etq;
 		////System.out.println("etqs2: " + etqs2);
@@ -982,13 +982,13 @@ AParams.props.i = 0
 		 if (!TS.compatibles(atrDeAParams.getProps().getParams(), TS.getProps(lex).getParams())){
 			 throw new Exception("ERROR: la llamada al procedimiento no es comaprtible con el procedimiento.");
 		 }
-		 //System.out.println("Antes de llamar a parchea en el ICall ");
-		 codigo.parchea (etqs1+2,etq);
-		 //System.out.println("Antes de llamar a TS en el ICall ");
-		 //System.out.println("Antes de llamar a TS en el ICall "+ lex );
-		 //System.out.println("La TS en ICall");
-		 //TS.muestra();
-		 //System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
+		 System.out.println("Antes de llamar a parchea en el ICall ");
+		 codigo.parchea (etqs1+3,etq);
+		 System.out.println("Antes de llamar a TS en el ICall ");
+		 System.out.println("Antes de llamar a TS en el ICall "+ lex );
+		 System.out.println("La TS en ICall");
+		 TS.muestra();
+		 System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
 		 codigo.genIns("ir-a", TS.getDir(lex));
 		 //System.out.println("TS.getDir(lex) :" + TS.getDir(lex));
 		 etq = etq + 1;
