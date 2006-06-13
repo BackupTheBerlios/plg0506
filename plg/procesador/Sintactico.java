@@ -39,7 +39,7 @@ public class Sintactico{
 	int nivel;
 	int nmax;
 	
-	private static int longApilaRet = 5;
+	private static int longApilaRet = 4;
 	private static int longPrologo = 13;
 	private static int longEpilogo = 12;
 	private static int longInicioPaso = 3;
@@ -954,8 +954,8 @@ AParams.props.i = 0
 		 Par a = new Par();
 		 int etqs1= etq; 
 		 String lex = lexico.getLookahead().getLexema(); // iden
-		 codigo.genIns("apila-ret", etqs1);
-		 etq ++;
+		 codigo.apila_ret(etqs1);
+		 etq= etq + longApilaRet;
 		 TablaSimbolos TSAux = new TablaSimbolos(TS.getTabla());
 		 System.out.println("La TS en ICall antes de cambiarla");
 		 TS.muestra();
