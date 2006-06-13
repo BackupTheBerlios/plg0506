@@ -16,7 +16,7 @@ public class Heap {
 	private int ultimo;
 	
 	/**
-	 * constructor de heap con un parmetro entero
+	 * constructor de heap con un parametro entero
 	 */
 	public Heap(int i) {
 		super();
@@ -58,7 +58,7 @@ public class Heap {
 	}
 	
 	/**
-	 * mtodo que coloca un elemento el montculo
+	 * metodo que coloca un elemento el montculo
 	 * @param v
 	 * @param u
 	 */
@@ -89,7 +89,7 @@ public class Heap {
 		}
 	}
 	/**
-	 * mtodo que reserva un tam de memoria
+	 * Metodo que reserva un tam de memoria
 	 * @param tam entero que indica la cantidad de memoria que se quiere reservar
 	 * @return int
 	 * @throws Exception
@@ -124,7 +124,7 @@ public class Heap {
 	}
 	
 	/**
-	 * mtodo que devuelve la direccin de memoria de un elemento
+	 * Metodo que devuelve la direccion de memoria de un elemento
 	 * @param d
 	 * @return int
 	 * @throws Exception
@@ -139,7 +139,7 @@ public class Heap {
 	}
 	
 	/**
-	 * Mtodo que modifica el contenido de una posicin de memoria
+	 * Metodo que modifica el contenido de una posicion de memoria
 	 * @param d
 	 * @param value
 	 * @throws Exception

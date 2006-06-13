@@ -15,22 +15,22 @@ import javax.swing.JOptionPane;
 
 /**
  * La clase <B>MaquinaP</B> implementa la maquina virtual. Para que el lenguaje objeto que hemos creado tenga valor 
- * es necesario que sea ejecutado en una m?quina y que ?sta traduzca los elementos del lenguaje fuente al lenguaje 
+ * es necesario que sea ejecutado en una maquina y que esta traduzca los elementos del lenguaje fuente al lenguaje 
  * objeto.
  * <P>La clase MaquinaP cuenta con los siguientes atributos:
- * <UL><LI><CODE>pila:</CODE> La pila de los operandos de la m?quina.</LI>
- * <LI><CODE>PC:</CODE> Contador de programa. Al final de la ejecuci?n nos dice cuantas lienas tiene dicho programa.</LI>
- * <LI><CODE>H:</CODE> Indica si la m?quina esta en ejecuci?n, parada por error, o acabo su ejecuci?n.</LI>
+ * <UL><LI><CODE>pila:</CODE> La pila de los operandos de la maquina.</LI>
+ * <LI><CODE>PC:</CODE> Contador de programa. Al final de la ejecucion nos dice cuantas lineas tiene dicho programa.</LI>
+ * <LI><CODE>H:</CODE> Indica si la maquina esta en ejecucion, parada por error, o acabo su ejecucion.</LI>
  * <LI><CODE>ST:</CODE> Puntero a la cima de la pila.</LI>
- * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
+ * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui habia puesto el nombre del fichero pero quizas deberia ser el
  * c?digo del programa.</LI>
- * <LI><CODE>Mem:</CODE> Memoria de datos est?tica.</LI>
- * <LI><CODE>heap:</CODE> Memoria de datos din?mica.</LI>
+ * <LI><CODE>Mem:</CODE> Memoria de datos estatica.</LI>
+ * <LI><CODE>heap:</CODE> Memoria de datos dinamica.</LI>
  * <LI><CODE>fichero:</CODE> Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP. Sera un fichero con extension '.obj'</LI>
  * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
  * </UL></P>
  * 
- * @author Jon?s Andradas, Paloma de la Fuente, Leticia Garc?a y Silvia Mart?n
+ * @author Jonas Andradas, Paloma de la Fuente, Leticia Garcia y Silvia Martin
  * @see java.io.FileReader#FileReader(java.lang.String)
  */
 
@@ -62,8 +62,8 @@ public class MaquinaP {
 	private int tamMem;
 
 	/**
-	 * El constructor de la clase MaquinaP que s?lo tiene el buffer de lectura del fichero como parmetro de entrada.
-	 * @param f Recibe como par?metro la ruta del fichero a ejecutar para poder inicializar todo.
+	 * El constructor de la clase MaquinaP que solo tiene el buffer de lectura del fichero como parametro de entrada.
+	 * @param f Recibe como parametro la ruta del fichero a ejecutar para poder inicializar todo.
 	 *
 	 */	
 	public MaquinaP(String f) {
@@ -107,7 +107,7 @@ public class MaquinaP {
 	
 	/**
 	 * Mutador para el atributo de la clase, H. 
-	 * @param h Entero que controla el estado actual de la pila, adem?s es donde se refleja el error.
+	 * @param h Entero que controla el estado actual de la pila, ademas es donde se refleja el error.
 	 */
 	public void setH(int h) {
 		H = h;
@@ -115,7 +115,7 @@ public class MaquinaP {
 	
 	/**
 	 * Accesor para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
-	 * @return Vector donde cada celda es una posici?n de Memoria.
+	 * @return Vector donde cada celda es una posicion de Memoria.
 	 */
 	public Vector getMem() {
 		return Mem;
@@ -131,7 +131,7 @@ public class MaquinaP {
 	
 	/**
 	 * Accesor para el atributo de la clase, PC. Que indica el contador de instrucciones del Programa. 
-	 * @return Entero que indica el numero de instrucci?n.
+	 * @return Entero que indica el numero de instruccion.
 	 */
 	public int getPC() {
 		return PC;
@@ -139,7 +139,7 @@ public class MaquinaP {
 	
 	/**
 	 * Mutador para el atributo de la clase, PC. Que indica el contador de instrucciones del Programa. 
-	 * @param pc Entero para actualizar la nueva posci?n del programa.
+	 * @param pc Entero para actualizar la nueva poscion del programa.
 	 */
 	public void setPC(int pc) {
 		PC = pc;
@@ -187,7 +187,7 @@ public class MaquinaP {
 	
 	/**
 	 * Mutador para el atributo de la clase ST. Se cambia el puntero a la cima de la pila, con lo que cambiara la cima de la pila.
-	 * @param st Recibe por par?metro el entero con el que cambiar la cima de la pila.
+	 * @param st Recibe por parametro el entero con el que cambiar la cima de la pila.
 	 */
 	public void setST(int st) {
 		ST = st;
@@ -222,13 +222,13 @@ public class MaquinaP {
 	}
 
 	/**
-	 * Obtiene el programa del fichero que recibe por par?metro. Guarda cada instruccion del programa en una posici?n del 
+	 * Obtiene el programa del fichero que recibe por parametro. Guarda cada instruccion del programa en una posicion del 
 	 * vector Prog. Para obtener el programa crea un BufferReader y se lanzan y capturan excepciones al respecto. 
 	 * 
-	 * @param f Recibe por par?metro el fichero del cual obtiene el programa. Ha de ser un FileReader para luego trabajar con el.
-	 * @return Devuelve el Vector con el programa. Cada posici?n es una instruccion de la maquina P.
-	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo m?todo.
-	 * @exception java.io.IOException Se lanza y se captura en este mismo m?todo.
+	 * @param f Recibe por parametro el fichero del cual obtiene el programa. Ha de ser un FileReader para luego trabajar con el.
+	 * @return Devuelve el Vector con el programa. Cada posicion es una instruccion de la maquina P.
+	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo metodo.
+	 * @exception java.io.IOException Se lanza y se captura en este mismo metodo.
 	 */
 	private Vector damePrograma(FileReader f){
 		Vector v=new Vector();
@@ -250,9 +250,9 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Aumenta el tama?o del vector memoria seg?n las necesidades del programa que va a ejecutar.
+	 * Aumenta el tama?o del vector memoria segun las necesidades del programa que va a ejecutar.
 	 * 
-	 * @param tam Recibe un entero con el tama?o que ha de aumentar.
+	 * @param tam Recibe un entero con el tamaño que ha de aumentar.
 	 */
 	private void aumentoMem(int tam){
 		for(int i = Mem.size();i<tam+1;i++){
@@ -261,7 +261,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * M?todo que ejecuta la Maquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
+	 * Metodo que ejecuta la Maquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
 	 *
 	 */
 	public void ejecuta() throws Exception{
@@ -722,7 +722,7 @@ public class MaquinaP {
 	 * Metodo que devuelve un String con el contenido de la Memoria. 
 	 * Se usa para ver el contenido final de la memoria despues de ejecutar la maquina P.
 	 * 
-	 * @return String con el contenido del vector Mamoria.
+	 * @return String con el contenido del vector Memoria.
 	 */
 	public String resultadoMem(){
 		String s="Memoria estatica:"+"\n";

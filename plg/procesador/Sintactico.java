@@ -17,7 +17,7 @@ import tablaSimbolos.Atributos;
  * <LI><CODE>dir:</CODE> Entero que marca la posicin de la pila con la que estamos trabajando. De tipo Entero.</LI>
  * </UL></P>
  * 
- * @author Paloma de la Fuente, Jonas Andradas, Leticia Garcma y Silvia Martmn
+ * @author Paloma de la Fuente, Jonas Andradas, Leticia Garcia y Silvia Martin
  *
  */
 
@@ -52,7 +52,7 @@ public class Sintactico{
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
-	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar.
+	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contiene el cdigo a analizar.
 	 * @param T Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
 	 * @param f String donde se guarga la ruta del fichero donde se va a guardar el codigo generado por el compilador.
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
@@ -124,7 +124,7 @@ public class Sintactico{
 	}
 	
 	/**
-	 * Recorre el conjunto de declaraciones (Dec) una por una.  Si tras una declaracisn encontramos
+	 * Recorre el conjunto de declaraciones (Dec) una por una.  Si tras una declaracion encontramos
 	 * un punto y coma (";"), procesamos otra mas.  Si en cambio lo que encontramos es una almohadilla
 	 * ("#"), dejamos de leer Decs.
 	 * 
@@ -286,7 +286,7 @@ public class Sintactico{
 	}	
 	
 	/**
-	 * Procesa una declaracisn de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
+	 * Procesa una declaracion de variable.  Cada declaracion Dec consta de dos elementos:  El tipo de la variable
 	 * y su nombre, de la forma: 
 	 * 			tipo identificador;
 	 * 
@@ -690,22 +690,6 @@ AParams.props.i = 0
 		return a;	
 	}
 	
-	/**	
-	 * IIf ::= {var etqs1, etqs2;
-	 * 			ExpC();
-	 *  		then 
-	 * 			emite(ir-f);
-	 * 			etqs1 <-- etq;
-	 * 			etq <--etq +1;
-	 * 			I();
-	 * 			emite(ir-a);
-	 * 			etqs2 <-- etq;
-	 * 			parchea(etqs1,etq);
-	 * 			etq <--etq +1;
-	 * 			PElse();
-	 * 			parchea(etqs2,etq); 
-	 * 			}
-	 */
 	public Par IIf() throws Exception{
 		Par a = new Par();
 		Par atrDeExpC;
@@ -773,20 +757,6 @@ AParams.props.i = 0
 		return atrDeIns;	
 	}
 
-	/**	
-	 * IWhile ::= {var etqb, etqs;
-	 *  		etqb <-- etq
-	 * 			ExpC();
-	 *  		do 
-	 * 			emite(ir-f);
-	 * 			etqs <-- etq;
-	 * 			etq <--etq +1;
-	 * 			I();
-	 * 			emite(ir-a etqb);
-	 * 			etq <--etq +1;
-	 * 			parchea(etqs,etq); 
-	 * 			}
-	 */
 	public Par IWhile() throws Exception{
 		Par a = new Par();
 		Par atrDeExpC;
@@ -867,7 +837,6 @@ AParams.props.i = 0
 				codigo.genIns("delete",a.getProps().getTam());
 			}
 			etq ++;
-			//System.out.println("etq: " + etq);
 		}
 		else {
 			a.getProps().setTipo("error");
@@ -877,13 +846,13 @@ AParams.props.i = 0
 	}
 	
 	/**
-	 * Procesa una instruccisn de asignacisn, de la forma:
+	 * Procesa una instruccion de asignacion, de la forma:
 	 * 
-	 * 		identificador := Expresisn.
+	 * 		identificador := Expresion.
 	 * 
-	 * Si hay un error en el formato de la instruccisn de asignacisn, o si 
-	 * el tipo del identificador usado no coincide con el de la expresisn, 
-	 * se lanza una Excepcisn.
+	 * Si hay un error en el formato de la instruccisn de asignacion, o si 
+	 * el tipo del identificador usado no coincide con el de la expresion, 
+	 * se lanza una Excepcion.
 	 * 
 	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
@@ -1000,8 +969,8 @@ AParams.props.i = 0
 	 }
 	
 	/**
-	 * Procesa y desarrolla una Expresisn de Comparacisn, ExpC, llamando a Exp y a RExpC, 
-	 * para empezar a desarrollar el arbol sintactico que reconocera la Expresisn. 
+	 * Procesa y desarrolla una Expresion de Comparacion, ExpC, llamando a Exp y a RExpC, 
+	 * para empezar a desarrollar el arbol sintactico que reconocera la Expresion. 
 	 * 
 	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
@@ -1125,7 +1094,7 @@ AParams.props.i = 0
 	}
 	
 	/**
-	 * Reconoce la segunda mitad (con el operador) de la descomposicisn de una Expresisn booleana o aritmitica.
+	 * Reconoce la segunda mitad (con el operador) de la descomposicisn de una Expresion booleana o aritmitica.
 	 * 
 	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
@@ -1199,7 +1168,7 @@ AParams.props.i = 0
 	}
 	
 	/**
-	 * Reconoce un Tirmino, compuesto de un Factor y un Tirmino Recursivo:
+	 * Reconoce un Termino, compuesto de un Factor y un Tirmino Recursivo:
 	 *  
 	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
@@ -1239,7 +1208,7 @@ AParams.props.i = 0
 	}
 	
 	/**
-	 * Reconoce un Tirmino Aritmitico recursivo.
+	 * Reconoce un Termino Aritmitico recursivo.
 	 *  
 	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
@@ -1316,7 +1285,7 @@ AParams.props.i = 0
 
 	
 	/**
-	 * Reconoce un Factor.  Un Factor puede ser un entero, un identificador o una Expresisn aritmitica
+	 * Reconoce un Factor. Un Factor puede ser un entero, un identificador o una Expresion aritmitica
 	 * entre parintesis.
 	 * 
 	 * @return Par devuelve los Par obtenidos en el analisis del Programa.
@@ -1407,9 +1376,9 @@ AParams.props.i = 0
 	}
 	
 	/** 
-	 * Resuelve un Fact en el que intervienen identificadores, tanto si es un identificador s?lo, como si es un puntero o un array.
+	 * Resuelve un Fact en el que intervienen identificadores, tanto si es un identificador solo, como si es un puntero o un array.
 	 * @return Par El objeto Par con los atributos obtenidos de resolver el identificador y sus referencias.
-	 * @throws Exception En caso de producirse una excepci?n, ?sta se propaga.
+	 * @throws Exception En caso de producirse una excepcion, esta se propaga.
 	 */
 	public Par Mem() throws Exception{
 		
@@ -1516,7 +1485,7 @@ AParams.props.i = 0
 	}
 	
 	/**
-	 * Genera el csdigo de la operacisn de multiplicacisn, divisisn o and.
+	 * Genera el codigo de la operacisn de multiplicacion, division o and.
 	 * 
 	 * @param opDeOpMul
 	 */
@@ -1533,7 +1502,7 @@ AParams.props.i = 0
 	}
 	
 	/**
-	 * Genera el csdigo de la operacisn de comparacisn
+	 * Genera el codigo de la operacion de comparacion
 	 * @param opDeOpComp
 	 */
 	public void genOpComp(String opDeOpComp){
@@ -1561,7 +1530,7 @@ AParams.props.i = 0
 	}
 
 	/**
-	 * Genera el csdigo de la negacisn booleana "not".
+	 * Genera el codigo de la negacion booleana "not".
 	 *
 	 */
 	public void genOpNot(){
