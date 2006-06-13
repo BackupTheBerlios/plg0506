@@ -104,9 +104,11 @@ public class Sintactico{
 		dir = 1;
 		nivel = 0;
 		int etqs2=etq;
+		System.out.println("etqs2: " + etqs2);
 		codigo.inicio();
 		etq = etq + longInicio;
 		int etqs = etq;
+		System.out.println("etqs: " + etqs);
 		codigo.genIns("ir-a");
 		etq ++;
 		System.out.println("etq: " + etq);
@@ -504,6 +506,7 @@ AParams.props.i = 0
 		Par a  = new Par();
 		int etqs1;
 		int inicio = etq;
+		System.out.println("inicio: " + inicio);
 		System.out.println("etq: " + etq);
 		int auxDir = dir;
 		//System.out.println();
@@ -524,6 +527,7 @@ AParams.props.i = 0
 		int tamlocales = dir - auxDir;
 		codigo.parchea(inicio,etq);
 		etqs1 = etq + longPrologo;
+		System.out.println("tamlocales: " + tamlocales);
 		codigo.prologo(tamlocales);
 		etq= etqs1;
 		Par atrDeIs = Is();
@@ -957,6 +961,7 @@ AParams.props.i = 0
 		 int etqs1= etq; 
 		 String lex = lexico.getLookahead().getLexema(); // iden
 		 codigo.apila_ret(etqs1);
+		 System.out.println("etqs1 :" + etqs1);
 		 etq= etq + longApilaRet;
 		 TablaSimbolos TSAux = new TablaSimbolos(TS.getTabla());
 		 System.out.println("La TS en ICall antes de cambiarla");
@@ -979,7 +984,8 @@ AParams.props.i = 0
 		 TS.muestra();
 		 System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
 		 codigo.genIns("ir-a", TS.getDir(lex));
-		 etq = etq +1;//+ longApilaRet 
+		 System.out.println("TS.getDir(lex) :" + TS.getDir(lex));
+		 etq = etq + 1;
 		 a.setProps(atrDeAParams.getProps());
 		 System.out.println("Terminamos el ICall");
 		 a.setId(lex);
@@ -1398,6 +1404,7 @@ AParams.props.i = 0
 		a.setId(tk.getLexema());
 		a.setClase(TS.getClase(tk.getLexema()));
 		a.setDir(TS.getDir(tk.getLexema()));
+		System.out.println("TS.getDir(tk.getLexema()) " + TS.getDir(tk.getLexema()));
 		codigo.genIns("apila",TS.getDir(tk.getLexema()));
 		etq ++;
 		System.out.println("etq: " + etq);

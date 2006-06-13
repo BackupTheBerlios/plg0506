@@ -1,7 +1,8 @@
 proc inic (int c){
-    int i
-    #
-    i := c;
+	int i
+	#
+	i := c;
 }
 #
 inic ( 5 );
+
