@@ -48,7 +48,7 @@ public class Sintactico{
 	private static int longFinPaso = 1;
 	//private static int longAccesoVar = 4;
 	private static int longInicio = 2;
-	private static int longPasoParametro = 3;
+	private static int longPasoParametro = 2;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -469,13 +469,15 @@ AParams.props.i = 0
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			codigo.genIns("copia");
 			etq ++;
+			System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaa 1");
 			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
+			System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaa 2");
 			a.getProps().getParams().addAll(atrDeLAParams.getProps().getParams());
 			codigo.genIns("flip");
 			etq ++;
 		}
 		codigo.paso_parametro(atrDeAParam.getDir());
-		etq += 2 + longPasoParametro;
+		etq += longPasoParametro;
 		return a;
 	}
 	
@@ -1048,6 +1050,10 @@ AParams.props.i = 0
 			a.getProps().setTipo("error");
 			return a;
 		}
+		if (lexico.reconoce(Tipos.TKCOMA)){
+			a.getProps().setTipo("");
+			return a;
+		}
 		if (!lexico.reconoce(Tipos.TKPYCOMA) || !lexico.reconoce(Tipos.TKEND) || 
 				! lexico.reconoce(Tipos.TKTHN) || !lexico.reconoce(Tipos.TKDO) || !lexico.reconoce(Tipos.TKPCI) ) {
 			if (lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKMAYIG) || lexico.reconoce(Tipos.TKMEN) || lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) || lexico.reconoce(Tipos.TKDIF)){
@@ -1129,6 +1135,10 @@ AParams.props.i = 0
 			return a;
 		}
 		if (lexico.getNextToken().getCategoriaLexica()== Tipos.TKCCI){
+			a.getProps().setTipo("");
+			return a;
+		}
+		if (lexico.reconoce(Tipos.TKCOMA)){
 			a.getProps().setTipo("");
 			return a;
 		}
@@ -1233,6 +1243,10 @@ AParams.props.i = 0
 		Par atrDeRTerm;
 		Par a = new Par();
 		if (lexico.getNextToken().getCategoriaLexica()== Tipos.TKCCI){
+			a.getProps().setTipo("");
+			return a;
+		}
+		if (lexico.reconoce(Tipos.TKCOMA)){
 			a.getProps().setTipo("");
 			return a;
 		}
