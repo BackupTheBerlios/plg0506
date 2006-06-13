@@ -131,7 +131,12 @@ public class Sintactico{
 		//System.out.println("Estoy en Decs y llamo a dec");
 		Par atrDeDec = Dec(); 
 		//System.out.println("A?ado");
-		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+		if (!atrDeDec.getClase().equals("proc")){
+			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+		}
+		else{
+			TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel(),atrDeDec.getT());
+		}
 		System.out.println("La TS que tengo despues de aadir en Decs, aado: " + atrDeDec.getId());
 		TS.muestra();
 		if (atrDeDec.getClase().equals("var")){

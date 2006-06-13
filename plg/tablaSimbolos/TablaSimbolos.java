@@ -160,7 +160,29 @@ public class TablaSimbolos {
 			return true;	
 		}	
 	}
-
+	
+	/**
+	 * 
+	 * @param id
+	 * @param t
+	 * @param clase
+	 * @param dir
+	 * @param nivel
+	 * @param TS
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean agnadeID(String id, Atributos t, String clase, int dir, int nivel, TablaSimbolos TS) throws Exception{
+		if (this.tabla.containsKey(id)){
+			throw new Exception ("No se puede duplicar el identificador");
+		}
+		else{
+			Par p = new Par(id, t, clase, dir, nivel,TS);
+			this.tabla.put(id,p);
+			return true;	
+		}	
+	}
+	
 	/**
 	 * El mtodo eliminaID elimina un identificador 'id' de la tabla si existe. 
 	 * Si no, lanzara una excepcion.
