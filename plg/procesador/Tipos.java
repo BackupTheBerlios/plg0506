@@ -1,9 +1,9 @@
 package procesador;
 /**
- * La clase <B>Tipos</B> declara las categoras lxicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
+ * La clase <B>Tipos</B> declara las categoras lexicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
  * <P>No tiene atributos, slo las constantes de los tipos.</P>
  * 
- * @author Jons Andradas, Paloma de la Fuente, Leticia Garca y Silvia Martn
+ * @author Jonas Andradas, Paloma de la Fuente, Leticia Garcia y Silvia Martin
  *
  */
 public class Tipos {
@@ -14,7 +14,7 @@ public class Tipos {
 	 */
 	
 	/**
-	 * Valor para reconocer nmeros enteros.
+	 * Valor para reconocer numeros enteros.
 	 */
 	public static final int TKNUM 		= 1;
 	
@@ -29,7 +29,7 @@ public class Tipos {
 	public static final int TKIDEN 		= 3; 
 	
 	/**
-	 * Valor para reconocer una asignacin.
+	 * Valor para reconocer una asignacion.
 	 */
 	public static final int TKASIGN	 	= 4; 
 	
@@ -49,22 +49,22 @@ public class Tipos {
 	public static final int TKRESTA		= 7; 
 	
 	/**
-	 * Valor para reconocer un signo de multiplicacin '*'.
+	 * Valor para reconocer un signo de multiplicacion '*'.
 	 */
 	public static final int TKMULT		= 8; 
 	
 	/**
-	 * Valor para reconocer un signo de divisin '/'.
+	 * Valor para reconocer un signo de division '/'.
 	 */
 	public static final int TKDIV	 	= 9; 
 	
 	/**
-	 * valor para reconocer un parntesis de apertura '('.
+	 * valor para reconocer un parentesis de apertura '('.
 	 */
 	public static final int TKPAP		= 10; 
 	
 	/**
-	 * Valor para reconocer un parntesis de cierre ')'.
+	 * Valor para reconocer un parentesis de cierre ')'.
 	 */
 	public static final int TKPCI		= 11; 
 	
@@ -129,7 +129,7 @@ public class Tipos {
 	public static final int TKBOOL		= 23;
 	
 	/**
-	 * Valor para reconocer carcter que indica el final de las declaraciones '#'.
+	 * Valor para reconocer caracter que indica el final de las declaraciones '#'.
 	 */
 	public static final int TKCUA		= 24;
 	

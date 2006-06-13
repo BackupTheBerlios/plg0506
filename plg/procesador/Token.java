@@ -4,10 +4,10 @@ package procesador;
  * La clase <B>Token</B> define los atributos y mtodos relacionados con los token que usan nuestro lenguaje.
  * 
  * <P>Cuenta con los siguientes atributos:
- * <UL><LI><CODE>categoriaLexica:</CODE> entero que indica a que categora lxica pertenece el token.</LI>
+ * <UL><LI><CODE>categoriaLexica:</CODE> entero que indica a que categora lexica pertenece el token.</LI>
  * <LI><CODE>lexema:</CODE> string que representa la parte lex del Token.</LI></UL></P>
  * 
- * @author Paloma de la Fuente, Jons Andradas, Leticia Garca y Silvia Martn
+ * @author Paloma de la Fuente, Jonas Andradas, Leticia Garcia y Silvia Martin
  *
  */
 public class Token {
@@ -22,7 +22,7 @@ public class Token {
 	private String lexema;
 	
 	/**
-	 * Constructor de la clase sin parametros. Inicializa lexema a vaco y categora lxica a un valor que no indica nada.
+	 * Constructor de la clase sin parametros. Inicializa lexema a vacio y categora lexica a un valor que no indica nada.
 	 */
 	public Token() {
 		lexema = "";
@@ -43,7 +43,7 @@ public class Token {
 
 	/**
 	 * Accesor el atributo de la clase categoriaLexica.
-	 * @return Entero que indica a que categora lxica pertenece el token.
+	 * @return Entero que indica a que categora lexica pertenece el token.
 	 */
 	public int getCategoriaLexica() {
 		return categoriaLexica;
@@ -51,7 +51,7 @@ public class Token {
 	
 	/**
 	 * Mutador el atributo de la clase categoriaLexica.
-	 * @param categoriaLexica Entero que indica a que categora lxica pertenece el token.
+	 * @param categoriaLexica Entero que indica a que categora lexica pertenece el token.
 	 */
 	public void setCategoriaLexica(int categoriaLexica) {
 		this.categoriaLexica = categoriaLexica;
@@ -75,7 +75,7 @@ public class Token {
 	
 	/**
 	 * 
-	 * El mtodo equals compara el Token que recibe como parmetro consigo mismo. Son iguales si tienen la misma categora lxica y el mismo lexema.
+	 * El metodo equals compara el Token que recibe como parametro consigo mismo. Son iguales si tienen la misma categoria lexica y el mismo lexema.
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 * @param tk Token con el que se quiere comparar si son iguales. 
 	 * @return Booleano que nos indica la igualdad o no de los dos Tokens.
