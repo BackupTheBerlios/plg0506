@@ -1,0 +1,17 @@
+bool a;
+int b;
+proc inic (int c){
+int i;
+pointer int h;
+array [1] of bool d
+#
+i := 1;
+d[1] := true;
+if d[1] then 
+	h pointer := -155;
+else
+	h pointer := 500;
+};
+int ultimo
+#
+a := false;

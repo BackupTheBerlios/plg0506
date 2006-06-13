@@ -132,6 +132,7 @@ public class Sintactico{
 		Par atrDeDec = Dec(); 
 		//System.out.println("A?ado");
 		TS.agnadeID(atrDeDec.getId(), atrDeDec.getProps(), atrDeDec.getClase(), atrDeDec.getDir(),atrDeDec.getNivel());
+		System.out.println("La TS que tengo despues de añadir en Decs, añado: " + atrDeDec.getId());
 		TS.muestra();
 		if (atrDeDec.getClase().equals("var")){
 			dir = dir + atrDeDec.getProps().getTam();
@@ -214,9 +215,13 @@ public class Sintactico{
 			nmax=nivel;
 		}
 		Par atrDeFParams = FParams();
+		System.out.println("La TS padre, creo: ");
+		TS.muestra();
 		TablaSimbolos tsAux = new TablaSimbolos(TS.getTabla());
 		TS = new TablaSimbolos(TS.getTabla(), atrDeFParams.getProps().getParams());
 		a.setT(TS);
+		System.out.println("La TS hijo, creo: ");
+		TS.muestra();
 		a.getProps().setTam(0);
 		a.getProps().setElems(atrDeFParams.getProps().getElems());
 		a.getProps().setParams(atrDeFParams.getProps().getParams());
@@ -225,7 +230,17 @@ public class Sintactico{
 		if (!lexico.reconoce(Tipos.TKLLAP)){
 			throw new Exception("ERROR: Falta una llave de apertura");
 		}
+		//Codigo de Palo de prueba
+		a.setDir(etq);
+		TS.agnadeID(a.getId(), a.getProps(), a.getClase(), a.getDir(),a.getNivel());
+		System.out.println("La TS hijo, creo despues de codigo Palo: ");
+		TS.muestra();
+		System.out.println("La dir de instrucciones que teno ahora es: "+ etq);
+		//FinCodigo de Palo
 		Bloque();
+		System.out.println("La dir de instrucciones que tenodespues de bloque es: "+ etq);
+		System.out.println("La TS hijo, creo despues de bloque: ");
+		TS.muestra();
 		if (!lexico.reconoce(Tipos.TKLLCI)){
 			throw new Exception("ERROR: Falta una llave de cierre");
 		}
@@ -478,6 +493,7 @@ AParams.props.i = 0
 		int inicio = etq;
 		System.out.println("etq: " + etq);
 		int auxDir = dir;
+		//System.out.println();
 		Token tk = lexico.getNextToken();
 		Par atrDeDecs;
 		codigo.genIns("ir-a");
@@ -490,6 +506,8 @@ AParams.props.i = 0
 			atrDeDecs=new Par();
 			atrDeDecs.getProps().setTipo("");
 		}
+		System.out.println("La TS que tengo en bloque: ");
+		TS.muestra();
 		int tamlocales = dir - auxDir;
 		codigo.parchea(inicio,etq);
 		etqs1 = etq + longPrologo;
