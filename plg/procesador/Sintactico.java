@@ -546,7 +546,8 @@ AParams.props.i = 0
 	 */
 	public Par I() throws Exception{
 		Par atrDeIns;
-		lexico.lexer();
+		Token t = lexico.lexer();
+		System.out.println("token "+ t.getLexema());
 		if (lexico.reconoce(Tipos.TKBEG)){
 			System.out.println("Begin");
 			atrDeIns = ICompuesta();
@@ -570,7 +571,8 @@ AParams.props.i = 0
 			}
 			else{
 				Token tk = lexico.getNextToken(); 
-				if (tk.equals(new Token ("(", Tipos.TKCAP))){
+				System.out.println("token "+ tk.getLexema());
+				if (tk.equals(new Token ("(", Tipos.TKPAP))){
 					System.out.println("ICall");
 					atrDeIns = ICall();
 				}
