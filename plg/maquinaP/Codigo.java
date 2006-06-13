@@ -138,7 +138,7 @@ public class Codigo {
 	public void parchea(int a, int b){
 		String i = (String)cod.elementAt(a) + " " + b;
 		cod.setElementAt(i,a);
-		System.out.println("Paso por parchea con: "+ cod.get(a) + "He añadido: " + b);
+		//System.out.println("Paso por parchea con: "+ cod.get(a) + "He aadido: " + b);
 	}
 	
 	/**
