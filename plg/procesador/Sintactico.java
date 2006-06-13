@@ -1130,6 +1130,7 @@ AParams.props.i = 0
 		Par atrDeTerm = new Par();
 		Par atrDeRExp;
 		Par a = new Par();
+		System.out.println("RExp");
 		if (lexico.reconoce(Tipos.TKFF)){
 			a.getProps().setTipo("error");
 			return a;
@@ -1203,6 +1204,7 @@ AParams.props.i = 0
 		Par atrDeFact;
 		Par atrDeRTerm;
 		Par a = new Par();
+		System.out.println("Term");
 		atrDeFact = Fact();
 		atrDeRTerm = RTerm();
 		
@@ -1242,21 +1244,23 @@ AParams.props.i = 0
 		Par atrDeFact;
 		Par atrDeRTerm;
 		Par a = new Par();
+		System.out.println("RTerm");
 		if (lexico.getNextToken().getCategoriaLexica()== Tipos.TKCCI){
 			a.getProps().setTipo("");
 			return a;
 		}
+		
+		Token tk = lexico.lexer();
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			a.getProps().setTipo("");
+			System.out.println("Hola");
 			return a;
 		}
-		Token tk = lexico.lexer();
-		
-		if (lexico.reconoce(Tipos.TKFF)){
+		else if (lexico.reconoce(Tipos.TKFF)){
 			a.getProps().setTipo("error");
 			return a;
 		}
-		if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
+		else if (!(lexico.reconoce(Tipos.TKPYCOMA) || lexico.reconoce(Tipos.TKMEN) ||
 				lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) ||
 				lexico.reconoce(Tipos.TKDIF) || lexico.reconoce(Tipos.TKMAYIG) ||
 				lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKPAP) ||
