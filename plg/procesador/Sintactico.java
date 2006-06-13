@@ -41,7 +41,9 @@ public class Sintactico{
 	
 	private static int longApilaRet = 4;
 	private static int longPrologo = 13;
-	private static int longEpilogo = 12;
+	//private static int longPrologo = 2;
+	private static int longEpilogo = 8;
+	//private static int longEpilogo = 12;
 	private static int longInicioPaso = 3;
 	private static int longFinPaso = 1;
 	//private static int longAccesoVar = 4;
@@ -522,7 +524,7 @@ AParams.props.i = 0
 		int tamlocales = dir - auxDir;
 		codigo.parchea(inicio,etq);
 		etqs1 = etq + longPrologo;
-		codigo.prologo(nivel, tamlocales);
+		codigo.prologo(tamlocales);
 		etq= etqs1;
 		Par atrDeIs = Is();
 		codigo.epilogo(nivel);
