@@ -399,7 +399,7 @@ AParams.props.i = 0
 	public Par AParams() throws Exception{
 		Par a  = new Par();
 		//codigo.inicio_paso();
-		etq = etq + longInicioPaso;
+		//etq = etq + longInicioPaso;
 		Token tk = lexico.lexer();//consumimos ( 
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
@@ -459,21 +459,22 @@ AParams.props.i = 0
 	public Par LAParams() throws Exception{
 		Par a = new Par();
 		Par atrDeLAParams = null;
-		
 		Par atrDeAParam = AParam();
-		
+		a.getProps().getParams().add(atrDeAParam);
+		a.getProps().setElems(a.getProps().getElems() + 1);
 		Token tk = lexico.getLookahead();
 		System.out.println("Llevamos le?do un: " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKCOMA)){
 			codigo.genIns("copia");
 			etq ++;
 			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
+			a.getProps().getParams().addAll(atrDeLAParams.getProps().getParams());
 			codigo.genIns("flip");
 			etq ++;
 		}
 		codigo.paso_parametro(atrDeAParam.getDir());
 		etq += 2 + longPasoParametro;
-		return atrDeLAParams;
+		return a;
 	}
 	
 	
@@ -965,6 +966,8 @@ AParams.props.i = 0
 		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
+		 System.out.println(atrDeAParams.getProps());
+		 System.out.println(TS.getProps(lex));
 		 if (!TS.compatibles(atrDeAParams.getProps(), TS.getProps(lex))){
 			 throw new Exception("ERROR: la llamada al procedimiento no es comaprtible con el procedimiento.");
 		 }
