@@ -376,17 +376,21 @@ AParams.props.i = 0
 		if (!lexico.reconoce(Tipos.TKPAP)){
 			throw new Exception ("ERROR: Necesitas un (");
 		}
-		tk = lexico.getNextToken(); 
+		tk = lexico.getNextToken();
+		System.out.println("El Token en AParams es: " + tk.getLexema());
 		if (tk.equals(new Token(")", Tipos.TKPCI))){
 			lexico.lexer();
 			a.getProps().setElems(0);
 			return a;
 		}
 		Par atrDeLAParams = LAParams();
-		tk = lexico.lexer(); //consumimos )
+		tk = lexico.getLookahead(); // leemos )
+		System.out.println("Volvemos de LAParams, y estamos en AParams. Leemos: " + tk.getLexema());
 		if (!lexico.reconoce(Tipos.TKPCI)){
 			throw new Exception ("ERROR: Necesitas un )");
 		}
+		tk = lexico.lexer(); // Consumimos )
+		System.out.println("Y unas l?neas m?s abajo, leemos: " + tk.getLexema());
 		codigo.fin_paso();
 		etq = etq + longFinPaso;
 		return atrDeLAParams;
@@ -433,7 +437,6 @@ AParams.props.i = 0
 		Token tk = lexico.getLookahead();
 		System.out.println("Llevamos le?do un: " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKCOMA)){
-			tk = lexico.lexer(); // COnsumo la ','
 			codigo.genIns("copia");
 			etq ++;
 			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
@@ -928,14 +931,14 @@ AParams.props.i = 0
 		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
-		 codigo.parchea (etqs1,etq);  
+		 codigo.parchea (etqs1,etq);
+		 System.out.println("Antes de llamar a TS en el ICall");
 		 codigo.genIns("ir-a", TS.getDir(lex));
 		 etq = etq + longApilaRet +1;
 		 a.setProps(atrDeAParams.getProps());
+		 System.out.println("Terminamos el ICall");
 		 a.setId(lex);
 		 TS = TSAux;
-		 Token tk = lexico.lexer(); // Consumimos el )
-		 System.out.println("Salimos del ICALL leyendo un ')'... " + tk.getLexema());
 		 return a;
 	 }
 	
@@ -991,7 +994,7 @@ AParams.props.i = 0
 			return a;
 		}
 		if (!lexico.reconoce(Tipos.TKPYCOMA) || !lexico.reconoce(Tipos.TKEND) || 
-				! lexico.reconoce(Tipos.TKTHN) || !lexico.reconoce(Tipos.TKDO) ) {
+				! lexico.reconoce(Tipos.TKTHN) || !lexico.reconoce(Tipos.TKDO) || !lexico.reconoce(Tipos.TKPCI) ) {
 			if (lexico.reconoce(Tipos.TKMAY) || lexico.reconoce(Tipos.TKMAYIG) || lexico.reconoce(Tipos.TKMEN) || lexico.reconoce(Tipos.TKMENIG) || lexico.reconoce(Tipos.TKIG) || lexico.reconoce(Tipos.TKDIF)){
 				Token tk = lexico.getLookahead();
 				atrDeExp = Exp();
