@@ -433,6 +433,7 @@ AParams.props.i = 0
 		Token tk = lexico.getLookahead();
 		System.out.println("Llevamos le?do un: " + tk.getLexema());
 		if (lexico.reconoce(Tipos.TKCOMA)){
+			tk = lexico.lexer(); // COnsumo la ','
 			codigo.genIns("copia");
 			etq ++;
 			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
@@ -933,6 +934,8 @@ AParams.props.i = 0
 		 a.setProps(atrDeAParams.getProps());
 		 a.setId(lex);
 		 TS = TSAux;
+		 Token tk = lexico.lexer(); // Consumimos el )
+		 System.out.println("Salimos del ICALL leyendo un ')'... " + tk.getLexema());
 		 return a;
 	 }
 	
