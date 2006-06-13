@@ -527,7 +527,7 @@ AParams.props.i = 0
 			atrDeDecs=new Par();
 			atrDeDecs.getProps().setTipo("");
 		}
-		//System.out.println("La TS que tengo en bloque: ");
+		System.out.println("La TS que tengo en bloque: ");
 		//TS.muestra();
 		int tamlocales = dir - auxDir;
 		codigo.parchea(inicio,etq);

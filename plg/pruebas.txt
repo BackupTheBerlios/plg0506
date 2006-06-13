@@ -1,9 +1,0 @@
-pointer int a;
-array [2] of bool d
-#
-d[1] := true;
-if d[1] then 
-	a := -155;
-else
-	a := 500;
-
