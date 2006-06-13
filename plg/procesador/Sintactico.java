@@ -931,8 +931,11 @@ AParams.props.i = 0
 		 TS = TS.getTS(lex);
 		 a.setT(TS);
 		 Par atrDeAParams = AParams();
+		 System.out.println("Antes de llamar a parchea en el ICall ");
 		 codigo.parchea (etqs1,etq);
-		 System.out.println("Antes de llamar a TS en el ICall");
+		 System.out.println("Antes de llamar a TS en el ICall ");
+		 System.out.println("Antes de llamar a TS en el ICall "+ lex );
+		 System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
 		 codigo.genIns("ir-a", TS.getDir(lex));
 		 etq = etq + longApilaRet +1;
 		 a.setProps(atrDeAParams.getProps());
