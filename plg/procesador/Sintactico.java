@@ -468,13 +468,12 @@ AParams.props.i = 0
 			codigo.genIns("copia");
 			etq ++;
 			atrDeLAParams = LAParams(); // NO LO USAMOS PARA NADA!!
-			// TODO No usamos el atrDeRLAParams para nada... Deber?amos unirlo a "a".
 			codigo.genIns("flip");
 			etq ++;
 		}
 		codigo.paso_parametro(atrDeAParam.getDir());
 		etq += 2 + longPasoParametro;
-		return a;
+		return atrDeLAParams;
 	}
 	
 	
