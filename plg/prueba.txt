@@ -1,16 +1,7 @@
-int x;
 proc inic (int c){
-	int i;
-	array [1] of bool d
-	#
-	i := 1;
-	d[1] := true;
-	if d[1] then 
-	    i := -155;
-	else
-	    i := 500;
-};
-bool a
+    int i
+    #
+    i := c;
+}
 #
-a := false;
-
+inic ( 5 );

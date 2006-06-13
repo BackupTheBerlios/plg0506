@@ -972,14 +972,14 @@ AParams.props.i = 0
 			 throw new Exception("ERROR: la llamada al procedimiento no es comaprtible con el procedimiento.");
 		 }
 		 System.out.println("Antes de llamar a parchea en el ICall ");
-		 codigo.parchea (etqs1,etq);
+		 codigo.parchea (etqs1+2,etq);
 		 System.out.println("Antes de llamar a TS en el ICall ");
 		 System.out.println("Antes de llamar a TS en el ICall "+ lex );
 		 System.out.println("La TS en ICall");
 		 TS.muestra();
 		 System.out.println("Antes de llamar a TS en el ICall " + " " + TS.getDir(lex));
 		 codigo.genIns("ir-a", TS.getDir(lex));
-		 etq = etq + longApilaRet +1;
+		 etq = etq +1;//+ longApilaRet 
 		 a.setProps(atrDeAParams.getProps());
 		 System.out.println("Terminamos el ICall");
 		 a.setId(lex);

@@ -138,6 +138,7 @@ public class Codigo {
 	public void parchea(int a, int b){
 		String i = (String)cod.elementAt(a) + " " + b;
 		cod.setElementAt(i,a);
+		System.out.println("Paso por parchea con: "+ cod.get(a) + "He añadido: " + b);
 	}
 	
 	/**
@@ -147,7 +148,7 @@ public class Codigo {
 	public void apila_ret (int ret) {
 		this.genIns("apila-dir",0);
 		this.genIns("apila",1);
-		this.genIns("apila", ret);
+		this.genIns("apila");//, ret
 		this.genIns("desapila-ind");
 	}
 	/**
