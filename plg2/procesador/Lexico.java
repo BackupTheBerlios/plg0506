@@ -158,7 +158,7 @@ public class Lexico {
 			/*
 			 * Si detectamos '=' hay que discernir si es el operador de asignacion o un ==.
 			 */
-			case '=':	compara = cmp(posicion, "=");
+			case '=':	compara = cmp(posicion, "==");
 						if (compara){
 							return new Token("==",CategoriaLexica.TKIG);
 						}	
@@ -200,86 +200,68 @@ public class Lexico {
 						
 			/*
 			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
+			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 't':	compara = cmp(posicion, "true");
 						if (compara){
 							return new Token("true",CategoriaLexica.TKTRUE);
 						}
 						else{
-							posicion = posicion - 3;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("t");
+							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
 			/*
 			 * Si detectamos 'f' hay que discernir si es el valor booleano 'false' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
+			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 'f':	compara = cmp(posicion, "false");
 						if (compara){
 							return new Token("false",CategoriaLexica.TKFALSE);
 						}
 						else{
-							posicion = posicion - 4;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("f");
+							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
 						
 			/*
 			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
+			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 'i':	compara = cmp(posicion, "int");
 						if (compara){ 
 							return new Token("int",CategoriaLexica.TKINT);
 						}
 						else{
-							posicion = posicion - 2;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("i");
+							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
 			/*
 			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
+			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 'b':	compara = cmp(posicion, "bool");
 						if (compara){
 							return new Token("bool",CategoriaLexica.TKBOOL);
 						}
 						else{
-							posicion = posicion - 3;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerCaracter("b");
+							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
 
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.
-			 * Si es una letra, llamamos a leerCaracter. Tiene que ser una letra porque los identificadores
+			 * Si es una letra, llamamos a leeIdentificador. Tiene que ser una letra porque los identificadores
 			 * comienzan por letra y luego pueden llevar digitos o letras o '_'.
 			 * Sino, hemos detectado un error y lanzamos una excepcion. 
 			 */
 			default:		if ((a>='1') && (a<='9')){
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerNumero("");
-							return new Token (aux,CategoriaLexica.TKNUM);
+								String aux = leeNumero(posicion);
+								return new Token (aux,CategoriaLexica.TKNUM);
 						}
 						else{
 							if ((a>='A') && (a<='z')){
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("");
+								String aux = leeIdentificador(posicion);
 								return new Token (aux,CategoriaLexica.TKIDEN);
 							}
 							else{
@@ -334,87 +316,20 @@ public class Lexico {
 			return false;
 		}
 	}
+	private String leeIdentificador(int posicion) throws IOException, Exception {
+			char a;
+			String s = new String();
+			fuente.seek(--posicion);
+			do {
+				a = fuente.readChar();
+				posicion++;
+				s.concat(String.valueOf(a));
+			}
+			while(((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9')));
+			fuente.seek(--posicion);
+			return s;
+	}
 
-	/**
-	 * El metodo leerNumero se encarga de leer un entero completo del fichero fuente. 
-	 * Como la definicion de nuestro lenguaje no permite la representacion del 0 como '+0' ni '-0', si detectamos un 0
-	 * lanzamos una excepcion. Sino, vamos leyendo mientras sean digitos hasta terminar de leer el entero.
-	 * 
-	 * @param aux String que almacena la parte leda del entero.
-	 * @return aux String que almacena el entero reconocido.
-	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
-	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
-	 */
-	public String leerNumero(String aux) throws Exception,IOException{
-		char a;
-		int i = 0;
-		a = (char)fuente.read();
-		posicion ++;
-		if (a == '0'){
-			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
-		}
-		else{
-			aux = aux.concat(new Character(a).toString());
-			while (((a = (char)fuente.read()) != -1) && (i <= 8)){
-				posicion ++;
-				if ((a>='0') && (a<'9')){
-					aux = aux.concat(new Character(a).toString());			
-				}
-				else{
-					posicion --;
-					fuente.seek(posicion);
-					return aux;
-				}
-				i ++;
-			}
-			if (i<=8){
-				posicion --;
-				fuente.seek(posicion);
-			}
-			return aux;
-		}	
-	}
-	
-	/**
-	 * El metodo leerCaracter es llamado cuando al menos hemos leido ya una letra. Asi, sslo tenemos que controlar que se lean letras, digitos o '_'.
-	 * Es decir, leemos mientras sean caracteres validos segun nuestra especificacion y hasta terminar de leer el identificador.
-	 * 
-	 * @param aux String que almacena la parte ya leda del identificador.
-	 * @return String que almacena el identificador ya reconocido.
-	 * @exception IOException que propagamos de las funciones de los RandomAccessFile de JAVA.
-	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
-	 * 
-	 */
-	
-	public String leerCaracter(String aux) throws Exception, IOException{
-		char a;
-		while ((a = (char)fuente.read()) != -1){
-			posicion ++;
-			if (a!='['){
-				if (a!=']'){	
-					if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-						aux = aux.concat(new Character(a).toString());			
-					}
-					else{
-						posicion --;
-						fuente.seek(posicion);
-						return aux;
-					}
-				}
-				else{
-					posicion --;
-					fuente.seek(posicion);
-					return aux;
-				}
-			}
-			else{
-				posicion --;
-				fuente.seek(posicion);
-				return aux;
-			}
-		}	
-		return aux;	
-	}
 	
 	/**
 	 * El metodo getNextToken devuelve el siguiente Token para poder realizar el preanalisis. 
