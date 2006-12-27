@@ -330,6 +330,20 @@ public class Lexico {
 			return s;
 	}
 
+	public String leeNumero(int posicion) throws Exception, IOException {
+			char a;
+			String s = new String();
+			fuente.seek(--posicion);
+			do {
+				a = fuente.readChar();
+				posicion++;
+				s.concat(String.valueOf(a));
+			} while(((a >= '0') && (a <= '9')));
+			fuente.seek(--posicion);
+			if (s.charAt(0) == '0' && s.charAt(1))
+				throw new Exception("ERROR en linea "+linea+": No existe ese numero");
+			return s;
+		}
 	
 	/**
 	 * El metodo getNextToken devuelve el siguiente Token para poder realizar el preanalisis. 
