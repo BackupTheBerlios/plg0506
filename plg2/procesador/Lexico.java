@@ -2,6 +2,7 @@ package procesador;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 
 
 
@@ -15,7 +16,7 @@ import java.io.RandomAccessFile;
  * <LI><CODE>posicion:</CODE> Entero que marca la posicin en la que se est leyendo dentro de una lnea.</LI>
  * </UL></P>
  * 
- * @author Jonas Andradas, Paloma de la Fuente, Leticia Garcia y Silvia Martin
+ * @author Leticia Garcia y Alberto Velazquez
  *
  */
 
@@ -122,10 +123,11 @@ public class Lexico {
 	 * @exception Exception que generamos cuando detectamos una secuencia de caracteres incorrecta.
 	 * 
 	 */
-	public Token getToken () throws IOException, Exception{
+	private Token getToken () throws IOException, Exception{
 		
 		char a;
 		int error;
+		boolean compara;
 		/*
 		 * La funcion read() saca un caracter del flujo de entrada
 		 */
@@ -146,674 +148,81 @@ public class Lexico {
 			case '0':	return new Token("0",CategoriaLexica.TKNUM);
 			case '(':	return new Token("(",CategoriaLexica.TKPAP);
 			case ')':	return new Token(")",CategoriaLexica.TKPCI);
-			case '[':	return new Token("[",CategoriaLexica.TKCAP);
-			case ']':	return new Token("]",CategoriaLexica.TKCCI);
 			case '{':	return new Token("{",CategoriaLexica.TKLLAP);
 			case '}':	return new Token("}",CategoriaLexica.TKLLCI);
-			case '*':	return new Token("*",CategoriaLexica.TKMULT);
+			case '+':	return new Token("+",CategoriaLexica.TKSUMA);
+			case '-':	return new Token("+",CategoriaLexica.TKRESTA);
+			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
 			case '/':	return new Token("/",CategoriaLexica.TKDIV);
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
-			case ',':	return new Token(",",CategoriaLexica.TKCOMA);
-			case '=':	return new Token("=",CategoriaLexica.TKIG);
-			case '#':	return new Token("#",CategoriaLexica.TKCUA);
-			
-			case '!':	a = (char)fuente.read();
-						posicion ++;
-						if (a == '='){
-							return new Token("!=",CategoriaLexica.TKDIF);
-						}	
-						else{
-							throw new Exception("ERROR en linea "+linea+": ':' debe ir seguido de '='");
-						}
-			
 			/*
-			 * Si detectamos ':' hay que discernir si es el operador de asignacion o un error.
-			 * Si es un error lanzamos una excepcion. 
+			 * Si detectamos '=' hay que discernir si es el operador de asignacion o un ==.
 			 */
-			case ':':	a = (char)fuente.read();
-						posicion ++;
-						if (a == '='){
-							return new Token(":=",CategoriaLexica.TKASIGN);
+			case '=':	compara = cmp(posicion, "=");
+						if (compara){
+							return new Token("==",CategoriaLexica.TKIG);
 						}	
 						else{
-							throw new Exception("ERROR en linea "+linea+": ':' debe ir seguido de '='");
+							return new Token("=",CategoriaLexica.TKASIGN);
 						}
-			
+			/*
+			 * Si detectamos '!' hay que discernir si es el operador not o !=.
+			 */
+			case '!':	compara = cmp(posicion, "!=");
+						if (compara){
+							return new Token("!=",CategoriaLexica.TKDIF);
+						}
+						else{
+							return new Token("!",CategoriaLexica.TKNOT);
+						}
+
 			/*
 			 * Si detectamos '<' hay que discernir si es el operador 'menor que' o 'menor o igual que'
-			 * 
-			 * La funcion seek(int), mueve el puntero de lectura a donde nos marca el entero. Asi podemos
-			 * modificar la posicion del flujo.
 			 */
-			case '<':	a = (char)fuente.read();
-						posicion ++;
-						if (a == '='){
+			case '<':	compara = cmp(posicion, "<=");
+						if (compara){
 							return new Token("<=",CategoriaLexica.TKMENIG);
-						}	
+							}
 						else{
-							posicion --;
-							fuente.seek(posicion);
-							return new Token ("<",CategoriaLexica.TKMEN);
+							return new Token("<",CategoriaLexica.TKMEN);
 						}
-			
+	
 			/*
 			 * Si detectamos '>' hay que discernir si es el operador 'mayor que' o 'mayor o igual que' 
 			 */
-			case '>':	a = (char)fuente.read();
-						posicion ++;
-						if (a == '='){
+			case '>':	compara = cmp(posicion, ">=");
+						if (compara){
 							return new Token(">=",CategoriaLexica.TKMAYIG);
-						}	
+						}
 						else{
-							posicion --;
-							fuente.seek(posicion);
-							return new Token (">",CategoriaLexica.TKMAYIG);
+							return new Token(">",CategoriaLexica.TKMAY);
 						}
 						
 			/*
-			 * Si detectamos '+' hay que discernir si es el operador '+' o es un numero positivo.
-			 * Para leer secuencias de digitos, usamos leerNumero. 
-			 * 
-			 * Eliminamos el + para que no de conflictos con los enteros de java.
+			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case '+':	a = (char)fuente.read();
-						posicion ++;
-						if ((a >= '1') && (a<='9')){
-							posicion --;
+			case 't':	compara = cmp(posicion, "true");
+						if (compara){
+							return new Token("true",CategoriaLexica.TKTRUE);
+						}
+						else{
+							posicion = posicion - 3;
 							fuente.seek(posicion);
 							String aux;
-							aux = leerNumero("");
-							return new Token (aux,CategoriaLexica.TKNUM);
-						}	
-						else{
-							posicion --;
-							fuente.seek(posicion);
-							return new Token ("+",CategoriaLexica.TKSUMA);
+							aux = leerCaracter("t");
+							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
-						
-			/*
-			 * Si detectamos '-' hay que discernir si es el operador '-' o es un numero negativo.
-			 * Para leer secuencias de digitos, usamos leerNumero.  
-			 */
-			case '-':	a = (char)fuente.read();
-						posicion ++;
-						if ((a >= '1') && (a<='9')){
-							posicion --;
-							fuente.seek(posicion);
-							String aux;
-							aux = leerNumero("-");
-							return new Token (aux,CategoriaLexica.TKNUM);
-						}	
-						else{
-							posicion --;
-							fuente.seek(posicion);
-							return new Token ("-",CategoriaLexica.TKRESTA);
-						}
-						
-			/*
-			 * Si detectamos 'a' hay que discernir si es el operador 'and', 'array' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-						
-			case 'a':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='n'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='d'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("and");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									return new Token ("and",CategoriaLexica.TKAND);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("an");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}	
-						}	
-						else{	
-							if (a =='r'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='r'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='a'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (a =='y'){
-											a = (char)fuente.read();
-											posicion ++;
-											if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-												posicion --;
-												fuente.seek(posicion);
-												String aux;
-												aux = leerCaracter("array");
-												return new Token (aux,CategoriaLexica.TKIDEN);
-											}
-											else{
-												posicion --;
-												fuente.seek(posicion);
-												return new Token ("array",CategoriaLexica.TKARRAY);
-											}
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("arra");
-											return new Token (aux,CategoriaLexica.TKIDEN);}	
-										}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("arr");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("ar");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("a");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-			/*
-			 * Si detectamos 'e' hay que discernir si es la palabra reservada 'end' o la palabra reservada 'else' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'e':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='n'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='d'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("end");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									return new Token ("end",CategoriaLexica.TKEND);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("en");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}	
-						}	
-						else{	
-							if (a =='l'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='s'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='e'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("else");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											return new Token ("else",CategoriaLexica.TKELS);
-										}
-									}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("els");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("el");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("e");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-			/*
-			 * Si detectamos 'n' hay que discernir si es el operador 'not' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'n':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='o'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='t'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("not");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									return new Token ("not",CategoriaLexica.TKNOT);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("no");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}	
-						}	
-						else{
-							if (a =='e'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='w'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("new");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										return new Token ("new",CategoriaLexica.TKNEW);
-									}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("ne");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}	
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("n");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-			
-			/*
-			 * Si detectamos 'o' hay que discernir si es el operador 'or', 'of' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			
-			case 'o':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='f'){
-							a = (char)fuente.read();
-							posicion ++;
-								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("of");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									return new Token ("of",CategoriaLexica.TKOF);
-								}
-						}	
-						else {	
-							if (a =='r'){ 
-								a = (char)fuente.read();
-								posicion ++;
-									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("or");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-									else {
-											posicion --;
-											fuente.seek(posicion);
-											return new Token ("or",CategoriaLexica.TKOR);
-									}
-							}	
-							else {
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("o");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						} 
-						
-			/*
-			 * Si detectamos 'd' hay que discernir si es la palabra reservada 'do' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'd':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='o'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("do");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								return new Token ("do",CategoriaLexica.TKDO);
-							}
-						}	
-						else{
-							if (a =='e'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='l'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='e'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (a =='t'){
-											a = (char)fuente.read();
-											posicion ++;
-											if (a =='e'){
-												a = (char)fuente.read();
-												posicion ++;
-												if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-													posicion --;
-													fuente.seek(posicion);
-													String aux;
-													aux = leerCaracter("delete");
-													return new Token (aux,CategoriaLexica.TKIDEN);
-												}
-												else{
-													posicion --;
-													fuente.seek(posicion);
-													return new Token ("delete",CategoriaLexica.TKDEL);
-												}
-											}
-											else{
-												posicion --;
-												fuente.seek(posicion);
-												String aux;
-												aux = leerCaracter("delet");
-												return new Token (aux,CategoriaLexica.TKIDEN);
-											}
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("dele");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("del");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("de");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("d");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-						
-			/*
-			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o la palabra reservada then o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 't':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='r'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='u'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='e'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("true");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										return new Token ("true",CategoriaLexica.TKTRUE);
-									}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("tru");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("tr");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-						else{							
-							if (a =='h'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='e'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='n'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("then");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											return new Token ("then",CategoriaLexica.TKTHN);
-										}
-									}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("the");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("th");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{							
-								if (a =='i'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='p'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (a =='o'){
-											a = (char)fuente.read();
-											posicion ++;
-											if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-												posicion --;
-												fuente.seek(posicion);
-												String aux;
-												aux = leerCaracter("tipo");
-												return new Token (aux,CategoriaLexica.TKIDEN);
-											}
-											else{
-												posicion --;
-												fuente.seek(posicion);
-												return new Token ("tipo",CategoriaLexica.TKTIPO);
-											}
-										}	
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("tip");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-									}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("ti");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}
-							}
-						}
-			
 			/*
 			 * Si detectamos 'f' hay que discernir si es el valor booleano 'false' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'f':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='a'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='l'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='s'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='e'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("false");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											return new Token ("false",CategoriaLexica.TKFALSE);
-										}
-									}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("fals");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("fal");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("fa");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
+			case 'f':	compara = cmp(posicion, "false");
+						if (compara){
+							return new Token("false",CategoriaLexica.TKFALSE);
 						}
-						else{							
-							posicion --;
+						else{
+							posicion = posicion - 4;
 							fuente.seek(posicion);
 							String aux;
 							aux = leerCaracter("f");
@@ -821,431 +230,36 @@ public class Lexico {
 						}
 						
 			/*
-			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es la palabra reservada 'if' o es un identificador.
+			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
 			 * Para leer identificadores, usamos leerCaracter().  
 			 */
-			case 'i':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='n'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='t'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("int");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									return new Token ("int",CategoriaLexica.TKINT);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("in");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}	
-						}	
-						else{							
-							if (a =='f'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("if");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									return new Token ("if",CategoriaLexica.TKIF);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("i");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
+			case 'i':	compara = cmp(posicion, "int");
+						if (compara){ 
+							return new Token("int",CategoriaLexica.TKINT);
 						}
-
-			/*
-			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool', la palabra reservada 'begin' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'b':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='o'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='o'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='l'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("bool");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										return new Token ("bool",CategoriaLexica.TKBOOL);
-									}
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("boo");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("bo");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}	
-						}	
-						else{							
-							if (a =='e'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='g'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='i'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (a =='n'){
-											a = (char)fuente.read();
-											posicion ++;
-											if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-												posicion --;
-												fuente.seek(posicion);
-												String aux;
-												aux = leerCaracter("begin");
-												return new Token (aux,CategoriaLexica.TKIDEN);
-											}
-											else{
-												posicion --;
-												fuente.seek(posicion);
-												return new Token ("begin",CategoriaLexica.TKBEG);
-											}
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("begi");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("beg");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}	
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("be");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("b");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-			/*
-			 * Si detectamos 'p' hay que discernir si es 'proc', la palabra reservada 'pointer' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'p':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='r'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='o'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='c'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("proc");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										return new Token ("proc",CategoriaLexica.TKPROC);
-									}
-								}
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("pro");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("pr");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-								}	
-						}	
-						else{							
-							if (a =='o'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='i'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='n'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (a =='t'){
-											a = (char)fuente.read();
-											posicion ++;
-											if (a =='e'){//1
-												a = (char)fuente.read();
-												posicion ++;
-												if (a =='r'){//2
-													a = (char)fuente.read();
-													posicion ++;
-													if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-														posicion --;
-														fuente.seek(posicion);
-														String aux;
-														aux = leerCaracter("pointer");
-														return new Token (aux,CategoriaLexica.TKIDEN);
-													}
-													else{
-														posicion --;
-														fuente.seek(posicion);
-														return new Token ("pointer",CategoriaLexica.TKPUNT);
-													}
-												}
-												else{
-													posicion --;
-													fuente.seek(posicion);
-													String aux;
-													aux = leerCaracter("pointe");
-													return new Token (aux,CategoriaLexica.TKIDEN);
-												}
-											}
-											else{
-												posicion --;
-												fuente.seek(posicion);
-												String aux;
-												aux = leerCaracter("point");
-												return new Token (aux,CategoriaLexica.TKIDEN);
-											}
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("poin");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-									}
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("poi");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}	
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("po");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("p");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-						
-				
-			/*
-			 * Si detectamos 'm' hay que discernir si es la palabra reservada 'memdir' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'm':	a = (char)fuente.read();
-								posicion ++;
-								if (a =='e'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='m'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (a =='d'){
-											a = (char)fuente.read();
-											posicion ++;
-											if (a =='i'){
-												a = (char)fuente.read();
-												posicion ++;
-												if (a =='r'){
-														a = (char)fuente.read();
-														posicion ++;
-														if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-															posicion --;
-															fuente.seek(posicion);
-															String aux;
-															aux = leerCaracter("memdir");
-															return new Token (aux,CategoriaLexica.TKIDEN);
-														}
-														else{
-															posicion --;
-															fuente.seek(posicion);
-															return new Token ("memdir",CategoriaLexica.TKMEMDIR);
-														}
-													}	
-												else{
-													posicion --;
-													fuente.seek(posicion);
-													String aux;
-													aux = leerCaracter("memdi");
-													return new Token (aux,CategoriaLexica.TKIDEN);
-												}
-											}	
-											else{
-												posicion --;
-												fuente.seek(posicion);
-												String aux;
-												aux = leerCaracter("memd");
-												return new Token (aux,CategoriaLexica.TKIDEN);
-											}
-										}	
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("mem");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-									}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("me");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}
-								else{							
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("m");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-			
-		
-									
-			/*
-			 * Si detectamos 'w' hay que discernir si es la palabra reservada 'while' o es un identificador.
-			 * Para leer identificadores, usamos leerCaracter().  
-			 */
-			case 'w':	a = (char)fuente.read();
-						posicion ++;
-						if (a =='h'){
-							a = (char)fuente.read();
-							posicion ++;
-							if (a =='i'){
-								a = (char)fuente.read();
-								posicion ++;
-								if (a =='l'){
-									a = (char)fuente.read();
-									posicion ++;
-									if (a =='e'){
-										a = (char)fuente.read();
-										posicion ++;
-										if (((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9'))){
-											posicion --;
-											fuente.seek(posicion);
-											String aux;
-											aux = leerCaracter("while");
-											return new Token (aux,CategoriaLexica.TKIDEN);
-										}
-										else{
-											posicion --;
-											fuente.seek(posicion);
-											return new Token ("while",CategoriaLexica.TKWHL);
-										}
-									}	
-									else{
-										posicion --;
-										fuente.seek(posicion);
-										String aux;
-										aux = leerCaracter("whil");
-										return new Token (aux,CategoriaLexica.TKIDEN);
-									}
-								}	
-								else{
-									posicion --;
-									fuente.seek(posicion);
-									String aux;
-									aux = leerCaracter("whi");
-									return new Token (aux,CategoriaLexica.TKIDEN);
-								}
-							}	
-							else{
-								posicion --;
-								fuente.seek(posicion);
-								String aux;
-								aux = leerCaracter("wh");
-								return new Token (aux,CategoriaLexica.TKIDEN);
-							}
-						}
-						else{							
-							posicion --;
+						else{
+							posicion = posicion - 2;
 							fuente.seek(posicion);
 							String aux;
-							aux = leerCaracter("w");
+							aux = leerCaracter("i");
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
-			
+			/*
+			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
+			 * Para leer identificadores, usamos leerCaracter().  
+			 */
+			case 'b':	compara = cmp(posicion, "bool");
+						if (compara){
+							return new Token("bool",CategoriaLexica.TKBOOL);
+						}
+						else{
+							posicion = posicion - 3;
+							fuente.seek(posicion);
+							String aux;
+							aux = leerCaracter("b");
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.
@@ -1269,7 +283,7 @@ public class Lexico {
 								return new Token (aux,CategoriaLexica.TKIDEN);
 							}
 							else{
-								throw new Exception("ERROR en linea "+linea+": No existe ese identificador");
+								throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
 							}
 						}			
 			}
@@ -1285,6 +299,42 @@ public class Lexico {
 		}
 	}
 	
+/*private boolean nextPos (int pos, String b) throws IOException, Exception{
+		int posicion = pos + b.length();
+		char a;
+		String aux = new String();
+		while (pos < posicion) {
+			a = (char)fuente.read();
+			aux = aux.concat(new Character(a).toString());
+		}	
+		if (b.equals(aux)){
+			return true;
+		}	
+		else{
+			posicion = pos;
+			fuente.seek(posicion);
+			return false;
+		}
+	}
+*/
+	private boolean cmp(int posicion, String string) throws IOException, Exception {
+		char[] array = new char[string.length()];
+		fuente.seek(--posicion);
+		for(int i = 0; i < string.length(); i++) {
+			array[i] = fuente.readChar();
+		}
+		String given = new String(array);
+		if (string.equals(given)) {
+			posicion += string.length();
+			fuente.seek(posicion);
+			return true;
+		}
+		else {
+			fuente.seek(++posicion);
+			return false;
+		}
+	}
+
 	/**
 	 * El metodo leerNumero se encarga de leer un entero completo del fichero fuente. 
 	 * Como la definicion de nuestro lenguaje no permite la representacion del 0 como '+0' ni '-0', si detectamos un 0

@@ -7,7 +7,7 @@ package procesador;
  * <UL><LI><CODE>categoriaLexica:</CODE> entero que indica a que categora lexica pertenece el token.</LI>
  * <LI><CODE>lexema:</CODE> string que representa la parte lex del Token.</LI></UL></P>
  * 
- * @author Paloma de la Fuente, Jonas Andradas, Leticia Garcia y Silvia Martin
+ * @author Leticia Garcia y Alberto Velazquez
  *
  */
 public class Token {
@@ -82,24 +82,11 @@ public class Token {
 	 * 
 	 */
 	public boolean equals(Token tk){
-		boolean b = true;
-		if (this.categoriaLexica == tk.getCategoriaLexica()){
-			b = b && true;
-		}
-		else{
-			b = b && false;
-		}
-		if (this.getLexema() == tk.getLexema()){
-			b = b && true;
-		}
-		else{
-			b = b && false;
-		}
-		return b;
+		return  (this.categoriaLexica == tk.getCategoriaLexica() && this.getLexema() == tk.getLexema() );
 	}
 	
 	/**
-	 * El mtodo muestraToken pasa un token a String para poderlo mostrar por pantalla.
+	 * El metodo muestraToken pasa un token a String para poderlo mostrar por pantalla como un par (lexema,categoria).
 	 * 
 	 * @return String para poder mostrar el contenido de Token.
 	 */
