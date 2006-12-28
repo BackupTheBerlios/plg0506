@@ -331,33 +331,36 @@ public class Lexico {
 	}
 	
 	private String leeIdentificador(int posicion) throws IOException, Exception {
-			char a;
-			String s = new String();
-			fuente.seek(--posicion);
-			do {
-				a = (char) fuente.read(); 
-				posicion++;
-				s = s.concat(String.valueOf(a));
-			}
-			while(((a >= 'A') && (a <= 'z')) || (a == '_') || ((a >= '0') && (a < '9')));
-			fuente.seek(--posicion);
-			return s;
-	}
-
-	public String leeNumero(int posicion) throws Exception, IOException {
-			char a;
-			String s = new String();
-			fuente.seek(--posicion);
-			do {
-				a = fuente.readChar();
-				posicion++;
-				s.concat(String.valueOf(a));
-			} while(((a >= '0') && (a <= '9')));
-			fuente.seek(--posicion);
-			if ((s.charAt(0) == '0') && (s.length() > 1))
-				throw new Exception("ERROR en linea "+linea+": No existe ese numero");
-			return s;
+		int a;
+		String s = new String();
+		fuente.seek(--posicion);
+		a = fuente.read();
+		posicion++;
+		while((a != -1) && (Character.isLetterOrDigit((char)a))) {
+			s = s.concat(Character.toString((char)a));
+			a = fuente.read();
+			posicion++;
 		}
+		fuente.seek(--posicion);
+		return s;
+}
+
+public String leeNumero(int posicion) throws Exception, IOException {
+		int a;
+		String s = new String();
+		fuente.seek(--posicion);
+		a = fuente.read();
+		posicion++;
+		while((a != -1) && (Character.isDigit((char)a))) {
+			s = s.concat(Character.toString((char)a));
+			a = fuente.read();
+			posicion++;
+		}
+		fuente.seek(--posicion);
+		if ((s.charAt(0) == '0') && (s.length() > 1))
+			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
+		return s;
+	}
 	
 	/**
 	 * El metodo getNextToken devuelve el siguiente Token para poder realizar el preanalisis. 
