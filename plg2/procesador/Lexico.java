@@ -299,13 +299,12 @@ public class Lexico {
 		}
 	}
 */
-	private boolean cmp(int posicion, String string) throws IOException, Exception {
-		char[] array = new char[string.length()];
+/*	private boolean cmp(int posicion, String string) throws IOException, Exception {
+		String given = new String();
 		fuente.seek(--posicion);
 		for(int i = 0; i < string.length(); i++) {
-			array[i] = fuente.readChar();
+			given.concat(String.valueOf(fuente.read()));
 		}
-		String given = new String(array);
 		if (string.equals(given)) {
 			posicion += string.length();
 			fuente.seek(posicion);
@@ -315,7 +314,22 @@ public class Lexico {
 			fuente.seek(++posicion);
 			return false;
 		}
+	}*/
+	
+	private boolean cmp(int posicion, String string) throws IOException, Exception {
+		int tmp = fuente.read(), i = 1;
+		boolean match = true;
+		while ((i < string.length()) && (tmp != -1) && (match == true)) {
+			match = match && ((char)tmp == string.charAt(i++));
+			tmp = fuente.read();
+		}
+		if (match) {
+			posicion = posicion - 1 + string.length();
+		}
+		fuente.seek(posicion);
+		return match;
 	}
+	
 	private String leeIdentificador(int posicion) throws IOException, Exception {
 			char a;
 			String s = new String();
@@ -325,7 +339,7 @@ public class Lexico {
 				posicion++;
 				s.concat(String.valueOf(a));
 			}
-			while(((a>='A') && (a<'z')) || (a=='_') || ((a>='0') && (a<'9')));
+			while(((a >= 'A') && (a <= 'z')) || (a == '_') || ((a >= '0') && (a < '9')));
 			fuente.seek(--posicion);
 			return s;
 	}
