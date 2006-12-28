@@ -340,7 +340,7 @@ public class Lexico {
 				s.concat(String.valueOf(a));
 			} while(((a >= '0') && (a <= '9')));
 			fuente.seek(--posicion);
-			if (s.charAt(0) == '0' && s.charAt(1))
+			if ((s.charAt(0) == '0') && (s.length() > 1))
 				throw new Exception("ERROR en linea "+linea+": No existe ese numero");
 			return s;
 		}
