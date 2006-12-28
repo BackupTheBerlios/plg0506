@@ -335,9 +335,9 @@ public class Lexico {
 			String s = new String();
 			fuente.seek(--posicion);
 			do {
-				a = fuente.readChar();
+				a = (char) fuente.read(); 
 				posicion++;
-				s.concat(String.valueOf(a));
+				s = s.concat(String.valueOf(a));
 			}
 			while(((a >= 'A') && (a <= 'z')) || (a == '_') || ((a >= '0') && (a < '9')));
 			fuente.seek(--posicion);

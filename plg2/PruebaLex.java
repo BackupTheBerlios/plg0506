@@ -15,6 +15,7 @@ public class PruebaLex {
 			Lexico lexico = new Lexico(fuente);
 			Token tk=lexico.lexer();
 			System.out.println("Inicio de fichero");
+			System.out.println(tk.muestraToken());
 			while(!tk.equals(new Token("eof",CategoriaLexica.TKFF))){
 				tk=lexico.lexer();
 				System.out.println(tk.muestraToken());
