@@ -1,13 +1,26 @@
 package tablaSimbolos;
 
+/**
+ * 
+ * @author 
+ *
+ */
 public class propiedades {
 
 	String tipo;
 	
+	/**
+	 * 
+	 *
+	 */
 	public propiedades() {
 		super();
 	}
 
+	/**
+	 * 
+	 * @param tipo
+	 */
 	public propiedades(String tipo) {
 		super();
 		this.tipo = tipo;
@@ -48,9 +61,9 @@ public class propiedades {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
-
+*/
 }

@@ -7,12 +7,10 @@ public class Atributo {
 	
 	public Atributo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Atributo(String tipo, String id) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.tipo = tipo;
 		this.id = id;
 	}
@@ -36,9 +34,6 @@ public class Atributo {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	/* */
 
 }

@@ -23,19 +23,27 @@ public class Par {
 	
 	public Par() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-
+	
+	/**
+	 * 
+	 * @param id
+	 * @param props
+	 */
 	public Par(String id, propiedades props) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.props = props;
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @param props
+	 * @param dir
+	 */
 	public Par(String id, propiedades props, int dir) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.props = props;
 		this.dir = dir;

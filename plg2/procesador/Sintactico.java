@@ -77,7 +77,7 @@ public class Sintactico{
 		}
 	}
 	
-	public String Decs(){
+	public String Decs() throws Exception{
 		Atributo atrDec = Dec(); 
 		TS.addID(atrDec.getId(),atrDec.getTipo());
 		Atributo atrRDecs = RDecs();
@@ -91,12 +91,13 @@ public class Sintactico{
 	
 	public Atributo RDecs(){
 		Atributo atrRDecs = new Atributo();
-		if (!lexico.reconoce(Tipos.TKPYCOMA)){ 
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){ 
 			atrRDecs.setTipo("error");
 			return atrRDecs;
 		}
 		Atributo Dec = Dec();
-		
+		//revisar esto solo he puesto para que no se queje
+		return Dec;
 	}
 	 
 	/*{RDecs1.tsh = añadeID (RDecs0.ts, Dec.id, <dir:RDecs0.dir+1, Dec.tipo>)
@@ -108,4 +109,14 @@ public class Sintactico{
 	{RDecs.ts = RDecs.tsh
 	RDecs.err = RDecs.errh}
 	*/
+	
+	public Atributo Dec(){
+		
+		return new Atributo();
+	}
+	
+	public String Is(){
+		
+		return "";
+	}
 }
