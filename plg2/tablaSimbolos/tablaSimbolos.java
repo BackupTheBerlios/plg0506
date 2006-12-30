@@ -8,7 +8,7 @@ import java.util.Hashtable;
  * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de smbolos. El valor que almacenamos ser un par con el nombre del identificador y el tipo del mismo. 
  * No se podrn almacenar datos repetidos.</LI></UL></P>
  * 
- * @author 
+ * @author Paloma de la Fuente y Leticia García
  *
  */
 public class tablaSimbolos {
@@ -59,10 +59,9 @@ public class tablaSimbolos {
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			propiedades prop = new propiedades(tipo);
-			Par p = new Par(id, prop, this.dir);
+			propiedades prop = new propiedades(tipo, this.dir);
 			this.dir ++;
-			this.tabla.put(id,p);
+			this.tabla.put(id,prop);
 			return true;	
 		}	
 	}
@@ -83,14 +82,32 @@ public class tablaSimbolos {
 		this.tabla = tabla;
 	}
 	
+	public int getDir() {
+		return dir;
+	}
+
+	public void setDir(int dir) {
+		this.dir = dir;
+	}
+
 	/**
 	 * 
 	 *
 	 */
 	public void mostrar(){
-		Enumeration e = tabla.elements();
+		Enumeration e = this.tabla.keys();
+		String aux = new String();
+		String id = new String();
+		propiedades p = new propiedades();
 		while (e.hasMoreElements()){
-			System.out.println(((Par)e.nextElement()).toString());
+			id = (String) e.nextElement();
+			aux = aux.concat("( ");
+			aux = aux.concat(id);
+			p = (propiedades)this.tabla.get(id);
+			aux = aux.concat(", ");
+			aux = aux.concat(p.toString());
+			aux = aux.concat(" )");
+			System.out.println(aux);
 		}
 		
 	}

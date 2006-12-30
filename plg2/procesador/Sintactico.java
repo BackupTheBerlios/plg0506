@@ -3,7 +3,6 @@ package procesador;
 import java.io.RandomAccessFile;
 import java.util.Vector;
 import tablaSimbolos.tablaSimbolos;
-import tablaSimbolos.Par;
 
 
 /**
@@ -32,7 +31,6 @@ public class Sintactico{
 	 */
 	Lexico lexico;
 	tablaSimbolos TS;
-	int dir;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -66,7 +64,7 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	public String Prog() throws Exception{
-		dir = 0;
+		TS.setDir(0);
 		String tipoDecs = Decs();
 		String tipoIs = Is();
 		if (tipoDecs.equals("error") || tipoIs.equals("error")){

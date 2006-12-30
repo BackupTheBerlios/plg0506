@@ -8,6 +8,7 @@ package tablaSimbolos;
 public class propiedades {
 
 	String tipo;
+	int dir;
 	
 	/**
 	 * 
@@ -21,9 +22,10 @@ public class propiedades {
 	 * 
 	 * @param tipo
 	 */
-	public propiedades(String tipo) {
+	public propiedades(String tipo, int dir) {
 		super();
 		this.tipo = tipo;
+		this.dir = dir;
 	}
 
 	public String getTipo() {
@@ -34,6 +36,14 @@ public class propiedades {
 		this.tipo = tipo;
 	}
 
+	public int getDir() {
+		return dir;
+	}
+
+	public void setDir(int dir) {
+		this.dir = dir;
+	}
+
 	/**
 	 * Mtodo que convierte en un String la lista de Atributos
 	 */
@@ -41,8 +51,10 @@ public class propiedades {
 		if (this != null){	
 			String aux;
 			aux = "( ";
-			aux = aux.concat(tipo);
-					aux = aux.concat(" )");
+			aux = aux.concat(this.tipo);
+			aux = aux.concat(", ");
+			aux = aux.concat(new Integer (this.dir).toString());
+			aux = aux.concat(" )");
 			return aux;
 		}
 		else {
