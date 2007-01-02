@@ -270,9 +270,4 @@ public class Sintactico{
 		}
 	}
 
-	/**
-	 * Genera el codigo de la negacion booleana "not".
-	 *
-	 */
-
 }
