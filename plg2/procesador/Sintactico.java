@@ -3,7 +3,7 @@ package procesador;
 import java.io.RandomAccessFile;
 import java.util.Vector;
 import tablaSimbolos.tablaSimbolos;
-
+import maquinaP.Codigo;
 
 /**
  * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
@@ -31,6 +31,7 @@ public class Sintactico{
 	 */
 	Lexico lexico;
 	tablaSimbolos TS;
+	Codigo codigo;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -42,6 +43,7 @@ public class Sintactico{
 	public Sintactico(RandomAccessFile fuente, tablaSimbolos T, String f) throws Exception{
 		lexico = new Lexico(fuente);		
 		TS = T;
+		codigo = new Codigo(f);
 	}
 
 	/**
@@ -133,13 +135,144 @@ public class Sintactico{
 		atrTipo.setTipo("error");
 		return atrTipo;
 	}
-	
-	public String Is(){
-		
-		return "";
+
+	public String Is() throws Exception{
+		Atributo atrI = I(); 
+		Atributo atrRIs = RIs();
+		if (atrI.getTipo().equals("error") || atrRIs.getTipo().equals("error")){
+			return "error";
+		}
+		else {
+			return atrRIs.getTipo();
+		}
 	}
-	public Atributo Iden(){
-		
+
+	public Atributo RIs() throws Exception{
+		Atributo atrRIs = new Atributo();
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RIs ::= λ
+			return atrRIs;
+		}
+		lexico.lexer(); //consumo ;
+		Atributo atrI = I();
+		Atributo atrRI1 = RIs();
+		if (atrI.getTipo().equals("error") || atrRI1.getTipo().equals("error")){
+			atrRIs.setTipo("error");
+		}
+		return atrRIs;
+	}
+	public Atributo I(){
+		Atributo atrI = IAsig();
+		return atrI;
+	}
+	
+	public Atributo IAsig(){
 		return new Atributo();
 	}
+
+	public Atributo ExpOr(){
+		return new Atributo();
+	}
+
+	public Atributo RExpOr(){
+		return new Atributo();
+	}
+	
+	public Atributo ExpAnd(){
+		return new Atributo();
+	}
+
+	public Atributo RExpAnd(){
+		return new Atributo();
+	}
+	
+	public Atributo ExpRel(){
+		return new Atributo();
+	}
+
+	public Atributo RExpRel(){
+		return new Atributo();
+	}
+	
+	public Atributo ExpAd(){
+		return new Atributo();
+	}
+
+	public Atributo RExpAd(){
+		return new Atributo();
+	}
+	
+	public Atributo ExpMul(){
+		return new Atributo();
+	}
+
+	public Atributo RExpMul(){
+		return new Atributo();
+	}
+	
+	public Atributo Fact(){
+		return new Atributo();
+	}
+	
+	public void genOpAnd(String opDeOpAnd){
+		if (opDeOpAnd == "&&")
+			codigo.genIns("and");
+	}
+	
+	public void genOpOr(String opDeOpOr){
+		if (opDeOpOr == "||")
+			codigo.genIns("or");
+	}
+
+	public void genOpAd(String opDeOpAd){
+		if (opDeOpAd == "+")
+			codigo.genIns("suma");
+		else if (opDeOpAd.equals("-"))
+			codigo.genIns("resta");
+	}
+	
+	public void genOpMul(String opDeOpMul){
+		if (opDeOpMul == "*")
+			codigo.genIns("multiplica");
+		else if (opDeOpMul.equals("/"))
+			codigo.genIns("divide");
+		else if (opDeOpMul.equals("%"))
+			codigo.genIns("modulo");
+	}
+	
+	public void genOpUn(String opDeOpUn){
+		if (opDeOpUn == "+")
+			codigo.genIns("positivo");
+		else if (opDeOpUn.equals("-"))
+			codigo.genIns("menos");
+		else if (opDeOpUn.equals("!"))
+			codigo.genIns("not");
+	}
+	public void genOpComp(String opDeOpComp){
+		
+		if (opDeOpComp == "<="){
+			codigo.genIns("menor_o_igual");
+		}	
+		if (opDeOpComp == "<"){
+				codigo.genIns("menor");
+		}
+		if (opDeOpComp == ">="){
+			codigo.genIns("mayor_o_igual");
+		}	
+		if (opDeOpComp == ">"){
+				codigo.genIns("mayor");
+		}
+		if (opDeOpComp == "=="){
+			codigo.genIns("igual");
+		}	
+		if (opDeOpComp == "!="){
+				codigo.genIns("distinto");
+		}
+	}
+
+	/**
+	 * Genera el codigo de la negacion booleana "not".
+	 *
+	 */
+
 }
