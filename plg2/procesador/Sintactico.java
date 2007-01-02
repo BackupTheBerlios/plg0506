@@ -87,34 +87,59 @@ public class Sintactico{
 		}
 	}
 	
-	public Atributo RDecs(){
+	public Atributo RDecs()throws Exception{
 		Atributo atrRDecs = new Atributo();
-		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){ 
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RDecs ::= λ
+			return atrRDecs;
+		}
+		lexico.lexer(); //consumo ;
+		Atributo atrDec = Dec();
+		TS.addID(atrDec.getId(),atrDec.getTipo());
+		Atributo atrRDecs1 = RDecs();
+		if (TS.existeID(atrDec.getId())){
 			atrRDecs.setTipo("error");
 			return atrRDecs;
 		}
-		Atributo Dec = Dec();
-		//revisar esto solo he puesto para que no se queje
-		return Dec;
+		if (atrDec.getTipo().equals("error") || atrRDecs1.getTipo().equals("error")){
+			atrRDecs.setTipo("error");
+		}
+		return atrRDecs;
 	}
 	 
-	/*{RDecs1.tsh = añadeID (RDecs0.ts, Dec.id, <dir:RDecs0.dir+1, Dec.tipo>)
-	RDecs1.errh = RDecs0.errh ∨ existeID (RDecs0.ts, Dec.id)} 
-	      RDecs
-	{ RDecs0.ts = RDecs1.ts
-	RDecs0.err = RDecs1.err}
-	RDecs ::= λ
-	{RDecs.ts = RDecs.tsh
-	RDecs.err = RDecs.errh}
-	*/
+	public Atributo Dec() throws Exception{
+		Atributo atrTipo = Tipo();
+		Atributo atrDec = new Atributo();
+		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+			atrDec.setTipo("error");
+			return atrDec;
+		}
+		Token tk = lexico.lexer(); //consumo iden
+		atrDec.setTipo(atrTipo.getTipo());
+		atrDec.setId(tk.getLexema());
+		return atrDec;
+	}
 	
-	public Atributo Dec(){
-		
-		return new Atributo();
+	public Atributo Tipo(){
+		Atributo atrTipo = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKINT)){
+			atrTipo.setTipo("int");
+			return atrTipo;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKBOOL)){
+			atrTipo.setTipo("bool");
+			return atrTipo;
+		}
+		atrTipo.setTipo("error");
+		return atrTipo;
 	}
 	
 	public String Is(){
 		
 		return "";
+	}
+	public Atributo Iden(){
+		
+		return new Atributo();
 	}
 }
