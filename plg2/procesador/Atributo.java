@@ -1,6 +1,11 @@
 package procesador;
 
-public class Atributo {
+/**
+ * La clase <B>Atributos</B> 
+ * 
+ * @author  Leticia Garcia 
+ *
+ */public class Atributo {
 
 	String tipo;
 	String id;

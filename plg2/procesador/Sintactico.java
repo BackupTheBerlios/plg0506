@@ -1,7 +1,6 @@
 package procesador;
 
 import java.io.RandomAccessFile;
-//import java.util.Vector;
 import tablaSimbolos.*;
 import maquinaP.Codigo;
 
@@ -15,7 +14,7 @@ import maquinaP.Codigo;
  * <LI><CODE>dir:</CODE> Entero que marca la posicin de la pila con la que estamos trabajando. De tipo Entero.</LI>
  * </UL></P>
  * 
- * @author Leticia Garcia
+ * @author Paloma de la Fuente y Leticia Garcia
  *
  */
 
@@ -239,14 +238,7 @@ public class Sintactico{
 		return atrIAsig;
 	}
 
-	/*
-ExpAnd 
-{ RExpOr.tsh = ExpAnd.tsh
-		RExpOr.tipoh = ExpAnd.tipo
-RExpOr.codh = ExpAnd.cod}
-RExpOr 
-{ExpOr.tipo = RExpOr.tipo
-ExpOr.cod = RExpOr.cod}*/
+
 	public Atributo ExpOr()throws Exception{
 		Atributo atrExpAnd = ExpAnd();
 		Atributo atrRExpOr = ExpOr();
@@ -307,12 +299,29 @@ ExpOr.cod = RExpOr.cod}*/
 		return atrExpAd;
 	}
 	
-	public Atributo ExpAd(){
-		return new Atributo();
+	public Atributo ExpAd() throws Exception{
+		ExpMul();
+		Atributo atrExpAd = RExpAd();
+		return atrExpAd;
 	}
 
-	public Atributo RExpAd(){
-		return new Atributo();
+	public Atributo RExpAd() throws Exception{
+		Atributo atrRExpAd = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RExpAd ::= λ
+			return atrRExpAd;
+		}
+		genOpAd((lexico.lexer()).getLexema());
+		Atributo atrExpMul = ExpMul();
+		if (!(atrExpMul.getTipo()).equals("int")){
+			atrRExpAd.setTipo("error");
+			return atrRExpAd;
+		}
+		else{
+			atrRExpAd.setTipo("int");	
+		}
+		atrRExpAd = RExpAd();
+		return atrRExpAd;
 	}
 	
 	public Atributo ExpMul(){

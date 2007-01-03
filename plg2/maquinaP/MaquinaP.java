@@ -1,5 +1,9 @@
 package maquinaP;
-
+/**
+ * La clase <B>maquinaP</B> 
+ * @author  Alberto Velazquez
+ *
+ */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
