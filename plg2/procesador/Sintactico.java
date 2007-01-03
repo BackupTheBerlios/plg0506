@@ -238,7 +238,14 @@ public class Sintactico{
 		return atrIAsig;
 	}
 
-
+	/*
+ExpAnd 
+{ RExpOr.tsh = ExpAnd.tsh
+		RExpOr.tipoh = ExpAnd.tipo
+RExpOr.codh = ExpAnd.cod}
+RExpOr 
+{ExpOr.tipo = RExpOr.tipo
+ExpOr.cod = RExpOr.cod}*/
 	public Atributo ExpOr()throws Exception{
 		Atributo atrExpAnd = ExpAnd();
 		Atributo atrRExpOr = ExpOr();
@@ -252,12 +259,22 @@ public class Sintactico{
 		return new Atributo();
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo ExpAnd() throws Exception{
 		ExpRel();
 		Atributo atrRExpAnd = RExpAnd();
 		return atrRExpAnd;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo RExpAnd() throws Exception{
 		Atributo atrRExpAnd = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -274,12 +291,23 @@ public class Sintactico{
 		return atrRExpAnd;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo ExpRel() throws Exception{
 		ExpAd();
 		Atributo atrRExpRel = RExpRel();
 		return atrRExpRel;
 	
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo RExpRel() throws Exception{
 		Atributo atrRExpRel = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
