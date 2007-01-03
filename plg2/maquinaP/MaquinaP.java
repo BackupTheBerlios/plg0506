@@ -254,6 +254,7 @@ public class MaquinaP {
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
+				//peta con divide porque no tiene un entero que parsear
 				System.out.println(linea[0] + "  " + Integer.parseInt(linea[1]));
 				pasos = pasos.concat("Num. de instr.: (" + PC + ") - " + linea[0] + "  " + Integer.parseInt(linea[1]) + "\n");
 				if (linea[0].compareTo("apila")==0)
@@ -276,15 +277,15 @@ public class MaquinaP {
 					or();
 				else if (linea[0].compareTo("not")==0)
 					not();
-				else if (linea[0].compareTo("neg")==0)
+				else if (linea[0].compareTo("menos")==0)
 					neg();
 				else if (linea[0].compareTo("menor")==0)
 					menor();
-				else if (linea[0].compareTo("menor_o_igual")==0)
+				else if (linea[0].compareTo("menorIgual")==0)
 					menorIgual();
 				else if (linea[0].compareTo("mayor")==0)
 					mayor();
-				else if (linea[0].compareTo("mayor_o_igual")==0)
+				else if (linea[0].compareTo("mayorIgual")==0)
 					mayorIgual();
 				else if (linea[0].compareTo("igual")==0)
 					igual();
