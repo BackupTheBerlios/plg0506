@@ -164,7 +164,12 @@ public class Sintactico{
 		atrTipo.setTipo("error");
 		return atrTipo;
 	}
- 
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public String Is() throws Exception{
 		Atributo atrI = I(); 
 		Atributo atrRIs = RIs();
@@ -175,7 +180,12 @@ public class Sintactico{
 			return atrRIs.getTipo();
 		}
 	}
-	 
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo RIs() throws Exception{
 		Atributo atrRIs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -190,6 +200,12 @@ public class Sintactico{
 		}
 		return atrRIs;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo I() throws Exception{
 		Atributo atrI = IAsig();
 		return atrI;
@@ -206,10 +222,15 @@ public class Sintactico{
 			atrIAsig.setTipo("error");
 			return atrIAsig;
 		}
-		atrIAsig.setId(lexico.getLookahead().getLexema());
+		Token tk = lexico.lexer(); //Consumimos el iden
+		atrIAsig.setId(tk.getLexema());
 		String tipo = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getTipo();
 		atrIAsig.setTipo(tipo);
-		lexico.lexer();//Consumimos para reconocer =
+		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
+	            atrIAsig.setTipo("error");
+	            return atrIAsig;
+	    }
+		lexico.lexer();//Consumimos =
 		Atributo atrExpOr= ExpOr();
 		if ((!TS.existeID(atrIAsig.getId())) || !atrExpOr.getTipo().equals(atrIAsig.getTipo())){
 			atrIAsig.setTipo("error");
@@ -226,7 +247,7 @@ RExpOr.codh = ExpAnd.cod}
 RExpOr 
 {ExpOr.tipo = RExpOr.tipo
 ExpOr.cod = RExpOr.cod}*/
-	public Atributo ExpOr(){
+	public Atributo ExpOr()throws Exception{
 		Atributo atrExpAnd = ExpAnd();
 		Atributo atrRExpOr = ExpOr();
 		if (atrExpAnd.getTipo().equals("error") || atrRExpOr.getTipo().equals("error")){
