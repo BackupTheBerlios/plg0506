@@ -1,7 +1,6 @@
 package procesador;
 
 import java.io.RandomAccessFile;
-import java.util.Vector;
 import tablaSimbolos.tablaSimbolos;
 import maquinaP.Codigo;
 
@@ -40,9 +39,8 @@ public class Sintactico{
 	 * @param f String donde se guarga la ruta del fichero donde se va a guardar el codigo generado por el compilador.
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
-	public Sintactico(RandomAccessFile fuente, tablaSimbolos T, String f) throws Exception{
+	public Sintactico(RandomAccessFile fuente, String f) throws Exception{
 		lexico = new Lexico(fuente);		
-		TS = T;
 		codigo = new Codigo(f);
 	}
 
@@ -52,6 +50,7 @@ public class Sintactico{
 	 */
 	public void startParsing() throws Exception{
 		String tipoProg = Prog();
+		codigo.inicializaCodigo();
 		if (tipoProg.equals("error")){
 			throw new Exception("El programa contiene errores de tipo");
 		}
@@ -68,7 +67,15 @@ public class Sintactico{
 	public String Prog() throws Exception{
 		TS.setDir(0);
 		String tipoDecs = Decs();
+		if (!lexico.reconoce(CategoriaLexica.TKLLAP)){
+			return "error";
+		}
+		lexico.lexer();
 		String tipoIs = Is();
+		if (!lexico.reconoce(CategoriaLexica.TKLLCI)){
+			return "error";
+		} 
+		lexico.lexer();
 		if (tipoDecs.equals("error") || tipoIs.equals("error")){
 			return "error";	
 		}
@@ -78,7 +85,8 @@ public class Sintactico{
 	}
 	
 	public String Decs() throws Exception{
-		Atributo atrDec = Dec(); 
+		Atributo atrDec = Dec();
+		TS = new tablaSimbolos();
 		TS.addID(atrDec.getId(),atrDec.getTipo());
 		Atributo atrRDecs = RDecs();
 		if (atrDec.getTipo().equals("error") || atrRDecs.getTipo().equals("error")){
@@ -177,21 +185,52 @@ public class Sintactico{
 	public Atributo RExpOr(){
 		return new Atributo();
 	}
-	
-	public Atributo ExpAnd(){
-		return new Atributo();
-	}
 
-	public Atributo RExpAnd(){
-		return new Atributo();
+	public Atributo ExpAnd() throws Exception{
+		ExpRel();
+		Atributo atrRExpAnd = RExpAnd();
+		return atrRExpAnd;
 	}
 	
-	public Atributo ExpRel(){
-		return new Atributo();
+	public Atributo RExpAnd() throws Exception{
+		Atributo atrRExpAnd = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RExpAnd ::= λ
+			return atrRExpAnd;
+		}
+		genOpAnd((lexico.lexer()).getLexema());
+		Atributo atrExpRel = ExpRel();
+		if (!(atrExpRel.getTipo()).equals("bool")){
+			atrRExpAnd.setTipo("error");
+			return atrRExpAnd;
+		}
+		atrRExpAnd = RExpAnd();
+		return atrRExpAnd;
 	}
-
-	public Atributo RExpRel(){
-		return new Atributo();
+	
+	public Atributo ExpRel() throws Exception{
+		ExpAd();
+		Atributo atrRExpRel = RExpRel();
+		return atrRExpRel;
+	
+	}
+	public Atributo RExpRel() throws Exception{
+		Atributo atrRExpRel = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RExpRel ::= λ
+			return atrRExpRel;
+		}
+		genOpComp((lexico.lexer()).getLexema());
+		Atributo atrExpRel1 = ExpRel();
+		if ((atrExpRel1.getTipo()).equals("error")){
+			atrRExpRel.setTipo("error");
+			return atrRExpRel;
+		}
+		else{
+			atrRExpRel.setTipo("bool");	
+		}
+		Atributo atrExpAd = ExpAd();
+		return atrExpAd;
 	}
 	
 	public Atributo ExpAd(){
