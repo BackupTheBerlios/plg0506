@@ -244,6 +244,10 @@ public class MaquinaP {
 	 *
 	 */
 	
+	private boolean hasInt(String l) {
+		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
+	}
+	
 	public void ejecuta() throws Exception{
 		String i;
 		String[] linea;
@@ -254,9 +258,14 @@ public class MaquinaP {
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
-				//peta con divide porque no tiene un entero que parsear
-				System.out.println(linea[0] + "  " + Integer.parseInt(linea[1]));
-				pasos = pasos.concat("Num. de instr.: (" + PC + ") - " + linea[0] + "  " + Integer.parseInt(linea[1]) + "\n");
+				if (hasInt(linea[0]))
+					System.out.println(linea[0] + "  " + linea[1]);
+				else
+					System.out.println(linea[0] + "  ");
+				pasos = pasos.concat("Num. de instr.: (" + PC + ") - " + linea[0] + "  ");
+				if (hasInt(linea[0]))
+					pasos = pasos.concat(linea[1]);
+				pasos = pasos.concat("\n");
 				if (linea[0].compareTo("apila")==0)
 					apila((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("desapila-dir")==0)
