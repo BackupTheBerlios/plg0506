@@ -43,7 +43,7 @@ public class tablaSimbolos {
 	 * @param id
 	 * @return
 	 */
-	public boolean existeID(String id){
+	public boolean existeID(String id)throws Exception{
 		return this.tabla.containsKey(id);
 	}
 	
