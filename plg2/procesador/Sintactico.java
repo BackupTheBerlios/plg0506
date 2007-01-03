@@ -1,7 +1,8 @@
 package procesador;
 
 import java.io.RandomAccessFile;
-import tablaSimbolos.tablaSimbolos;
+//import java.util.Vector;
+import tablaSimbolos.*;
 import maquinaP.Codigo;
 
 /**
@@ -31,6 +32,7 @@ public class Sintactico{
 	Lexico lexico;
 	tablaSimbolos TS;
 	Codigo codigo;
+	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -84,6 +86,11 @@ public class Sintactico{
 		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public String Decs() throws Exception{
 		Atributo atrDec = Dec();
 		TS = new tablaSimbolos();
@@ -97,6 +104,11 @@ public class Sintactico{
 		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo RDecs()throws Exception{
 		Atributo atrRDecs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -116,7 +128,12 @@ public class Sintactico{
 		}
 		return atrRDecs;
 	}
-	 
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo Dec() throws Exception{
 		Atributo atrTipo = Tipo();
 		Atributo atrDec = new Atributo();
@@ -130,6 +147,10 @@ public class Sintactico{
 		return atrDec;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Atributo Tipo(){
 		Atributo atrTipo = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
@@ -143,7 +164,7 @@ public class Sintactico{
 		atrTipo.setTipo("error");
 		return atrTipo;
 	}
-
+ 
 	public String Is() throws Exception{
 		Atributo atrI = I(); 
 		Atributo atrRIs = RIs();
@@ -154,7 +175,7 @@ public class Sintactico{
 			return atrRIs.getTipo();
 		}
 	}
-
+	 
 	public Atributo RIs() throws Exception{
 		Atributo atrRIs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -169,16 +190,48 @@ public class Sintactico{
 		}
 		return atrRIs;
 	}
-	public Atributo I(){
+	public Atributo I() throws Exception{
 		Atributo atrI = IAsig();
 		return atrI;
 	}
 	
-	public Atributo IAsig(){
-		return new Atributo();
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Atributo IAsig() throws Exception{
+		Atributo atrIAsig = new Atributo();
+		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+			atrIAsig.setTipo("error");
+			return atrIAsig;
+		}
+		atrIAsig.setId(lexico.getLookahead().getLexema());
+		String tipo = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getTipo();
+		atrIAsig.setTipo(tipo);
+		lexico.lexer();//Consumimos para reconocer =
+		Atributo atrExpOr= ExpOr();
+		if ((!TS.existeID(atrIAsig.getId())) || !atrExpOr.getTipo().equals(atrIAsig.getTipo())){
+			atrIAsig.setTipo("error");
+			return atrIAsig;
+		}
+		return atrIAsig;
 	}
 
+	/*
+ExpAnd 
+{ RExpOr.tsh = ExpAnd.tsh
+		RExpOr.tipoh = ExpAnd.tipo
+RExpOr.codh = ExpAnd.cod}
+RExpOr 
+{ExpOr.tipo = RExpOr.tipo
+ExpOr.cod = RExpOr.cod}*/
 	public Atributo ExpOr(){
+		Atributo atrExpAnd = ExpAnd();
+		Atributo atrRExpOr = ExpOr();
+		if (atrExpAnd.getTipo().equals("error") || atrRExpOr.getTipo().equals("error")){
+			
+		}
 		return new Atributo();
 	}
 
@@ -253,16 +306,28 @@ public class Sintactico{
 		return new Atributo();
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpAnd
+	 */
 	public void genOpAnd(String opDeOpAnd){
 		if (opDeOpAnd == "&&")
 			codigo.genIns("and");
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpOr
+	 */
 	public void genOpOr(String opDeOpOr){
 		if (opDeOpOr == "||")
 			codigo.genIns("or");
 	}
-
+	
+	/**
+	 * 
+	 * @param opDeOpAd
+	 */
 	public void genOpAd(String opDeOpAd){
 		if (opDeOpAd == "+")
 			codigo.genIns("suma");
@@ -270,6 +335,10 @@ public class Sintactico{
 			codigo.genIns("resta");
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpMul
+	 */
 	public void genOpMul(String opDeOpMul){
 		if (opDeOpMul == "*")
 			codigo.genIns("multiplica");
@@ -279,6 +348,10 @@ public class Sintactico{
 			codigo.genIns("modulo");
 	}
 	
+	/**
+	 * 
+	 * @param opDeOpUn
+	 */
 	public void genOpUn(String opDeOpUn){
 		if (opDeOpUn == "+")
 			codigo.genIns("positivo");
@@ -287,16 +360,21 @@ public class Sintactico{
 		else if (opDeOpUn.equals("!"))
 			codigo.genIns("not");
 	}
+	
+	/**
+	 * 
+	 * @param opDeOpComp
+	 */
 	public void genOpComp(String opDeOpComp){
 		
 		if (opDeOpComp == "<="){
-			codigo.genIns("menor_o_igual");
+			codigo.genIns("menorIgual");
 		}	
 		if (opDeOpComp == "<"){
 				codigo.genIns("menor");
 		}
 		if (opDeOpComp == ">="){
-			codigo.genIns("mayor_o_igual");
+			codigo.genIns("mayorIgual");
 		}	
 		if (opDeOpComp == ">"){
 				codigo.genIns("mayor");
