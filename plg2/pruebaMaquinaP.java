@@ -17,7 +17,7 @@ public class pruebaMaquinaP {
 			cod.genIns("apila-dir", 0);
 			cod.genIns("apila-dir", 1);
 			cod.genIns("divide");
-			cod.genIns("desapila_dir",2);
+			cod.genIns("desapila-dir",2);
 			cod.muestraCodigo();
 			MaquinaP MP = new MaquinaP(f);
 			MP.setProg(cod.getCod());
