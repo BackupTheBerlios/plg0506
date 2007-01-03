@@ -277,8 +277,10 @@ public class MaquinaP {
 					or();
 				else if (linea[0].compareTo("not")==0)
 					not();
+				else if (linea[0].compareTo("positivo")==0)
+					mas();
 				else if (linea[0].compareTo("menos")==0)
-					neg();
+					menos();
 				else if (linea[0].compareTo("menor")==0)
 					menor();
 				else if (linea[0].compareTo("menorIgual")==0)
@@ -633,7 +635,7 @@ public class MaquinaP {
 	 *	Pila[ST] <--  - Pila[ST]
 	 *	PC <-- PC + 1 
 	 */
-	public void neg()throws Exception{
+	public void menos()throws Exception{
 		if (ST<0){
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
 		}
@@ -642,6 +644,12 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 	
+	public void mas()throws Exception{
+		if (ST<0){
+			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
+		}
+		PC = PC + 1;
+	}
 	/**
 	 * Metodo que realiza una operacion de menor con dos operandos. Se desapilan los dos primeros elementos de la pila y se realiza la operacion.
 	 * Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno 
