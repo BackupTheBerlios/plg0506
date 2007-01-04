@@ -238,25 +238,36 @@ public class Sintactico{
 		return atrIAsig;
 	}
 
-	/*
-ExpAnd 
-{ RExpOr.tsh = ExpAnd.tsh
-		RExpOr.tipoh = ExpAnd.tipo
-RExpOr.codh = ExpAnd.cod}
-RExpOr 
-{ExpOr.tipo = RExpOr.tipo
-ExpOr.cod = RExpOr.cod}*/
-	public Atributo ExpOr()throws Exception{
-		Atributo atrExpAnd = ExpAnd();
-		Atributo atrRExpOr = ExpOr();
-		if (atrExpAnd.getTipo().equals("error") || atrRExpOr.getTipo().equals("error")){
-			
-		}
-		return new Atributo();
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Atributo ExpOr() throws Exception{
+		ExpAnd();
+		Atributo atrRExpOr = RExpOr();
+		return atrRExpOr;
 	}
-
-	public Atributo RExpOr(){
-		return new Atributo();
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Atributo RExpOr() throws Exception{
+		Atributo atrRExpOr = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RExpOr ::= λ
+			return atrRExpOr;
+		}
+		genOpAnd((lexico.lexer()).getLexema());
+		Atributo atrExpAnd = ExpAnd();
+		if (!(atrExpAnd.getTipo()).equals("bool")){
+			atrRExpOr.setTipo("error");
+			return atrRExpOr;
+		}
+		atrRExpOr = RExpAnd();
+		return atrRExpOr;
 	}
 
 	/**
