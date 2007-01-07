@@ -3,8 +3,6 @@ import java.io.RandomAccessFile;
 
 import javax.swing.JOptionPane;
 
-//import tablaSimbolos.tablaSimbolos;
-
 /**
  * La clase <B>Procesador</B> es el procesador del compilador del lenguaje. Se encarga de crear la Tabla de Simbolos,
  * de llamar a Sintactico, para empezar el analisis.
@@ -31,7 +29,6 @@ public class Procesador {
 				 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 				 * se recoge mas abajo.
 				 */
-				//tablaSimbolos TS = new tablaSimbolos();	
 				Sintactico sintactico;		
 				sintactico = new Sintactico(fuente, f);
 				System.out.println("Inicio del analisis\n");
