@@ -338,12 +338,22 @@ public class Sintactico{
 		return atrExpAd;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo ExpAd() throws Exception{
 		ExpMul();
 		Atributo atrExpAd = RExpAd();
 		return atrExpAd;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public Atributo RExpAd() throws Exception{
 		Atributo atrRExpAd = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -363,15 +373,47 @@ public class Sintactico{
 		return atrRExpAd;
 	}
 	
-	public Atributo ExpMul(){
-		return new Atributo();
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Atributo ExpMul() throws Exception{
+		Fact();
+		Atributo atrRExpMul = RExpMul();
+		return atrRExpMul;
 	}
 
-	public Atributo RExpMul(){
-		return new Atributo();
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Atributo RExpMul() throws Exception{
+		Atributo atrRExpMul = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RExpMul ::= λ
+			return atrRExpMul;
+		}
+		genOpMul((lexico.lexer()).getLexema());
+		Atributo atrFact = Fact();
+		if (!(atrFact.getTipo()).equals("int")){
+			atrRExpMul.setTipo("error");
+			return atrRExpMul;
+		}
+		else{
+			atrRExpMul.setTipo("int");	
+		}
+		atrRExpMul = RExpMul();
+		return atrRExpMul;
 	}
 	
-	public Atributo Fact(){
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Atributo Fact() throws Exception{
 		return new Atributo();
 	}
 	

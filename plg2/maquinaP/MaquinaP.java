@@ -821,6 +821,8 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 	
+	
+	
 	/**
 	 * Metodo que realiza una operacion de salto del programa. Se comprueba que el salto no supere el tamao del programa y se aumenta el contador
 	 * del programa segun el valor que recibimos por parametro.
