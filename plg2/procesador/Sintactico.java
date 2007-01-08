@@ -50,12 +50,11 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */
 	public void startParsing() throws Exception{
-		String tipoProg = Prog();
 		codigo.inicializaCodigo();
-		if (tipoProg.equals("error")){
+		boolean tipoProg = Prog();
+		if (tipoProg){
 			throw new Exception("El programa contiene errores de tipo");
 		}
-	
 	}
 
 	/**
@@ -65,41 +64,36 @@ public class Sintactico{
 	 * @return errDeProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
-	public String Prog() throws Exception{
-		TS.setDir(0);
-		String tipoDecs = Decs();
-		if (!lexico.reconoce(CategoriaLexica.TKLLAP)){
-			return "error";
+	public boolean Prog() throws Exception{
+		boolean errProg = true;
+		boolean errDecs = Decs();
+		if (lexico.reconoce(CategoriaLexica.TKLLAP)){
+			lexico.lexer(); //consumo {
+			boolean errIs = Is();
+			if (lexico.reconoce(CategoriaLexica.TKLLCI)){
+				lexico.lexer(); // consumo }
+				errProg = errDecs || errIs;
+				codigo.genIns("stop");
+			}
 		}
-		lexico.lexer();
-		String tipoIs = Is();
-		if (!lexico.reconoce(CategoriaLexica.TKLLCI)){
-			return "error";
-		} 
-		lexico.lexer();
-		if (tipoDecs.equals("error") || tipoIs.equals("error")){
-			return "error";	
-		}
-		else{
-			return tipoIs;
-		}
+		return errProg;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String Decs() throws Exception{
+	public boolean Decs() throws Exception{
 		Atributo atrDec = Dec();
 		TS = new tablaSimbolos();
 		TS.addID(atrDec.getId(),atrDec.getTipo());
-		Atributo atrRDecs = RDecs();
-		if (atrDec.getTipo().equals("error") || atrRDecs.getTipo().equals("error")){
-			return "error";
+		Atributo atrRDecs = RDecs(atrDec);
+		if (atrRDecs.getTipo().equals("error")){
+			return true;
 		}
-		else {
-			return atrRDecs.getTipo();
+		else{
+			return false;
 		}
 	}
 	
@@ -108,23 +102,19 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributo RDecs()throws Exception{
+	public Atributo RDecs(Atributo heredado)throws Exception{
 		Atributo atrRDecs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RDecs ::= λ
-			return atrRDecs;
+			return heredado;
 		}
 		lexico.lexer(); //consumo ;
 		Atributo atrDec = Dec();
 		TS.addID(atrDec.getId(),atrDec.getTipo());
-		Atributo atrRDecs1 = RDecs();
-		if (TS.existeID(atrDec.getId())){
-			atrRDecs.setTipo("error");
-			return atrRDecs;
+		if (TS.existeID(atrDec.getId()) || heredado.getTipo().equals("error")){
+			atrDec.setTipo("error");
 		}
-		if (atrDec.getTipo().equals("error") || atrRDecs1.getTipo().equals("error")){
-			atrRDecs.setTipo("error");
-		}
+		atrRDecs = RDecs(atrDec);
 		return atrRDecs;
 	}
 	
@@ -169,14 +159,14 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public String Is() throws Exception{
+	public boolean Is() throws Exception{
 		Atributo atrI = I(); 
-		Atributo atrRIs = RIs();
-		if (atrI.getTipo().equals("error") || atrRIs.getTipo().equals("error")){
-			return "error";
+		Atributo atrRIs = RIs(atrI);
+		if (atrRIs.getTipo().equals("error")){
+			return true;
 		}
 		else {
-			return atrRIs.getTipo();
+			return false;
 		}
 	}
 	
@@ -185,16 +175,16 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributo RIs() throws Exception{
+	public Atributo RIs(Atributo heredado) throws Exception{
 		Atributo atrRIs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RIs ::= λ
-			return atrRIs;
+			return heredado;
 		}
 		lexico.lexer(); //consumo ;
 		Atributo atrI = I();
-		Atributo atrRI1 = RIs();
-		if (atrI.getTipo().equals("error") || atrRI1.getTipo().equals("error")){
+		atrRIs = RIs(atrI);
+		if (heredado.getTipo().equals("error") || atrRIs.getTipo().equals("error")){
 			atrRIs.setTipo("error");
 		}
 		return atrRIs;
@@ -244,8 +234,8 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	public Atributo ExpOr() throws Exception{
-		ExpAnd();
-		Atributo atrRExpOr = RExpOr();
+		Atributo atrExpAnd = ExpAnd();
+		Atributo atrRExpOr = RExpOr(atrExpAnd);
 		return atrRExpOr;
 	}
 	
@@ -254,19 +244,21 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributo RExpOr() throws Exception{
+	public Atributo RExpOr(Atributo heredado) throws Exception{
 		Atributo atrRExpOr = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
-			return atrRExpOr;
+			return heredado;
 		}
-		genOpAnd((lexico.lexer()).getLexema());
+		genOpOr((lexico.lexer()).getLexema());
 		Atributo atrExpAnd = ExpAnd();
-		if (!(atrExpAnd.getTipo()).equals("bool")){
-			atrRExpOr.setTipo("error");
-			return atrRExpOr;
+		if (!(atrExpAnd.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
+			atrExpAnd.setTipo("error");
 		}
-		atrRExpOr = RExpAnd();
+		else{
+			atrExpAnd.setTipo("bool");
+		}
+		atrRExpOr = RExpOr(atrExpAnd);
 		return atrRExpOr;
 	}
 
@@ -276,8 +268,8 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	public Atributo ExpAnd() throws Exception{
-		ExpRel();
-		Atributo atrRExpAnd = RExpAnd();
+		Atributo atrExpRel = ExpRel();
+		Atributo atrRExpAnd = RExpAnd(atrExpRel);
 		return atrRExpAnd;
 	}
 	
@@ -286,19 +278,21 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributo RExpAnd() throws Exception{
+	public Atributo RExpAnd(Atributo heredado) throws Exception{
 		Atributo atrRExpAnd = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpAnd ::= λ
-			return atrRExpAnd;
+			//RExpOr ::= λ
+			return heredado;
 		}
 		genOpAnd((lexico.lexer()).getLexema());
 		Atributo atrExpRel = ExpRel();
-		if (!(atrExpRel.getTipo()).equals("bool")){
-			atrRExpAnd.setTipo("error");
-			return atrRExpAnd;
+		if (!(atrExpRel.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
+			atrExpRel.setTipo("error");
 		}
-		atrRExpAnd = RExpAnd();
+		else{
+			atrExpRel.setTipo("bool");
+		}
+		atrRExpAnd = RExpOr(atrExpRel);
 		return atrRExpAnd;
 	}
 	
@@ -308,10 +302,9 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	public Atributo ExpRel() throws Exception{
-		ExpAd();
-		Atributo atrRExpRel = RExpRel();
+		Atributo atrExpAd = ExpAd();
+		Atributo atrRExpRel = RExpRel(atrExpAd);
 		return atrRExpRel;
-	
 	}
 	
 	/**
@@ -319,25 +312,30 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	public Atributo RExpRel() throws Exception{
+	public Atributo RExpRel(Atributo heredado) throws Exception{
 		Atributo atrRExpRel = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpRel ::= λ
-			return atrRExpRel;
+			//RExpOr ::= λ
+			return heredado;
 		}
-		genOpComp((lexico.lexer()).getLexema());
-		Atributo atrExpRel1 = ExpRel();
-		if ((atrExpRel1.getTipo()).equals("error")){
+		genOpAnd((lexico.lexer()).getLexema());
+		if (heredado.getTipo().equals("error")){
 			atrRExpRel.setTipo("error");
-			return atrRExpRel;
 		}
 		else{
-			atrRExpRel.setTipo("bool");	
+			atrRExpRel.setTipo("bool");
 		}
-		Atributo atrExpAd = ExpAd();
-		return atrExpAd;
+		atrRExpRel = ExpAd();
+		return atrRExpRel;
 	}
 	
+	/*
+	 * ExpAd(out tipo0) ::=
+ExpMul(out tipo1)
+	(tipoh2 ← tipo1;)
+RExpAd(in tipoh2; out tipo2)
+	(tipo0 ← tipo2;)
+	 */
 	/**
 	 * 
 	 * @return
@@ -349,6 +347,18 @@ public class Sintactico{
 		return atrExpAd;
 	}
 
+	/*
+	 * RExpAd(in tipoh0,; out  tipo0) ::= OpAd(out op)
+ExpMul(out tipo1)
+(tipoh2 ← si (tipoh0 = tipo1 = int)
+			int
+si no err; emite(op);)
+RExpAd(in tipoh2; out tipo2)
+(tipo0 ← tipo2;)
+
+RExpAd(in tipoh; out  tipo) ::= λ
+(tipo ← tipoh;)
+	 */
 	/**
 	 * 
 	 * @return
@@ -373,6 +383,9 @@ public class Sintactico{
 		return atrRExpAd;
 	}
 	
+	/*
+	 * 
+	 */
 	/**
 	 * 
 	 * @return
