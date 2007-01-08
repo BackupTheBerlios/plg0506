@@ -416,41 +416,47 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	
-	/*Fact ::= iden
-				{ Fact.tipo = si existeID (Fact.tsh, iden.lex)
-									Fact.tsh[iden.lex].tipo
-				              si no err, 
-				Fact.cod = apila-dir (Fact.tsh [iden.lex].dir) }
-     Fact ::=  	{ ExpOr.tsh = Fact.tsh }
-     		( ExpOr )
-				{ Fact.tipo = ExpOr.tipo, 
-				Fact.cod = ExpOr.cod }
-     Fact ::=  	{ Fact1.tsh = Fact0.tsh }
-     		opUnario Fact
-     			{ Fact0.tipo = Fact1.tipo, 
-     			Fact0.cod = Fact1.cod || opUnario.cod }*/
 	public Atributo Fact() throws Exception{
 		Atributo atrFact = new Atributo();
+		
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			atrFact.setTipo("int");
 			codigo.genIns("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
+			lexico.lexer(); //Cosumimos el entero
 			return atrFact;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
 			atrFact.setTipo("bool");
 			codigo.genIns("apila",1);
+			lexico.lexer(); //Cosumimos 'true'
 			return atrFact;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
 			atrFact.setTipo("bool");
 			codigo.genIns("apila",0);
+			lexico.lexer(); //Cosumimos 'false'
 			return atrFact;
 		}
-		else if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
-			atrFact.setTipo("bool");
-			codigo.genIns("apila",1);
+		else if (lexico.reconoce(CategoriaLexica.TKPAP)) {
+			lexico.lexer(); //Cosumimos '('
+			atrFact = ExpOr();
+			if (!lexico.reconoce(CategoriaLexica.TKPCI)){
+				atrFact.setTipo("error");
+				return atrFact;
+			}
+			lexico.lexer(); //Cosumimos ')'
 			return atrFact;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
+			Token tk = lexico.lexer(); //Consumimos el iden
+			atrFact.setId(tk.getLexema());
+			String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
+			atrFact.setTipo(tipo);
+			return atrFact;
+		}
+		else{
+			genOpUn((lexico.lexer()).getLexema()); //Consumimos el operador
+			atrFact = Fact();
 		}
 		return atrFact;
 	}
