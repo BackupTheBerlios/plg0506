@@ -397,12 +397,15 @@ public class Sintactico{
 		}
 		genOpMul((lexico.lexer()).getLexema());
 		Atributo atrFact = Fact();
-		if (!(atrFact.getTipo()).equals("int")){
-			atrRExpMul.setTipo("error");
-			return atrRExpMul;
+		if ((atrFact.getTipo()).equals("int")){
+			atrRExpMul.setTipo("int");
+		}
+		else if ((atrFact.getTipo()).equals("bool")){
+			atrRExpMul.setTipo("bool");
 		}
 		else{
-			atrRExpMul.setTipo("int");	
+			atrRExpMul.setTipo("error");
+			return atrRExpMul;
 		}
 		atrRExpMul = RExpMul();
 		return atrRExpMul;
@@ -413,8 +416,43 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
+	
+	/*Fact ::= iden
+				{ Fact.tipo = si existeID (Fact.tsh, iden.lex)
+									Fact.tsh[iden.lex].tipo
+				              si no err, 
+				Fact.cod = apila-dir (Fact.tsh [iden.lex].dir) }
+     Fact ::=  	{ ExpOr.tsh = Fact.tsh }
+     		( ExpOr )
+				{ Fact.tipo = ExpOr.tipo, 
+				Fact.cod = ExpOr.cod }
+     Fact ::=  	{ Fact1.tsh = Fact0.tsh }
+     		opUnario Fact
+     			{ Fact0.tipo = Fact1.tipo, 
+     			Fact0.cod = Fact1.cod || opUnario.cod }*/
 	public Atributo Fact() throws Exception{
-		return new Atributo();
+		Atributo atrFact = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKINT)){
+			atrFact.setTipo("int");
+			codigo.genIns("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
+			return atrFact;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
+			atrFact.setTipo("bool");
+			codigo.genIns("apila",1);
+			return atrFact;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
+			atrFact.setTipo("bool");
+			codigo.genIns("apila",0);
+			return atrFact;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
+			atrFact.setTipo("bool");
+			codigo.genIns("apila",1);
+			return atrFact;
+		}
+		return atrFact;
 	}
 	
 	/**
