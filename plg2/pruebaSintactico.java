@@ -13,7 +13,7 @@ public class pruebaSintactico {
 		String cod = new String();
 		try{
 			fuente= new RandomAccessFile(f,"r");
-			Sintactico parser = new Sintactico(fuente,cod);
+			Sintactico parser = new Sintactico(fuente,f);
 			parser.startParsing();
 			Codigo c = parser.getCodigo();
 			c.muestraCodigo();
