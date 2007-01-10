@@ -1,5 +1,3 @@
-import procesador.Procesador;
-import maquinaP.MaquinaP;
 import nGui.GUI;
 
 public class Main {

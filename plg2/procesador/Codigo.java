@@ -40,7 +40,7 @@ public class Codigo {
 		fcod = fcod.concat("obj");
 		//File fich= new File(fcod);
 		try{
-			fichero = new FileOutputStream(fich, false);
+			fichero = new FileOutputStream(fcod, false);
 		}
 		catch(java.io.FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + fcod +e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);

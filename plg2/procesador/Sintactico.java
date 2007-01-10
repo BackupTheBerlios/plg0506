@@ -1,7 +1,9 @@
 package procesador;
 
-import java.io.RandomAccessFile;
+//import java.io.RandomAccessFile;
 import java.io.File;
+import java.io.IOException;
+
 import tablaSimbolos.*;
 
 /**
@@ -151,6 +153,17 @@ public class Sintactico{
 	private Atributo Tipo(){
 		System.out.println("Tipo");
 		Atributo atrTipo = new Atributo();
+		//FIXME: De pruebas
+		try {
+			System.out.println(lexico.getNextToken().muestraToken());
+			lexico.lexer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			atrTipo.setTipo("int");
 			return atrTipo;
@@ -159,6 +172,8 @@ public class Sintactico{
 			atrTipo.setTipo("bool");
 			return atrTipo;
 		}
+		//FIXME
+		System.out.println("### Error ###");
 		atrTipo.setTipo("error");
 		return atrTipo;
 	}

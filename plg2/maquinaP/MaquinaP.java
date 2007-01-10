@@ -35,7 +35,6 @@ public class MaquinaP {
 	private int ST;
 	private Vector Prog;
 	private Vector Mem;
-	//private Heap heap;
 	private FileReader fichero;
 	private String pasos;
 	private int tamMem;
