@@ -235,6 +235,7 @@ public class Lexico {
 			 */
 			case 'i':	compara = cmp(posicion, "int");
 						if (compara){ 
+							System.out.println("holaaaaaaaaaa compara funciona mal");
 							return new Token("int",CategoriaLexica.TKINT);
 						}
 						else{

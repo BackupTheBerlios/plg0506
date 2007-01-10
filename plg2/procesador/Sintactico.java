@@ -136,11 +136,11 @@ public class Sintactico{
 		System.out.println("Dec");
 		Atributo atrTipo = Tipo();
 		Atributo atrDec = new Atributo();
+		Token tk = lexico.lexer(); //consumo iden
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			atrDec.setTipo("error");
 			return atrDec;
 		}
-		Token tk = lexico.lexer(); //consumo iden
 		atrDec.setTipo(atrTipo.getTipo());
 		atrDec.setId(tk.getLexema());
 		return atrDec;
@@ -149,21 +149,13 @@ public class Sintactico{
 	/**
 	 * 
 	 * @return
+	 * @throws Exception 
+	 * @throws IOException 
 	 */
-	private Atributo Tipo(){
+	private Atributo Tipo() throws IOException, Exception{
 		System.out.println("Tipo");
 		Atributo atrTipo = new Atributo();
-		//FIXME: De pruebas
-		try {
-			System.out.println(lexico.getNextToken().muestraToken());
-			lexico.lexer();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lexico.lexer();
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			atrTipo.setTipo("int");
 			return atrTipo;
