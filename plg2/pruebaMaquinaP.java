@@ -1,4 +1,4 @@
-import maquinaP.Codigo;
+import procesador.Codigo;
 import maquinaP.MaquinaP;
 
 public class pruebaMaquinaP {

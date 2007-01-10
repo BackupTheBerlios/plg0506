@@ -1,4 +1,4 @@
-package maquinaP;
+package procesador;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,13 +32,13 @@ public class Codigo {
 	 * 
 	 * @param f String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
 	 */
-	public Codigo(String f){		
+	public Codigo(File fich){		
 		cod = new Vector();
 		String fcod;
-		int i= f.length();
-		fcod = new String(f.substring( 0,i-3));
+		int i= fich.toString().length();
+		fcod = new String(fich.toString().substring( 0,i-3));
 		fcod = fcod.concat("obj");
-		File fich= new File(fcod);
+		//File fich= new File(fcod);
 		try{
 			fichero = new FileOutputStream(fich, false);
 		}
@@ -101,6 +101,8 @@ public class Codigo {
 	 * Mtodo que imprime por pantalla el contenido del atributo cod. No tiene parmetros de entrada ni de salida.
 	 * 
 	 */
+	
+	/* FIXME: Esta función sobra */
 	public void muestraCodigo(){		
 		for (int i=0;i<cod.size();i++){
 			System.out.println(i+"  "+cod.elementAt(i));
@@ -117,5 +119,13 @@ public class Codigo {
 		catch(java.io.IOException e){
 			JOptionPane.showMessageDialog(null,"No he podido cerrar el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	public String getString(){
+		String ins = null;
+		for (int i = 0; i < cod.size(); i++) {
+			ins = (String)cod.elementAt(i) + "\n";
+			}
+		return ins;
 	}
 }

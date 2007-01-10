@@ -4,10 +4,15 @@ import java.io.File;
 import javax.swing.*;          
 import java.awt.*;
 import java.awt.event.*;
+import procesador.Procesador;
+import maquinaP.MaquinaP;
 
 public class GUI {
     protected JTextArea texto0, texto1;
     protected File file;
+    protected MaquinaP maquinap;
+    protected Procesador procesador = new Procesador();
+
     
     public GUI() {
     	super();
@@ -74,7 +79,13 @@ public class GUI {
             putValue(MNEMONIC_KEY, mnemonic);
         }
         public void actionPerformed(ActionEvent e) {
-            texto0.append("Boton 0\n");
+            //texto0.append("Boton 0\n");
+            if (file == null)
+            	texto0.append("### ERROR: selecciona un archivo ###");
+            else {
+            	procesador.procesa(file);
+            	texto0.append(procesador.getCodigo());
+            }
         }
     }
 

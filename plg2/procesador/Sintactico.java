@@ -1,8 +1,8 @@
 package procesador;
 
 import java.io.RandomAccessFile;
+import java.io.File;
 import tablaSimbolos.*;
-import maquinaP.Codigo;
 
 /**
  * La clase <B>Sintactico</B> analiza los tokens que han sido reconocidos por <B>Lexico</B>. 
@@ -40,33 +40,13 @@ public class Sintactico{
 	 * @param f String donde se guarga la ruta del fichero donde se va a guardar el codigo generado por el compilador.
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
-	public Sintactico(RandomAccessFile fuente, String f) throws Exception{
-		lexico = new Lexico(fuente);		
+	public Sintactico(File f) throws Exception{
+		lexico = new Lexico(f);		
 		codigo = new Codigo(f);
 	}
 	
 	public Codigo getCodigo() {
 		return codigo;
-	}
-
-	public void setCodigo(Codigo codigo) {
-		this.codigo = codigo;
-	}
-
-	public Lexico getLexico() {
-		return lexico;
-	}
-
-	public void setLexico(Lexico lexico) {
-		this.lexico = lexico;
-	}
-
-	public tablaSimbolos getTS() {
-		return TS;
-	}
-
-	public void setTS(tablaSimbolos ts) {
-		TS = ts;
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package procesador;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
 import java.io.RandomAccessFile;
 
 
@@ -40,10 +42,15 @@ public class Lexico {
 	 * @param f Buffer de entrada del que se leen caracteres. Que es del tipo RandomAccessFile.
 	 * 
 	 */
-	public Lexico(RandomAccessFile f) {
+	public Lexico(File f) {
 		linea = 0;
 		lookahead = new Token();
-		fuente = f;
+		try {
+			fuente = new RandomAccessFile(f, "r");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		posicion = 0;
 	}
 	
