@@ -1,19 +1,20 @@
-import java.io.RandomAccessFile;
+import java.io.File;
+//import java.io.RandomAccessFile;
 import javax.swing.JOptionPane;
 import procesador.*;
-import maquinaP.*;
+//import maquinaP.*;
 public class pruebaSintactico {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		RandomAccessFile fuente;
+		File fuente;
 		String f= "Ejemplo.txt";
-		String cod = new String();
+		//String cod = new String();
 		try{
-			fuente= new RandomAccessFile(f,"r");
-			Sintactico parser = new Sintactico(fuente,f);
+			fuente= new File(f);
+			Sintactico parser = new Sintactico(fuente);
 			parser.startParsing();
 			Codigo c = parser.getCodigo();
 			c.muestraCodigo();
