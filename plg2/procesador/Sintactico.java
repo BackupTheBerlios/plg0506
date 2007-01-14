@@ -156,7 +156,6 @@ public class Sintactico{
 	private Atributo Tipo() throws IOException, Exception{
 		System.out.println("Tipo");
 		Atributo atrTipo = new Atributo();
-		//lexico.lexer();
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			atrTipo.setTipo("int");
 			return atrTipo;
@@ -165,8 +164,6 @@ public class Sintactico{
 			atrTipo.setTipo("bool");
 			return atrTipo;
 		}
-		//FIXME
-		System.out.println("### Error ###");
 		atrTipo.setTipo("error");
 		return atrTipo;
 	}
@@ -446,8 +443,8 @@ public class Sintactico{
 		System.out.println(lexico.getNextToken().muestraToken());
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
 			atrFact.setTipo("int");
-			codigo.genIns("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
 			lexico.lexer(); //Cosumimos el entero
+			codigo.genIns("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
 			return atrFact;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
