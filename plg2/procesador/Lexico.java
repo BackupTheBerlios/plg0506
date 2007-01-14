@@ -140,6 +140,7 @@ public class Lexico {
 		while ((error = fuente.read())!=-1){
 			a = (char) error;
 			posicion ++;
+			//System.out.println(posicion);
 			switch (a){
 			
 			/*
@@ -234,11 +235,12 @@ public class Lexico {
 			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 'i':	compara = cmp(posicion, "int");
-						if (compara){ 
-							System.out.println("holaaaaaaaaaa compara funciona mal");
+						if (compara){
+							//System.out.println("Fuera de cmp posicion es " + posicion);
 							return new Token("int",CategoriaLexica.TKINT);
 						}
 						else{
+							//System.out.println("Fuera de cmp posicion es " + posicion);
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
@@ -284,6 +286,8 @@ public class Lexico {
 		if (error != -1)
 			throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
 		else {
+
+			//System.out.println("He detectado EOF\n");
 			return new Token ("eof",CategoriaLexica.TKFF);
 		}
 	}
@@ -323,32 +327,52 @@ public class Lexico {
 		}
 	}*/
 	
-	private boolean cmp(int posicion, String string) throws IOException, Exception {
-		int tmp = fuente.read(), i = 1;
+	/*private boolean cmp(int posicion, String string) throws IOException, Exception {
+		int i, tmp = fuente.read();
 		boolean match = true;
-		while ((i < string.length()) && (tmp != -1) && (match == true)) {
-			match = match && ((char)tmp == string.charAt(i++));
+		for (i = 1; ((i < string.length()) && (tmp != -1) && match); i++) {
+			match = match && ((char)tmp == string.charAt(i));
 			tmp = fuente.read();
 		}
-		if (match) {
+		if (match)
 			posicion = posicion - 1 + string.length();
+		else
+			fuente.seek(posicion);
+		return match;
+	}*/
+	
+	private boolean cmp(int pos, String string) throws IOException, Exception {
+		int a;
+		String s = new String();
+		boolean match;
+		fuente.seek(pos - 1);
+		a = fuente.read();
+		for (int i = 0; (i < string.length() && (a != -1)); i++) {
+			s = s.concat(Character.toString((char)a));
+			a = fuente.read();
 		}
-		fuente.seek(posicion);
+		match = string.equals(s);
+		if (match) {
+			pos += string.length() - 1;
+		}
+		fuente.seek(pos);
+		setPosicion(pos);
 		return match;
 	}
 	
-	private String leeIdentificador(int posicion) throws IOException, Exception {
+	private String leeIdentificador(int pos) throws IOException, Exception {
 		int a;
 		String s = new String();
-		fuente.seek(--posicion);
+		fuente.seek(--pos);
 		a = fuente.read();
-		posicion++;
+		pos++;
 		while((a != -1) && (Character.isLetterOrDigit((char)a))) {
 			s = s.concat(Character.toString((char)a));
 			a = fuente.read();
-			posicion++;
+			pos++;
 		}
-		fuente.seek(--posicion);
+		fuente.seek(--pos);
+		setPosicion(pos);
 		return s;
 }
 
@@ -364,6 +388,7 @@ public String leeNumero(int posicion) throws Exception, IOException {
 			posicion++;
 		}
 		fuente.seek(--posicion);
+		setPosicion(posicion);
 		if ((s.charAt(0) == '0') && (s.length() > 1))
 			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
 		return s;
@@ -402,11 +427,13 @@ public String leeNumero(int posicion) throws Exception, IOException {
 	 * El metodo reconoce indica si una categora lexica dada es igual o no a la categoria lexica del Token
 	 * @param tk Entero que indica una categora lexica. 
 	 * @return Booleano que nos dir si son iguales las categoras lexicas.
+	 * @throws Exception 
+	 * @throws IOException 
 	 * 
 	 */
-	public boolean reconoce(int tk){
+	public boolean reconoce(int tk) throws IOException, Exception{
 		boolean aux = true;
-		if (tk == lookahead.getCategoriaLexica()){
+		if (tk == getNextToken().getCategoriaLexica()){
 			aux = true;
 		}	
 		else{ 

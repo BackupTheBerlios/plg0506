@@ -136,11 +136,12 @@ public class Sintactico{
 		System.out.println("Dec");
 		Atributo atrTipo = Tipo();
 		Atributo atrDec = new Atributo();
-		Token tk = lexico.lexer(); //consumo iden
+		Token tk = lexico.lexer(); //consumo el tipo
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			atrDec.setTipo("error");
 			return atrDec;
 		}
+		tk = lexico.lexer(); //consumo el iden
 		atrDec.setTipo(atrTipo.getTipo());
 		atrDec.setId(tk.getLexema());
 		return atrDec;
@@ -155,7 +156,7 @@ public class Sintactico{
 	private Atributo Tipo() throws IOException, Exception{
 		System.out.println("Tipo");
 		Atributo atrTipo = new Atributo();
-		lexico.lexer();
+		//lexico.lexer();
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			atrTipo.setTipo("int");
 			return atrTipo;
@@ -233,6 +234,9 @@ public class Sintactico{
 		}
 		Token tk = lexico.lexer(); //Consumimos el iden
 		atrIAsig.setId(tk.getLexema());
+		if (!TS.existeID(atrIAsig.getId())){
+			throw new Exception ("El identificador no ha sido declarado antes");
+		}
 		String tipo = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getTipo();
 		atrIAsig.setTipo(tipo);
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
@@ -241,7 +245,7 @@ public class Sintactico{
 	    }
 		lexico.lexer();//Consumimos =
 		Atributo atrExpOr= ExpOr();
-		if ((!TS.existeID(atrIAsig.getId())) || !atrExpOr.getTipo().equals(atrIAsig.getTipo())){
+		if (!atrExpOr.getTipo().equals(atrIAsig.getTipo())){
 			atrIAsig.setTipo("error");
 			return atrIAsig;
 		}
@@ -308,7 +312,7 @@ public class Sintactico{
 			//RExpOr ::= λ
 			return heredado;
 		}
-		genOpAnd((lexico.lexer()).getLexema());
+		genOpRel((lexico.lexer()).getLexema());
 		Atributo atrExpRel = ExpRel();
 		if (!(atrExpRel.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrExpRel.setTipo("error");
@@ -439,8 +443,8 @@ public class Sintactico{
 	private Atributo Fact() throws Exception{
 		System.out.println("Fact");
 		Atributo atrFact = new Atributo();
-		
-		if (lexico.reconoce(CategoriaLexica.TKINT)){
+		System.out.println(lexico.getNextToken().muestraToken());
+		if (lexico.reconoce(CategoriaLexica.TKNUM)){
 			atrFact.setTipo("int");
 			codigo.genIns("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
 			lexico.lexer(); //Cosumimos el entero
@@ -471,10 +475,12 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
 			if (TS.existeID(tk.getLexema())){
+				System.out.println("Estoy reconociendo el i");
 				atrFact.setId(tk.getLexema());
 				String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
 				atrFact.setTipo(tipo);
-				codigo.genIns("apila", Integer.parseInt(tk.getLexema()));
+				int dir =((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
+				codigo.genIns("apila-dir", dir);
 			}
 			else{
 				atrFact.setTipo("error");
@@ -550,7 +556,7 @@ public class Sintactico{
 	 * 
 	 * @param opDeOpComp
 	 */
-	private void genOpComp(String opDeOpComp){
+	private void genOpRel(String opDeOpComp){
 		
 		if (opDeOpComp == "<="){
 			codigo.genIns("menorIgual");

@@ -37,6 +37,7 @@ public class Token {
 	 *  
 	 */
 	public Token(String lex, int tipo) {
+		//System.out.println("Creo token " + lex);
 		lexema = lex;
 		categoriaLexica = tipo;
 	}

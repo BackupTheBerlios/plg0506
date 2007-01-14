@@ -1,23 +1,27 @@
-import java.io.File;
 //import java.io.RandomAccessFile;
-
+import java.io.File;
 import javax.swing.JOptionPane;
-import procesador.Lexico;
-import procesador.CategoriaLexica;
-import procesador.Token;
+import procesador.*;
 
 public class PruebaLex {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		//RandomAccessFile fuente;
 		File fuente;
 		String f= "Ejemplo.txt";
 		try{
-			fuente= new File(f);
+			//fuente= new RandomAccessFile(f,"r");
+			fuente = new File(f);
 			Lexico lexico = new Lexico(fuente);
-			Token tk=lexico.lexer();
 			System.out.println("Inicio de fichero");
+			Token tk=lexico.lexer();
 			System.out.println(tk.muestraToken());
-			while(!tk.equals(new Token("eof",CategoriaLexica.TKFF))){
+			//while(!tk.equals(new Token("eof",CategoriaLexica.TKFF))){
+			while(!tk.getLexema().equals("eof")){
 				tk=lexico.lexer();
 				System.out.println(tk.muestraToken());
 			}

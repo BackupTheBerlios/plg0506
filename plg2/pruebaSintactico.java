@@ -9,12 +9,14 @@ public class pruebaSintactico {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File fuente;
+		//RandomAccessFile fuente;
 		String f= "Ejemplo.txt";
+		File fuente = new File(f);
 		//String cod = new String();
 		try{
-			fuente= new File(f);
+			//fuente= new RandomAccessFile(f,"r");
 			Sintactico parser = new Sintactico(fuente);
+			fuente= new File(f);
 			parser.startParsing();
 			Codigo c = parser.getCodigo();
 			c.muestraCodigo();
