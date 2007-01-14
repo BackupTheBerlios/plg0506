@@ -1,6 +1,6 @@
 package procesador;
 
-import java.io.RandomAccessFile;
+//import java.io.RandomAccessFile;
 import java.io.File;
 import javax.swing.JOptionPane;
 
