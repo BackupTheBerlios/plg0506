@@ -119,10 +119,10 @@ public class Sintactico{
 		}
 		lexico.lexer(); //consumo ;
 		Atributo atrDec = Dec();
-		TS.addID(atrDec.getId(),atrDec.getTipo());
 		if (TS.existeID(atrDec.getId()) || heredado.getTipo().equals("error")){
 			atrDec.setTipo("error");
 		}
+		TS.addID(atrDec.getId(),atrDec.getTipo());
 		atrRDecs = RDecs(atrDec);
 		return atrRDecs;
 	}
@@ -178,6 +178,7 @@ public class Sintactico{
 		Atributo atrI = I(); 
 		Atributo atrRIs = RIs(atrI);
 		if (atrRIs.getTipo().equals("error")){
+			System.out.println("En Is "+ atrRIs.getId()+ " es "+atrRIs.getTipo());
 			return true;
 		}
 		else {

@@ -70,12 +70,4 @@ public class propiedades {
 	public boolean equals(propiedades a){
 		return (this.getTipo() ==a.getTipo());
 	}
-	/**
-	 * @param args
-	 */
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-*/
 }

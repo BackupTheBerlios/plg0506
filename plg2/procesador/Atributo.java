@@ -35,10 +35,4 @@ package procesador;
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-
-	/**
-	 * @param args
-	 */
-	/* */
-
 }
