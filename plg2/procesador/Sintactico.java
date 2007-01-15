@@ -272,6 +272,9 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
 			return heredado;
+		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
 		}
 		genOpOr((lexico.lexer()).getLexema());
 		Atributo atrExpAnd = ExpAnd();
@@ -307,6 +310,9 @@ public class Sintactico{
 		Atributo atrRExpAnd = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
+			return heredado;
+		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
 			return heredado;
 		}
 		genOpRel((lexico.lexer()).getLexema());
@@ -344,6 +350,9 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
 			return heredado;
+		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
 		}
 		genOpAnd((lexico.lexer()).getLexema());
 		if (heredado.getTipo().equals("error")){
@@ -378,6 +387,9 @@ public class Sintactico{
 		Atributo atrRExpAd = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpAd ::= λ
+			return heredado;
+		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
 			return heredado;
 		}
 		genOpAd((lexico.lexer()).getLexema());
@@ -414,6 +426,10 @@ public class Sintactico{
 		System.out.println("RExpMul");
 		Atributo atrRExpMul = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			//RExpMul ::= λ
+			return heredado;
+		}
+		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
 			//RExpMul ::= λ
 			return heredado;
 		}
