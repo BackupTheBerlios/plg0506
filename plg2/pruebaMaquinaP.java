@@ -1,7 +1,5 @@
-//import maquinaP.Codigo;
 import java.io.File;
-
-import procesador.Codigo;
+import procesador.*;
 import maquinaP.MaquinaP;
 
 public class pruebaMaquinaP {
@@ -12,22 +10,13 @@ public class pruebaMaquinaP {
 	public static void main(String[] args) throws Exception {
 			String f = new String ("Ejemplo.txt");
 			File file = new File(f);
-			Codigo cod = new Codigo(file);
-			cod.inicializaCodigo();
-			cod.genIns("apila",10);
-			cod.genIns("desapila-dir",0);
-			cod.genIns("apila",5);
-			cod.genIns("desapila-dir",1);
-			cod.genIns("apila-dir", 0);
-			cod.genIns("apila-dir", 1);
-			cod.genIns("divide");
-			cod.genIns("desapila-dir",2);
-			cod.muestraCodigo();
+			Procesador p = new Procesador();
+			p.procesa(file);
+			Codigo c = p.getCod();
 			MaquinaP MP = new MaquinaP(f);
-			MP.setProg(cod.getCod());
+			MP.setProg(c.getCod());
 			MP.ejecuta();
 			MP.muestraPila();
 			MP.resultadoMem();
-			//la memoria quedaría [10, 5, 2]
 	}
 }
