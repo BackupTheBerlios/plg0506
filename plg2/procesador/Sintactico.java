@@ -178,7 +178,6 @@ public class Sintactico{
 		Atributo atrI = I(); 
 		Atributo atrRIs = RIs(atrI);
 		if (atrRIs.getTipo().equals("error")){
-			System.out.println("En Is "+ atrRIs.getId()+ " es "+atrRIs.getTipo());
 			return true;
 		}
 		else {
@@ -277,6 +276,9 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
+		if (!lexico.reconoce(CategoriaLexica.TKOR)){
+			return heredado;
+		}
 		genOpOr((lexico.lexer()).getLexema());
 		Atributo atrExpAnd = ExpAnd();
 		if (!(atrExpAnd.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
@@ -316,7 +318,10 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-		genOpRel((lexico.lexer()).getLexema());
+		if (!lexico.reconoce(CategoriaLexica.TKAND)){
+			return heredado;
+		}
+		genOpAnd((lexico.lexer()).getLexema());
 		Atributo atrExpRel = ExpRel();
 		if (!(atrExpRel.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrExpRel.setTipo("error");
@@ -355,14 +360,23 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-		genOpAnd((lexico.lexer()).getLexema());
-		if (heredado.getTipo().equals("error")){
+		if (!lexico.reconoce(CategoriaLexica.TKIG) && !lexico.reconoce(CategoriaLexica.TKDIF)
+				&& !lexico.reconoce(CategoriaLexica.TKMAY)&& !lexico.reconoce(CategoriaLexica.TKMAYIG)
+				&& !lexico.reconoce(CategoriaLexica.TKMEN)&& !lexico.reconoce(CategoriaLexica.TKMENIG)){
+			return heredado;
+		}
+		genOpRel((lexico.lexer()).getLexema());
+		
+		atrRExpRel = ExpAd();
+		if (heredado.getTipo().equals("error") || atrRExpRel.getTipo().equals("error")){
+			atrRExpRel.setTipo("error");
+		}
+		else if (!heredado.getTipo().equals(atrRExpRel.getTipo())) {
 			atrRExpRel.setTipo("error");
 		}
 		else{
 			atrRExpRel.setTipo("bool");
 		}
-		atrRExpRel = ExpAd();
 		return atrRExpRel;
 	}
 	
@@ -391,6 +405,9 @@ public class Sintactico{
 			return heredado;
 		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
 			//RExpMul ::= λ
+			return heredado;
+		}
+		if (!lexico.reconoce(CategoriaLexica.TKSUMA) && !lexico.reconoce(CategoriaLexica.TKRESTA)){
 			return heredado;
 		}
 		genOpAd((lexico.lexer()).getLexema());
@@ -432,6 +449,9 @@ public class Sintactico{
 		}
 		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
 			//RExpMul ::= λ
+			return heredado;
+		}
+		if (!lexico.reconoce(CategoriaLexica.TKDIV) && !lexico.reconoce(CategoriaLexica.TKMOD)&& !lexico.reconoce(CategoriaLexica.TKMULT)){
 			return heredado;
 		}
 		genOpMul((lexico.lexer()).getLexema());
@@ -489,7 +509,6 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
 			if (TS.existeID(tk.getLexema())){
-				System.out.println("Estoy reconociendo el i");
 				atrFact.setId(tk.getLexema());
 				String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
 				atrFact.setTipo(tipo);
