@@ -18,7 +18,6 @@ public class pruebaMaquinaP {
 			MaquinaP MP = new MaquinaP(f);
 			MP.setProg(c.getCod());
 			MP.ejecuta();
-			MP.muestraPila();
-			MP.resultadoMem();
+			System.out.print(MP.resultadoMem());
 	}
 }

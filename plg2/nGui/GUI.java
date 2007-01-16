@@ -1,7 +1,9 @@
 package nGui;
 
 import java.io.File;
-import javax.swing.*;          
+import javax.swing.*;   
+import javax.swing.JOptionPane;
+
 import java.awt.*;
 import java.awt.event.*;
 import procesador.Procesador;
@@ -19,11 +21,11 @@ public class GUI {
     }
 
     public Component createComponents() {
-        texto0 = new JTextArea("Código procesado");
+        texto0 = new JTextArea("Codigo procesado");
         JScrollPane area0ScrollPane = new JScrollPane(texto0);
         area0ScrollPane.setPreferredSize(new Dimension(250, 250));
 
-        texto1 = new JTextArea("Estado de la máquina P");
+        texto1 = new JTextArea("Estado de la maquina P");
         JScrollPane area1ScrollPane = new JScrollPane(texto1);
         area1ScrollPane.setPreferredSize(new Dimension(250, 250));
 
@@ -31,7 +33,7 @@ public class GUI {
 
         JButton button0 = new JButton(button0Action);
 
-        Action button1Action = new Button1Action("Cargar en máquina P", null, "Descripcion", null);
+        Action button1Action = new Button1Action("Cargar en maquina P", null, "Descripcion", null);
 
         JButton button1 = new JButton(button1Action);
         
@@ -96,7 +98,14 @@ public class GUI {
             putValue(MNEMONIC_KEY, mnemonic);
         }
         public void actionPerformed(ActionEvent e) {
-            texto1.append("Boton 1\n");
+        	try{
+        	String s = maquinap.ejecuta();
+        	s = s.concat(maquinap.resultadoMem());
+            texto1.append(s);
+        	}
+        	catch(Exception ex) {
+				JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			}
         }
     }
     

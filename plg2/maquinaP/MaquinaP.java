@@ -54,7 +54,7 @@ public class MaquinaP {
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
 		fcod = fcod.concat("obj");
-		System.out.println(fcod);
+		//System.out.println(fcod);
 		File fich= new File(fcod);
 		try{
 			fichero = new FileReader(fich);
@@ -233,12 +233,12 @@ public class MaquinaP {
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
 	}
 	
-	public void ejecuta() throws Exception{
+	public String ejecuta() throws Exception{
 		String i;
 		String[] linea;
 		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
-		System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
-		System.out.println(Prog.size());
+		//System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
+		//System.out.println(Prog.size());
 		for (int j = 0; H == 0; j++){
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
@@ -302,6 +302,7 @@ public class MaquinaP {
 			else
 				eof();
 		}
+		return pasos;
 	}
 	
 	/**
@@ -311,9 +312,9 @@ public class MaquinaP {
 	 * @return String con el contenido del vector Memoria.
 	 */
 	public String resultadoMem(){
-		String s="Memoria estatica:"+"\n";
+		String s="\n"+"Memoria :"+"\n";
 		for (int i=0;i<Mem.size();i++){
-			System.out.println(Mem.elementAt(i));
+			//System.out.println(Mem.elementAt(i));
 			if(Mem.elementAt(i)!=null){
 				s= s.concat("posicion "+i+":  "+((Integer)Mem.elementAt(i)).toString());
 				s=s.concat(" \n");
@@ -455,9 +456,9 @@ public class MaquinaP {
 	 * @param d
 	 */
 	public void apila_dir (int d) throws Exception{
-		System.out.println("Estoy en apila-dir");
+		//System.out.println("Estoy en apila-dir")
 		ST = ST + 1; 
-		System.out.println("Con valor de dir " + d);
+		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
 			if (d >= 0){
 				if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ 
