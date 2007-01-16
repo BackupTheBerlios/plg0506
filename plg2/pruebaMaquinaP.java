@@ -12,7 +12,9 @@ public class pruebaMaquinaP {
 			File file = new File(f);
 			Procesador p = new Procesador();
 			p.procesa(file);
+			System.out.println("El resultado del parser: ");
 			Codigo c = p.getCod();
+			c.muestraCodigo();
 			MaquinaP MP = new MaquinaP(f);
 			MP.setProg(c.getCod());
 			MP.ejecuta();

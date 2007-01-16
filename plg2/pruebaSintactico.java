@@ -1,8 +1,6 @@
 import java.io.File;
-//import java.io.RandomAccessFile;
 import javax.swing.JOptionPane;
 import procesador.*;
-//import maquinaP.*;
 public class pruebaSintactico {
 
 	/**

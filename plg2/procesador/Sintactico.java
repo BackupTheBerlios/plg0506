@@ -246,6 +246,8 @@ public class Sintactico{
 			atrIAsig.setTipo("error");
 			return atrIAsig;
 		}
+		int dir = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getDir();
+		codigo.genIns("desapila-dir", dir);
 		return atrIAsig;
 	}
 
@@ -279,13 +281,15 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKOR)){
 			return heredado;
 		}
-		genOpOr((lexico.lexer()).getLexema());
+		String op = genOpOr((lexico.lexer()).getLexema());
 		Atributo atrExpAnd = ExpAnd();
 		if (!(atrExpAnd.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrExpAnd.setTipo("error");
 		}
 		else{
 			atrExpAnd.setTipo("bool");
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 		}
 		atrRExpOr = RExpOr(atrExpAnd);
 		return atrRExpOr;
@@ -321,13 +325,15 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKAND)){
 			return heredado;
 		}
-		genOpAnd((lexico.lexer()).getLexema());
+		String op = genOpAnd((lexico.lexer()).getLexema());
 		Atributo atrExpRel = ExpRel();
 		if (!(atrExpRel.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrExpRel.setTipo("error");
 		}
 		else{
 			atrExpRel.setTipo("bool");
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 		}
 		atrRExpAnd = RExpOr(atrExpRel);
 		return atrRExpAnd;
@@ -365,7 +371,7 @@ public class Sintactico{
 				&& !lexico.reconoce(CategoriaLexica.TKMEN)&& !lexico.reconoce(CategoriaLexica.TKMENIG)){
 			return heredado;
 		}
-		genOpRel((lexico.lexer()).getLexema());
+		String op = genOpRel((lexico.lexer()).getLexema());
 		
 		atrRExpRel = ExpAd();
 		if (heredado.getTipo().equals("error") || atrRExpRel.getTipo().equals("error")){
@@ -376,6 +382,8 @@ public class Sintactico{
 		}
 		else{
 			atrRExpRel.setTipo("bool");
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 		}
 		return atrRExpRel;
 	}
@@ -410,14 +418,16 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKSUMA) && !lexico.reconoce(CategoriaLexica.TKRESTA)){
 			return heredado;
 		}
-		genOpAd((lexico.lexer()).getLexema());
+		String op = genOpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
 		if (!(atrExpMul.getTipo()).equals("int") && !heredado.getTipo().equals("int")){
 			atrRExpAd.setTipo("error");
 			return atrRExpAd;
 		}
 		else{
-			atrRExpAd.setTipo("int");	
+			atrRExpAd.setTipo("int");
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 		}
 		atrRExpAd = RExpAd(atrRExpAd);
 		return atrRExpAd;
@@ -454,13 +464,15 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKDIV) && !lexico.reconoce(CategoriaLexica.TKMOD)&& !lexico.reconoce(CategoriaLexica.TKMULT)){
 			return heredado;
 		}
-		genOpMul((lexico.lexer()).getLexema());
+		String op = genOpMul((lexico.lexer()).getLexema());
 		Atributo atrFact = Fact();
 		if ((atrFact.getTipo()).equals("int") && heredado.getTipo().equals("int")){
 			atrRExpMul.setTipo("int");
 		}
 		else if ((atrFact.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrRExpMul.setTipo("bool");
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 		}
 		else{
 			atrRExpMul.setTipo("error");
@@ -521,9 +533,10 @@ public class Sintactico{
 			return atrFact;
 		}
 		if ( (lexico.reconoce(CategoriaLexica.TKNOT)) || (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
-			Token tk = lexico.lexer(); //Consumimos operador unario
-			genOpUn(tk.getLexema()); //Consumimos el operador
+			String op = genOpUn(lexico.lexer().getLexema()); //Consumimos operador unario
 			atrFact = Fact();
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 			return atrFact;
 		}
 		atrFact.setTipo("error");
@@ -533,82 +546,90 @@ public class Sintactico{
 	/**
 	 * 
 	 * @param opDeOpAnd
+	 * @throws Exception 
 	 */
-	private void genOpAnd(String opDeOpAnd){
+	private String genOpAnd(String opDeOpAnd){
 		if (opDeOpAnd == "&&")
-			codigo.genIns("and");
+			return "and";
+		else
+			return "";
 	}
 	
 	/**
 	 * 
 	 * @param opDeOpOr
 	 */
-	private void genOpOr(String opDeOpOr){
+	private String genOpOr(String opDeOpOr){
 		if (opDeOpOr == "||")
-			codigo.genIns("or");
+			return ("or");
+		else return "";
 	}
 	
 	/**
 	 * 
 	 * @param opDeOpAd
 	 */
-	private void genOpAd(String opDeOpAd){
+	private String genOpAd(String opDeOpAd){
 		if (opDeOpAd == "+")
-			codigo.genIns("suma");
+			return ("suma");
 		else if (opDeOpAd.equals("-"))
-			codigo.genIns("resta");
+			return("resta");
+		else return "";
 	}
 	
 	/**
 	 * 
 	 * @param opDeOpMul
 	 */
-	private void genOpMul(String opDeOpMul){
+	private String genOpMul(String opDeOpMul){
 		if (opDeOpMul == "*")
-			codigo.genIns("multiplica");
+			return("multiplica");
 		else if (opDeOpMul.equals("/"))
-			codigo.genIns("divide");
+			return("divide");
 		else if (opDeOpMul.equals("%"))
-			codigo.genIns("modulo");
+			return("modulo");
+		else return "";
 	}
 	
 	/**
 	 * 
 	 * @param opDeOpUn
 	 */
-	private void genOpUn(String opDeOpUn){
+	private String genOpUn(String opDeOpUn){
 		if (opDeOpUn == "+")
-			codigo.genIns("positivo");
+			return("positivo");
 		else if (opDeOpUn.equals("-"))
-			codigo.genIns("menos");
+			return("menos");
 		else if (opDeOpUn.equals("!"))
-			codigo.genIns("not");
+			return("not");
+		else return "";
 	}
 	
 	/**
 	 * 
 	 * @param opDeOpComp
 	 */
-	private void genOpRel(String opDeOpComp){
+	private String genOpRel(String opDeOpComp){
 		
 		if (opDeOpComp == "<="){
-			codigo.genIns("menorIgual");
+			return("menorIgual");
 		}	
-		if (opDeOpComp == "<"){
-				codigo.genIns("menor");
+		else if (opDeOpComp == "<"){
+				return("menor");
 		}
-		if (opDeOpComp == ">="){
-			codigo.genIns("mayorIgual");
+		else if (opDeOpComp == ">="){
+			return("mayorIgual");
 		}	
-		if (opDeOpComp == ">"){
-				codigo.genIns("mayor");
+		else if (opDeOpComp == ">"){
+				return("mayor");
 		}
-		if (opDeOpComp == "=="){
-			codigo.genIns("igual");
+		else if (opDeOpComp == "=="){
+			return("igual");
 		}	
-		if (opDeOpComp == "!="){
-				codigo.genIns("distinto");
+		else if (opDeOpComp == "!="){
+				return("distinto");
 		}
+		else return "";
 	}
 
 }

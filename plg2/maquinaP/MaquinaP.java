@@ -25,7 +25,6 @@ public class MaquinaP {
 	 * Prog:Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
 	 * codigo del programa.
 	 * Mem: Memoria de datos estatica.
-	 * heap:Memoria de datos din?mica.
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
@@ -52,10 +51,10 @@ public class MaquinaP {
 		tamMem= Integer.MAX_VALUE;
 		ST = -1;
 		Mem= new Vector();
-		//heap= new Heap(50);
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
 		fcod = fcod.concat("obj");
+		System.out.println(fcod);
 		File fich= new File(fcod);
 		try{
 			fichero = new FileReader(fich);
@@ -186,20 +185,6 @@ public class MaquinaP {
 	}
 
 	/**
-	 * @return Returns the heap.
-	 */
-	/*public Heap getHeap() {
-		return heap;
-	}*/
-
-	/**
-	 * @param heap The heap to set.
-	 */
-	/*public void setHeap(Heap heap) {
-		this.heap = heap;
-	}*/
-
-	/**
 	 * Obtiene el programa del fichero que recibe por parametro. Guarda cada instruccion del programa en una posicion del 
 	 * vector Prog. Para obtener el programa crea un BufferReader y se lanzan y capturan excepciones al respecto. 
 	 * 
@@ -239,7 +224,8 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Metodo que ejecuta la Maquina P. Va leyendo las intrucciones que ha generado el compilador y las ejecuta.
+	 * Metodo que ejecuta la Maquina P. Va leyendo las intrucciones que ha generado el 
+	 * compilador y las ejecuta.
 	 *
 	 */
 	
@@ -257,11 +243,14 @@ public class MaquinaP {
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
-				if (hasInt(linea[0]))
+				if (hasInt(linea[0])){
 					System.out.println(linea[0] + "  " + linea[1]);
-				else
+				}
+				else{
 					System.out.println(linea[0] + "  ");
+				}
 				pasos = pasos.concat("Num. de instr.: (" + PC + ") - " + linea[0] + "  ");
+				
 				if (hasInt(linea[0]))
 					pasos = pasos.concat(linea[1]);
 				pasos = pasos.concat("\n");
@@ -271,8 +260,9 @@ public class MaquinaP {
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("apila-dir")==0)
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("suma")==0)
+				else if (linea[0].compareTo("suma")==0){
 					suma();
+				}
 				else if (linea[0].compareTo("resta")==0)
 					resta();
 				else if (linea[0].compareTo("multiplica")==0)
@@ -465,7 +455,9 @@ public class MaquinaP {
 	 * @param d
 	 */
 	public void apila_dir (int d) throws Exception{
+		System.out.println("Estoy en apila-dir");
 		ST = ST + 1; 
+		System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
 			if (d >= 0){
 				if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ 
