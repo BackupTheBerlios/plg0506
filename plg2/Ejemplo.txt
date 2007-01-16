@@ -5,6 +5,6 @@ bool c
 i = 10;
 i = i + 1;
 b = true;
-c = i <= 11;
-b = c && b
+c = (i <= 11);
+b = (c && b)
 }

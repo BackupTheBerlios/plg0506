@@ -162,6 +162,23 @@ public class Lexico {
 			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
 			case '/':	return new Token("/",CategoriaLexica.TKDIV);
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
+			
+			case '&': compara = cmp (posicion, "&&");
+						if (compara){
+							return new Token("&&", CategoriaLexica.TKAND);
+						}
+						else{
+							throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
+						}
+			
+			case '|': compara = cmp (posicion, "||");
+				if (compara){
+					return new Token("||", CategoriaLexica.TKOR);
+				}
+				else{
+					throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
+				}
+	
 			/*
 			 * Si detectamos '=' hay que discernir si es el operador de asignacion o un ==.
 			 */
