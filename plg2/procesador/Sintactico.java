@@ -468,11 +468,11 @@ public class Sintactico{
 		Atributo atrFact = Fact();
 		if ((atrFact.getTipo()).equals("int") && heredado.getTipo().equals("int")){
 			atrRExpMul.setTipo("int");
+			if (op != "") codigo.genIns(op);
+			else throw new Exception("Operador no valido");
 		}
 		else if ((atrFact.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrRExpMul.setTipo("bool");
-			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
 		}
 		else{
 			atrRExpMul.setTipo("error");
@@ -584,8 +584,9 @@ public class Sintactico{
 	private String genOpMul(String opDeOpMul){
 		if (opDeOpMul == "*")
 			return("multiplica");
-		else if (opDeOpMul.equals("/"))
-			return("divide");
+		else if (opDeOpMul.equals("/")){
+			System.out.println("Hoooooooooooooollaaaaaaaaaaaa");
+			return("divide");}
 		else if (opDeOpMul.equals("%"))
 			return("modulo");
 		else return "";

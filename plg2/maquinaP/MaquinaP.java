@@ -422,6 +422,7 @@ public class MaquinaP {
 		}
 		Integer s1 = (Integer)pila.pop();
 		Integer s2 = (Integer)pila.pop();
+		if (s1.intValue()==0) throw new Exception("ERROR: Estas tratando de dividir por 0.");
 		Integer s = new Integer(s2.intValue()/s1.intValue());
 		pila.push(s);
 		ST = ST-1;
