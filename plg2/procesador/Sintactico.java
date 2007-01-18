@@ -420,7 +420,6 @@ public class Sintactico{
 		}
 		String op = genOpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
-		System.out.println("Atencioooooooooon   " + atrExpMul.getTipo());
 		if (!atrExpMul.getTipo().equals("int") || !heredado.getTipo().equals("int")){
 			atrRExpAd.setTipo("error");
 			return atrRExpAd;
