@@ -98,6 +98,7 @@ public class GUI {
             putValue(MNEMONIC_KEY, mnemonic);
         }
         public void actionPerformed(ActionEvent e) {
+        	maquinap = new MaquinaP(file);
         	try{
         	String s = maquinap.ejecuta();
         	s = s.concat(maquinap.resultadoMem());

@@ -43,8 +43,9 @@ public class MaquinaP {
 	 * @param f Recibe como parametro la ruta del fichero a ejecutar para poder inicializar todo.
 	 *
 	 */	
-	public MaquinaP(String f) {
+	public MaquinaP(File file) {
 		super();
+		String f = file.toString();
 		pila = new Stack();
 		PC = 0;
 		H = 0;
