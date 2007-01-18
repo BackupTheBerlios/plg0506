@@ -644,7 +644,8 @@ public class MaquinaP {
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
 		}
 		Integer n= (Integer)pila.pop();
-		pila.push(new Integer(-(n.intValue())));
+		if (n.intValue()!=0) pila.push(new Integer(-(n.intValue())));
+		else pila.push(n);
 		PC = PC + 1;
 	}
 	

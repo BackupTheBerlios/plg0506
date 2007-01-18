@@ -8,7 +8,7 @@ public class pruebaMaquinaP {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-			String f = new String ("Ejemplo5.txt");
+			String f = new String ("Ejemplo3.txt");
 			File file = new File(f);
 			Procesador p = new Procesador();
 			p.procesa(file);

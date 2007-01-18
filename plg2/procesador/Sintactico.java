@@ -283,7 +283,7 @@ public class Sintactico{
 		}
 		String op = genOpOr((lexico.lexer()).getLexema());
 		Atributo atrExpAnd = ExpAnd();
-		if (!(atrExpAnd.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
+		if (!atrExpAnd.getTipo().equals("bool") || !heredado.getTipo().equals("bool")){
 			atrExpAnd.setTipo("error");
 		}
 		else{
@@ -327,7 +327,7 @@ public class Sintactico{
 		}
 		String op = genOpAnd((lexico.lexer()).getLexema());
 		Atributo atrExpRel = ExpRel();
-		if (!(atrExpRel.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
+		if (!atrExpRel.getTipo().equals("bool") || !heredado.getTipo().equals("bool")){
 			atrExpRel.setTipo("error");
 		}
 		else{
@@ -420,7 +420,8 @@ public class Sintactico{
 		}
 		String op = genOpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
-		if (!(atrExpMul.getTipo()).equals("int") && !heredado.getTipo().equals("int")){
+		System.out.println("Atencioooooooooon   " + atrExpMul.getTipo());
+		if (!atrExpMul.getTipo().equals("int") || !heredado.getTipo().equals("int")){
 			atrRExpAd.setTipo("error");
 			return atrRExpAd;
 		}
