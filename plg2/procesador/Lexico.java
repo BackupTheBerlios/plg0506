@@ -147,7 +147,7 @@ public class Lexico {
 			 * En primer lugar identificamos todos los caracteres especiales.
 			 */
 			case '\n':	linea ++;
-						break;
+						break;			
 			case '\t':	break;
 			case ' ':	break;
 			case '\f':	break;
@@ -160,10 +160,17 @@ public class Lexico {
 			case '+':	return new Token("+",CategoriaLexica.TKSUMA);
 			case '-':	return new Token("-",CategoriaLexica.TKRESTA);
 			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
-			case '/':	return new Token("/",CategoriaLexica.TKDIV);
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
 			case '%':	return new Token(";",CategoriaLexica.TKMOD);
-			
+			case '/': compara = cmp (posicion, "//");
+						if (compara){
+							leeComentario(--posicion);
+							linea ++;
+							break;
+						}
+						else{
+							return new Token("/",CategoriaLexica.TKDIV);
+						}
 			case '&': compara = cmp (posicion, "&&");
 						if (compara){
 							return new Token("&&", CategoriaLexica.TKAND);
@@ -394,7 +401,7 @@ public class Lexico {
 		return s;
 }
 
-public String leeNumero(int posicion) throws Exception, IOException {
+private String leeNumero(int posicion) throws Exception, IOException {
 		int a;
 		String s = new String();
 		fuente.seek(--posicion);
@@ -412,6 +419,22 @@ public String leeNumero(int posicion) throws Exception, IOException {
 		return s;
 	}
 	
+private String leeComentario (int posicion)throws Exception, IOException {
+	int a;
+	String s = new String();
+	fuente.seek(--posicion);
+	a = fuente.read();
+	posicion++;
+	while(a != '\n') {
+		s = s.concat(Character.toString((char)a));
+		a = fuente.read();
+		posicion++;
+	}
+	fuente.seek(--posicion);
+	setPosicion(posicion);
+	return s;
+}
+
 	/**
 	 * El metodo getNextToken devuelve el siguiente Token para poder realizar el preanalisis. 
 	 * No avanza el cursor, sino que s?lo "mira" cual es el siguiente Token que leera "lexer()"
