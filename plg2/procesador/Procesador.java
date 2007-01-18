@@ -45,9 +45,9 @@ public class Procesador {
 			}
 	}
 	
-	public String getCodigo() {
+	/*public String getStrCod() {
 		return sintactico.getCodigo().getString();
-	}
+	}*/
 	
 	public Codigo getCod() {
 		return sintactico.getCodigo();

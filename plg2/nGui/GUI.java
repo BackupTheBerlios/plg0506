@@ -7,11 +7,13 @@ import javax.swing.JOptionPane;
 import java.awt.*;
 import java.awt.event.*;
 import procesador.Procesador;
+import procesador.Codigo;
 import maquinaP.MaquinaP;
 
 public class GUI {
     protected JTextArea texto0, texto1;
     protected File file;
+    protected Codigo codigo;
     protected MaquinaP maquinap;
     protected Procesador procesador = new Procesador();
 
@@ -82,11 +84,13 @@ public class GUI {
         }
         public void actionPerformed(ActionEvent e) {
             //texto0.append("Boton 0\n");
-            if (file == null)
-            	texto0.append("### ERROR: selecciona un archivo ###");
-            else {
+        	texto0.setText(null);
+            if (file == null) {
+            	texto0.append("\n### ERROR: selecciona un archivo ###");
+            } else {
             	procesador.procesa(file);
-            	texto0.append(procesador.getCodigo());
+            	codigo = procesador.getCod();
+            	texto0.append(codigo.getString());
             }
         }
     }
@@ -98,13 +102,16 @@ public class GUI {
             putValue(MNEMONIC_KEY, mnemonic);
         }
         public void actionPerformed(ActionEvent e) {
+        	texto1.setText(null);
         	maquinap = new MaquinaP(file);
-        	try{
-        	String s = maquinap.ejecuta();
-        	s = s.concat(maquinap.resultadoMem());
-            texto1.append(s);
-        	}
-        	catch(Exception ex) {
+        	//Codigo c = procesador.getCod();
+        	maquinap.setProg(codigo.getCod());
+        	try {
+        		//String s = maquinap.ejecuta();
+        		//s = s.concat(maquinap.resultadoMem());
+        		//texto1.append(s);
+        		texto1.append(maquinap.ejecuta() + maquinap.resultadoMem());
+        	} catch(Exception ex) {
 				JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
         }

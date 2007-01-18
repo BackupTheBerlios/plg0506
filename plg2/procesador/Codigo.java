@@ -108,24 +108,23 @@ public class Codigo {
 			System.out.println(i+"  "+cod.elementAt(i));
 		}
 		String ins;
-		try{
+		try {
 			for (int i=0;i<cod.size();i++){
 				ins = (String)cod.elementAt(i);
 				ins = ins+("\n");
 				fichero.write(ins.getBytes());
 			}
 			fichero.close();
-		}
-		catch(java.io.IOException e){
+		} catch(java.io.IOException e) {
 			JOptionPane.showMessageDialog(null,"No he podido cerrar el fichero. "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	public String getString(){
-		String ins = null;
+		String ins = new String();
 		for (int i = 0; i < cod.size(); i++) {
-			ins = (String)cod.elementAt(i) + "\n";
-			}
+			ins = ins.concat((String)cod.elementAt(i) + "\n");
+		}
 		return ins;
 	}
 }

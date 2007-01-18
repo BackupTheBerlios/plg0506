@@ -15,7 +15,7 @@ public class pruebaMaquinaP {
 			System.out.println("El resultado del parser: ");
 			Codigo c = p.getCod();
 			c.muestraCodigo();
-			MaquinaP MP = new MaquinaP(f);
+			MaquinaP MP = new MaquinaP(file);
 			MP.setProg(c.getCod());
 			MP.ejecuta();
 			System.out.print(MP.resultadoMem());
