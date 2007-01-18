@@ -462,12 +462,13 @@ public class MaquinaP {
 		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
 			if (d >= 0){
-				if ((Mem.size()>=d)&&(Mem.elementAt(d)!=null)){ 
-					pila.push(Mem.elementAt(d));  
+				if ((Mem.size()>=d)&&(!Mem.isEmpty())){ 
+					if (Mem.elementAt(d)!=null) pila.push(Mem.elementAt(d));
+					else throw new Exception("ERROR: Variable sin inicializar.");
 					PC = PC + 1;
 				}
 				else{				
-					throw new Exception("ERROR: Variable sin inicializar.");
+					throw new Exception("ERROR: Variable sin declarar.");
 				}
 			}
 			else{
