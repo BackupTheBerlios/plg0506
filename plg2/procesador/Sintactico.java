@@ -33,6 +33,7 @@ public class Sintactico{
 	Lexico lexico;
 	tablaSimbolos TS;
 	Codigo codigo;
+	int linea;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -59,7 +60,7 @@ public class Sintactico{
 		codigo.inicializaCodigo();
 		boolean tipoProg = Prog();
 		if (tipoProg){
-			throw new Exception("El programa contiene errores de tipo");
+			throw new Exception("Error en linea: " + linea + "El programa contiene errores de tipo");
 		}
 	}
 
@@ -121,6 +122,7 @@ public class Sintactico{
 		Atributo atrDec = Dec();
 		if (TS.existeID(atrDec.getId()) || heredado.getTipo().equals("error")){
 			atrDec.setTipo("error");
+			linea = lexico.getLinea();
 		}
 		TS.addID(atrDec.getId(),atrDec.getTipo());
 		atrRDecs = RDecs(atrDec);
@@ -202,6 +204,7 @@ public class Sintactico{
 		atrRIs = RIs(atrI);
 		if (heredado.getTipo().equals("error") || atrRIs.getTipo().equals("error")){
 			atrRIs.setTipo("error");
+			linea = lexico.getLinea();
 		}
 		return atrRIs;
 	}
@@ -232,7 +235,7 @@ public class Sintactico{
 		Token tk = lexico.lexer(); //Consumimos el iden
 		atrIAsig.setId(tk.getLexema());
 		if (!TS.existeID(atrIAsig.getId())){
-			throw new Exception ("El identificador no ha sido declarado antes");
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
 		}
 		String tipo = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getTipo();
 		atrIAsig.setTipo(tipo);
@@ -244,6 +247,7 @@ public class Sintactico{
 		Atributo atrExpOr= ExpOr();
 		if (!atrExpOr.getTipo().equals(atrIAsig.getTipo())){
 			atrIAsig.setTipo("error");
+			linea = lexico.getLinea();
 			return atrIAsig;
 		}
 		int dir = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getDir();
@@ -289,7 +293,7 @@ public class Sintactico{
 		else{
 			atrExpAnd.setTipo("bool");
 			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
+			else throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 		}
 		atrRExpOr = RExpOr(atrExpAnd);
 		return atrRExpOr;
@@ -333,7 +337,7 @@ public class Sintactico{
 		else{
 			atrExpRel.setTipo("bool");
 			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
+			else throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 		}
 		atrRExpAnd = RExpOr(atrExpRel);
 		return atrRExpAnd;
@@ -383,7 +387,7 @@ public class Sintactico{
 		else{
 			atrRExpRel.setTipo("bool");
 			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
+			else throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 		}
 		return atrRExpRel;
 	}
@@ -420,6 +424,7 @@ public class Sintactico{
 		}
 		String op = genOpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
+		System.out.println("Atencioooooooooon   " + atrExpMul.getTipo());
 		if (!atrExpMul.getTipo().equals("int") || !heredado.getTipo().equals("int")){
 			atrRExpAd.setTipo("error");
 			return atrRExpAd;
@@ -427,7 +432,7 @@ public class Sintactico{
 		else{
 			atrRExpAd.setTipo("int");
 			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
+			else throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 		}
 		atrRExpAd = RExpAd(atrRExpAd);
 		return atrRExpAd;
@@ -469,7 +474,7 @@ public class Sintactico{
 		if ((atrFact.getTipo()).equals("int") && heredado.getTipo().equals("int")){
 			atrRExpMul.setTipo("int");
 			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
+			else throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 		}
 		else if ((atrFact.getTipo()).equals("bool") && heredado.getTipo().equals("bool")){
 			atrRExpMul.setTipo("bool");
@@ -536,7 +541,7 @@ public class Sintactico{
 			String op = genOpUn(lexico.lexer().getLexema()); //Consumimos operador unario
 			atrFact = Fact();
 			if (op != "") codigo.genIns(op);
-			else throw new Exception("Operador no valido");
+			else throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 			return atrFact;
 		}
 		atrFact.setTipo("error");
