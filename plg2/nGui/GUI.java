@@ -107,9 +107,6 @@ public class GUI {
         	//Codigo c = procesador.getCod();
         	maquinap.setProg(codigo.getCod());
         	try {
-        		//String s = maquinap.ejecuta();
-        		//s = s.concat(maquinap.resultadoMem());
-        		//texto1.append(s);
         		texto1.append(maquinap.ejecuta() + maquinap.resultadoMem());
         	} catch(Exception ex) {
 				JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -128,6 +125,8 @@ public class GUI {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 file = fc.getSelectedFile();
+                texto0.setText(null);
+                texto1.setText(null);
             }
         }
     }
