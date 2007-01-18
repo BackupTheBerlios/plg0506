@@ -123,6 +123,7 @@ public class Sintactico{
 		if (TS.existeID(atrDec.getId()) || heredado.getTipo().equals("error")){
 			atrDec.setTipo("error");
 			linea = lexico.getLinea();
+			return atrRDecs;
 		}
 		TS.addID(atrDec.getId(),atrDec.getTipo());
 		atrRDecs = RDecs(atrDec);
@@ -205,6 +206,7 @@ public class Sintactico{
 		if (heredado.getTipo().equals("error") || atrRIs.getTipo().equals("error")){
 			atrRIs.setTipo("error");
 			linea = lexico.getLinea();
+			return atrRIs;
 		}
 		return atrRIs;
 	}
