@@ -1,8 +1,11 @@
 package nGui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javax.swing.*;   
-import javax.swing.JOptionPane;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,7 +14,7 @@ import procesador.Codigo;
 import maquinaP.MaquinaP;
 
 public class GUI {
-    protected JTextArea texto0, texto1;
+    protected JTextArea texto0, texto1, textosrc;
     protected File file;
     protected Codigo codigo;
     protected MaquinaP maquinap;
@@ -21,8 +24,32 @@ public class GUI {
     public GUI() {
     	super();
     }
+    
+    private String readFileIntoString(File f) {
+    	FileReader fr = null;
+    	String str = new String();
+    	int c;
+    	
+    	try {
+			fr = new FileReader(f);
+			while ((c = fr.read()) != -1)
+				str += (char)c;
+			fr.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return str;
+    }
 
     public Component createComponents() {
+    	textosrc = new JTextArea("Fuente");
+    	JScrollPane srcScrollPane = new JScrollPane(textosrc);
+    	srcScrollPane.setPreferredSize(new Dimension(250, 250));
+    	
         texto0 = new JTextArea("Codigo procesado");
         JScrollPane area0ScrollPane = new JScrollPane(texto0);
         area0ScrollPane.setPreferredSize(new Dimension(250, 250));
@@ -31,11 +58,11 @@ public class GUI {
         JScrollPane area1ScrollPane = new JScrollPane(texto1);
         area1ScrollPane.setPreferredSize(new Dimension(250, 250));
 
-        Action button0Action = new Button0Action("Procesar archivo", null, "Descripcion", null);
+        Action button0Action = new Button0Action("Procesar", null, "Descripcion", null);
 
         JButton button0 = new JButton(button0Action);
 
-        Action button1Action = new Button1Action("Cargar en maquina P", null, "Descripcion", null);
+        Action button1Action = new Button1Action("Ejecutar", null, "Descripcion", null);
 
         JButton button1 = new JButton(button1Action);
         
@@ -51,25 +78,29 @@ public class GUI {
 
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 2;
         pane.add(button2, c);
-        c.gridwidth = 1;
+        
+        c.gridx = 1;
+        c.gridy = 0;
+        pane.add(button0, c);
+
+        c.gridx = 2;
+        c.gridy = 0;
+        pane.add(button1, c);
         
         c.gridx = 0;
         c.gridy = 1;
+        pane.add(srcScrollPane, c);
+        
+        c.gridx = 1;
+        c.gridy = 1;
         pane.add(area0ScrollPane, c);
 
-        c.gridx = 1;
+        c.gridx = 2;
         c.gridy = 1;
         pane.add(area1ScrollPane, c);
 
-        c.gridx = 0;
-        c.gridy = 2;
-        pane.add(button0, c);
 
-        c.gridx = 1;
-        c.gridy = 2;
-        pane.add(button1, c);
 
         pane.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
@@ -83,11 +114,10 @@ public class GUI {
             putValue(MNEMONIC_KEY, mnemonic);
         }
         public void actionPerformed(ActionEvent e) {
-            //texto0.append("Boton 0\n");
-        	texto0.setText(null);
             if (file == null) {
-            	texto0.append("\n### ERROR: selecciona un archivo ###");
+            	texto0.setText("\n### ERROR: selecciona un archivo ###");
             } else {
+            	texto0.setText(null);
             	procesador.procesa(file);
             	codigo = procesador.getCod();
             	texto0.append(codigo.getString());
@@ -125,8 +155,7 @@ public class GUI {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 file = fc.getSelectedFile();
-                texto0.setText(null);
-                texto1.setText(null);
+                textosrc.setText(readFileIntoString(file));
             }
         }
     }
