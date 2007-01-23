@@ -554,9 +554,27 @@ public class Sintactico{
 		if ( (lexico.reconoce(CategoriaLexica.TKNOT)) || (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
 			String op = genOpUn(lexico.lexer().getLexema()); //Consumimos operador unario
 			atrFact = Fact();
-			if (op != ""){
+			if (op == "!"){
 				codigo.genIns(op);
+				if (!atrFact.getTipo().equals("bool")){
+						atrFact.setTipo("error");
+						throw new Exception("Error de tipos en linea: " + lexico.getLinea());
+				}
+				else{
+					atrFact.setTipo("bool");
+				}					
 			}
+			else if (op == "+" || op == "-"){
+				codigo.genIns(op);
+				if (!atrFact.getTipo().equals("int")){
+						atrFact.setTipo("error");
+						throw new Exception("Error de tipos en linea: " + lexico.getLinea());
+				}
+				else{
+					atrFact.setTipo("int");
+				}
+			}
+			
 			else{
 				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 			}
