@@ -38,7 +38,6 @@ public class Codigo {
 		int i= fich.toString().length();
 		fcod = new String(fich.toString().substring( 0,i-3));
 		fcod = fcod.concat("obj");
-		//File fich= new File(fcod);
 		try{
 			fichero = new FileOutputStream(fcod, false);
 		}
@@ -101,8 +100,6 @@ public class Codigo {
 	 * Mtodo que imprime por pantalla el contenido del atributo cod. No tiene parmetros de entrada ni de salida.
 	 * 
 	 */
-	
-	/* FIXME: Esta función sobra */
 	public void muestraCodigo(){		
 		for (int i=0;i<cod.size();i++){
 			System.out.println(i+"  "+cod.elementAt(i));

@@ -55,7 +55,6 @@ public class MaquinaP {
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
 		fcod = fcod.concat("obj");
-		//System.out.println(fcod);
 		File fich= new File(fcod);
 		try{
 			fichero = new FileReader(fich);
@@ -315,7 +314,6 @@ public class MaquinaP {
 	public String resultadoMem(){
 		String s="\n"+"Memoria :"+"\n";
 		for (int i=0;i<Mem.size();i++){
-			//System.out.println(Mem.elementAt(i));
 			if(Mem.elementAt(i)!=null){
 				s= s.concat("posicion "+i+":  "+((Integer)Mem.elementAt(i)).toString());
 				s=s.concat(" \n");
@@ -325,18 +323,6 @@ public class MaquinaP {
 				s=s.concat(" \n");
 			}
 		}
-		/*s = s.concat("Memoria dinamica:"+"\n");
-		for (int i=0;i<heap.getHeap().size();i++){
-			System.out.println(heap.getHeap().elementAt(i));
-			if(heap.getHeap().elementAt(i)!=null){
-				s= s.concat("posicion "+i+":  "+((Integer)heap.getHeap().elementAt(i)).toString());
-				s=s.concat(" \n");
-			}
-			else{
-				s=s.concat("posicion "+i+": "+" null");
-				s=s.concat(" \n");
-			}
-		}*/
 		return s;
 	}
 	
@@ -476,16 +462,6 @@ public class MaquinaP {
 				throw new Exception("ERROR: Puntero sin inicializar.");
 			}
 		}
-		/*else{ //memo dinamica
-			d=d-tamMem;
-			if (d<heap.getHeap().size()){
-				pila.push(new Integer(heap.getElementAt(d)));
-				PC = PC + 1;
-			}
-			else{
-				throw new Exception("ERROR: Memoria sin inicializar.");
-			}
-		}*/
 	}
 	
 	/**
@@ -520,15 +496,6 @@ public class MaquinaP {
 			}
 			
 		}
-		/*else{ //memo dinamica
-			d=d-tamMem;
-			if (d<heap.getHeap().size()){
-				heap.setElementAt(d,((Integer)pila.pop()));
-			}
-			else{
-				throw new Exception("ERROR: Puntero sin inicializar.");
-			}
-		}*/
 		ST = ST -1;
 		PC = PC + 1;
 	}

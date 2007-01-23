@@ -22,7 +22,6 @@ public class tablaSimbolos {
 	 */
 	public tablaSimbolos() {
 		super();
-		// TODO Auto-generated constructor stub
 		this.tabla = new Hashtable();
 		this.dir = 0;
 	}
@@ -33,7 +32,6 @@ public class tablaSimbolos {
 	 */
 	public tablaSimbolos(Hashtable tabla) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.tabla = tabla;
 		this.dir = 0;
 	}
@@ -112,12 +110,4 @@ public class tablaSimbolos {
 		
 	}
 	
-	/**
-	 * @param args
-	 */
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-*/
 }

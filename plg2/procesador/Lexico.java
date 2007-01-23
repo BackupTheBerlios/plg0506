@@ -47,9 +47,8 @@ public class Lexico {
 		lookahead = new Token();
 		try {
 			fuente = new RandomAccessFile(f, "r");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} 
+		catch (FileNotFoundException e) {	
 		}
 		posicion = 0;
 	}
@@ -140,7 +139,6 @@ public class Lexico {
 		while ((error = fuente.read())!=-1){
 			a = (char) error;
 			posicion ++;
-			//System.out.println(posicion);
 			switch (a){
 			
 			/*
@@ -308,63 +306,14 @@ public class Lexico {
 		/*
 		 * Si se sale del while es que read detecto un error y lanzamos una excepcion de entrada/salida. 
 		 */
-		if (error != -1)
+		if (error != -1){
 			throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
+		}	
 		else {
-
-			//System.out.println("He detectado EOF\n");
 			return new Token ("eof",CategoriaLexica.TKFF);
 		}
 	}
 	
-/*private boolean nextPos (int pos, String b) throws IOException, Exception{
-		int posicion = pos + b.length();
-		char a;
-		String aux = new String();
-		while (pos < posicion) {
-			a = (char)fuente.read();
-			aux = aux.concat(new Character(a).toString());
-		}	
-		if (b.equals(aux)){
-			return true;
-		}	
-		else{
-			posicion = pos;
-			fuente.seek(posicion);
-			return false;
-		}
-	}
-*/
-/*	private boolean cmp(int posicion, String string) throws IOException, Exception {
-		String given = new String();
-		fuente.seek(--posicion);
-		for(int i = 0; i < string.length(); i++) {
-			given.concat(String.valueOf(fuente.read()));
-		}
-		if (string.equals(given)) {
-			posicion += string.length();
-			fuente.seek(posicion);
-			return true;
-		}
-		else {
-			fuente.seek(++posicion);
-			return false;
-		}
-	}*/
-	
-	/*private boolean cmp(int posicion, String string) throws IOException, Exception {
-		int i, tmp = fuente.read();
-		boolean match = true;
-		for (i = 1; ((i < string.length()) && (tmp != -1) && match); i++) {
-			match = match && ((char)tmp == string.charAt(i));
-			tmp = fuente.read();
-		}
-		if (match)
-			posicion = posicion - 1 + string.length();
-		else
-			fuente.seek(posicion);
-		return match;
-	}*/
 	
 	private boolean cmp(int pos, String string) throws IOException, Exception {
 		int a;
@@ -399,9 +348,9 @@ public class Lexico {
 		fuente.seek(--pos);
 		setPosicion(pos);
 		return s;
-}
+	}
 
-private String leeNumero(int posicion) throws Exception, IOException {
+	private String leeNumero(int posicion) throws Exception, IOException {
 		int a;
 		String s = new String();
 		fuente.seek(--posicion);
