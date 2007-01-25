@@ -136,6 +136,7 @@ public class Lexico {
 		/*
 		 * La funcion read() saca un caracter del flujo de entrada
 		 */
+		
 		while ((error = fuente.read())!=-1){
 			a = (char) error;
 			posicion ++;
@@ -144,7 +145,9 @@ public class Lexico {
 			/*
 			 * En primer lugar identificamos todos los caracteres especiales.
 			 */
-			case '\n':	linea ++;
+			case '\n':	System.out.println("Antes "+linea + " Posicion " + posicion);
+						linea ++;
+						System.out.println("Despues " + linea);
 						break;			
 			case '\t':	break;
 			case ' ':	break;
@@ -410,6 +413,7 @@ private String leeComentario (int posicion)throws Exception, IOException {
 	 */
 	public Token lexer() throws IOException, Exception{
 			lookahead = getToken();
+			System.out.println("linea " + linea + " tk " + lookahead.getLexema());
 			return lookahead;
 	}
 	
