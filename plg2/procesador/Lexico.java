@@ -138,6 +138,7 @@ public class Lexico {
 		 */
 		
 		while ((error = fuente.read())!=-1){
+			
 			a = (char) error;
 			posicion ++;
 			switch (a){
@@ -145,9 +146,7 @@ public class Lexico {
 			/*
 			 * En primer lugar identificamos todos los caracteres especiales.
 			 */
-			case '\n':	System.out.println("Antes "+linea + " Posicion " + posicion);
-						linea ++;
-						System.out.println("Despues " + linea);
+			case '\n':	linea ++;
 						break;			
 			case '\t':	break;
 			case ' ':	break;
@@ -262,11 +261,9 @@ public class Lexico {
 			 */
 			case 'i':	compara = cmp(posicion, "int");
 						if (compara){
-							//System.out.println("Fuera de cmp posicion es " + posicion);
 							return new Token("int",CategoriaLexica.TKINT);
 						}
 						else{
-							//System.out.println("Fuera de cmp posicion es " + posicion);
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
@@ -397,9 +394,11 @@ private String leeComentario (int posicion)throws Exception, IOException {
 	 */
 	public Token getNextToken() throws IOException, Exception{
 		int aux = posicion;
+		int auxLinea = linea;
 		Token tk = getToken();
 		fuente.seek(aux);
 		posicion = aux;
+		linea = auxLinea;
 		return tk;	
 		
 	}
@@ -413,7 +412,6 @@ private String leeComentario (int posicion)throws Exception, IOException {
 	 */
 	public Token lexer() throws IOException, Exception{
 			lookahead = getToken();
-			System.out.println("linea " + linea + " tk " + lookahead.getLexema());
 			return lookahead;
 	}
 	
