@@ -551,35 +551,35 @@ public class Sintactico{
 			}
 			return atrFact;
 		}
-		if ( (lexico.reconoce(CategoriaLexica.TKNOT)) || (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
-			String op = genOpUn(lexico.lexer().getLexema()); //Consumimos operador unario
+
+		if (lexico.reconoce(CategoriaLexica.TKNOT)){
+			String op = genOpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
 			atrFact = Fact();
-			if (op == "!"){
-				codigo.genIns(op);
-				if (!atrFact.getTipo().equals("bool")){
-						atrFact.setTipo("error");
-						throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-				}
-				else{
-					atrFact.setTipo("bool");
-				}					
+			codigo.genIns(op);
+			if (!atrFact.getTipo().equals("bool")){
+					atrFact.setTipo("error");
+					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
-			else if (op == "+" || op == "-"){
-				codigo.genIns(op);
-				if (!atrFact.getTipo().equals("int")){
-						atrFact.setTipo("error");
-						throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-				}
-				else{
-					atrFact.setTipo("int");
-				}
-			}
-			
 			else{
-				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
+				atrFact.setTipo("bool");
 			}
 			return atrFact;
 		}
+		
+		if ( (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
+			String op = genOpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
+			atrFact = Fact();
+			codigo.genIns(op);
+			if (!atrFact.getTipo().equals("int")){
+					atrFact.setTipo("error");
+					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
+			}
+			else{
+				atrFact.setTipo("int");
+			}
+			return atrFact;
+		}
+		
 		atrFact.setTipo("error");
 		return atrFact;
 	}
@@ -635,20 +635,31 @@ public class Sintactico{
 	/**
 	 * 
 	 * @param opDeOpUn
+	 * @return
 	 */
-	private String genOpUn(String opDeOpUn){
+	private String genOpUnarioArit(String opDeOpUn){
 		if (opDeOpUn == "+")
 			return("positivo");
 		else if (opDeOpUn.equals("-"))
 			return("menos");
-		else if (opDeOpUn.equals("!"))
-			return("not");
 		else return "";
 	}
 	
 	/**
 	 * 
+	 * @param opDeOpUn
+	 * @return
+	 */
+	private String genOpUnarioLog(String opDeOpUn){
+		if (opDeOpUn.equals("!"))
+			return("not");
+		else return "";
+	}
+		
+	/**
+	 * 
 	 * @param opDeOpComp
+	 * @return
 	 */
 	private String genOpRel(String opDeOpComp){
 		

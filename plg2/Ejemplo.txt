@@ -2,9 +2,9 @@ int i;
 bool b;
 bool c
 {
-i = +10;
+i = !10;
 i = i + 1;
-b = true;
+b = +true;
 c = (i <= 11);
 b = (c && b)
 }
