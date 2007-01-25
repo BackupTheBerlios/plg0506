@@ -269,6 +269,8 @@ public class MaquinaP {
 					multiplica();
 				else if (linea[0].compareTo("divide")==0)
 					divide();
+				else if (linea[0].compareTo("modulo")==0)
+					modulo();
 				else if (linea[0].compareTo("and")==0)
 					and();
 				else if (linea[0].compareTo("or")==0)
@@ -291,6 +293,8 @@ public class MaquinaP {
 					igual();
 				else if (linea[0].compareTo("distinto")==0)
 					distinto();
+				else if (linea[0].compareTo("stop")==0)
+					H=1;
 				else{
 					error();
 				}
@@ -415,7 +419,20 @@ public class MaquinaP {
 		ST = ST-1;
 		PC = PC + 1;
 	}
-	
+
+	public void modulo()throws Exception{
+		if (ST<1){
+			throw new Exception("ERROR: Modulo. La pila no contiene los datos necesarios.");
+		}
+		Integer s1 = (Integer)pila.pop();
+		Integer s2 = (Integer)pila.pop();
+		if (s1.intValue()==0) throw new Exception("ERROR: Estas tratando de dividir por 0.");
+		Integer s = new Integer(s2.intValue()%s1.intValue());
+		pila.push(s);
+		ST = ST-1;
+		PC = PC + 1;
+	}
+
 	/**
 	 * Metodo que apila un entero en la pila. Se aumenta en uno el tamao de la pila y se apila el entero que recibe como
 	 * parametro. Tambien se aumenta en uno el contador del programa.
