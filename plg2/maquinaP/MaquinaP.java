@@ -18,11 +18,11 @@ public class MaquinaP {
 	/*
 	 * Atributos de la clase:
 	 * 
-	 * pila: La pila de los operandos de la m?quina.
-	 * PC: Contador de programa. Al final de la ejecuci?n nos dice cuantas lienas tiene dicho programa.
-	 * H: Indica si la m?quina esta en ejecuci?n, parada por error, o acabo su ejecuci?n.
+	 * pila: La pila de los operandos de la maquina.
+	 * PC: Contador de programa. Al final de la ejecucion nos dice cuantas lineas tiene dicho programa.
+	 * H: Indica si la maquina esta en ejecucion, parada por error, o acabo su ejecuci?n.
 	 * ST: Puntero a la cima de la pila.
-	 * Prog:Memoria de programas. Aqui hab?a puesto el nombre del fichero pero quizas deberia ser el
+	 * Prog:Memoria de programas. Aqui habia puesto el nombre del fichero pero quizas deberia ser el
 	 * codigo del programa.
 	 * Mem: Memoria de datos estatica.
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
@@ -40,7 +40,7 @@ public class MaquinaP {
 
 	/**
 	 * El constructor de la clase MaquinaP que solo tiene el buffer de lectura del fichero como parametro de entrada.
-	 * @param f Recibe como parametro la ruta del fichero a ejecutar para poder inicializar todo.
+	 * @param f Recibe como parametro el fichero a ejecutar para poder inicializar todo.
 	 *
 	 */	
 	public MaquinaP(File file) {
@@ -155,7 +155,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Accesor para el atributo la clase, ST. Se debuelve el valor que apunta a la cima de la pila.
+	 * Accesor para el atributo la clase, ST. Se devuelve el valor que apunta a la cima de la pila.
 	 * @return Entero que apunta a la cima de la pila de la maquina.
 	 */
 	public int getST() {
@@ -171,6 +171,7 @@ public class MaquinaP {
 	}
 	
 	/**
+	 *  Accesor para el atributo la clase, fichero. Se devuelve el fichero del que se lee.
 	 * @return Returns the fichero.
 	 */
 	public FileReader getFichero() {
@@ -178,6 +179,7 @@ public class MaquinaP {
 	}
 
 	/**
+	 * Mutador para el atributo de la clase fichero. Se cambia el fichero del que queremos ejecutar, con lo que cambiara el resultado de la ejecucion.
 	 * @param fichero The fichero to set.
 	 */
 	public void setFichero(FileReader fichero) {
@@ -213,7 +215,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Aumenta el tama?o del vector memoria segun las necesidades del programa que va a ejecutar.
+	 * Aumenta el tamaño del vector memoria segun las necesidades del programa que va a ejecutar.
 	 * 
 	 * @param tam Recibe un entero con el tamao que ha de aumentar.
 	 */
@@ -226,19 +228,21 @@ public class MaquinaP {
 	/**
 	 * Metodo que ejecuta la Maquina P. Va leyendo las intrucciones que ha generado el 
 	 * compilador y las ejecuta.
-	 *
+	 * @param l Instruccion que se esta ejecutando.
 	 */
-	
 	private boolean hasInt(String l) {
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
 	}
 	
+	/**
+	 * 
+	 * @return El resultado de la ejecucion del programa en la maquina P. Se mostrara el estado de la memoria.
+	 * @throws Exception
+	 */
 	public String ejecuta() throws Exception{
 		String i;
 		String[] linea;
 		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
-		//System.out.println("\n\n\nComenzamos con la ejecucion de la pila. \n\n\n");
-		//System.out.println(Prog.size());
 		for (int j = 0; H == 0; j++){
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
