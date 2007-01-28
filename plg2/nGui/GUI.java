@@ -132,15 +132,20 @@ public class GUI {
             putValue(MNEMONIC_KEY, mnemonic);
         }
         public void actionPerformed(ActionEvent e) {
-        	texto1.setText(null);
-        	maquinap = new MaquinaP(file);
-        	//Codigo c = procesador.getCod();
-        	maquinap.setProg(codigo.getCod());
-        	try {
-        		texto1.append(maquinap.ejecuta() + maquinap.resultadoMem());
-        	} catch(Exception ex) {
-				JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-			}
+        	 if (file == null) {
+             	texto1.setText("\n# ERROR: procese primero un archivo #");
+             } 
+        	 else {
+	        	texto1.setText(null);
+	        	maquinap = new MaquinaP(file);
+	        	//Codigo c = procesador.getCod();
+	        	maquinap.setProg(codigo.getCod());
+	        	try {
+	        		texto1.append(maquinap.ejecuta() + maquinap.resultadoMem());
+	        	} catch(Exception ex) {
+					JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}
+             }
         }
     }
     
