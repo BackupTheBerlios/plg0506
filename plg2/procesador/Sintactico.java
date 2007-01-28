@@ -37,9 +37,7 @@ public class Sintactico{
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
-	 * @param fuente RandomAccessFile que se utiliza para leer del fichero que contiene el cdigo a analizar.
-	 * @param T Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
-	 * @param f String donde se guarga la ruta del fichero donde se va a guardar el codigo generado por el compilador.
+	 * @param f String donde se guarda la ruta del fichero donde se va a guardar el codigo generado por el compilador.
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public Sintactico(File f) throws Exception{

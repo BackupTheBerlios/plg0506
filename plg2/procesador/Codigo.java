@@ -30,7 +30,7 @@ public class Codigo {
 	/**
 	 * El constructor de la clase Codigo no tiene parmetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vaca.
 	 * 
-	 * @param f String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
+	 * @param fich String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
 	 */
 	public Codigo(File fich){		
 		cod = new Vector();

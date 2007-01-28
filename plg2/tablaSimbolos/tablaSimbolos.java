@@ -39,7 +39,7 @@ public class tablaSimbolos {
 	/**
 	 * 
 	 * @param id
-	 * @return
+	 * @return boolean
 	 */
 	public boolean existeID(String id)throws Exception{
 		return this.tabla.containsKey(id);
@@ -49,7 +49,7 @@ public class tablaSimbolos {
 	 * 
 	 * @param id
 	 * @param tipo
-	 * @return
+	 * @return boolean
 	 * @throws Exception
 	 */
 	public boolean addID(String id, String tipo) throws Exception{
@@ -66,7 +66,7 @@ public class tablaSimbolos {
 	
 	/**
 	 * 
-	 * @return
+	 * @return hashtable
 	 */
 	public Hashtable getTabla() {
 		return tabla;

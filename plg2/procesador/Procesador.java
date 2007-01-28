@@ -23,7 +23,6 @@ public class Procesador {
 	 * El mtodo procesa de esta clase implementa del procesador del lenguaje y captura una excepcin
 	 * IOException procedente de la funcin de RandomAccessFile de JAVA si no se encuentra el fichero de entrada.
 	 * 
-	 * @param fuente Que contendr la ruta del fichero a procesar.
 	 * @param f String con la ruta del fichero.
 	 * 
 	 */

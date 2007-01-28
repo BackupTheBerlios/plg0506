@@ -2,7 +2,7 @@ package tablaSimbolos;
 
 /**
  * 
- * @author 
+ * @author Leticia Garcia
  *
  */
 public class propiedades {
