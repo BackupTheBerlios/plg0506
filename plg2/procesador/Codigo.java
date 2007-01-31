@@ -24,7 +24,7 @@ public class Codigo {
 	 *  El String cod guarda el codigo del lenguaje objeto, que es el codigo de la maquina P.
 	 *  En el fichero se guarda tambien el codigo generado, por si se quiere ejecutar en otra ocasin. El fichero se guarda con extension '.obj'
 	 */
-	Vector<String> cod;
+	Vector cod;
 	FileOutputStream fichero;
 	
 	/**
@@ -33,7 +33,7 @@ public class Codigo {
 	 * @param fich String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
 	 */
 	public Codigo(File fich){		
-		cod = new Vector<String>();
+		cod = new Vector();
 		String fcod;
 		int i= fich.toString().length();
 		fcod = new String(fich.toString().substring( 0,i-3));
@@ -49,7 +49,7 @@ public class Codigo {
 	 * Accesor para el atributo cod de la clase Cdigo. 
 	 * @return Devuelve el codigo generado hasta ese momento
 	 */
-	public Vector<String> getCod() {
+	public Vector getCod() {
 		return cod;
 	}
 
@@ -57,7 +57,7 @@ public class Codigo {
 	 * Este mtodo inicializa el atributo cod con la cadena vaca. No cuenta con parmetros de entrada ni de salida. No devuelve nada.
 	 */
 	public void inicializaCodigo(){
-		cod = new Vector<String>();
+		cod = new Vector();
 	}
 	
 	/**

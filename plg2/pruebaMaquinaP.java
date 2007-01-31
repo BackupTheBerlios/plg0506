@@ -18,7 +18,7 @@ public class pruebaMaquinaP {
 			Codigo c = p.getCod();
 			c.muestraCodigo();
 			MaquinaP MP = new MaquinaP(file);
-			Vector<String> cod2 = c.getCod();
+			Vector cod2 = c.getCod();
 			MP.setProg(cod2);
 			MP.ejecuta();
 			System.out.print(MP.resultadoMem());
