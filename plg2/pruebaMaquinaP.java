@@ -1,4 +1,6 @@
 import java.io.File;
+import java.util.Vector;
+
 import procesador.*;
 import maquinaP.MaquinaP;
 
@@ -16,7 +18,8 @@ public class pruebaMaquinaP {
 			Codigo c = p.getCod();
 			c.muestraCodigo();
 			MaquinaP MP = new MaquinaP(file);
-			MP.setProg(c.getCod());
+			Vector<String> cod2 = c.getCod();
+			MP.setProg(cod2);
 			MP.ejecuta();
 			System.out.print(MP.resultadoMem());
 	}

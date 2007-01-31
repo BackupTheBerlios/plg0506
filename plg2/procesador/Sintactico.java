@@ -140,7 +140,7 @@ public class Sintactico{
 		Atributo atrDec = new Atributo();
 		Token tk = lexico.lexer(); //consumo el tipo
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("DeclaraciÃ³n incorrecta en lÃ­nea " + lexico.getLinea());
+			throw new Exception("Declaración incorrecta en línea " + lexico.getLinea());
 		}
 		tk = lexico.lexer(); //consumo el iden
 		atrDec.setTipo(atrTipo.getTipo());

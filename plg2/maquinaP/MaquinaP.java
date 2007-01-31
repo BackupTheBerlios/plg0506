@@ -28,12 +28,12 @@ public class MaquinaP {
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
-	private Stack pila;
+	private Stack<Integer> pila;
 	private int PC;
 	private int H;
 	private int ST;
-	private Vector Prog;
-	private Vector Mem;
+	private Vector<String> Prog;
+	private Vector<Integer> Mem;
 	private FileReader fichero;
 	private String pasos;
 	private int tamMem;
@@ -46,12 +46,12 @@ public class MaquinaP {
 	public MaquinaP(File file) {
 		super();
 		String f = file.toString();
-		pila = new Stack();
+		pila = new Stack<Integer>();
 		PC = 0;
 		H = 0;
 		tamMem= Integer.MAX_VALUE;
 		ST = -1;
-		Mem= new Vector();
+		Mem= new Vector<Integer>();
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
 		fcod = fcod.concat("obj");
@@ -94,7 +94,7 @@ public class MaquinaP {
 	 * Accesor para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
 	 * @return Vector donde cada celda es una posicion de Memoria.
 	 */
-	public Vector getMem() {
+	public Vector<Integer> getMem() {
 		return Mem;
 	}
 	
@@ -102,7 +102,7 @@ public class MaquinaP {
 	 * Mutador para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
 	 * @param mem Se recibe un vector a modo de memoria de Progrma.
 	 */
-	public void setMem(Vector mem) {
+	public void setMem(Vector<Integer> mem) {
 		Mem = mem;
 	}
 	
@@ -126,7 +126,7 @@ public class MaquinaP {
 	 * Accesor para el atributo de la clase, pila. Pila del programa. 
 	 * @return Devuelve la pila del programa.
 	 */
-	public Stack getPila() {
+	public Stack<Integer> getPila() {
 		return pila;
 	}
 	
@@ -134,7 +134,7 @@ public class MaquinaP {
 	 * Mutador para el atributo de la clase, pila. Se actualizara la pila del programa.
 	 * @param pila una nueva pila con valores y operaciones.
 	 */
-	public void setPila(Stack pila) {
+	public void setPila(Stack<Integer> pila) {
 		this.pila = pila;
 	}
 	
@@ -142,7 +142,7 @@ public class MaquinaP {
 	 * Accesor para el atributo de la clase, Prog. Vector con las intrucciones del programa que se ha de ejecutar.
 	 * @return Vector con el contenido del programa.
 	 */
-	public Vector getProg() {
+	public Vector<String> getProg() {
 		return Prog;
 	}
 	
@@ -150,7 +150,7 @@ public class MaquinaP {
 	 * Mutador para el atributo de la clase, Prog. Se actualizaran el vector con las instrucciones del Programa.
 	 * @param prog Se recibe el vector con el nuevo programa.
 	 */
-	public void setProg(Vector prog) {
+	public void setProg(Vector<String> prog) {
 		Prog = prog;
 	}
 	
@@ -195,8 +195,8 @@ public class MaquinaP {
 	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo metodo.
 	 * @exception java.io.IOException Se lanza y se captura en este mismo metodo.
 	 */
-	private Vector damePrograma(FileReader f){
-		Vector v=new Vector();
+	private Vector<String> damePrograma(FileReader f){
+		Vector<String> v=new Vector<String>();
 		BufferedReader entrada = null;
 	    try {
 	      entrada = new BufferedReader(f);
@@ -823,7 +823,7 @@ public class MaquinaP {
 	 * @return String con el contenido de la Pila
 	 */
 	public String muestraPila(){
-		Stack aux = new Stack();
+		Stack<Integer> aux = new Stack<Integer>();
 		String pilas="El contenido de la pila es: \n";
 		while(!pila.isEmpty()){
 			Integer n = (Integer)pila.pop();
