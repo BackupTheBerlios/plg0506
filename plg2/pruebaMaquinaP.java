@@ -7,7 +7,9 @@ import maquinaP.MaquinaP;
 public class pruebaMaquinaP {
 
 	/**
+	 * 
 	 * @param args
+	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
 			String f = new String ("Ejemplo.txt");

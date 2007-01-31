@@ -215,7 +215,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Aumenta el tamaÃ±o del vector memoria segun las necesidades del programa que va a ejecutar.
+	 * Aumenta el tamaño del vector memoria segun las necesidades del programa que va a ejecutar.
 	 * 
 	 * @param tam Recibe un entero con el tamao que ha de aumentar.
 	 */
@@ -237,7 +237,7 @@ public class MaquinaP {
 	/**
 	 * 
 	 * @return El resultado de la ejecucion del programa en la maquina P. Se mostrara el estado de la memoria.
-	 * @throws Exception
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public String ejecuta() throws Exception{
 		String i;
@@ -343,6 +343,8 @@ public class MaquinaP {
 	 * Pila[ST-1] <-- Pila[ST-1] + Pila[ST]
 	 * ST <-- ST -1 
 	 * PC <-- PC + 1
+	 * 
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 
 	public void suma() throws Exception{
@@ -366,6 +368,8 @@ public class MaquinaP {
 	 *	Pila[ST-1] <-- Pila[ST-1] - Pila[ST]
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void resta()throws Exception{
 		if (ST<1){
@@ -388,6 +392,8 @@ public class MaquinaP {
 	 *	Pila[ST-1] <-- Pila[ST-1] * Pila[ST]  
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void multiplica()throws Exception{
 		if (ST<1){
@@ -410,6 +416,8 @@ public class MaquinaP {
 	 *	Pila[ST-1] <-- Pila[ST-1] / Pila[ST]  
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void divide()throws Exception{
 		if (ST<1){
@@ -424,6 +432,10 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 
+	/**
+	 * 
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
+	 */
 	public void modulo()throws Exception{
 		if (ST<1){
 			throw new Exception("ERROR: Modulo. La pila no contiene los datos necesarios.");
@@ -463,6 +475,8 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 *
 	 * @param d
+	 * 
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void apila_dir (int d) throws Exception{
 		//System.out.println("Estoy en apila-dir")
@@ -495,6 +509,8 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 *
 	 * @param d
+	 * 
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
@@ -551,6 +567,8 @@ public class MaquinaP {
 	 *		"false" en cualquier otro caso
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1 
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void and() throws Exception{
 		if (ST<1){
@@ -578,6 +596,8 @@ public class MaquinaP {
 	 *		"true" en c.o.c.
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1 
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void or()throws Exception{
 		if (ST<1){
@@ -603,6 +623,8 @@ public class MaquinaP {
 	 *	Pila[ST] <-- "true" si Pila[ST] = "false"
 	 *				"false" en c.o.c
 	 *	PC <-- PC + 1 
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void not()throws Exception{
 		if (ST<0){
@@ -626,6 +648,8 @@ public class MaquinaP {
 	 * (R16) Neg:
 	 *	Pila[ST] <--  - Pila[ST]
 	 *	PC <-- PC + 1 
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void menos()throws Exception{
 		if (ST<0){
@@ -637,6 +661,10 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 	
+	/**
+	 * 
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
+	 */
 	public void mas()throws Exception{
 		if (ST<0){
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
@@ -680,6 +708,8 @@ public class MaquinaP {
 	 *			"false" en c.o.c
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void menorIgual()throws Exception{
 		if (ST<1){
@@ -707,6 +737,8 @@ public class MaquinaP {
 	 *			"false" en c.o.c
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mayor()throws Exception{
 		if (ST<1){
@@ -734,6 +766,8 @@ public class MaquinaP {
 	 *			"false" en c.o.c
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mayorIgual()throws Exception{
 		if (ST<1){
@@ -761,6 +795,8 @@ public class MaquinaP {
 	 *			"false" en c.o.c
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void igual()throws Exception{
 		if (ST<1){
@@ -788,6 +824,8 @@ public class MaquinaP {
 	 *			"false" en c.o.c
 	 *	ST <-- ST ? 1
 	 *	PC <-- PC + 1
+	 *
+	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void distinto()throws Exception{
 		if (ST<1){
@@ -804,18 +842,6 @@ public class MaquinaP {
 		ST = ST -1;
 		PC = PC + 1;
 	}
-	
-	
-	
-	/**
-	 * Metodo que realiza una operacion de salto del programa. Se comprueba que el salto no supere el tamao del programa y se aumenta el contador
-	 * del programa segun el valor que recibimos por parametro.
-	 * 
-	 * (R20) ir-a(s):
-	 * PC <-- s
-	 * 
-	 * @param s Numero de instrucciones que ha de saltar y no ejecutar la maquinaP
-	 */
 	
 	/**
 	 * Metodo que obtiene el contenido de la pila en un String para ver su contenido.
