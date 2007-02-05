@@ -1,6 +1,5 @@
 package procesador;
 
-//import java.io.RandomAccessFile;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,10 +12,9 @@ import tablaSimbolos.*;
  * incluida en el paquete <B>maquinaP</B>.</LI>
  * <LI><CODE>lexico:</CODE> Analiza el fichero de entrada para reconocer tokens. De tipo Lexico.</LI>
  * <LI><CODE>TS:</CODE> Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos. De tipo TablaSimbolos.</LI>
- * <LI><CODE>dir:</CODE> Entero que marca la posicin de la pila con la que estamos trabajando. De tipo Entero.</LI>
  * </UL></P>
  * 
- * @author Paloma de la Fuente y Leticia Garcia
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 
@@ -140,7 +138,7 @@ public class Sintactico{
 		Atributo atrDec = new Atributo();
 		Token tk = lexico.lexer(); //consumo el tipo
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("Declaración incorrecta en línea " + lexico.getLinea());
+			throw new Exception("Declaraciï¿½n incorrecta en lï¿½nea " + lexico.getLinea());
 		}
 		tk = lexico.lexer(); //consumo el iden
 		atrDec.setTipo(atrTipo.getTipo());

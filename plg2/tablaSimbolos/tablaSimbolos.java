@@ -3,12 +3,14 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
- * La clase <B>TablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
+ * La clase <B>tablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
  * <P>Esta clase cuenta con el siguiente atributo:
  * <UL><LI><CODE>tabla:</CODE> Usaremos del API de JAVA una tabla Hash como tabla de smbolos. El valor que almacenamos ser un par con el nombre del identificador y el tipo del mismo. 
- * No se podrn almacenar datos repetidos.</LI></UL></P>
+ * No se podrn almacenar datos repetidos.</LI>
+ * <LI><CODE>dir:</CODE> Ultima direccion disponible de la tabla.</LI>
+ * </UL></P>
  * 
- * @author Paloma de la Fuente y Leticia García
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 public class tablaSimbolos {
@@ -18,7 +20,7 @@ public class tablaSimbolos {
 	int dir;
 
 	/**
-	 * 
+	 * Constructor de la clase y no necesita parametros.
 	 */
 	public tablaSimbolos() {
 		super();

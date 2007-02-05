@@ -17,7 +17,7 @@ import java.io.RandomAccessFile;
  * <LI><CODE>posicion:</CODE> Entero que marca la posicin en la que se est leyendo dentro de una lnea.</LI>
  * </UL></P>
  * 
- * @author Leticia Garcia y Alberto Velazquez
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 

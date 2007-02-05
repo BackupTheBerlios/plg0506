@@ -1,9 +1,9 @@
 package procesador;
 /**
- * La clase <B>Tipos</B> declara las categoras lexicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
+ * La clase <B>CategoriaLexica</B> declara las categorias lexicas que nuestro lenguaje puede reconocer. Cada una de ellas es un valor entero.
  * <P>No tiene atributos, solo las constantes de los tipos.</P>
  * 
- * @author  Leticia Garcia y Alberto Velazquez
+* @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 public class CategoriaLexica {

@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
  * 
  * <P>No tiene atributos</P>
  * 
- * @author Paloma de la Fuente
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 public class Procesador {
@@ -43,10 +43,11 @@ public class Procesador {
 			}
 	}
 	
-	/*public String getStrCod() {
-		return sintactico.getCodigo().getString();
-	}*/
-	
+	/**
+	 * Accesor del codigo generado al procesar el codigo fuente.
+	 * 
+	 * @return devuelve el codigo objeto que se ha generado al procesar el fichero de codigo fuente.
+	 */
 	public Codigo getCod() {
 		return sintactico.getCodigo();
 	}

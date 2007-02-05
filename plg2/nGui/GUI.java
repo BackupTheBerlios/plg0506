@@ -13,14 +13,24 @@ import procesador.Procesador;
 import procesador.Codigo;
 import maquinaP.MaquinaP;
 
+/**
+ * Clase que contiene la interfaz grafica del compilador-procesador.
+ * 
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
+ *
+ */
 public class GUI {
+	
     protected JTextArea texto0, texto1, textosrc;
     protected File file;
     protected Codigo codigo;
     protected MaquinaP maquinap;
     protected Procesador procesador = new Procesador();
 
-    
+    /**
+     * Constructor de la clase. No necesita parametros.
+     *
+     */
     public GUI() {
     	super();
     }

@@ -1,15 +1,15 @@
 import nGui.GUI;
 
 /**
- * 
- * @author paloma
+ * Clase que contiene el menu principal del compilador desde donde se llama a la Gui para que el usuario pueda manejar el compilador.
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez 
  *
  */
 public class Main {
 	
 	/**
-	 * 
-	 * @param args
+	 * Main del compilador.
+	 * @param args Parametros de entrada. En este caso no se utilizan.
 	 */
 	public static void main(String[] args) {
 

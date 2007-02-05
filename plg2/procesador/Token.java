@@ -7,7 +7,7 @@ package procesador;
  * <UL><LI><CODE>categoriaLexica:</CODE> entero que indica a que categora lexica pertenece el token.</LI>
  * <LI><CODE>lexema:</CODE> string que representa la parte lex del Token.</LI></UL></P>
  * 
- * @author Leticia Garcia y Alberto Velazquez
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 public class Token {

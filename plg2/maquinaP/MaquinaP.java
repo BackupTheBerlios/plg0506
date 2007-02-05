@@ -1,7 +1,21 @@
 package maquinaP;
 /**
- * La clase <B>maquinaP</B> 
- * @author  Alberto Velazquez
+ La clase <B>MaquinaP</B> implementa la maquina virtual. Para que el lenguaje objeto que hemos creado tenga valor 
+ * es necesario que sea ejecutado en una maquina y que esta traduzca los elementos del lenguaje fuente al lenguaje 
+ * objeto.
+ * <P>La clase MaquinaP cuenta con los siguientes atributos:
+ * <UL><LI><CODE>pila:</CODE> La pila de los operandos de la maquina.</LI>
+ * <LI><CODE>PC:</CODE> Contador de programa. Al final de la ejecucion nos dice cuantas lineas tiene dicho programa.</LI>
+ * <LI><CODE>H:</CODE> Indica si la maquina esta en ejecucion, parada por error, o acabo su ejecucion.</LI>
+ * <LI><CODE>ST:</CODE> Puntero a la cima de la pila.</LI>
+ * <LI><CODE>Prog:</CODE>Memoria de programas. Aqui habia puesto el nombre del fichero pero quizas deberia ser el
+ * c?digo del programa.</LI>
+ * <LI><CODE>Mem:</CODE> Memoria de datos estatica.</LI>
+ * <LI><CODE>fichero:</CODE> Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP. Sera un fichero con extension '.obj'</LI>
+ * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
+ * </UL></P>
+ * 
+ * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
  *
  */
 import java.io.BufferedReader;
@@ -215,7 +229,7 @@ public class MaquinaP {
 	}
 	
 	/**
-	 * Aumenta el tama�o del vector memoria segun las necesidades del programa que va a ejecutar.
+	 * Aumenta el tamaño del vector memoria segun las necesidades del programa que va a ejecutar.
 	 * 
 	 * @param tam Recibe un entero con el tamao que ha de aumentar.
 	 */
@@ -235,6 +249,9 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que va tratando las instrucciones contenidas en Prog y las va ejecutando cambiando asi el contenido
+	 * de la memoria si fuese necesario. Se almacena el proceso en un String para devolver el resultado de lo que
+	 * ha ejecutado.
 	 * 
 	 * @return El resultado de la ejecucion del programa en la maquina P. Se mostrara el estado de la memoria.
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
@@ -433,6 +450,13 @@ public class MaquinaP {
 	}
 
 	/**
+	 * La instruccion modulo se realiza entre la cima de la pila y el siguiente elemento. Se almacena el resultado en la cima de la pila,
+	 * se disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno el contador del programa.
+	 * 
+	 * (R27) mod:
+	 * Pila[ST-1] ← Pila [ ST – 1 ] % Pila [ ST ]
+	 * ST ← ST - 1
+	 * PC ← PC + 1
 	 * 
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
@@ -474,7 +498,7 @@ public class MaquinaP {
 	 *	Pila[ST] <-- Mem[d]  
 	 *	PC <-- PC + 1
 	 *
-	 * @param d
+	 * @param d direcion de la que se va a obtener el valor que apilar en la cima.
 	 * 
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
@@ -508,7 +532,7 @@ public class MaquinaP {
 	 *	ST <-- ST -1 
 	 *	PC <-- PC + 1
 	 *
-	 * @param d
+	 * @param d Direccion de la memoria donde se almacenara el valor que hay en la cima de la pila.
 	 * 
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
@@ -662,7 +686,13 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * Metodo que cambia a positivo el signo de un entero. Se desapilan los dos primeros elementos de la pila y se realiza una and.  
+	 * Despues se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta 
+	 * en uno el contador del programa.
 	 * 
+	 * (R28) Mas:
+	 *	Pila[ST] <--  + Pila[ST]
+	 *	PC <-- PC + 1 
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mas()throws Exception{
