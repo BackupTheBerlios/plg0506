@@ -29,8 +29,9 @@ public class tablaSimbolos {
 	}
 
 	/**
+	 * Constructor de la tabla de Simbolos y recibe como parametro un nuevo valor de la tabla.
 	 * 
-	 * @param tabla
+	 * @param tabla Nuevo valor de la tabla de simbolos.
 	 */
 	public tablaSimbolos(Hashtable tabla) {
 		super();
@@ -39,20 +40,23 @@ public class tablaSimbolos {
 	}
 	
 	/**
+	 * Metodo para comprobar si existe ya un identificador declarado en la tabla de simbolos. Si es asi
+	 * devolvera verdadero para que se genere un error.
 	 * 
-	 * @param id
-	 * @return boolean
+	 * @param id Identificador de variable que se va a comprobar si exite o no en la tabla.
+	 * @return boolean Sera verdadero si el identificador si existe y falso en otro caso.
 	 */
 	public boolean existeID(String id)throws Exception{
 		return this.tabla.containsKey(id);
 	}
 	
 	/**
+	 * Metodo para añadir un nuevo identificador a la tabla de simbolos. 
 	 * 
-	 * @param id
-	 * @param tipo
-	 * @return boolean
-	 * @throws Exception
+	 * @param id Nombre del identificador que se va añadir.
+	 * @param tipo Tipo del nuevo identificador a añadir.
+	 * @return boolean Se devuelve verdadero si todo ha sido correcto. Falso en caso contrario.
+	 * @throws Exception Excepcion generada si el identificador ya existe, se capturara en otro lugar.
 	 */
 	public boolean addID(String id, String tipo) throws Exception{
 		if (this.tabla.containsKey(id)){
@@ -67,31 +71,39 @@ public class tablaSimbolos {
 	}
 	
 	/**
-	 * 
-	 * @return hashtable
+	 * Accesor del atributo que contiene la tabla de simbolos
+	 * @return hashtable Tabla de simbolos con la que se esta trabajando en ese momento.
 	 */
 	public Hashtable getTabla() {
 		return tabla;
 	}
 
 	/**
-	 * 
-	 * @param tabla
+	 * Mutador del atributo tabla.
+	 * @param tabla Nuevo valor de la tabla.
 	 */
 	public void setTabla(Hashtable tabla) {
 		this.tabla = tabla;
 	}
 	
+	/**
+	 * Accesor del atributo que contiene la ultima direccion de la tabla de simbolos
+	 * @return entero con la direccion.
+	 */
 	public int getDir() {
 		return dir;
 	}
 
+	/**
+	 * Mutador del atributo direccion.
+	 * @param dir
+	 */
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
 
 	/**
-	 * 
+	 * Metodo para mostrar el contenido de la tabla de simbolos. Se pasa el contenido de la tabla a un String y luego se imprime por pantalla.
 	 *
 	 */
 	public void mostrar(){
@@ -111,5 +123,4 @@ public class tablaSimbolos {
 		}
 		
 	}
-	
 }
