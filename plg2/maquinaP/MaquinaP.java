@@ -54,7 +54,7 @@ public class MaquinaP {
 
 	/**
 	 * El constructor de la clase MaquinaP que solo tiene el buffer de lectura del fichero como parametro de entrada.
-	 * @param f Recibe como parametro el fichero a ejecutar para poder inicializar todo.
+	 * @param file Recibe como parametro el fichero a ejecutar para poder inicializar todo.
 	 *
 	 */	
 	public MaquinaP(File file) {
@@ -454,9 +454,9 @@ public class MaquinaP {
 	 * se disminuye en 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta en uno el contador del programa.
 	 * 
 	 * (R27) mod:
-	 * Pila[ST-1] ← Pila [ ST – 1 ] % Pila [ ST ]
-	 * ST ← ST - 1
-	 * PC ← PC + 1
+	 * Pila[ST-1] <-- Pila [ ST - 1 ] % Pila [ ST ]
+	 * ST <-- ST - 1
+	 * PC <-- PC + 1
 	 * 
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
