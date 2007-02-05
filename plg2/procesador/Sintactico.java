@@ -116,7 +116,7 @@ public class Sintactico{
 		lexico.lexer(); //consumo ;
 		Atributo atrDec = Dec();
 		if (TS.existeID(atrDec.getId())){
-			throw new Exception("El identificador " + atrDec.getId() + " está duplicado");
+			throw new Exception("El identificador " + atrDec.getId() + " esta duplicado");
 		}
 		if (heredado.getTipo().equals("error")){
 			atrRDecs.setTipo("error");
@@ -138,7 +138,7 @@ public class Sintactico{
 		Atributo atrDec = new Atributo();
 		Token tk = lexico.lexer(); //consumo el tipo
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("Declaraci�n incorrecta en l�nea " + lexico.getLinea());
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 		}
 		tk = lexico.lexer(); //consumo el iden
 		atrDec.setTipo(atrTipo.getTipo());
@@ -163,7 +163,7 @@ public class Sintactico{
 			atrTipo.setTipo("bool");
 			return atrTipo;
 		}
-		throw new Exception("Tipo incorrecto en línea " + lexico.getLinea());
+		throw new Exception("Tipo incorrecto en linea " + lexico.getLinea());
 	}
 	
 	/**
@@ -236,12 +236,12 @@ public class Sintactico{
 		String tipo = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getTipo();
 		atrIAsig.setTipo(tipo);
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
-			throw new Exception("Error en la asignación en línea: " + lexico.getLinea());
+			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
 	    }
 		lexico.lexer();//Consumimos =
 		Atributo atrExpOr= ExpOr();
 		if (!atrExpOr.getTipo().equals(atrIAsig.getTipo())){
-			throw new Exception("Error de tipos en línea: " + lexico.getLinea());
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		int dir = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getDir();
 		codigo.genIns("desapila-dir", dir);
@@ -281,7 +281,7 @@ public class Sintactico{
 		String op = genOpOr((lexico.lexer()).getLexema());
 		Atributo atrExpAnd = ExpAnd();
 		if (!atrExpAnd.getTipo().equals("bool") || !heredado.getTipo().equals("bool")){
-			throw new Exception("Error de tipos en línea: " + lexico.getLinea());
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		else{
 			atrExpAnd.setTipo("bool");
@@ -289,7 +289,7 @@ public class Sintactico{
 				codigo.genIns(op);
 			}
 			else{
-				throw new Exception("Error en línea " + lexico.getLinea() + ": operador no válido");
+				throw new Exception("Error en linea " + lexico.getLinea() + ": operador no válido");
 			}
 		}
 		atrRExpOr = RExpOr(atrExpAnd);
@@ -329,7 +329,7 @@ public class Sintactico{
 		String op = genOpAnd((lexico.lexer()).getLexema());
 		Atributo atrExpRel = ExpRel();
 		if (!atrExpRel.getTipo().equals("bool") || !heredado.getTipo().equals("bool")){
-			throw new Exception("Error de tipos en línea: " + lexico.getLinea());
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		else{
 			atrExpRel.setTipo("bool");
@@ -380,7 +380,7 @@ public class Sintactico{
 		
 		atrRExpRel = ExpAd();
 		if (heredado.getTipo().equals("error") || atrRExpRel.getTipo().equals("error")){
-			throw new Exception("Error de tipos en línea: " + lexico.getLinea());
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		else if (!heredado.getTipo().equals(atrRExpRel.getTipo())) {
 			atrRExpRel.setTipo("error");
@@ -430,7 +430,7 @@ public class Sintactico{
 		String op = genOpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
 		if (!atrExpMul.getTipo().equals("int") || !heredado.getTipo().equals("int")){
-			throw new Exception("Error de tipos en línea: " + lexico.getLinea());
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		else{
 			atrRExpAd.setTipo("int");
@@ -491,7 +491,7 @@ public class Sintactico{
 			atrRExpMul.setTipo("bool");
 		}
 		else{
-			throw new Exception("Error de tipos en línea: " + lexico.getLinea());
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		atrRExpMul = RExpMul(atrRExpMul);
 		return atrRExpMul;
@@ -527,7 +527,7 @@ public class Sintactico{
 			lexico.lexer(); //Cosumimos '('
 			atrFact = ExpOr();
 			if (!lexico.reconoce(CategoriaLexica.TKPCI)){
-				throw new Exception(" Error de parentización, en linea: " + lexico.getLinea());
+				throw new Exception(" Error de parentizacion, en linea: " + lexico.getLinea());
 			}
 			lexico.lexer(); //Cosumimos ')'
 			return atrFact;

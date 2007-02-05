@@ -12,7 +12,7 @@ public class Main {
 	 * @param args Parametros de entrada. En este caso no se utilizan.
 	 */
 	public static void main(String[] args) {
-
+		System.out.println("Main main");	
 		GUI mainGui = new GUI();
 		mainGui.main();
 		

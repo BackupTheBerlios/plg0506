@@ -1,10 +1,15 @@
-int i;
-bool b;
-bool c
+bool b1;
+bool b2;
+int i1;
+int i2;
+int i3;
+
+
 {
-i = !10;
-i = i + 1;
-b = +true;
-c = (i <= 11);
-b = (c && b)
+i1 = 5 + 1;
+i2 = 2;
+i3 = i1 / 2;
+i2 = i1 * i2;
+b1 = (1 > 1);
+b2 = (i2 <= i3) || b1;
 }

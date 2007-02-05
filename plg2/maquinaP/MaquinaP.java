@@ -59,6 +59,7 @@ public class MaquinaP {
 	 */	
 	public MaquinaP(File file) {
 		super();
+		System.out.println("Constructor Maquina P");
 		String f = file.toString();
 		pila = new Stack();
 		PC = 0;
@@ -85,6 +86,7 @@ public class MaquinaP {
 	 * @return String con los pasos ejecutados y estados de la pila.
 	 */
 	public String getPasos() {
+		System.out.println("getPasos");
 		return pasos;
 	}
 
@@ -93,6 +95,7 @@ public class MaquinaP {
 	 * @return String con los pasos ejecutados y estados de la pila.
 	 */
 	public int getH() {
+		System.out.println("getH");
 		return H;
 	}
 	
@@ -101,6 +104,7 @@ public class MaquinaP {
 	 * @param h Entero que controla el estado actual de la pila, ademas es donde se refleja el error.
 	 */
 	public void setH(int h) {
+		System.out.println("setH");
 		H = h;
 	}
 	
@@ -109,6 +113,7 @@ public class MaquinaP {
 	 * @return Vector donde cada celda es una posicion de Memoria.
 	 */
 	public Vector getMem() {
+		System.out.println("getMem");
 		return Mem;
 	}
 	
@@ -117,6 +122,7 @@ public class MaquinaP {
 	 * @param mem Se recibe un vector a modo de memoria de Progrma.
 	 */
 	public void setMem(Vector mem) {
+		System.out.println("setMem");
 		Mem = mem;
 	}
 	
@@ -125,6 +131,7 @@ public class MaquinaP {
 	 * @return Entero que indica el numero de instruccion.
 	 */
 	public int getPC() {
+		System.out.println("getPC");
 		return PC;
 	}
 	
@@ -133,6 +140,7 @@ public class MaquinaP {
 	 * @param pc Entero para actualizar la nueva poscion del programa.
 	 */
 	public void setPC(int pc) {
+		System.out.println("setPC");
 		PC = pc;
 	}
 	
@@ -141,6 +149,7 @@ public class MaquinaP {
 	 * @return Devuelve la pila del programa.
 	 */
 	public Stack getPila() {
+		System.out.println("getPila");
 		return pila;
 	}
 	
@@ -149,6 +158,7 @@ public class MaquinaP {
 	 * @param pila una nueva pila con valores y operaciones.
 	 */
 	public void setPila(Stack pila) {
+		System.out.println("setPila");
 		this.pila = pila;
 	}
 	
@@ -157,6 +167,7 @@ public class MaquinaP {
 	 * @return Vector con el contenido del programa.
 	 */
 	public Vector getProg() {
+		System.out.println("getProg");
 		return Prog;
 	}
 	
@@ -165,6 +176,7 @@ public class MaquinaP {
 	 * @param prog Se recibe el vector con el nuevo programa.
 	 */
 	public void setProg(Vector prog) {
+		System.out.println("setProg");
 		Prog = prog;
 	}
 	
@@ -173,6 +185,7 @@ public class MaquinaP {
 	 * @return Entero que apunta a la cima de la pila de la maquina.
 	 */
 	public int getST() {
+		System.out.println("getST");
 		return ST;
 	}
 	
@@ -181,6 +194,7 @@ public class MaquinaP {
 	 * @param st Recibe por parametro el entero con el que cambiar la cima de la pila.
 	 */
 	public void setST(int st) {
+		System.out.println("setST");
 		ST = st;
 	}
 	
@@ -189,6 +203,7 @@ public class MaquinaP {
 	 * @return Returns the fichero.
 	 */
 	public FileReader getFichero() {
+		System.out.println("getFichero");
 		return fichero;
 	}
 
@@ -197,6 +212,7 @@ public class MaquinaP {
 	 * @param fichero The fichero to set.
 	 */
 	public void setFichero(FileReader fichero) {
+		System.out.println("setFichero");
 		this.fichero = fichero;
 	}
 
@@ -210,6 +226,7 @@ public class MaquinaP {
 	 * @exception java.io.IOException Se lanza y se captura en este mismo metodo.
 	 */
 	private Vector damePrograma(FileReader f){
+		System.out.println("damePrograma");
 		Vector v=new Vector();
 		BufferedReader entrada = null;
 	    try {
@@ -234,6 +251,7 @@ public class MaquinaP {
 	 * @param tam Recibe un entero con el tamao que ha de aumentar.
 	 */
 	private void aumentoMem(int tam){
+		System.out.println("aumentoMem");
 		for(int i = Mem.size();i<tam+1;i++){
 			Mem.add(i,null);
 		}
@@ -245,6 +263,7 @@ public class MaquinaP {
 	 * @param l Instruccion que se esta ejecutando.
 	 */
 	private boolean hasInt(String l) {
+		System.out.println("hasInt");
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
 	}
 	
@@ -257,6 +276,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public String ejecuta() throws Exception{
+		System.out.println("ejecuta");
 		String i;
 		String[] linea;
 		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
@@ -337,6 +357,7 @@ public class MaquinaP {
 	 * @return String con el contenido del vector Memoria.
 	 */
 	public String resultadoMem(){
+		System.out.println("resultadoMem");
 		String s="\n"+"Memoria :"+"\n";
 		for (int i=0;i<Mem.size();i++){
 			if(Mem.elementAt(i)!=null){
@@ -365,6 +386,7 @@ public class MaquinaP {
 	 */
 
 	public void suma() throws Exception{
+		System.out.println("suma");
 		if (ST<1){
 			throw new Exception("ERROR: Suma. La pila no contiene los datos necesarios.");
 		}
@@ -389,6 +411,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void resta()throws Exception{
+		System.out.println("resta");
 		if (ST<1){
 			throw new Exception("ERROR: Resta. La pila no contiene los datos necesarios.");
 		}
@@ -413,6 +436,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void multiplica()throws Exception{
+		System.out.println("multiplica");
 		if (ST<1){
 			throw new Exception("ERROR: Multiplica. La pila no contiene los datos necesarios.");
 		}
@@ -437,6 +461,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void divide()throws Exception{
+		System.out.println("divide");
 		if (ST<1){
 			throw new Exception("ERROR: Divide. La pila no contiene los datos necesarios.");
 		}
@@ -461,6 +486,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void modulo()throws Exception{
+		System.out.println("modulo");
 		if (ST<1){
 			throw new Exception("ERROR: Modulo. La pila no contiene los datos necesarios.");
 		}
@@ -484,6 +510,7 @@ public class MaquinaP {
 	 * @param n
 	 */
 	public void apila (int n){
+		System.out.println("apila");
 		ST=ST+1;
 		pila.push(new Integer (n));
 		PC=PC+1;
@@ -503,7 +530,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void apila_dir (int d) throws Exception{
-		//System.out.println("Estoy en apila-dir")
+		System.out.println("apila-dir");
 		ST = ST + 1; 
 		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
@@ -513,13 +540,13 @@ public class MaquinaP {
 					else throw new Exception("ERROR: Variable sin inicializar.");
 					PC = PC + 1;
 				}
-				else{				
-					throw new Exception("ERROR: Variable sin declarar.");
+				else {				
+					throw new Exception("ERROR: Variable sin inicializar.");
 				}
 			}
-			else{
-				throw new Exception("ERROR: Puntero sin inicializar.");
-			}
+		}
+		else{
+			throw new Exception("ERROR: Variable sin declarar.");
 		}
 	}
 	
@@ -539,6 +566,7 @@ public class MaquinaP {
 	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
+		System.out.println("desapila_dir");
 		if (ST<0){
 			throw new Exception("ERROR: Desapila_dir. La pila no contiene los datos necesarios.");
 		}
@@ -552,10 +580,6 @@ public class MaquinaP {
 					Mem.set(d,pila.pop());
 				}
 			}
-			else{
-				throw new Exception("ERROR: Puntero sin inicializar.");
-			}
-			
 		}
 		ST = ST -1;
 		PC = PC + 1;
@@ -568,6 +592,7 @@ public class MaquinaP {
 	 *	H <-- 1
 	 */
 	public void eof(){
+		System.out.println("eof");
 		H=1;
 	}
 	
@@ -578,6 +603,7 @@ public class MaquinaP {
 	 * H <-- -1
 	 */
 	public void error(){
+		System.out.println("error");
 		H = -1;
 	}
 	
@@ -595,6 +621,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void and() throws Exception{
+		System.out.println("and");
 		if (ST<1){
 			throw new Exception("ERROR: And. La pila no contiene los datos necesarios.");
 		}
@@ -624,6 +651,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void or()throws Exception{
+		System.out.println("or");
 		if (ST<1){
 			throw new Exception("ERROR: Or. La pila no contiene los datos necesarios.");
 		}
@@ -651,6 +679,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void not()throws Exception{
+		System.out.println("not");
 		if (ST<0){
 			throw new Exception("ERROR: Not. La pila no contiene los datos necesarios.");
 		}
@@ -676,6 +705,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void menos()throws Exception{
+		System.out.println("menos");
 		if (ST<0){
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
 		}
@@ -696,6 +726,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mas()throws Exception{
+		System.out.println("mas");
 		if (ST<0){
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
 		}
@@ -713,6 +744,7 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void menor()throws Exception{
+		System.out.println("menor");
 		if (ST<1){
 			throw new Exception("ERROR: Menor. La pila no contiene los datos necesarios.");
 		}
@@ -742,6 +774,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void menorIgual()throws Exception{
+		System.out.println("menorIgual");
 		if (ST<1){
 			throw new Exception("ERROR: Menor o igual. Memoria sin inicializar.");
 		}
@@ -771,6 +804,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mayor()throws Exception{
+		System.out.println("mayor");
 		if (ST<1){
 			throw new Exception("ERROR: Mayor. La pila no contiene los datos necesarios.");
 		}
@@ -800,6 +834,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mayorIgual()throws Exception{
+		System.out.println("mayorIgual");
 		if (ST<1){
 			throw new Exception("ERROR: Mayor o igual. La pila no contiene los datos necesarios.");
 		}
@@ -829,6 +864,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void igual()throws Exception{
+		System.out.println("igual");
 		if (ST<1){
 			throw new Exception("ERROR: Igual. La pila no contiene los datos necesarios.");
 		}
@@ -858,6 +894,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void distinto()throws Exception{
+		System.out.println("distinto");
 		if (ST<1){
 			throw new Exception("ERROR: Distinto. La pila no contiene los datos necesarios.");
 		}
@@ -879,6 +916,7 @@ public class MaquinaP {
 	 * @return String con el contenido de la Pila
 	 */
 	public String muestraPila(){
+		System.out.println("muestraPila");
 		Stack aux = new Stack();
 		String pilas="El contenido de la pila es: \n";
 		while(!pila.isEmpty()){
