@@ -152,4 +152,20 @@ public class CategoriaLexica {
 	 * Valor para reconocer el caracter '}'
 	 */
 	public static final int TKLLCI		= 28;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'if'
+	 */
+	public static final int TKIF		= 29;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'else'
+	 */
+	public static final int TKELSE		= 30;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'then'
+	 */
+	public static final int TKTHEN		= 31;
+	
 }

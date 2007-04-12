@@ -31,6 +31,7 @@ public class Sintactico{
 	Lexico lexico;
 	tablaSimbolos TS;
 	Codigo codigo;
+	int etq;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -67,9 +68,10 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	private boolean Prog() throws Exception{
-		//System.out.println("Prog");
+		System.out.println("Prog");
 		boolean errProg = true;
 		boolean errDecs = Decs();
+		etq = 0;
 		if (lexico.reconoce(CategoriaLexica.TKLLAP)){
 			lexico.lexer(); //consumo {
 			boolean errIs = Is();
@@ -172,7 +174,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private boolean Is() throws Exception{
-		//System.out.println("Is");
+		System.out.println("Is");
 		Atributo atrI = I(); 
 		Atributo atrRIs = RIs(atrI);
 		if (atrRIs.getTipo().equals("error")){
@@ -211,9 +213,52 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo I() throws Exception{
-		//System.out.println("I");
-		Atributo atrI = IAsig();
+		System.out.println("I");
+		Atributo atrI = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKIF)){
+			System.out.println("If");
+			atrI = IIf();
+		}
+		else{
+			atrI = IAsig();
+		}
 		return atrI;
+	}
+	
+	/**
+	 * IIf ::= if (Exp) then I PElse
+	IIf.cod = Exp.cod || if-f (PElse.etqi) || I.cod || PElse.cod
+	Exp.etqh = IIf.etqh
+	I.etqh = ExpOr.etq+1
+	PElse.etqh = I.etq
+	IIf.etq = PElse.etq
+
+	 * @return
+	 * @throws Exception
+	 */
+	private Atributo IIf() throws Exception{
+		
+		
+		return new Atributo();
+	}
+		
+	/**
+	 * 
+PElse ::= else I 
+	PElse.cod = ir-a (I.etq) || I.cod
+	I.etqh = PElse.etqi = PElse.etqh+1
+	PElse.etq = I.etq
+PElse ::= λ
+	PElse.cod = λ
+	PElse.etq = PElse.etqi = Pelse.etqh
+
+	 * @return
+	 * @throws Exception
+	 */
+	private Atributo PElse() throws Exception{
+		
+		
+		return new Atributo();
 	}
 	
 	/**

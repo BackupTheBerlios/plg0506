@@ -231,7 +231,8 @@ public class Lexico {
 						}
 						
 			/*
-			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
+			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true', si es la palabra reservada
+			 * 'then' o es un identificador.
 			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 't':	compara = cmp(posicion, "true");
@@ -239,8 +240,14 @@ public class Lexico {
 							return new Token("true",CategoriaLexica.TKTRUE);
 						}
 						else{
-							String aux = leeIdentificador(posicion);
-							return new Token (aux,CategoriaLexica.TKIDEN);
+							compara = cmp(posicion, "then");
+							if (compara){
+								return new Token("then",CategoriaLexica.TKTHEN);
+							}
+							else{
+								String aux = leeIdentificador(posicion);
+								return new Token (aux,CategoriaLexica.TKIDEN);
+							}
 						}
 			/*
 			 * Si detectamos 'f' hay que discernir si es el valor booleano 'false' o es un identificador.
@@ -256,7 +263,8 @@ public class Lexico {
 						}
 						
 			/*
-			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
+			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int', si es la palabra reservada
+			 * 'if' o es un identificador.
 			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
 			case 'i':	compara = cmp(posicion, "int");
@@ -264,8 +272,14 @@ public class Lexico {
 							return new Token("int",CategoriaLexica.TKINT);
 						}
 						else{
-							String aux = leeIdentificador(posicion);
-							return new Token (aux,CategoriaLexica.TKIDEN);
+							compara = cmp(posicion, "if");
+							if (compara){
+								return new Token("if",CategoriaLexica.TKIF);
+							}
+							else{
+								String aux = leeIdentificador(posicion);
+								return new Token (aux,CategoriaLexica.TKIDEN);
+							}
 						}
 			/*
 			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
@@ -280,6 +294,19 @@ public class Lexico {
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
 
+						/*
+						 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
+						 * Para leer identificadores, usamos leeIdentificador().  
+						 */
+			case 'e':	compara = cmp(posicion, "else");
+						if (compara){
+							return new Token("else",CategoriaLexica.TKELSE);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+						
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.
