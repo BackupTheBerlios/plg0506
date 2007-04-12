@@ -215,7 +215,10 @@ public class Sintactico{
 	private Atributo I() throws Exception{
 		System.out.println("I");
 		Atributo atrI = new Atributo();
-		if (lexico.reconoce(CategoriaLexica.TKIF)){
+		if (lexico.reconoce(CategoriaLexica.TKLLAP)){
+			atrI = ICompuesta();
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKIF)){
 			System.out.println("If");
 			atrI = IIf();
 		}
@@ -224,7 +227,41 @@ public class Sintactico{
 		}
 		return atrI;
 	}
+	/**
+	 *ICompuesta (out err)::=  
+	 *reconoce ({)
+	 *IsOpc (out err1)
+	 *reconoce (})
+	 *(err  ← err1)
+	 */
 	
+	private Atributo ICompuesta() throws Exception{
+		lexico.lexer(); //consumimos {
+		Atributo atrIsOpc = IsOpc();
+		if (! lexico.reconoce(CategoriaLexica.TKLLCI)){
+			throw new Exception("Error falta '}' en linea: " + lexico.getLinea());
+		}
+		lexico.lexer(); //consumimos }
+		atrIsOpc.setTipo("");
+		return atrIsOpc;
+	}
+	/**
+	 * IsOpc (out err)::= λ
+	 *(err  ← false)	
+	 *IsOpc (out err)::= Is (out err1)
+	 *(err  ← err1)
+	 */
+	private Atributo IsOpc() throws Exception{
+		Atributo atrIs = new Atributo();
+		// IsOpc ::= λ 
+		if (! lexico.reconoce(CategoriaLexica.TKLLCI)){
+			if (Is()){
+				atrIs.setTipo("error");
+			}
+		}
+		atrIs.setTipo("");
+		return atrIs;
+	}
 	/**
 	 * IIf ::= if (Exp) then I PElse
 	IIf.cod = Exp.cod || if-f (PElse.etqi) || I.cod || PElse.cod
