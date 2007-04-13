@@ -334,6 +334,10 @@ public class MaquinaP {
 					igual();
 				else if (linea[0].compareTo("distinto")==0)
 					distinto();
+				else if (linea[0].compareTo("ir-a")==0)
+					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
+				else if (linea[0].compareTo("ir-f")==0)
+					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
 				else{
@@ -908,6 +912,40 @@ public class MaquinaP {
 		}
 		ST = ST -1;
 		PC = PC + 1;
+	}
+	
+	/**
+	 *   ir-a (cont) 
+	 *	 PC = cont
+	 * @param cont
+	 * @throws Exception
+	 */
+	public void ir_a(int cont) throws Exception{
+		System.out.println("ir-a");
+		PC = cont;
+	}
+	
+	/**
+	 * ir-f (cont) 
+		si Pila[ST] = 0 entonces
+		PC = cont
+		Sino 
+		PC = PC+1
+		ST = ST+1	
+
+	 * @param cont
+	 * @throws Exception
+	 */
+	public void ir_f (int cont) throws Exception{
+		System.out.println("ir-f");
+		int c1= ((Integer)pila.pop()).intValue();
+		if (c1==0){
+			PC = cont;
+		}
+		else{
+			PC= PC + 1;
+		}
+		ST = ST - 1;
 	}
 	
 	/**

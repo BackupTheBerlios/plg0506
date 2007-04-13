@@ -270,13 +270,64 @@ public class Sintactico{
 	PElse.etqh = I.etq
 	IIf.etq = PElse.etq
 
+I ::= IIf
+	I.err=IIf.err
+
+IIf ::= if Exp then I PElse
+	IIf.err = (Exp.tipo ≠ bool) ∨ I.err ∨ PElse.err
+
+PElse ::= else I 
+	PElse.err = I.err
+
+PElse ::= λ 
+	PElse.err = false
+
+IIf ::= {ExpOr.tsh = IIf.tsh ; Exp.etqh = IIf.etqh}
+	if (ExpOr) then
+		{I.tsh = ExpOr.ts
+		I.etqh = ExpOr.etq+1} 
+	I 
+		{PElse.tsh = IIf.tsh; PElse.etqh = I.etq}
+	PElse
+	{IIf.err = ExpOr.tipo ≠ bool Ú I.err Ú PElse.err
+	IIf.cod = Exp.cod || if-f (PElse.etqi) || I.cod || PElse.cod;
+	IIf.etq = PElse.etq}
+
+PElse ::= {I.tsh = Pelse.tsh; I.etqh = PElse.etqi = PElse.etqh+1}
+	else I 
+	{Pelse.err = I.err; PElse.cod = ir-a (I.etq) || I.cod; PElse.etq = I.etq}
+
+PElse ::= λ
+		{PElse.err = false; PElse.cod = λ; PElse.cod = λ; 
+		PElse.etq = PElse.etqi = Pelse.etqh}
+
+
 	 * @return
 	 * @throws Exception
 	 */
 	private Atributo IIf() throws Exception{
+		Atributo atrIf = new Atributo();
+		lexico.lexer();//Consumimos el IF
+		if (!lexico.reconoce(CategoriaLexica.TKPAP)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el parentesis '('");
+		}
+		lexico.lexer(); //Consumimos el '('
+		Atributo atrExpOr = ExpOr();
+		if (!atrExpOr.getTipo().equals("bool")){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " La condicion de la instrucción IF ha de ser de tipo bool");
+		}
+		if (!lexico.reconoce(CategoriaLexica.TKPCI)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el parentesis ')'");
+		}
+		lexico.lexer();//Consumimos el ')'
+		if (!lexico.reconoce(CategoriaLexica.TKTHEN)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el then de la instrucción IF");
+		}
+		lexico.lexer();//Consumimos THEN
 		
+		Atributo atrI = I();
 		
-		return new Atributo();
+		return atrIf;
 	}
 		
 	/**
@@ -304,7 +355,7 @@ PElse ::= λ
 	 * @throws Exception
 	 */
 	private Atributo IAsig() throws Exception{
-		//System.out.println("IAsig");
+		System.out.println("IAsig");
 		Atributo atrIAsig = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			atrIAsig.setTipo("error");
@@ -327,6 +378,7 @@ PElse ::= λ
 		}
 		int dir = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getDir();
 		codigo.genIns("desapila-dir", dir);
+		etq++;
 		return atrIAsig;
 	}
 
@@ -369,6 +421,7 @@ PElse ::= λ
 			atrExpAnd.setTipo("bool");
 			if (op != ""){
 				codigo.genIns(op);
+				etq++;
 			}
 			else{
 				throw new Exception("Error en linea " + lexico.getLinea() + ": operador no válido");
@@ -417,6 +470,7 @@ PElse ::= λ
 			atrExpRel.setTipo("bool");
 			if (op != ""){
 				codigo.genIns(op);
+				etq++;
 			}
 			else{
 				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
@@ -471,6 +525,7 @@ PElse ::= λ
 			atrRExpRel.setTipo("bool");
 			if (op != ""){
 				codigo.genIns(op);
+				etq++;
 			}
 			else{
 				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
@@ -518,6 +573,7 @@ PElse ::= λ
 			atrRExpAd.setTipo("int");
 			if (op != ""){
 				codigo.genIns(op);
+				etq++;
 			}
 			else{
 				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
@@ -564,6 +620,7 @@ PElse ::= λ
 			atrRExpMul.setTipo("int");
 			if (op != ""){
 				codigo.genIns(op);
+				etq++;
 			}
 			else{
 				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
@@ -591,17 +648,20 @@ PElse ::= λ
 			atrFact.setTipo("int");
 			lexico.lexer(); //Cosumimos el entero
 			codigo.genIns("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
+			etq++;
 			return atrFact;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
 			atrFact.setTipo("bool");
 			codigo.genIns("apila",1);
+			etq++;			
 			lexico.lexer(); //Cosumimos 'true'
 			return atrFact;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
 			atrFact.setTipo("bool");
 			codigo.genIns("apila",0);
+			etq++;
 			lexico.lexer(); //Cosumimos 'false'
 			return atrFact;
 		}
@@ -622,6 +682,7 @@ PElse ::= λ
 				atrFact.setTipo(tipo);
 				int dir =((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
 				codigo.genIns("apila-dir", dir);
+				etq++;
 			}
 			else{
 				atrFact.setTipo("error");
@@ -633,6 +694,7 @@ PElse ::= λ
 			String op = genOpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
 			atrFact = Fact();
 			codigo.genIns(op);
+			etq++;
 			if (!atrFact.getTipo().equals("bool")){
 					atrFact.setTipo("error");
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
@@ -647,6 +709,7 @@ PElse ::= λ
 			String op = genOpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
 			atrFact = Fact();
 			codigo.genIns(op);
+			etq++;
 			if (!atrFact.getTipo().equals("int")){
 					atrFact.setTipo("error");
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
