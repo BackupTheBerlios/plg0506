@@ -236,6 +236,7 @@ public class Sintactico{
 	 */
 	
 	private Atributo ICompuesta() throws Exception{
+		System.out.println("ICompuesta");
 		lexico.lexer(); //consumimos {
 		Atributo atrIsOpc = IsOpc();
 		if (! lexico.reconoce(CategoriaLexica.TKLLCI)){
@@ -252,6 +253,7 @@ public class Sintactico{
 	 *(err  ← err1)
 	 */
 	private Atributo IsOpc() throws Exception{
+		System.out.println("IsOpc");
 		Atributo atrIs = new Atributo();
 		// IsOpc ::= λ 
 		if (! lexico.reconoce(CategoriaLexica.TKLLCI)){
@@ -263,49 +265,12 @@ public class Sintactico{
 		return atrIs;
 	}
 	/**
-	 * IIf ::= if (Exp) then I PElse
-	IIf.cod = Exp.cod || if-f (PElse.etqi) || I.cod || PElse.cod
-	Exp.etqh = IIf.etqh
-	I.etqh = ExpOr.etq+1
-	PElse.etqh = I.etq
-	IIf.etq = PElse.etq
-
-I ::= IIf
-	I.err=IIf.err
-
-IIf ::= if Exp then I PElse
-	IIf.err = (Exp.tipo ≠ bool) ∨ I.err ∨ PElse.err
-
-PElse ::= else I 
-	PElse.err = I.err
-
-PElse ::= λ 
-	PElse.err = false
-
-IIf ::= {ExpOr.tsh = IIf.tsh ; Exp.etqh = IIf.etqh}
-	if (ExpOr) then
-		{I.tsh = ExpOr.ts
-		I.etqh = ExpOr.etq+1} 
-	I 
-		{PElse.tsh = IIf.tsh; PElse.etqh = I.etq}
-	PElse
-	{IIf.err = ExpOr.tipo ≠ bool Ú I.err Ú PElse.err
-	IIf.cod = Exp.cod || if-f (PElse.etqi) || I.cod || PElse.cod;
-	IIf.etq = PElse.etq}
-
-PElse ::= {I.tsh = Pelse.tsh; I.etqh = PElse.etqi = PElse.etqh+1}
-	else I 
-	{Pelse.err = I.err; PElse.cod = ir-a (I.etq) || I.cod; PElse.etq = I.etq}
-
-PElse ::= λ
-		{PElse.err = false; PElse.cod = λ; PElse.cod = λ; 
-		PElse.etq = PElse.etqi = Pelse.etqh}
-
-
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	private Atributo IIf() throws Exception{
+		System.out.println("IIf");
 		Atributo atrIf = new Atributo();
 		lexico.lexer();//Consumimos el IF
 		if (!lexico.reconoce(CategoriaLexica.TKPAP)){
@@ -324,29 +289,46 @@ PElse ::= λ
 			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el then de la instrucción IF");
 		}
 		lexico.lexer();//Consumimos THEN
-		
+		codigo.emite("ir-f"); 
+		int etqs1=etq;
+		etq++;
 		Atributo atrI = I();
-		
+		codigo.emite("ir-a");
+		int etqs2 = etq;
+		etq++;
+		codigo.parchea(etqs1, etq);
+		Atributo atrPElse = PElse();
+		codigo.parchea(etqs2,etq);
+		if ((atrI.getTipo().equals("error")) || (atrPElse.getTipo().equals("error"))){
+			atrIf.setTipo("error");
+		}
+		else{
+			atrIf.setTipo("");
+		}
 		return atrIf;
 	}
 		
 	/**
 	 * 
-PElse ::= else I 
-	PElse.cod = ir-a (I.etq) || I.cod
-	I.etqh = PElse.etqi = PElse.etqh+1
-	PElse.etq = I.etq
-PElse ::= λ
-	PElse.cod = λ
-	PElse.etq = PElse.etqi = Pelse.etqh
-
 	 * @return
 	 * @throws Exception
 	 */
 	private Atributo PElse() throws Exception{
-		
-		
-		return new Atributo();
+		System.out.println("PElse");
+		Atributo atrElse = new Atributo();
+		atrElse.setTipo("");
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			return atrElse;
+		}
+		if (!lexico.reconoce(CategoriaLexica.TKELSE)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el else de la instrucción IF o un ';'");
+		}
+		lexico.lexer();//Consumimos ELSE
+		Atributo atrI = I();
+		if (atrI.getTipo().equals("error")){
+			atrElse.setTipo("error");
+		}
+		return atrElse;
 	}
 	
 	/**

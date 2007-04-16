@@ -97,6 +97,30 @@ public class Codigo {
 	}
 	
 	/**
+	 * Método que genera el código necesario para hacer ir-f o ir-a
+	 * @param s String contiene el código ir-f o ir-a
+	 */
+	public void emite(String s){
+		if (s.startsWith("ir-f")){
+			genIns(s);
+		}
+		if (s.startsWith("ir-a")){
+			genIns(s);
+		}
+	}
+	/**
+	 * Método que parchea la dirección a sumándole la dirección de b
+	 * @param a int a parchear
+	 * @param b int necesario para hacer el parcheo
+	 */
+	public void parchea(int a, int b){
+		String i = (String)cod.elementAt(a) + " " + b;
+		cod.setElementAt(i,a);
+		//System.out.println("Paso por parchea con: "+ cod.get(a) + "He aadido: " + b);
+	}
+	
+	
+	/**
 	 * Mtodo que imprime por pantalla el contenido del atributo cod. No tiene parmetros de entrada ni de salida.
 	 * 
 	 */
