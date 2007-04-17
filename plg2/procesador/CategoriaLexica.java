@@ -168,4 +168,13 @@ public class CategoriaLexica {
 	 */
 	public static final int TKTHEN		= 31;
 	
+	/**
+	 * Valor para reconocer la palabra reservada 'while'
+	 */
+	public static final int TKWHILE		= 32;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'do'
+	 */
+	public static final int TKDO		= 33;
 }

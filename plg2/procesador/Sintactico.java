@@ -222,6 +222,10 @@ public class Sintactico{
 			System.out.println("If");
 			atrI = IIf();
 		}
+		else if (lexico.reconoce(CategoriaLexica.TKWHILE)){
+			System.out.println("While");
+			atrI = IWhile();
+		}
 		else{
 			atrI = IAsig();
 		}
@@ -329,6 +333,46 @@ public class Sintactico{
 			atrElse.setTipo("error");
 		}
 		return atrElse;
+	}
+	
+	/**
+	 * 
+	 *  
+	 * @return
+	 * @throws Exception
+	 */
+	private Atributo IWhile() throws Exception{
+		Atributo atrWhile = new Atributo();
+		lexico.lexer(); //consumimos while
+		if (!lexico.reconoce(CategoriaLexica.TKPAP)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el parentesis '('");
+		}
+		lexico.lexer(); //Consumimos el '('
+		int etqAux = etq;
+		Atributo atrExpOr = ExpOr();
+		if (!atrExpOr.getTipo().equals("bool")){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " La condicion de la instrucción IF ha de ser de tipo bool");
+		}
+		if (!lexico.reconoce(CategoriaLexica.TKPCI)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el parentesis ')'");
+		}
+		lexico.lexer();//Consumimos el ')'
+		if (!lexico.reconoce(CategoriaLexica.TKDO)){
+			throw new Exception ("Error en linea: " + lexico.getLinea() + " Falta el 'do' en la expresión");
+		}
+		lexico.lexer(); //Consumimos el do
+		codigo.emite("ir-f");
+		int etqAux1 = etq;
+		etq++;
+		Atributo atrI = I();
+		codigo.emite("ir-a " + etqAux);
+		etq++;
+		codigo.parchea(etqAux1, etq);
+		if(atrI.getTipo().equals("error"))
+			atrWhile.setTipo("error");
+		else
+			atrWhile.setTipo("");
+		return atrWhile;
 	}
 	
 	/**

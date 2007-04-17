@@ -2,17 +2,18 @@ bool b1;
 bool b2;
 int i1;
 int i2;
-int i3
+int i3;
+int pako
 {
 i1 = 5 + 1;
 i2 = 2;
 i3 = i1 / 2;
 i2 = i1 * i2;
 b1 = (1 > 1);
-if ((b1 || true) && false) then {
-	i1 = 25;
-	i3 = 35
-}
-else;
+pako = 0;
+while (pako < 10) do {
+	pako = pako + 2;
+	pako = pako - 1
+};
 b2 = (i2 <= i3) || b1
 }
