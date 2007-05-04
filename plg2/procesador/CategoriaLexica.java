@@ -177,4 +177,12 @@ public class CategoriaLexica {
 	 * Valor para reconocer la palabra reservada 'do'
 	 */
 	public static final int TKDO		= 33;
+	/**
+	 * Valor para reconocer la palabra reservada 'type'
+	 */
+	public static final int TKTYPE		= 34;
+	/**
+	 * Valor para reconocer la palabra reservada 'reg'
+	 */
+	public static final int TKREG		= 35;
 }
