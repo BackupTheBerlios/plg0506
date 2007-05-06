@@ -162,6 +162,7 @@ public class Lexico {
 			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
 			case '%':	return new Token("%",CategoriaLexica.TKMOD);
+			case ':':	return new Token(":",CategoriaLexica.TKDOSPTOS);
 			case '/': compara = cmp (posicion, "//");
 						if (compara){
 							leeComentario(--posicion);

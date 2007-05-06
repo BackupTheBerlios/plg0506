@@ -185,4 +185,8 @@ public class CategoriaLexica {
 	 * Valor para reconocer la palabra reservada 'reg'
 	 */
 	public static final int TKREG		= 35;
+	/**
+	 * Valor para reconocer el caracter ':'
+	 */
+	public static final int TKDOSPTOS	= 36;
 }

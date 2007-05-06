@@ -7,8 +7,16 @@ package tablaSimbolos;
  */
 public class propiedades {
 
-	String tipo;
+	/**
+	 * ExpresionTipo tipo;
+	 * String clase;
+	 * int dir;
+	 * int tam;
+	 */
+	
+	ExpresionTipo tipo;
 	int dir;
+	String clase;
 	
 	/**
 	 * Constructor de la clase sin parametros.
@@ -22,7 +30,7 @@ public class propiedades {
 	 * @param tipo String con el tipo del token.
 	 * @param dir Entero con la direccion de memoria de la variable.
 	 */
-	public propiedades(String tipo, int dir) {
+	public propiedades(ExpresionTipo tipo, int dir) {
 		super();
 		this.tipo = tipo;
 		this.dir = dir;
@@ -32,7 +40,7 @@ public class propiedades {
 	 * Accesor para el atributo tipo de la clase.
 	 * @return Devuelve el tipo que contiene el atributo.
 	 */
-	public String getTipo() {
+	public ExpresionTipo getTipo() {
 		return tipo;
 	}
 
@@ -40,7 +48,7 @@ public class propiedades {
 	 * Mutador el atributo tipo de la clase.
 	 * @param tipo Nuevo valor para el atributo tipo
 	 */
-	public void setTipo(String tipo) {
+	public void setTipo(ExpresionTipo tipo) {
 		this.tipo = tipo;
 	}
 
@@ -64,7 +72,7 @@ public class propiedades {
 	 * Metodo que convierte en un String la lista de Atributos
 	 * @return Devuelve un String con los valores que contienen sus atributos
 	 */
-	public String toString(){
+/*	public String toString(){
 		if (this != null){	
 			String aux;
 			aux = "( ";
@@ -77,7 +85,7 @@ public class propiedades {
 		else {
 			return "null";
 		}
-	}
+	}*/
 	
 	/**
 	 * Metodo que devuelve un booleano con la igualdad de los atributos
@@ -86,5 +94,13 @@ public class propiedades {
 	 */
 	public boolean equals(propiedades a){
 		return (this.getTipo() ==a.getTipo());
+	}
+
+	public String getClase() {
+		return clase;
+	}
+
+	public void setClase(String clase) {
+		this.clase = clase;
 	}
 }
