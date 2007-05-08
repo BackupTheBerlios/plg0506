@@ -64,7 +64,10 @@ public class tablaSimbolos {
 		}
 		else{
 			propiedades prop = new propiedades(tipo, this.dir);
-			this.dir ++;
+			if (tipo.getTipo().equals("reg"))
+				this.dir = this.dir + tipo.getParams().size();
+			else
+				this.dir ++;
 			this.tabla.put(id,prop);
 			return true;	
 		}	

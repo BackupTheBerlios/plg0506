@@ -163,6 +163,7 @@ public class Lexico {
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
 			case '%':	return new Token("%",CategoriaLexica.TKMOD);
 			case ':':	return new Token(":",CategoriaLexica.TKDOSPTOS);
+			case '.':	return new Token(".",CategoriaLexica.TKPUNTO);
 			case '/': compara = cmp (posicion, "//");
 						if (compara){
 							leeComentario(--posicion);
