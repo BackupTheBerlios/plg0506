@@ -188,9 +188,9 @@ public class CategoriaLexica {
 	/**
 	 * Valor para reconocer el caracter ':'
 	 */
-	public static final int TKDOSPTOS	= 36;
+//	public static final int TKDOSPTOS	= 36;
 	/**
 	 * Valor para reconocer el caracter '.'
 	 */
-	public static final int TKPUNTO		= 37;
+	public static final int TKPUNTO		= 36;
 }

@@ -1,6 +1,8 @@
 package tablaSimbolos;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
+import procesador.*;
 
 /**
  * La clase <B>tablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
@@ -58,12 +60,13 @@ public class tablaSimbolos {
 	 * @return boolean Se devuelve verdadero si todo ha sido correcto. Falso en caso contrario.
 	 * @throws Exception Excepcion generada si el identificador ya existe, se capturara en otro lugar.
 	 */
-	public boolean addID(String id, ExpresionTipo tipo) throws Exception{
+	public boolean addID(String id, ExpresionTipo tipo, String clase) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
 			propiedades prop = new propiedades(tipo, this.dir);
+			prop.setClase(clase);
 			if (tipo.getTipo().equals("reg"))
 				this.dir = this.dir + tipo.getParams().size();
 			else
@@ -124,6 +127,17 @@ public class tablaSimbolos {
 			aux = aux.concat(" )");
 			System.out.println(aux);
 		}
-		
+	}
+	
+	public boolean Hay_campo(Vector campos,String id){
+		boolean enc = false;
+		int i = 0;
+		while (i<campos.size()){
+			Atributo a = (Atributo)campos.elementAt(i);
+			if (a.getId().equals(id))
+				return true;
+			i++;
+		}
+		return enc;
 	}
 }

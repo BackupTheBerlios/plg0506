@@ -14,6 +14,7 @@ public class ExpresionTipo {
 	int nelems;
 	int tam;
 	Vector params;
+	String id;
 	
 	/**
 	 * Contructor sin parmetros para la clase ExpresionTipo 
@@ -22,6 +23,15 @@ public class ExpresionTipo {
 	public ExpresionTipo() {
 		super();
 		this.t = "";
+		this.tbase = null;
+		this.nelems = 0;
+		this.tam = 0;
+		this.params = new Vector();
+	}
+	
+	public ExpresionTipo(String tipo) {
+		super();
+		this.t = tipo;
 		this.tbase = null;
 		this.nelems = 0;
 		this.tam = 0;
@@ -144,6 +154,14 @@ public class ExpresionTipo {
 		this.tam = tam;
 	}
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	/**
 	 * Mtodo que convierte en un String la lista de ExpresionTipo
 	 */

@@ -96,7 +96,7 @@ public class Sintactico{
 		//System.out.println("Decs");
 		Atributo atrDec = Dec();
 		TS = new tablaSimbolos();
-		TS.addID(atrDec.getId(),atrDec.getTipo());
+		TS.addID(atrDec.getId(),atrDec.getTipo(),atrDec.getClase());
 		Atributo atrRDecs = RDecs(atrDec);
 		if (atrRDecs.getTipo().equals("error")){
 			return true;
@@ -127,7 +127,7 @@ public class Sintactico{
 			atrRDecs.getTipo().setTipo("error");
 			return atrRDecs;
 		}
-		TS.addID(atrDec.getId(),atrDec.getTipo());
+		TS.addID(atrDec.getId(),atrDec.getTipo(),atrDec.getClase());
 		atrRDecs = RDecs(atrDec);
 		return atrRDecs;
 	}
@@ -166,13 +166,18 @@ public class Sintactico{
 				throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 			}
 			Token tk = lexico.lexer(); //consumo iden
-			atrTipo.setId(tk.getLexema());
-			ExpresionTipo et = new ExpresionTipo();
-			et.setElems(atrReg.getTipo().getParams().size());
-			et.setParams(atrReg.getTipo().getParams());
-			et.setTipo(atrTipo.getTipo().getTipo());
-			atrTipo.setTipo(et);
-			return atrTipo;
+			if (!referenciaErronea(atrTipo.getTipo()) &&
+					!TS.existeID(tk.getLexema())){
+				atrTipo.setId(tk.getLexema());
+				ExpresionTipo et = new ExpresionTipo();
+				et.setTam(atrReg.getTipo().getParams().size());
+				et.setParams(atrReg.getTipo().getParams());
+				et.setTipo(atrTipo.getTipo().getTipo());
+				atrTipo.setTipo(et);
+				return atrTipo;
+			}
+			else
+				throw new Exception("Variable ya declarada en linea " + lexico.getLinea());
 		}
 		else if ((atrTipo.getTipo()).getTipo().equals("array")){
 			/**
@@ -191,10 +196,11 @@ public class Sintactico{
 		lexico.lexer(); //consumo {
 		Vector campos = new Vector();
 		Atributo campo = DecCampo();
-		campos = DecRCampos(campos,campo);
+		int despla = 0;
+		campos = DecRCampos(campos,campo, despla);
 		ExpresionTipo et = new ExpresionTipo();
 		et.setParams(campos);
-		et.setElems(campos.size());
+		et.setTam(campos.size());
 		a.setTipo(et);
 		if (!lexico.reconoce(CategoriaLexica.TKLLCI)){
 			throw new Exception ("ERROR: Necesitas una }");
@@ -205,27 +211,33 @@ public class Sintactico{
 	
 	public Atributo DecCampo() throws Exception {
 		Atributo a = new Atributo();
+		Atributo b = Tipo();
+		if (referenciaErronea(b.getTipo()))
+				throw new Exception("Referencia erronea en linea " + lexico.getLinea());
+		a.setTipo(b.getTipo());
+		lexico.lexer(); // consumo el tipo
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 		}
 		Token tk = lexico.lexer(); //consumo iden
 		a.setId(tk.getLexema());
-		if (!lexico.reconoce(CategoriaLexica.TKDOSPTOS)){
-			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
-		}
-		lexico.lexer(); //consumo :
-		Atributo b = Tipo();
-		a.setTipo(b.getTipo());
-		lexico.lexer(); // consumo el tipo
 		return a; 
 	}
 	
-	public Vector DecRCampos(Vector v, Atributo campo)throws Exception{
-		v.add(campo);
+	public Vector DecRCampos(Vector v, Atributo campo, int despla)throws Exception{
+		campo.setDesplazamiento(despla);
+		System.out.println("Campo : " + campo.getId() + " : " + campo.getDesplazamiento());
+		if (!v.contains(campo)){
+			v.add(campo);
+		}
+		else{
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
+		}
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer(); //consumo ;
 			campo = DecCampo();
-			DecRCampos(v,campo);
+			despla++;
+			DecRCampos(v,campo,despla);
 			return v;
 		}
 		else if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -260,17 +272,34 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			et.setTipo("int");
 			atrTipo.setTipo(et);
+			et.setTam(1);
 			return atrTipo;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKBOOL)){
 			et.setTipo("bool");
 			atrTipo.setTipo(et);
+			et.setTam(1);
 			return atrTipo;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKREG)){
 			et.setTipo("reg");
 			atrTipo.setTipo(et);
 			return atrTipo;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+			Token tk = lexico.getNextToken();
+			if (TS.existeID(tk.getLexema())){
+				propiedades p = (propiedades)TS.getTabla().get(tk.getLexema());
+				if (p.getClase().equals("tipo")){
+				//if (((propiedades)TS.getTabla().get(tk.getLexema())).getClase().equals("tipo")){
+					et.setTipo("ref");
+					et.setId(tk.getLexema());
+					atrTipo.setTipo(et);
+					return atrTipo;
+				}
+				else
+					throw new Exception("Tipo incorrecto en linea " + lexico.getLinea());
+			}
 		}
 		throw new Exception("Tipo incorrecto en linea " + lexico.getLinea());
 	}
@@ -498,57 +527,25 @@ public class Sintactico{
 		System.out.println("IAsig");
 		ExpresionTipo et = new ExpresionTipo();
 		Atributo atrIAsig = new Atributo();
-		atrIAsig.setTipo(et);
+		atrIAsig.setTipo(et);	
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			atrIAsig.getTipo().setTipo("error");
 			return atrIAsig;
 		}
-		Token tk = lexico.lexer(); //Consumimos el iden
-		atrIAsig.setId(tk.getLexema());
-		if (!TS.existeID(atrIAsig.getId())){
-			throw new Exception ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
-		}
-		propiedades p = (propiedades)TS.getTabla().get(atrIAsig.getId());
-		String tipo = (p.getTipo()).getTipo();
-		String tipoC = "";
-		int indiceCampo = 0;
-		et.setTipo(tipo);
-		atrIAsig.setTipo(et);
-		//REGISTRO
-		if (tipo.equals("reg")){
-			if (!lexico.reconoce(CategoriaLexica.TKPUNTO)){
-				throw new Exception("Error en el acceso a campo en linea: " + lexico.getLinea());
-		    }
-			lexico.lexer(); //consumo el .
-			if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-				throw new Exception("Error en el acceso a campo en linea: " + lexico.getLinea());
-		    }
-			Token tk2 = lexico.lexer();//consumo el iden (campo)
-			indiceCampo = TipoCampo(tk.getLexema(),tk2.getLexema());
-			p = (propiedades)TS.getTabla().get(atrIAsig.getId());
-			Atributo c = (Atributo)p.getTipo().getParams().elementAt(indiceCampo);
-			tipoC = c.getTipo().getTipo();
-			
-		}
+		Token tk = lexico.getNextToken();
+		atrIAsig = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
 			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
 	    }
-		lexico.lexer();//Consumimos =
+		lexico.lexer();//consumo =
+		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		Atributo atrExpOr= ExpOr();
-		int dir = ((propiedades)TS.getTabla().get(atrIAsig.getId())).getDir();
-		if (tipo.equals("reg")){
-			if (!atrExpOr.getTipo().getTipo().equals(tipoC)){
-				throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-			}
-		}
-		else{
-			if (!atrExpOr.getTipo().getTipo().equals(tipo)){
-				throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-			}
-		}
-		dir = dir + indiceCampo;
-		codigo.genIns("desapila-dir", dir);
+		codigo.genIns("desapila-dir",dir + atrIAsig.getDesplazamiento());
 		etq++;
+		if ((atrIAsig.getTipo().getTipo().equals("error")) ||
+				!compatible(atrIAsig,atrExpOr) ||
+				(atrExpOr.getTipo().getTipo().equals("error")))
+			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		return atrIAsig;
 	}
 
@@ -848,6 +845,7 @@ public class Sintactico{
 			lexico.lexer(); //Cosumimos 'false'
 			return atrFact;
 		}
+		// Fact ::= (ExpOr)
 		if (lexico.reconoce(CategoriaLexica.TKPAP)) {
 			lexico.lexer(); //Cosumimos '('
 			atrFact = ExpOr();
@@ -857,36 +855,24 @@ public class Sintactico{
 			lexico.lexer(); //Cosumimos ')'
 			return atrFact;
 		}
+		// Fact ::= Mem
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
-			int indiceCampo = 0;
-			Token tk = lexico.lexer(); //Consumimos el iden
-			if (TS.existeID(tk.getLexema())){
-				atrFact.setId(tk.getLexema());
-				String tipo = ((ExpresionTipo)(((propiedades)TS.getTabla().get(atrFact.getId())).getTipo())).getTipo();
-				int dir =((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
-				/* Si es registro */
-				if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
-					lexico.lexer();//consumo el .
-					if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-						throw new Exception(" Error de acceso a campo, en linea: " + lexico.getLinea());
-					}
-					Token tk2 = lexico.lexer();
-					indiceCampo = TipoCampo(tk.getLexema(),tk2.getLexema());
-					propiedades p = (propiedades)TS.getTabla().get(atrFact.getId());
-					Atributo c = (Atributo)p.getTipo().getParams().elementAt(indiceCampo);
-					tipo = c.getTipo().getTipo();
-					dir = dir + indiceCampo;
-				}				
-				atrFact.getTipo().setTipo(tipo);
-				codigo.genIns("apila-dir", dir);
-				etq++;
+			atrFact = Mem();
+			if (!atrFact.getTipo().getTipo().equals("error")){
+				Atributo a = new Atributo(new ExpresionTipo("int"));
+				Atributo b = new Atributo(new ExpresionTipo("bool"));
+				if (compatible(atrFact,a) || compatible(atrFact,b)){
+					int dir = ((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
+					codigo.genIns("apila-dir",dir + atrFact.getDesplazamiento());
+					etq++;
+				}
 			}
 			else{
-				atrFact.getTipo().setTipo("error");
+				throw new Exception("Error de tipos en linea: " + lexico.getLinea());				
 			}
 			return atrFact;
 		}
-
+		//Fact ::= opUnarioLog Fact 
 		if (lexico.reconoce(CategoriaLexica.TKNOT)){
 			String op = genOpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
 			atrFact = Fact();
@@ -901,7 +887,7 @@ public class Sintactico{
 			}
 			return atrFact;
 		}
-		
+		//Fact ::= opUnarioArit Fact 
 		if ( (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
 			String op = genOpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
 			atrFact = Fact();
@@ -919,6 +905,74 @@ public class Sintactico{
 		
 		atrFact.getTipo().setTipo("error");
 		return atrFact;
+	}
+
+	    	/*****etq=etq + resultado.accesoVar(lexemaActual,ts);****/
+	    	
+	private Atributo Mem()throws Exception{
+		Atributo atrMem = new Atributo();
+		Token tk = lexico.getNextToken();
+		atrMem.setId(tk.getLexema());
+		int desp = 0;
+		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
+		ExpresionTipo tipo = ((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo()));
+		tipo = ref(tipo);
+		atrMem.setTipo(tipo);
+		Atributo atrRMem2 = null;
+		if (dir >= 0){
+			etq = etq + 1;
+			lexico.lexer(); //consumo el iden
+			atrRMem2 = RMem(atrMem);
+			if (atrRMem2.getTipo() != null){
+				tipo = atrRMem2.getTipo();
+				desp = atrRMem2.getDesplazamiento();
+			}
+		}
+		else{
+			throw new Exception(" Variable no declarada, en linea: " + lexico.getLinea());
+		}
+		atrMem.setTipo(tipo);
+		atrMem.setDesplazamiento(desp);
+		return atrMem;
+	}
+
+	private Atributo RMem (Atributo atr) throws Exception{
+		Atributo atrRMem = null;
+		ExpresionTipo etRMem = new ExpresionTipo(); 
+		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
+			lexico.lexer(); //consumo el .
+			//if (atr.getTipo().getTipo().equals("reg")){
+				if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+					Token tk = lexico.lexer();
+					int desp = DesplaCampo(atr.getId(),tk.getLexema());
+					if (desp != -1){
+						etRMem = ((Atributo)atr.getTipo().getParams().elementAt(desp)).getTipo();
+						if (etRMem.getTipo().equals("ref")){
+							atr.setTipo(((propiedades)TS.getTabla().get(etRMem.getId())).getTipo());
+							atr.setDesplazamiento(atr.getDesplazamiento() + desp);
+							atr.setId(etRMem.getId());
+						}
+						else{
+							atr.setTipo(etRMem);
+							atr.setDesplazamiento(desp);
+						}
+						etq += 2;
+						atrRMem = RMem(atr);
+						if (atrRMem.getTipo() != null){
+							atr.setTipo(atrRMem.getTipo());
+							atr.setDesplazamiento(atrRMem.getDesplazamiento());
+						}
+					}
+					else{
+						throw new Exception(" Campo no existente en el registro, en linea: " + lexico.getLinea());	
+					}
+				}
+/*			}
+			else{
+				throw new Exception("Declaracion de tipo mal construida, en linea: " + lexico.getLinea());				
+			}*/
+		}
+		return atr;
 	}
 	
 	/**
@@ -1021,17 +1075,77 @@ public class Sintactico{
 		else return "";
 	}
 	
-	public int TipoCampo(String id,String campo){
+	public int DesplaCampo(String id,String campo){
 		Hashtable tabla = TS.getTabla();
 		propiedades p = (propiedades) tabla.get(id);
 		ExpresionTipo et = p.getTipo();
 		Vector v = et.getParams();
-		int i = 0;
-		while (i < v.size() && !(((Atributo)v.elementAt(i)).getId().equals(campo)))
-			i++;
-		if (i == v.size())
-			return -1;
+		int despla = -1;
+		if (TS.Hay_campo(v, campo)){
+			int i = 0;
+			while (i < v.size()){
+				Atributo a = ((Atributo)v.elementAt(i));
+				if (a.getId().equals(campo)){
+					return a.getDesplazamiento();
+				}
+				i++;
+			}
+		}
+		return despla;
+	}
+	
+	private ExpresionTipo ref(ExpresionTipo t) throws Exception{
+		if (t.getTipo().equals("ref")) {
+			if (TS.existeID(t.getId())) {
+				t = (ExpresionTipo)((propiedades)((TS.getTabla()).get(t.getId()))).getTipo();
+				return ref(t);
+			} else{
+				throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
+			}
+		}
 		else
-			return i;
+			return t;
+	}
+	
+	private boolean compatible(Atributo atr1, Atributo atr2){
+		Vector visitados = new Vector();
+		ExpresionTipo t1 = atr1.getTipo();
+		ExpresionTipo t2 = atr2.getTipo();	
+		return compatible2(t1, t2, visitados);
+	}
+	
+	private boolean compatible2 (ExpresionTipo t1, ExpresionTipo t2, Vector visitados){
+		Tupla pareja = new Tupla (t1,t2);
+		if (visitados.contains(pareja))
+			return true;
+		else
+			visitados.add(pareja);
+		if ((t1.getTipo().equals(t2.getTipo())) && 
+				(t1.getTipo().equals("int") || t1.getTipo().equals("bool")))
+			return true;
+		else if (t1.getTipo().equals("ref")){
+			t1 = (ExpresionTipo)((propiedades)TS.getTabla().get(t1.getId())).getTipo();
+			return compatible2(t1,t2,visitados);
+		}
+		else if (t2.getTipo().equals("ref")){
+			t2 = (ExpresionTipo)((propiedades)TS.getTabla().get(t2.getId())).getTipo();
+			return compatible2(t1,t2,visitados);
+		}
+		else if((t1.getTipo().equals(t2.getTipo())) && 
+				(t1.getParams().size() == t2.getParams().size())){
+			Atributo atr1,atr2;
+			for (int i=0;i<t1.getParams().size();i++){
+				atr1 = (Atributo)t1.getParams().elementAt(i);
+				atr2 = (Atributo)t2.getParams().elementAt(i);
+				if (!compatible2(atr1.getTipo(),atr2.getTipo(),visitados))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean referenciaErronea(ExpresionTipo et) throws Exception{
+		return ((et.getTipo().equals("ref")) && (!TS.existeID(et.getId())));
 	}
 }
