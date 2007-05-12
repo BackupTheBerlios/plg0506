@@ -920,7 +920,7 @@ public class Sintactico{
 		atrMem.setTipo(tipo);
 		Atributo atrRMem2 = null;
 		if (dir >= 0){
-			etq = etq + 1;
+			//etq = etq + 1;
 			lexico.lexer(); //consumo el iden
 			atrRMem2 = RMem(atrMem);
 			if (atrRMem2.getTipo() != null){
@@ -956,7 +956,7 @@ public class Sintactico{
 							atr.setTipo(etRMem);
 							atr.setDesplazamiento(desp);
 						}
-						etq += 2;
+						//etq += 2;
 						atrRMem = RMem(atr);
 						if (atrRMem.getTipo() != null){
 							atr.setTipo(atrRMem.getTipo());
