@@ -162,7 +162,7 @@ public class Lexico {
 			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
 			case '%':	return new Token("%",CategoriaLexica.TKMOD);
-//			case ':':	return new Token(":",CategoriaLexica.TKDOSPTOS);
+			case '^':	return new Token(":",CategoriaLexica.TKPUNTERO);
 			case '.':	return new Token(".",CategoriaLexica.TKPUNTO);
 			case '/': compara = cmp (posicion, "//");
 						if (compara){
@@ -329,8 +329,14 @@ public class Lexico {
 							return new Token("do",CategoriaLexica.TKDO);
 						}
 						else{
-							String aux = leeIdentificador(posicion);
-							return new Token (aux,CategoriaLexica.TKIDEN);
+							compara = cmp(posicion, "delete");
+							if (compara){
+								return new Token ("delete",CategoriaLexica.TKDELETE);
+							}
+							else{
+								String aux = leeIdentificador(posicion);
+								return new Token (aux,CategoriaLexica.TKIDEN);
+							}
 						}
 						
 			case 'r':	compara = cmp(posicion, "reg");
@@ -340,8 +346,16 @@ public class Lexico {
 						else{
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
-						}						
-			
+						}	
+						
+			case 'n':	compara = cmp(posicion, "new");
+						if (compara){
+							return new Token("new",CategoriaLexica.TKNEW);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}			
 			
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
