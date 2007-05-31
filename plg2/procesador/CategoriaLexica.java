@@ -201,4 +201,8 @@ public class CategoriaLexica {
 	 * Valor para reconocer la palabra reservada 'delete'
 	 */
 	public static final int TKDELETE		= 39;
+	/**
+	 * Valor para reconocer la palabra reservada 'array'
+	 */
+	public static final int TKARRAY		= 40;
 }

@@ -357,6 +357,14 @@ public class Lexico {
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}			
 			
+			case 'a':	compara = cmp(posicion, "array");
+						if (compara){
+							return new Token("array",CategoriaLexica.TKARRAY);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.
