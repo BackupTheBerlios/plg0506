@@ -129,7 +129,7 @@ public class tablaSimbolos {
 		}
 	}
 	
-	public boolean Hay_campo(Vector campos,String id){
+	public boolean hayCampo(Vector campos,String id){
 		boolean enc = false;
 		int i = 0;
 		while (i<campos.size()){

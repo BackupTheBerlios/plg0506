@@ -289,7 +289,9 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKLLCI)){
 				throw new Exception ("ERROR: Necesitas una }");
 			}
+			System.out.println(lexico.getNextToken().getLexema());
 			lexico.lexer(); //consumo }
+			System.out.println(lexico.getNextToken().getLexema());
 			return atrTipo;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
@@ -556,7 +558,7 @@ public class Sintactico{
 				compatibles(atrIAsig.getTipo(),et2)){
 			codigo.genIns("desapila-dir",dir + atrIAsig.getDesplazamiento());
 		}else{
-			mueve(atrIAsig.getTipo().getTam());
+			codigo.genIns("mueve", atrIAsig.getTipo().getTam());
 		}
 		etq++;
 		return atrIAsig;
@@ -895,7 +897,7 @@ public class Sintactico{
 			if (!atrFact.getTipo().getTipo().equals("bool")){
 					atrFact.getTipo().setTipo("error");
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-			}
+			}	
 			else{
 				atrFact.getTipo().setTipo("bool");
 			}
@@ -920,10 +922,53 @@ public class Sintactico{
 		atrFact.getTipo().setTipo("error");
 		return atrFact;
 	}
-
-	    	/*****etq=etq + resultado.accesoVar(lexemaActual,ts);****/
-	    	
-	private Atributo Mem()throws Exception{
+	
+	private Atributo Mem() throws Exception{
+		Atributo atrMem = new Atributo();
+		ExpresionTipo et = new ExpresionTipo();
+		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+			Token tk = lexico.lexer();
+			if (TS.existeID(tk.getLexema())){
+				propiedades p = (propiedades)TS.getTabla().get(tk.getLexema());
+				if (p.getClase().equals("var")){
+					et = ref(p.getTipo());
+					codigo.genIns("apila", p.getDir());
+					etq = etq + 1;
+				}else{
+					et.setTipo("error");
+				}
+			}else{
+				et.setTipo("error");
+			}
+			atrMem.setTipo(et);
+			return atrMem;
+		}else{
+			Atributo atrMem1 = Mem();
+			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
+				lexico.lexer();
+				if (!lexico.reconoce(CategoriaLexica.TKIDEN))
+					throw new Exception("Error en linea: " + lexico.getLinea());
+				Token tk = lexico.lexer();
+				if (atrMem1.getTipo().getTipo().equals("reg")){
+					if (TS.hayCampo(atrMem1.getTipo().getParams(),tk.getLexema())){
+						int indice = DesplaCampo(atrMem1.getId(),tk.getLexema());
+						ExpresionTipo et1 = (ExpresionTipo)atrMem1.getTipo().getParams().elementAt(indice);
+						atrMem.setTipo(ref(et1));
+						codigo.genIns("apila",atrMem.getDesplazamiento());
+						codigo.genIns("suma");
+						etq = etq + 2;
+					}else{
+						atrMem.setTipo(new ExpresionTipo("error"));
+					}
+				}else{
+					atrMem.setTipo(new ExpresionTipo("error"));
+				}
+			}
+		}
+		return atrMem;
+	}
+	
+/*	private Atributo Mem()throws Exception{
 		Atributo atrMem = new Atributo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
@@ -981,13 +1026,9 @@ public class Sintactico{
 						throw new Exception(" Campo no existente en el registro, en linea: " + lexico.getLinea());	
 					}
 				}
-/*			}
-			else{
-				throw new Exception("Declaracion de tipo mal construida, en linea: " + lexico.getLinea());				
-			}*/
 		}
 		return atr;
-	}
+	}*/
 	
 	/**
 	 * 
@@ -1095,7 +1136,7 @@ public class Sintactico{
 		ExpresionTipo et = p.getTipo();
 		Vector v = et.getParams();
 		int despla = -1;
-		if (TS.Hay_campo(v, campo)){
+		if (TS.hayCampo(v, campo)){
 			int i = 0;
 			while (i < v.size()){
 				Atributo a = ((Atributo)v.elementAt(i));
@@ -1168,9 +1209,5 @@ public class Sintactico{
 	
 	private boolean referenciaErronea(ExpresionTipo et) throws Exception{
 		return ((et.getTipo().equals("ref")) && (!TS.existeID(et.getId())));
-	}
-	
-	private void mueve (int t){
-		
 	}
 }

@@ -64,7 +64,7 @@ public class MaquinaP {
 		pila = new Stack();
 		PC = 0;
 		H = 0;
-		tamMem= Integer.MAX_VALUE;
+		tamMem = Integer.MAX_VALUE;
 		ST = -1;
 		Mem= new Vector();
 		int i= f.length();
@@ -338,6 +338,8 @@ public class MaquinaP {
 					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("ir-f")==0)
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
+				else if (linea[0].compareTo("mueve")==0)
+					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
 				else{
@@ -947,7 +949,35 @@ public class MaquinaP {
 		}
 		ST = ST - 1;
 	}
-	
+	/**		if (d<tamMem){
+			if (d >= 0){
+				if (d>=Mem.size()){
+					aumentoMem(d);
+					Mem.set(d,pila.pop());
+				}
+				else{
+					Mem.set(d,pila.pop());
+				}
+			}
+		}
+	*/
+	public void mueve (int s){
+		System.out.println("mueve");
+		int c1= ((Integer)pila.pop()).intValue();
+		int c2= ((Integer)pila.pop()).intValue();
+		if ((c2 + s) < tamMem){
+			for (int i=0;i<s;i++){
+				Mem.set(c2+i, Mem.get(c1+i)); 
+			}
+		}else{
+			aumentoMem(c2 + s);
+			for (int i=0;i<s;i++){
+				Mem.set(c2+i, Mem.get(c1+i)); 
+			}
+		}
+		ST = ST - 2;
+		PC = PC + 1;
+	}
 	/**
 	 * Metodo que obtiene el contenido de la pila en un String para ver su contenido.
 	 * 
