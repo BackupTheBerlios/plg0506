@@ -190,19 +190,7 @@ public class CategoriaLexica {
 	 */
 	public static final int TKPUNTO		= 36;
 	/**
-	 * Valor para reconocer el caracter '^'
-	 */
-	public static final int TKPUNTERO	= 37;
-	/**
-	 * Valor para reconocer la palabra reservada 'new'
-	 */
-	public static final int TKNEW		= 38;
-	/**
-	 * Valor para reconocer la palabra reservada 'delete'
-	 */
-	public static final int TKDELETE		= 39;
-	/**
 	 * Valor para reconocer la palabra reservada 'array'
 	 */
-	public static final int TKARRAY		= 40;
+	public static final int TKARRAY		= 37;
 }
