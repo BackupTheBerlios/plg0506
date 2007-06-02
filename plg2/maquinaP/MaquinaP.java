@@ -263,7 +263,7 @@ public class MaquinaP {
 	 * @param l Instruccion que se esta ejecutando.
 	 */
 	private boolean hasInt(String l) {
-		System.out.println("hasInt");
+//		System.out.println("hasInt");
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
 	}
 	
@@ -304,6 +304,10 @@ public class MaquinaP {
 				else if (linea[0].compareTo("suma")==0){
 					suma();
 				}
+				else if (linea[0].compareTo("apila_ind")==0)
+					apila_ind();
+				else if (linea[0].compareTo("desapila_ind")==0)
+					desapila_ind();
 				else if (linea[0].compareTo("resta")==0)
 					resta();
 				else if (linea[0].compareTo("multiplica")==0)
@@ -591,6 +595,49 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 
+	public void apila_ind() throws Exception{
+		System.out.println("apila_ind");
+		int c1 = ((Integer)pila.pop()).intValue();
+		if(c1 < tamMem){
+			if (c1 >= 0){
+				if ((Mem.size() >= c1)&&(!Mem.isEmpty())){
+					if (Mem.elementAt(c1) != null)
+						pila.push(Mem.elementAt(c1));
+					else 
+						throw new Exception("ERROR: Variable sin inicializar.");
+					PC = PC + 1;
+				}else {				
+					throw new Exception("ERROR: Variable sin inicializar.");
+				}
+			}
+		}
+		else{
+			throw new Exception("ERROR: Variable sin declarar.");
+		}
+	}
+	
+	public void desapila_ind() throws Exception{
+		System.out.println("desapila_ind");
+		if (ST == -1){
+			throw new Exception("ERROR: Desapila_ind. La pila vacia.");
+		}		
+		int c1 = ((Integer)pila.pop()).intValue();
+		int c2 = ((Integer)pila.pop()).intValue();
+		if (c2 < tamMem){
+			if (c2 >= 0){
+				if (c2 >= Mem.size()){
+					aumentoMem(c2);
+					Mem.set(c2, new Integer(c1));
+				}
+				else{
+					Mem.set(c2, new Integer(c1));
+				}
+			}
+		}
+		ST = ST - 2;
+		PC = PC + 1;
+	}
+	
 	/**
 	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de fichero.
 	 * 
@@ -949,18 +996,7 @@ public class MaquinaP {
 		}
 		ST = ST - 1;
 	}
-	/**		if (d<tamMem){
-			if (d >= 0){
-				if (d>=Mem.size()){
-					aumentoMem(d);
-					Mem.set(d,pila.pop());
-				}
-				else{
-					Mem.set(d,pila.pop());
-				}
-			}
-		}
-	*/
+	
 	public void mueve (int s){
 		System.out.println("mueve");
 		int c1= ((Integer)pila.pop()).intValue();
