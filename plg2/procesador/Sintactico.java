@@ -173,27 +173,6 @@ public class Sintactico{
 			throw new Exception("Variable ya declarada en linea " + lexico.getLinea());
 	}
 	
-/*	public Atributo DecReg() throws Exception{
-		Atributo a = new Atributo();
-		if (!lexico.reconoce(CategoriaLexica.TKLLAP)){
-			throw new Exception ("ERROR: Necesitas una {");
-		}
-		lexico.lexer(); //consumo {
-		Vector campos = new Vector();
-		Atributo campo = DecCampo();
-		int despla = 0;
-		campos = DecRCampos(campos,campo, despla);
-		ExpresionTipo et = new ExpresionTipo();
-		et.setParams(campos);
-		et.setTam(campos.size());
-		a.setTipo(et);
-		if (!lexico.reconoce(CategoriaLexica.TKLLCI)){
-			throw new Exception ("ERROR: Necesitas una }");
-		}
-		lexico.lexer(); //consumo }
-		return a;
-	}*/
-	
 	public Vector Campos() throws Exception{
 		Vector campos = new Vector();
 		Atributo atrCampo = Campo();
@@ -299,7 +278,6 @@ public class Sintactico{
 			if (TS.existeID(tk.getLexema())){
 				propiedades p = (propiedades)TS.getTabla().get(tk.getLexema());
 				if (p.getClase().equals("tipo")){
-				//if (((propiedades)TS.getTabla().get(tk.getLexema())).getClase().equals("tipo")){
 					et.setTipo("ref");
 					et.setId(tk.getLexema());
 					atrTipo.setTipo(et);
@@ -541,6 +519,7 @@ public class Sintactico{
 			return atrIAsig;
 		}
 		Token tk = lexico.getNextToken();
+//		atrIAsig = Mem(new Atributo());
 		atrIAsig = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
 			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
@@ -556,7 +535,7 @@ public class Sintactico{
 		ExpresionTipo et2 = new ExpresionTipo("bool");		
 		if (compatibles(atrIAsig.getTipo(),et) ||
 				compatibles(atrIAsig.getTipo(),et2)){
-			codigo.genIns("desapila-dir",dir + atrIAsig.getDesplazamiento());
+			codigo.genIns("desapila_ind");
 		}else{
 			codigo.genIns("mueve", atrIAsig.getTipo().getTam());
 		}
@@ -873,13 +852,14 @@ public class Sintactico{
 		// Fact ::= Mem
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			atrFact = Mem();
+			//atrFact = Mem(new Atributo());
 			if (!atrFact.getTipo().getTipo().equals("error")){
 				Atributo a = new Atributo(new ExpresionTipo("int"));
 				Atributo b = new Atributo(new ExpresionTipo("bool"));
 				if (compatibles(atrFact.getTipo(),a.getTipo()) || 
 						compatibles(atrFact.getTipo(),b.getTipo())){
 					int dir = ((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
-					codigo.genIns("apila-dir",dir + atrFact.getDesplazamiento());
+					codigo.genIns("apila_ind");
 					etq++;
 				}
 			}
@@ -923,52 +903,61 @@ public class Sintactico{
 		return atrFact;
 	}
 	
-	private Atributo Mem() throws Exception{
+/*	private Atributo Mem(Atributo a) throws Exception{
 		Atributo atrMem = new Atributo();
 		ExpresionTipo et = new ExpresionTipo();
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 			Token tk = lexico.lexer();
-			if (TS.existeID(tk.getLexema())){
-				propiedades p = (propiedades)TS.getTabla().get(tk.getLexema());
-				if (p.getClase().equals("var")){
-					et = ref(p.getTipo());
-					codigo.genIns("apila", p.getDir());
-					etq = etq + 1;
-				}else{
-					et.setTipo("error");
-				}
-			}else{
-				et.setTipo("error");
-			}
-			atrMem.setTipo(et);
-			return atrMem;
-		}else{
-			Atributo atrMem1 = Mem();
-			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
-				lexico.lexer();
-				if (!lexico.reconoce(CategoriaLexica.TKIDEN))
-					throw new Exception("Error en linea: " + lexico.getLinea());
-				Token tk = lexico.lexer();
-				if (atrMem1.getTipo().getTipo().equals("reg")){
-					if (TS.hayCampo(atrMem1.getTipo().getParams(),tk.getLexema())){
-						int indice = DesplaCampo(atrMem1.getId(),tk.getLexema());
-						ExpresionTipo et1 = (ExpresionTipo)atrMem1.getTipo().getParams().elementAt(indice);
-						atrMem.setTipo(ref(et1));
-						codigo.genIns("apila",atrMem.getDesplazamiento());
-						codigo.genIns("suma");
-						etq = etq + 2;
+			if (!lexico.reconoce(CategoriaLexica.TKPUNTO)){
+				// Mem ::= id
+				if (a.getTipo().getTipo().equals("reg")){
+					if (TS.existeID(a.getId())){
+						propiedades p = (propiedades)TS.getTabla().get(a.id);
+						Vector camposA = ((ExpresionTipo)p.getTipo()).getParams();
+						if (TS.hayCampo(camposA, tk.getLexema())){
+							int indice = DesplaCampo(a.getId(),tk.getLexema());
+							et = ref(p.getTipo());
+							Atributo aux = (Atributo)camposA.elementAt(indice);
+							et.setTipo(((ExpresionTipo)aux.getTipo()).getTipo());
+							atrMem.setTipo(et);
+							atrMem.setId(a.getId());
+							atrMem.setDesplazamiento(indice);
+							//codigo.genIns("apila",a.getDesplazamiento() + indice);
+							//codigo.genIns("suma");
+							//etq = etq + 2;
+							//etq = etq + 1;
+						}else{
+							et.setTipo("error");
+						}
 					}else{
-						atrMem.setTipo(new ExpresionTipo("error"));
+						et.setTipo("error");
 					}
 				}else{
-					atrMem.setTipo(new ExpresionTipo("error"));
+					if (TS.existeID(tk.getLexema())){
+						propiedades p = (propiedades)TS.getTabla().get(tk.getLexema());
+						if (p.getClase().equals("var")){
+							et = ref(p.getTipo());
+							//codigo.genIns("apila", p.getDir() + a.getDesplazamiento());
+							//etq = etq + 1;
+						}else{
+							et.setTipo("error");
+						}
+					}else{
+						et.setTipo("error");
+					}
 				}
+			}else{
+				// Mem ::= Mem.id
+				lexico.lexer();// consumo el .
+				atrMem.setTipo(new ExpresionTipo("reg"));
+				atrMem.setId(tk.getLexema());
+				atrMem = Mem(atrMem);
 			}
 		}
 		return atrMem;
-	}
+	}*/
 	
-/*	private Atributo Mem()throws Exception{
+	private Atributo Mem()throws Exception{
 		Atributo atrMem = new Atributo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
@@ -979,7 +968,8 @@ public class Sintactico{
 		atrMem.setTipo(tipo);
 		Atributo atrRMem2 = null;
 		if (dir >= 0){
-			//etq = etq + 1;
+			codigo.genIns("apila",dir);
+			etq = etq + 1;
 			lexico.lexer(); //consumo el iden
 			atrRMem2 = RMem(atrMem);
 			if (atrRMem2.getTipo() != null){
@@ -1015,7 +1005,9 @@ public class Sintactico{
 							atr.setTipo(etRMem);
 							atr.setDesplazamiento(desp);
 						}
-						//etq += 2;
+						codigo.genIns("apila",desp);
+						codigo.genIns("suma");
+						etq += 2;
 						atrRMem = RMem(atr);
 						if (atrRMem.getTipo() != null){
 							atr.setTipo(atrRMem.getTipo());
@@ -1028,7 +1020,7 @@ public class Sintactico{
 				}
 		}
 		return atr;
-	}*/
+	}
 	
 	/**
 	 * 
