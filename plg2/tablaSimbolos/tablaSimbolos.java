@@ -20,6 +20,7 @@ public class tablaSimbolos {
 		
 	Hashtable tabla;
 	int dir;
+	tablaSimbolos tsPadre;
 
 	/**
 	 * Constructor de la clase y no necesita parametros.
@@ -39,6 +40,16 @@ public class tablaSimbolos {
 		super();
 		this.tabla = tabla;
 		this.dir = 0;
+	}
+	
+	/**
+	 * Constructor de la tabla de simbolos: recibe una tabla padre.
+	 * 
+	 * @param tsPadre Tabla de simbolos padre
+	 */
+	public tablaSimbolos(tablaSimbolos tsPadre) {
+		this();
+		this.tsPadre = tsPadre;
 	}
 	
 	/**
@@ -107,7 +118,15 @@ public class tablaSimbolos {
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
+	
+	public tablaSimbolos getTSPadre() {
+		return tsPadre;
+	}
 
+	public void setTSPadre(tablaSimbolos tsPadre) {
+		this.tsPadre = tsPadre;
+	}
+	
 	/**
 	 * Metodo para mostrar el contenido de la tabla de simbolos. Se pasa el contenido de la tabla a un String y luego se imprime por pantalla.
 	 *
@@ -140,4 +159,5 @@ public class tablaSimbolos {
 		}
 		return enc;
 	}
+
 }
