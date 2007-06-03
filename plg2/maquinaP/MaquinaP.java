@@ -639,6 +639,23 @@ public class MaquinaP {
 	}
 	
 	/**
+	 * apila_ret salva la dir. de retorno de un procedimiento.
+	 * 
+	 * @param ret Dir. de retorno
+	 * @throws Exception
+	 */
+	
+	public void apila_ret(int ret) throws Exception {
+		System.out.println("apila_ret");
+		//Uso funciones ya definidas para aprovechar las comprobaciones
+		apila_dir(0);
+		apila(1);
+		suma();
+		apila(ret);
+		desapila_ind();
+	}
+	
+	/**
 	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de fichero.
 	 * 
 	 * (R8) EOF:
