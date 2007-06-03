@@ -18,7 +18,7 @@ import tablaSimbolos.ExpresionTipo;
 	ExpresionTipo tipo;
 	String id;
 	String clase;
-	int desplazamiento = 0;
+//	int desplazamiento = 0;
 	
 	public Atributo() {
 		super();
@@ -59,11 +59,11 @@ import tablaSimbolos.ExpresionTipo;
 		this.tipo = tipo;
 	}
 
-	public int getDesplazamiento() {
+/*	public int getDesplazamiento() {
 		return desplazamiento;
 	}
 
 	public void setDesplazamiento(int desplazamiento) {
 		this.desplazamiento = desplazamiento;
-	}
+	}*/
 }
