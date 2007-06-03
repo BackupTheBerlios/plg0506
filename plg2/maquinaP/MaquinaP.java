@@ -647,24 +647,16 @@ public class MaquinaP {
 	
 	public void apila_ret(int d) throws Exception {
 		System.out.println("apila_ret");
-		//Uso funciones ya definidas para aprovechar las comprobaciones
 		apila_dir(0);
 		apila(1);
 		suma();
 		apila(d);
 		desapila_ind();
-		/*if (Mem.elementAt(d) == null) throw new Exception("Contenido nulo en dir. de retorno");
-		int dir = (Integer)Mem.elementAt(d);
-		apila(dir + 1);
-		desapila_ind();*/
 		PC++;
 	}
 	
 	public void prologo(int nivel, int tamlocales) throws Exception {
 		System.out.println("prologo");
-		/*int d = 0;
-		if (Mem.elementAt(d) == null) throw new Exception("Contenido nulo en dir. de retorno");
-		int dir = (Integer)Mem.elementAt(d);*/
 		int pc = PC + 1;
 		//
 		apila_dir(0);
