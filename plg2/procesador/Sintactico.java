@@ -595,7 +595,13 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
 			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+		}
+		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
+		}
+		//FIXME
+		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
 		}
@@ -646,7 +652,13 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
 			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+		}
+		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
+		}
+//		FIXME
+		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
 		}
@@ -696,7 +708,13 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
 			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+		}
+		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
+		}
+//		FIXME
+		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
 		}
@@ -752,7 +770,13 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpAd ::= λ
 			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+		}
+		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
+		}
+//		FIXME
+		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
 		}
@@ -805,6 +829,11 @@ public class Sintactico{
 			return heredado;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
+			//RExpMul ::= λ
+			return heredado;
+		}
+//		FIXME
+		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
 		}
@@ -884,7 +913,7 @@ public class Sintactico{
 				Atributo b = new Atributo(new ExpresionTipo("bool"));
 				if (compatibles(atrFact.getTipo(),a.getTipo()) || 
 						compatibles(atrFact.getTipo(),b.getTipo())){
-					int dir = ((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
+					//int dir = ((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
 					codigo.genIns("apila_ind");
 					etq++;
 				}
@@ -933,7 +962,6 @@ public class Sintactico{
 		Atributo atrMem = new Atributo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
-//		int desp = 0;
 		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		ExpresionTipo tipo = ((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo()));
 		tipo = ref(tipo);
@@ -946,14 +974,12 @@ public class Sintactico{
 			atrRMem2 = RMem(atrMem);
 			if (atrRMem2.getTipo() != null){
 				tipo = atrRMem2.getTipo();
-				//desp = atrRMem2.getDesplazamiento();
 			}
 		}
 		else{
 			throw new Exception(" Variable no declarada, en linea: " + lexico.getLinea());
 		}
 		atrMem.setTipo(tipo);
-		//atrMem.setDesplazamiento(desp);
 		return atrMem;
 	}
 
@@ -962,7 +988,6 @@ public class Sintactico{
 		ExpresionTipo etRMem = new ExpresionTipo(); 
 		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 			lexico.lexer(); //consumo el .
-			//if (atr.getTipo().getTipo().equals("reg")){
 				if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 					Token tk = lexico.lexer();
 					int desp = indiceCampo(atr.getId(),tk.getLexema());
@@ -970,12 +995,10 @@ public class Sintactico{
 						etRMem = ((Parametros)atr.getTipo().getParams().elementAt(desp)).getTipo();
 						if (etRMem.getTipo().equals("ref")){
 							atr.setTipo(((propiedades)TS.getTabla().get(etRMem.getId())).getTipo());
-							//atr.setDesplazamiento(atr.getDesplazamiento() + desp);
 							atr.setId(etRMem.getId());
 						}
 						else{
 							atr.setTipo(etRMem);
-							//atr.setDesplazamiento(desp);
 						}
 						codigo.genIns("apila",desp);
 						codigo.genIns("suma");
@@ -983,13 +1006,35 @@ public class Sintactico{
 						atrRMem = RMem(atr);
 						if (atrRMem.getTipo() != null){
 							atr.setTipo(atrRMem.getTipo());
-							//atr.setDesplazamiento(atrRMem.getDesplazamiento());
 						}
 					}
 					else{
 						throw new Exception(" Campo no existente en el registro, en linea: " + lexico.getLinea());	
 					}
 				}
+		}
+		else if(lexico.reconoce(CategoriaLexica.TKCORAP)){
+			lexico.lexer(); // consumo '['
+			atrRMem=ExpOr();
+			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
+				throw new Exception("Falta un corchete de cierre");
+			}
+			lexico.lexer();//consumo el ']'
+			/*
+			 * tipoh2 ← si tipoh0.t = array  tipo1.t = int
+					ref!(tipoh0.tbase, ts)
+				si no <t: err>;
+			emite(apila(tipoh0.tam));
+			emite( multiplica);
+			emite(suma;);
+		etq ← etq + 3;
+			RMem(in tipoh2; out tipo2);
+			tipo0 ← tipo2;
+				fsi
+			 */
+			if (atrRMem.getTipo().getTipo().equals("int") && atr.getTipo().getTipo().equals("array")){
+				
+			}
 		}
 		return atr;
 	}
