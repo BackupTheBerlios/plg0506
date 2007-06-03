@@ -1,4 +1,4 @@
-	package procesador;
+package procesador;
 
 import java.io.File;
 import java.io.IOException;
@@ -272,6 +272,32 @@ public class Sintactico{
 			lexico.lexer(); //consumo }
 			System.out.println(lexico.getNextToken().getLexema());
 			return atrTipo;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKARRAY)){
+			lexico.lexer(); //consumo array
+			Atributo b = Tipo();
+			if (referenciaErronea(b.getTipo())){
+					throw new Exception("Referencia erronea en linea " + lexico.getLinea());
+			}
+			et.setTbase(b.getTipo());
+			lexico.lexer(); // consumo el tipo
+			if (!lexico.reconoce(CategoriaLexica.TKCORAP)){
+				throw new Exception("ERROR: Necesitas un [");
+			}
+			lexico.lexer(); //consumo '['
+			if (!lexico.reconoce(CategoriaLexica.TKINT)){
+				throw new Exception("ERROR: Necesitas un entero para definir el valor del array");
+			}
+			Token tk = lexico.lexer(); //consumo el entero
+			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
+			et.setTipo("array");
+			et.setTam(b.getTipo().getTam() * et.getTam());
+			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
+				throw new Exception("ERROR: Necesitas un ']'");
+			}
+			lexico.lexer(); //consumo ']'			
+			atrTipo.setTipo(et);
+			return atrTipo;			
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 			Token tk = lexico.getNextToken();
@@ -902,61 +928,7 @@ public class Sintactico{
 		atrFact.getTipo().setTipo("error");
 		return atrFact;
 	}
-	
-/*	private Atributo Mem(Atributo a) throws Exception{
-		Atributo atrMem = new Atributo();
-		ExpresionTipo et = new ExpresionTipo();
-		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-			Token tk = lexico.lexer();
-			if (!lexico.reconoce(CategoriaLexica.TKPUNTO)){
-				// Mem ::= id
-				if (a.getTipo().getTipo().equals("reg")){
-					if (TS.existeID(a.getId())){
-						propiedades p = (propiedades)TS.getTabla().get(a.id);
-						Vector camposA = ((ExpresionTipo)p.getTipo()).getParams();
-						if (TS.hayCampo(camposA, tk.getLexema())){
-							int indice = DesplaCampo(a.getId(),tk.getLexema());
-							et = ref(p.getTipo());
-							Atributo aux = (Atributo)camposA.elementAt(indice);
-							et.setTipo(((ExpresionTipo)aux.getTipo()).getTipo());
-							atrMem.setTipo(et);
-							atrMem.setId(a.getId());
-							atrMem.setDesplazamiento(indice);
-							//codigo.genIns("apila",a.getDesplazamiento() + indice);
-							//codigo.genIns("suma");
-							//etq = etq + 2;
-							//etq = etq + 1;
-						}else{
-							et.setTipo("error");
-						}
-					}else{
-						et.setTipo("error");
-					}
-				}else{
-					if (TS.existeID(tk.getLexema())){
-						propiedades p = (propiedades)TS.getTabla().get(tk.getLexema());
-						if (p.getClase().equals("var")){
-							et = ref(p.getTipo());
-							//codigo.genIns("apila", p.getDir() + a.getDesplazamiento());
-							//etq = etq + 1;
-						}else{
-							et.setTipo("error");
-						}
-					}else{
-						et.setTipo("error");
-					}
-				}
-			}else{
-				// Mem ::= Mem.id
-				lexico.lexer();// consumo el .
-				atrMem.setTipo(new ExpresionTipo("reg"));
-				atrMem.setId(tk.getLexema());
-				atrMem = Mem(atrMem);
-			}
-		}
-		return atrMem;
-	}*/
-	
+
 	private Atributo Mem()throws Exception{
 		Atributo atrMem = new Atributo();
 		Token tk = lexico.getNextToken();

@@ -155,6 +155,8 @@ public class Lexico {
 			case '0':	return new Token("0",CategoriaLexica.TKNUM);
 			case '(':	return new Token("(",CategoriaLexica.TKPAP);
 			case ')':	return new Token(")",CategoriaLexica.TKPCI);
+			case '[':	return new Token("[",CategoriaLexica.TKCORAP);
+			case ']':	return new Token("]",CategoriaLexica.TKCORCI);
 			case '{':	return new Token("{",CategoriaLexica.TKLLAP);
 			case '}':	return new Token("}",CategoriaLexica.TKLLCI);
 			case '+':	return new Token("+",CategoriaLexica.TKSUMA);

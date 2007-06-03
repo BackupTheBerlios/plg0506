@@ -214,4 +214,14 @@ public class CategoriaLexica {
 	 */
 	public static final int TKSEP		= 40;
 	
+	/**
+	 * Valor para reconocer la palabra reservada ']'
+	 */
+	public static final int TKCORAP		= 41;
+	
+	/**
+	 * Valor para reconocer la palabra reservada '['
+	 */
+	public static final int TKCORCI		= 42;
+
 }
