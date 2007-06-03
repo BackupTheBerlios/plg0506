@@ -17,6 +17,7 @@ public class propiedades {
 	ExpresionTipo tipo;
 	int dir;
 	String clase;
+	int nivel;
 	
 	/**
 	 * Constructor de la clase sin parametros.
@@ -102,5 +103,13 @@ public class propiedades {
 
 	public void setClase(String clase) {
 		this.clase = clase;
+	}
+
+	public int getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
 	}
 }

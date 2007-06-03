@@ -27,6 +27,8 @@ import java.util.Stack;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
+import tablaSimbolos.*;
+
 public class MaquinaP {
 
 	/*
@@ -714,9 +716,13 @@ public class MaquinaP {
 		PC = pc;
 	}
 	
-	/*public void pasoParametro(modoReal, pFormal) {
-		//FIXME
-	}*/
+	public void pasoParametro(String modoReal, String pformal) {
+		//TODO
+	}
+	
+	public void accesoVar(String infoID) {
+		//TODO
+	}
 	
 	/**
 	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de fichero.

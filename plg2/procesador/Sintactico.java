@@ -1,4 +1,4 @@
-package procesador;
+	package procesador;
 
 import java.io.File;
 import java.io.IOException;
