@@ -13,7 +13,7 @@ public class ExpresionTipo {
 	ExpresionTipo tbase; 
 	int nelems;
 	int tam;
-	Vector<Parametros> params;
+	Vector params;
 	String id;
 	
 	/**
@@ -26,7 +26,7 @@ public class ExpresionTipo {
 		this.tbase = null;
 		this.nelems = 0;
 		this.tam = 0;
-		this.params = new Vector<Parametros>();
+		this.params = new Vector();
 	}
 	
 	public ExpresionTipo(String tipo) {
@@ -35,7 +35,7 @@ public class ExpresionTipo {
 		this.tbase = null;
 		this.nelems = 0;
 		this.tam = 0;
-		this.params = new Vector<Parametros>();
+		this.params = new Vector();
 	}
 	
 	/**
@@ -59,11 +59,11 @@ public class ExpresionTipo {
 	 * Contructor con parmetros para la clase ExpresionTipo
 	 *
 	 */
-	public ExpresionTipo(String tipo, String tbase, int elems, int tam, Vector<Parametros> params) {
+	public ExpresionTipo(String tipo, String tbase, int elems, int tam, Vector params) {
 		super();
 		this.t = tipo;
 		if (tbase != ""){
-			this.tbase = new ExpresionTipo(tbase,"",0,0, new Vector<Parametros>());
+			this.tbase = new ExpresionTipo(tbase,"",0,0, new Vector());
 		}
 		else{
 			tbase = null;
@@ -94,7 +94,7 @@ public class ExpresionTipo {
 	 * @return params
 	 */
 	
-	public Vector<Parametros> getParams() {
+	public Vector getParams() {
 		return params;
 	}
 	
@@ -102,7 +102,7 @@ public class ExpresionTipo {
 	 * Mutador para los parmetros
 	 * @param params Vector que contiene los parmetros
 	 */
-	public void setParams(Vector<Parametros> params) {
+	public void setParams(Vector params) {
 		this.params = params;
 	}
 	
