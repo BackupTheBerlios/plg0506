@@ -684,6 +684,13 @@ public class MaquinaP {
 		pila.push(i);
 	}
 	
+	private void flip() throws Exception {
+		Integer i = (Integer)pila.pop();
+		Integer j = (Integer)pila.pop();
+		pila.push(j);
+		pila.push(i);
+	}
+	
 	public void epilogo(int nivel) throws Exception {
 		System.out.println("epilogo");
 		int pc = PC + 1;
@@ -706,6 +713,10 @@ public class MaquinaP {
 		//
 		PC = pc;
 	}
+	
+	/*public void pasoParametro(modoReal, pFormal) {
+		//FIXME
+	}*/
 	
 	/**
 	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de fichero.

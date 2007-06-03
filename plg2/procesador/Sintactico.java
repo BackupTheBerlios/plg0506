@@ -995,7 +995,7 @@ public class Sintactico{
 					Token tk = lexico.lexer();
 					int desp = DesplaCampo(atr.getId(),tk.getLexema());
 					if (desp != -1){
-						etRMem = ((Atributo)atr.getTipo().getParams().elementAt(desp)).getTipo();
+						etRMem = ((Parametros)atr.getTipo().getParams().elementAt(desp)).getTipo();
 						if (etRMem.getTipo().equals("ref")){
 							atr.setTipo(((propiedades)TS.getTabla().get(etRMem.getId())).getTipo());
 							atr.setDesplazamiento(atr.getDesplazamiento() + desp);
@@ -1185,10 +1185,10 @@ public class Sintactico{
 			else if((t1.getTipo().equals(t2.getTipo())) && 
 						(t1.getTipo().equals("reg")) &&
 						(t1.getParams().size() == t2.getParams().size())){
-					Atributo atr1,atr2;
+					Parametros atr1,atr2;
 					for (int i=0;i<t1.getParams().size();i++){
-						atr1 = (Atributo)t1.getParams().elementAt(i);
-						atr2 = (Atributo)t2.getParams().elementAt(i);
+						atr1 = (Parametros)t1.getParams().elementAt(i);
+						atr2 = (Parametros)t2.getParams().elementAt(i);
 						if (!compatibles2(atr1.getTipo(),atr2.getTipo(),visitados))
 							return false;
 					}
@@ -1198,10 +1198,10 @@ public class Sintactico{
 					(t1.getTipo().equals("proc")) &&
 					(t1.getParams().size() == t2.getParams().size())) {
 				for (int i = 1; i < t1.getParams().size(); i++) {
-					Atributo a1 = (Atributo)t1.getParams().elementAt(i);
-					Atributo a2 = (Atributo)t2.getParams().elementAt(i);
+					Parametros a1 = (Parametros)t1.getParams().elementAt(i);
+					Parametros a2 = (Parametros)t2.getParams().elementAt(i);
 					if (!compatibles2(a1.getTipo(), a2.getTipo(), visitados)
-							|| (a2.getClase().equals("var") && !a1.getClase().equals("var"))) {
+							|| (a2.getModo().equals("var") && !a1.getModo().equals("var"))) {
 						return false;
 					}
 				}
