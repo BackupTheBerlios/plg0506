@@ -1194,6 +1194,19 @@ public class Sintactico{
 					}
 					return true;
 			}
+			else if ((t1.getTipo().equals(t2.getTipo())) && 
+					(t1.getTipo().equals("proc")) &&
+					(t1.getParams().size() == t2.getParams().size())) {
+				for (int i = 1; i < t1.getParams().size(); i++) {
+					Atributo a1 = (Atributo)t1.getParams().elementAt(i);
+					Atributo a2 = (Atributo)t2.getParams().elementAt(i);
+					if (!compatibles2(a1.getTipo(), a2.getTipo(), visitados)
+							|| (a2.getClase().equals("var") && !a1.getClase().equals("var"))) {
+						return false;
+					}
+				}
+				return true;
+			}
 			else
 				return false;
 		}
