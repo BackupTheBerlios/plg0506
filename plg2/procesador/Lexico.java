@@ -349,6 +349,21 @@ public class Lexico {
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
+			case '#':	return new Token("#", CategoriaLexica.TKSEP);
+			case 'p':	compara = cmp(posicion, "proc");
+						if (compara) {
+							return new Token("proc", CategoriaLexica.TKPROC);
+						} else {
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			case 'v':	compara = cmp(posicion, "var");
+						if (compara) {
+							return new Token("var", CategoriaLexica.TKVAR);
+						} else {
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.

@@ -177,20 +177,41 @@ public class CategoriaLexica {
 	 * Valor para reconocer la palabra reservada 'do'
 	 */
 	public static final int TKDO		= 33;
+	
 	/**
 	 * Valor para reconocer la palabra reservada 'type'
 	 */
 	public static final int TKTYPE		= 34;
+	
 	/**
 	 * Valor para reconocer la palabra reservada 'reg'
 	 */
 	public static final int TKREG		= 35;
+	
 	/**
 	 * Valor para reconocer el caracter '.'
 	 */
 	public static final int TKPUNTO		= 36;
+	
 	/**
 	 * Valor para reconocer la palabra reservada 'array'
 	 */
 	public static final int TKARRAY		= 37;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'proc'
+	 */
+	public static final int TKPROC		= 38;
+	
+	/**
+	 * Valor para reconocer la palabra reservada 'var'
+	 */
+	public static final int TKVAR		= 39;
+	
+	/**
+	 * Valor para reconocer el catacter '#' que separa declaraciones y operaciones
+	 * en los procedimientos
+	 */
+	public static final int TKSEP		= 40;
+	
 }
