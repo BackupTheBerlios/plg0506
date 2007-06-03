@@ -176,8 +176,8 @@ public class Sintactico{
 	public Vector Campos() throws Exception{
 		Vector campos = new Vector();
 		Atributo atrCampo = Campo();
-		int despla = 0;
-		campos = RCampos(campos,atrCampo, despla);
+//		int despla = 0;
+		campos = RCampos(campos,atrCampo);
 		return campos;
 	}
 	
@@ -196,9 +196,9 @@ public class Sintactico{
 		return a; 
 	}
 	
-	public Vector RCampos(Vector v, Atributo campo, int despla)throws Exception{
-		campo.setDesplazamiento(despla);
-		System.out.println("Campo : " + campo.getId() + " : " + campo.getDesplazamiento());
+	public Vector RCampos(Vector v, Atributo campo)throws Exception{
+//		campo.setDesplazamiento(despla);
+//		System.out.println("Campo : " + campo.getId() + " : " + campo.getDesplazamiento());
 		if (!v.contains(campo)){
 			v.add(campo);
 		}
@@ -208,8 +208,8 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer(); //consumo ;
 			campo = Campo();
-			despla++;
-			RCampos(v,campo,despla);
+			//despla++;
+			RCampos(v,campo);
 			return v;
 		}
 		else if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -518,14 +518,14 @@ public class Sintactico{
 			atrIAsig.getTipo().setTipo("error");
 			return atrIAsig;
 		}
-		Token tk = lexico.getNextToken();
+//		Token tk = lexico.getNextToken();
 //		atrIAsig = Mem(new Atributo());
 		atrIAsig = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
 			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
 	    }
 		lexico.lexer();//consumo =
-		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
+//		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		Atributo atrExpOr= ExpOr();
 		if ((atrIAsig.getTipo().getTipo().equals("error")) ||
 				!compatibles(atrIAsig.getTipo(),atrExpOr.getTipo()) ||
@@ -961,7 +961,7 @@ public class Sintactico{
 		Atributo atrMem = new Atributo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
-		int desp = 0;
+//		int desp = 0;
 		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		ExpresionTipo tipo = ((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo()));
 		tipo = ref(tipo);
@@ -974,14 +974,14 @@ public class Sintactico{
 			atrRMem2 = RMem(atrMem);
 			if (atrRMem2.getTipo() != null){
 				tipo = atrRMem2.getTipo();
-				desp = atrRMem2.getDesplazamiento();
+				//desp = atrRMem2.getDesplazamiento();
 			}
 		}
 		else{
 			throw new Exception(" Variable no declarada, en linea: " + lexico.getLinea());
 		}
 		atrMem.setTipo(tipo);
-		atrMem.setDesplazamiento(desp);
+		//atrMem.setDesplazamiento(desp);
 		return atrMem;
 	}
 
@@ -993,17 +993,17 @@ public class Sintactico{
 			//if (atr.getTipo().getTipo().equals("reg")){
 				if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 					Token tk = lexico.lexer();
-					int desp = DesplaCampo(atr.getId(),tk.getLexema());
+					int desp = indiceCampo(atr.getId(),tk.getLexema());
 					if (desp != -1){
 						etRMem = ((Parametros)atr.getTipo().getParams().elementAt(desp)).getTipo();
 						if (etRMem.getTipo().equals("ref")){
 							atr.setTipo(((propiedades)TS.getTabla().get(etRMem.getId())).getTipo());
-							atr.setDesplazamiento(atr.getDesplazamiento() + desp);
+							//atr.setDesplazamiento(atr.getDesplazamiento() + desp);
 							atr.setId(etRMem.getId());
 						}
 						else{
 							atr.setTipo(etRMem);
-							atr.setDesplazamiento(desp);
+							//atr.setDesplazamiento(desp);
 						}
 						codigo.genIns("apila",desp);
 						codigo.genIns("suma");
@@ -1011,7 +1011,7 @@ public class Sintactico{
 						atrRMem = RMem(atr);
 						if (atrRMem.getTipo() != null){
 							atr.setTipo(atrRMem.getTipo());
-							atr.setDesplazamiento(atrRMem.getDesplazamiento());
+							//atr.setDesplazamiento(atrRMem.getDesplazamiento());
 						}
 					}
 					else{
@@ -1122,7 +1122,7 @@ public class Sintactico{
 		else return "";
 	}
 	
-	public int DesplaCampo(String id,String campo){
+	public int indiceCampo(String id,String campo){
 		Hashtable tabla = TS.getTabla();
 		propiedades p = (propiedades) tabla.get(id);
 		ExpresionTipo et = p.getTipo();
@@ -1133,10 +1133,11 @@ public class Sintactico{
 			while (i < v.size()){
 				Atributo a = ((Atributo)v.elementAt(i));
 				if (a.getId().equals(campo)){
-					return a.getDesplazamiento();
+					return i;
 				}
 				i++;
 			}
+			despla = i;
 		}
 		return despla;
 	}
