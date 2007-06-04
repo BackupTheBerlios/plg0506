@@ -202,7 +202,6 @@ public class ExpresionTipo {
 	 */
 	public boolean equals(ExpresionTipo a){
 		boolean iguales = false;
-		// TODO REVISAR ESTE EQUALS, hacerlo recursivo, y que pare cuando el tbase de alguno de los dos sea "", y si no son iguales, devuelva falso.
 		iguales = (this.nelems == a.getElems() && this.tam == a.getTam() && this.t.equals(a.getTipo()));
 		if (a.getTbase() == null)
 			return (iguales && tbase == null);

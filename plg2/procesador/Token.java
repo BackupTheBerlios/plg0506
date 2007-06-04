@@ -12,7 +12,7 @@ package procesador;
  */
 public class Token {
 	
-	/*
+	/**
 	 * Atributos de la clase:
 	 * 
 	 * categoria lexica nos indica a que categoria Lexica pertenece el Token,

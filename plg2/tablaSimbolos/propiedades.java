@@ -68,26 +68,6 @@ public class propiedades {
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
-
-	/**
-	 * Metodo que convierte en un String la lista de Atributos
-	 * @return Devuelve un String con los valores que contienen sus atributos
-	 */
-/*	public String toString(){
-		if (this != null){	
-			String aux;
-			aux = "( ";
-			aux = aux.concat(this.tipo);
-			aux = aux.concat(", ");
-			aux = aux.concat(new Integer (this.dir).toString());
-			aux = aux.concat(" )");
-			return aux;
-		}
-		else {
-			return "null";
-		}
-	}*/
-	
 	/**
 	 * Metodo que devuelve un booleano con la igualdad de los atributos
 	 * @param a Atributo con el que queremos comparar la igualdad

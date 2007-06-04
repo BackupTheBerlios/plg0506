@@ -186,7 +186,7 @@ public class tablaSimbolos {
 		} else {
 			dir = ((Integer)piladir.pop()).intValue();
 			tamlocales = ((Integer)pilatam.pop()).intValue();
-			nivel = 0; //FIXME
+			nivel = 0; 
 		}
 	}
 	
@@ -203,7 +203,7 @@ public class tablaSimbolos {
 		this.tamlocales = tamlocales;
 	}
 
-	public void insertTipo(String id, ExpresionTipo tipo) {//FIXME
+	public void insertTipo(String id, ExpresionTipo tipo) {
 		propiedades p = (propiedades)tabla.get(id);
 		p.setTipo(tipo);
 		p.setDir(dir);

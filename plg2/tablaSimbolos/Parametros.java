@@ -17,7 +17,4 @@ public class Parametros {
 	public void setTipo(ExpresionTipo tipo) {
 		this.tipo = tipo;
 	}
-	
-	
-
 }
