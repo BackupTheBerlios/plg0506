@@ -36,8 +36,10 @@ public class Sintactico{
 	Codigo codigo;
 	int etq;
 	int nivel;
-	int numNiveles;
-	
+	int tamlocales;
+	int numniveles;
+	static final int longinicio = 4;
+	int dirm;
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 
@@ -73,10 +75,20 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	private boolean Prog() throws Exception{
+		int etqaux, etqinic;
+		codigo.genIns("inicio");
+		etqinic = etq;
+		etq = etq + Sintactico.longinicio;
+		codigo.genIns("ir-a");
+		etqaux = etq;
+		etq ++;
+		nivel = 0;
+		tamlocales = 0;
 		System.out.println("Prog");
 		boolean errProg = true;
 		boolean errDecs = Decs();
-		etq = 0;
+		codigo.parcheaInicio(numniveles + 1, dirm, etqinic);
+		codigo.parchea(etqaux,etq);
 		if (lexico.reconoce(CategoriaLexica.TKLLAP)){
 			lexico.lexer(); //consumo {
 			boolean errIs = Is();
@@ -84,6 +96,7 @@ public class Sintactico{
 				lexico.lexer(); // consumo }
 				errProg = errDecs || errIs;
 				codigo.genIns("stop");
+				etq ++;
 			}
 		}
 		return errProg;
@@ -114,7 +127,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RDecs(Atributo heredado)throws Exception{
-		System.out.println("RDecs");
+		//System.out.println("RDecs");
 		Atributo atrRDecs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RDecs ::= λ
@@ -140,13 +153,20 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo Dec() throws Exception{
-		System.out.println("Dec");
 		Atributo a = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKTYPE)){
 			lexico.lexer(); //consumo TYPE
 			Atributo b = DecTipo();
 			a.setId(b.getId());
 			a.setClase("tipo");
+			a.setTipo(b.getTipo());
+			return a;
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKPROC)){
+			lexico.lexer(); //consumo PROC
+			Atributo b = DecProc();
+			a.setId(b.getId());
+			a.setClase("proc");
 			a.setTipo(b.getTipo());
 			return a;
 		}
@@ -159,9 +179,10 @@ public class Sintactico{
 		}
 		throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());		
 	}
-	
+	public Atributo DecProc()throws Exception{
+		return new Atributo();
+	}
 	public Atributo DecTipo() throws Exception{
-		System.out.println("DecTipo");
 		Atributo atrTipo = Tipo();
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
@@ -177,28 +198,10 @@ public class Sintactico{
 			throw new Exception("Variable ya declarada en linea " + lexico.getLinea());
 	}
 	
-	public Atributo DecProc() throws Exception {//TODO
-		Atributo atrProc = new Atributo();
-		if (!lexico.reconoce(CategoriaLexica.TKPROC)) {
-			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
-		}
-		lexico.lexer();
-		//¿Falta algo?
-		Token tk = lexico.lexer();
-		if (!TS.existeID(tk.getLexema())) {
-			nivel++;
-			if (nivel > numNiveles) numNiveles = nivel;
-			lexico.setNivel(nivel);
-			TS.setNivel(nivel);//¿O es TS.setNivel(1)?
-			ExpresionTipo tipo = new ExpresionTipo();
-			tipo.setTipo("proc");
-		}
-		return atrProc;
-	}
-	
 	public Vector Campos() throws Exception{
 		Vector campos = new Vector();
 		Atributo atrCampo = Campo();
+//		int despla = 0;
 		campos = RCampos(campos,atrCampo);
 		return campos;
 	}
@@ -219,6 +222,8 @@ public class Sintactico{
 	}
 	
 	public Vector RCampos(Vector v, Atributo campo)throws Exception{
+//		campo.setDesplazamiento(despla);
+//		System.out.println("Campo : " + campo.getId() + " : " + campo.getDesplazamiento());
 		if (!v.contains(campo)){
 			v.add(campo);
 		}
@@ -228,6 +233,7 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer(); //consumo ;
 			campo = Campo();
+			//despla++;
 			RCampos(v,campo);
 			return v;
 		}
@@ -239,11 +245,9 @@ public class Sintactico{
 	
 	
 	public Atributo DecVar() throws Exception{
-		System.out.println("DecVar");
 		Atributo atrTipo = Tipo();
 		Atributo atrDec = new Atributo();
 		Token tk = lexico.lexer(); //consumo el tipo
-		//System.out.println("He consumido: " + tk.muestraToken());
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 		}
@@ -260,7 +264,6 @@ public class Sintactico{
 	 * @throws IOException 
 	 */
 	private Atributo Tipo() throws Exception{
-		System.out.println("Tipo");
 		Atributo atrTipo = new Atributo();
 		ExpresionTipo et = new ExpresionTipo();
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
@@ -295,11 +298,9 @@ public class Sintactico{
 			System.out.println(lexico.getNextToken().getLexema());
 			return atrTipo;
 		}
-		// array bool [5] a
 		else if (lexico.reconoce(CategoriaLexica.TKARRAY)){
 			lexico.lexer(); //consumo array
 			Atributo b = Tipo();
-			//System.out.println("El tipo que he leido " + b.getTipo().getTipo());
 			if (referenciaErronea(b.getTipo())){
 					throw new Exception("Referencia erronea en linea " + lexico.getLinea());
 			}
@@ -308,22 +309,18 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORAP)){
 				throw new Exception("ERROR: Necesitas un [");
 			}
-			//Token tk2 = 
 			lexico.lexer(); //consumo '['
-			//System.out.println("He consumido: " + tk2.muestraToken());
-			//tk2 = lexico.getNextToken();
-			//System.out.println("Lo que tengo es: " + tk2.muestraToken());
-			if (!lexico.reconoce(CategoriaLexica.TKNUM)){
+			if (!lexico.reconoce(CategoriaLexica.TKINT)){
 				throw new Exception("ERROR: Necesitas un entero para definir el valor del array");
 			}
 			Token tk = lexico.lexer(); //consumo el entero
 			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
 			et.setTipo("array");
 			et.setTam(b.getTipo().getTam() * et.getTam());
-			//System.out.println("El tamaño es: " + et.getTam());
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("ERROR: Necesitas un ']'");
 			}
+			lexico.lexer(); //consumo ']'			
 			atrTipo.setTipo(et);
 			return atrTipo;			
 		}
@@ -578,18 +575,13 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
 			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
 	    }
-		
 		lexico.lexer();//consumo =
 //		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		Atributo atrExpOr= ExpOr();
-		System.out.println("El tipo de ExpOr es: " + atrExpOr.getTipo().getTipo());
-		System.out.println("Son Compatibles??: " + compatibles(atrIAsig.getTipo(),atrExpOr.getTipo()));
 		if ((atrIAsig.getTipo().getTipo().equals("error")) ||
 				!compatibles(atrIAsig.getTipo(),atrExpOr.getTipo()) ||
-				(atrExpOr.getTipo().getTipo().equals("error"))){
-			System.out.println("Estoy entrando aqui... bazura");
+				(atrExpOr.getTipo().getTipo().equals("error")))
 			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-		}
 		et = new ExpresionTipo("int");
 		ExpresionTipo et2 = new ExpresionTipo("bool");		
 		if (compatibles(atrIAsig.getTipo(),et) ||
@@ -610,7 +602,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo ExpOr() throws Exception{
-		System.out.println("ExpOr");
+		//System.out.println("ExpOr");
 		Atributo atrExpAnd = ExpAnd();
 		Atributo atrRExpOr = RExpOr(atrExpAnd);
 		return atrRExpOr;
@@ -622,12 +614,13 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RExpOr(Atributo heredado) throws Exception{
-		System.out.println("RExpOr");
+		//System.out.println("RExpOr");
 		Atributo atrRExpOr = new Atributo();
 		atrRExpOr.setTipo(new ExpresionTipo());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RExpOr ::= λ
 			return heredado;
+			
 		}
 		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
 			//RExpMul ::= λ
@@ -667,7 +660,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo ExpAnd() throws Exception{
-		System.out.println("ExpAnd");
+		//System.out.println("ExpAnd");
 		Atributo atrExpRel = ExpRel();
 		Atributo atrRExpAnd = RExpAnd(atrExpRel);
 		return atrRExpAnd;
@@ -679,7 +672,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RExpAnd(Atributo heredado) throws Exception{
-		System.out.println("RExpAnd");
+		//System.out.println("RExpAnd");
 		Atributo atrRExpAnd = new Atributo();
 		atrRExpAnd.setTipo(new ExpresionTipo());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -723,7 +716,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo ExpRel() throws Exception{
-		System.out.println("ExpRel");
+		//System.out.println("ExpRel");
 		Atributo atrExpAd = ExpAd();
 		Atributo atrRExpRel = RExpRel(atrExpAd);
 		return atrRExpRel;
@@ -735,7 +728,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RExpRel(Atributo heredado) throws Exception{
-		System.out.println("RExpRel");
+		//System.out.println("RExpRel");
 		Atributo atrRExpRel = new Atributo();
 		atrRExpRel.setTipo(new ExpresionTipo());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -757,10 +750,8 @@ public class Sintactico{
 			return heredado;
 		}
 		String op = genOpRel((lexico.lexer()).getLexema());
-		System.out.println("\n El operador: " + op);
+		
 		atrRExpRel = ExpAd();
-		System.out.println("\n El heredado es: " + heredado.getTipo().getTipo());
-		System.out.println("ExpAd: " + atrRExpRel.getTipo().getTipo());
 		if (heredado.getTipo().getTipo().equals("error") || 
 				atrRExpRel.getTipo().getTipo().equals("error")){
 			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
@@ -787,7 +778,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo ExpAd() throws Exception{
-		System.out.println("ExpAd");
+		//System.out.println("ExpAd");
 		Atributo atrExpMul = ExpMul();
 		Atributo atrExpAd = RExpAd(atrExpMul);
 		return atrExpAd;
@@ -799,7 +790,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RExpAd(Atributo heredado) throws Exception{
-		System.out.println("RExpAd");
+		//System.out.println("RExpAd");
 		Atributo atrRExpAd = new Atributo();
 		atrRExpAd.setTipo(new ExpresionTipo());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -844,7 +835,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo ExpMul() throws Exception{
-		System.out.println("ExpMul");
+		//System.out.println("ExpMul");
 		Atributo atrFact = Fact();
 		Atributo atrRExpMul = RExpMul(atrFact);
 		return atrRExpMul;
@@ -856,7 +847,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RExpMul(Atributo heredado) throws Exception{
-		System.out.println("RExpMul");
+		//System.out.println("RExpMul");
 		Atributo atrRExpMul = new Atributo();
 		atrRExpMul.setTipo(new ExpresionTipo());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -905,7 +896,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo Fact() throws Exception{
-		System.out.println("Fact");
+		//System.out.println("Fact");
 		Atributo atrFact = new Atributo();
 		atrFact.setTipo(new ExpresionTipo());
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
@@ -942,7 +933,6 @@ public class Sintactico{
 		// Fact ::= Mem
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			atrFact = Mem();
-			System.out.println("El iden " + atrFact.getId() + " con tipo: " + atrFact.getTipo());
 			//atrFact = Mem(new Atributo());
 			if (!atrFact.getTipo().getTipo().equals("error")){
 				Atributo a = new Atributo(new ExpresionTipo("int"));
@@ -995,16 +985,12 @@ public class Sintactico{
 	}
 
 	private Atributo Mem()throws Exception{
-		System.out.println("Mem");
 		Atributo atrMem = new Atributo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
-		//System.out.println("Estoy en Mem con el iden: " + tk.getLexema());
 		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		ExpresionTipo tipo = ((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo()));
-		System.out.println("Estoy en Mem con el iden: " + tk.getLexema() + " y el tipo es: "+tipo.getTipo() + " y la puta direccion es: "+dir);
 		tipo = ref(tipo);
-		System.out.println("Estoy en Mem con el iden: " + tk.getLexema() + " y el tipo despues de ref es: "+tipo);
 		atrMem.setTipo(tipo);
 		Atributo atrRMem2 = null;
 		if (dir >= 0){
@@ -1059,22 +1045,22 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("Falta un corchete de cierre");
 			}
-			Token tk = lexico.lexer();//consumo el ']'
-			System.out.println("He consumido: " + tk.muestraToken());
-			etRMem = atr.getTipo().getTbase(); 
-			ExpresionTipo et2= new ExpresionTipo();
-			System.out.println("Lo que tengo en ExpOr es: " + atrRMem.getTipo().getTipo());
+			lexico.lexer();//consumo el ']'
+			/*
+			 * tipoh2 ← si tipoh0.t = array  tipo1.t = int
+					ref!(tipoh0.tbase, ts)
+				si no <t: err>;
+			emite(apila(tipoh0.tam));
+			emite( multiplica);
+			emite(suma;);
+		etq ← etq + 3;
+			RMem(in tipoh2; out tipo2);
+			tipo0 ← tipo2;
+				fsi
+			 */
 			if (atrRMem.getTipo().getTipo().equals("int") && atr.getTipo().getTipo().equals("array")){
-				et2 = ref(etRMem);
+				
 			}
-			else{
-				et2.setTipo("error");
-			}
-			codigo.genIns("apila", atr.getTipo().getTam());
-			codigo.genIns("multiplica");
-			codigo.genIns("suma");
-			etq = etq + 3;
-			atr = RMem(atr);	
 		}
 		return atr;
 	}
@@ -1199,27 +1185,13 @@ public class Sintactico{
 		return despla;
 	}
 	
-	/**
-	 * fun ref!(exp,ts)
-		si exp.t = ref entonces
-			si existeID(ts,exp.id)
-				devuelve ref!(ts[exp.id].tipo,ts)
-			si no <t:err>
-		si no devuelve exp
-		ffun
-	 * @param t
-	 * @return
-	 * @throws Exception
-	 */
 	private ExpresionTipo ref(ExpresionTipo t) throws Exception{
 		if (t.getTipo().equals("ref")) {
 			if (TS.existeID(t.getId())) {
 				t = (ExpresionTipo)((propiedades)((TS.getTabla()).get(t.getId()))).getTipo();
 				return ref(t);
 			} else{
-				t.setTipo("error");
-				return t;
-				//throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
+				throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
 			}
 		}
 		else
@@ -1233,8 +1205,6 @@ public class Sintactico{
 	
 	private boolean compatibles2 (ExpresionTipo t1, ExpresionTipo t2, Vector visitados){
 		Tupla pareja = new Tupla (t1,t2);
-		System.out.println("Tengo como t1: " + t1.getTipo());
-		System.out.println("Tengo como t2: " + t2.getTipo());
 		if (visitados.contains(pareja))
 			return true;
 		else{
@@ -1256,16 +1226,6 @@ public class Sintactico{
 						(t1.getElems() == t2.getElems())){
 					return compatibles2(t1.getTbase(),t2.getTbase(),visitados);				
 			}
-			else if ((t1.getTipo().equals("array")) &&
-						(!t2.getTipo().equals("array"))) {
-					System.out.println("\n Estoy en linea de codigo "+ lexico.getLinea());
-					System.out.println("Voy a llamar con t2: "+ t2.getTipo());
-					return compatibles2(t1.getTbase(),t2,visitados);
-			}
-			else if ((t2.getTipo().equals("array")) &&
-					(!t1.getTipo().equals("array"))) {
-						return compatibles2(t1,t2.getTbase(),visitados);
-			}
 			else if((t1.getTipo().equals(t2.getTipo())) && 
 						(t1.getTipo().equals("reg")) &&
 						(t1.getParams().size() == t2.getParams().size())){
@@ -1274,7 +1234,6 @@ public class Sintactico{
 						atr1 = (Parametros)t1.getParams().elementAt(i);
 						atr2 = (Parametros)t2.getParams().elementAt(i);
 						if (!compatibles2(atr1.getTipo(),atr2.getTipo(),visitados))
-							System.out.println("Estoy entrando aqui... bazura2");
 							return false;
 					}
 					return true;
@@ -1287,14 +1246,12 @@ public class Sintactico{
 					Parametros a2 = (Parametros)t2.getParams().elementAt(i);
 					if (!compatibles2(a1.getTipo(), a2.getTipo(), visitados)
 							|| (a2.getModo().equals("var") && !a1.getModo().equals("var"))) {
-						System.out.println("Estoy entrando aqui... bazura3");
 						return false;
 					}
 				}
 				return true;
 			}
 			else
-				System.out.println("Estoy entrando aqui... bazura4");
 				return false;
 		}
 	}
