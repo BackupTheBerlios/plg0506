@@ -298,9 +298,11 @@ public class Sintactico{
 			System.out.println(lexico.getNextToken().getLexema());
 			return atrTipo;
 		}
+		// array bool [5] a
 		else if (lexico.reconoce(CategoriaLexica.TKARRAY)){
 			lexico.lexer(); //consumo array
 			Atributo b = Tipo();
+			//System.out.println("El tipo que he leido " + b.getTipo().getTipo());
 			if (referenciaErronea(b.getTipo())){
 					throw new Exception("Referencia erronea en linea " + lexico.getLinea());
 			}
@@ -309,21 +311,26 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORAP)){
 				throw new Exception("ERROR: Necesitas un [");
 			}
+			//Token tk2 = 
 			lexico.lexer(); //consumo '['
-			if (!lexico.reconoce(CategoriaLexica.TKINT)){
+			//System.out.println("He consumido: " + tk2.muestraToken());
+			//tk2 = lexico.getNextToken();
+			//System.out.println("Lo que tengo es: " + tk2.muestraToken());
+			if (!lexico.reconoce(CategoriaLexica.TKNUM)){
 				throw new Exception("ERROR: Necesitas un entero para definir el valor del array");
 			}
 			Token tk = lexico.lexer(); //consumo el entero
 			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
 			et.setTipo("array");
 			et.setTam(b.getTipo().getTam() * et.getTam());
+			//System.out.println("El tamaÃ±o es: " + et.getTam());
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("ERROR: Necesitas un ']'");
 			}
-			lexico.lexer(); //consumo ']'			
 			atrTipo.setTipo(et);
 			return atrTipo;			
 		}
+
 		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 			Token tk = lexico.getNextToken();
 			if (TS.existeID(tk.getLexema())){
@@ -1047,22 +1054,22 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("Falta un corchete de cierre");
 			}
-			lexico.lexer();//consumo el ']'
-			/*
-			 * tipoh2 ← si tipoh0.t = array  tipo1.t = int
-					ref!(tipoh0.tbase, ts)
-				si no <t: err>;
-			emite(apila(tipoh0.tam));
-			emite( multiplica);
-			emite(suma;);
-		etq ← etq + 3;
-			RMem(in tipoh2; out tipo2);
-			tipo0 ← tipo2;
-				fsi
-			 */
+			Token tk = lexico.lexer();//consumo el ']'
+			System.out.println("He consumido: " + tk.muestraToken());
+			etRMem = atr.getTipo().getTbase(); 
+			ExpresionTipo et2= new ExpresionTipo();
+			System.out.println("Lo que tengo en ExpOr es: " + atrRMem.getTipo().getTipo());
 			if (atrRMem.getTipo().getTipo().equals("int") && atr.getTipo().getTipo().equals("array")){
-				
+				et2 = ref(etRMem);
 			}
+			else{
+				et2.setTipo("error");
+			}
+			codigo.genIns("apila", atr.getTipo().getTam());
+			codigo.genIns("multiplica");
+			codigo.genIns("suma");
+			etq = etq + 3;
+			atr = RMem(atr);	
 		}
 		return atr;
 	}
@@ -1192,8 +1199,11 @@ public class Sintactico{
 			if (TS.existeID(t.getId())) {
 				t = (ExpresionTipo)((propiedades)((TS.getTabla()).get(t.getId()))).getTipo();
 				return ref(t);
-			} else{
-				throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
+			}
+			else{
+				t.setTipo("error");
+				return t;
+				//throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
 			}
 		}
 		else
@@ -1227,6 +1237,16 @@ public class Sintactico{
 						(t1.getTipo().equals("array")) &&
 						(t1.getElems() == t2.getElems())){
 					return compatibles2(t1.getTbase(),t2.getTbase(),visitados);				
+			}			
+			else if ((t1.getTipo().equals("array")) &&
+					(!t2.getTipo().equals("array"))) {
+					System.out.println("\n Estoy en linea de codigo "+ lexico.getLinea());
+					System.out.println("Voy a llamar con t2: "+ t2.getTipo());
+					return compatibles2(t1.getTbase(),t2,visitados);
+			}
+			else if ((t2.getTipo().equals("array")) &&
+					(!t1.getTipo().equals("array"))) {
+						return compatibles2(t1,t2.getTbase(),visitados);
 			}
 			else if((t1.getTipo().equals(t2.getTipo())) && 
 						(t1.getTipo().equals("reg")) &&
