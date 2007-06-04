@@ -99,7 +99,7 @@ public class Sintactico{
 		}
 		return errProg;
 	}
-/* LETICIA, NO FUNCIONA
+/* ESTO, NO FUNCIONA
  private boolean Prog() throws Exception{
 		int etqaux, etqinic;
 		codigo.genIns("inicio");
@@ -223,19 +223,18 @@ public class Sintactico{
 			throw new Exception("Variable ya declarada en linea " + lexico.getLinea());
 	}
 	
-	public Atributo DecProc() throws Exception {//TODO
+	public Atributo DecProc() throws Exception {
 		Atributo atrProc = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPROC)) {
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 		}
 		lexico.lexer();
-		//Â¿Falta algo?
 		Token tk = lexico.lexer();
 		if (!TS.existeID(tk.getLexema())) {
 			nivel++;
 			if (nivel > numniveles) numniveles = nivel;
 			lexico.setNivel(nivel);
-			TS.setNivel(nivel);//Â¿O es TS.setNivel(1)?
+			TS.setNivel(nivel);
 			ExpresionTipo tipo = new ExpresionTipo();
 			atrProc.setTipo(tipo);
 			tipo.setTipo("proc");
@@ -289,8 +288,8 @@ public class Sintactico{
 	  // dirm = dirm + tipo.tam;
 	  TS.setTamlocales(TS.getTamlocales() + 1);
 	  if(lexico.reconoce(CategoriaLexica.TKIDEN)){
-		  Token tk2 = lexico.lexer();
-		  //TODO:Hay que convertir las operaciones de abajo
+		  //Token tk2 = lexico.lexer();
+		  //Hay que convertir las operaciones de abajo
 		  //ts.ponTipoFull(lexemaActual,tipo);
 		  //ts.ponClase(lexemaActual, 3);
 		  //vectorParam.add(new Par(true,tipo));
@@ -318,7 +317,7 @@ public class Sintactico{
 		  lexico.reconoce(CategoriaLexica.TKIDEN);		tk = lexico.lexer();
 		  tipo.setId(tk.getLexema());
 	  } else {
-		  //TODO: faltan casos
+		  // faltan casos
 	  }
 	  return tipo;
   }
@@ -326,7 +325,6 @@ public class Sintactico{
 	public Vector Campos() throws Exception{
 		Vector campos = new Vector();
 		Atributo atrCampo = Campo();
-//		int despla = 0;
 		campos = RCampos(campos,atrCampo);
 		return campos;
 	}
@@ -347,8 +345,6 @@ public class Sintactico{
 	}
 	
 	public Vector RCampos(Vector v, Atributo campo)throws Exception{
-//		campo.setDesplazamiento(despla);
-//		System.out.println("Campo : " + campo.getId() + " : " + campo.getDesplazamiento());
 		if (!v.contains(campo)){
 			v.add(campo);
 		}
@@ -358,7 +354,6 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer(); //consumo ;
 			campo = Campo();
-			//despla++;
 			RCampos(v,campo);
 			return v;
 		}
@@ -431,7 +426,6 @@ public class Sintactico{
 		else if (lexico.reconoce(CategoriaLexica.TKARRAY)){
 			lexico.lexer(); //consumo array
 			Atributo b = Tipo();
-			//System.out.println("El tipo que he leido " + b.getTipo().getTipo());
 			if (referenciaErronea(b.getTipo())){
 					throw new Exception("Referencia erronea en linea " + lexico.getLinea());
 			}
@@ -440,11 +434,7 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORAP)){
 				throw new Exception("ERROR: Necesitas un [");
 			}
-			//Token tk2 = 
 			lexico.lexer(); //consumo '['
-			//System.out.println("He consumido: " + tk2.muestraToken());
-			//tk2 = lexico.getNextToken();
-			//System.out.println("Lo que tengo es: " + tk2.muestraToken());
 			if (!lexico.reconoce(CategoriaLexica.TKNUM)){
 				throw new Exception("ERROR: Necesitas un entero para definir el valor del array");
 			}
@@ -452,7 +442,6 @@ public class Sintactico{
 			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
 			et.setTipo("array");
 			et.setTam(b.getTipo().getTam() * et.getElems());
-			//System.out.println("El tamaÃƒÂ±o es: " + et.getTam());
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("ERROR: Necesitas un ']'");
 			}
@@ -708,14 +697,11 @@ public class Sintactico{
 			atrIAsig.getTipo().setTipo("error");
 			return atrIAsig;
 		}
-//		Token tk = lexico.getNextToken();
-//		atrIAsig = Mem(new Atributo());
 		atrIAsig = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
 			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
 	    }
 		lexico.lexer();//consumo =
-//		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		Atributo atrExpOr= ExpOr();
 		if ((atrIAsig.getTipo().getTipo().equals("error")) ||
 				!compatibles(atrIAsig.getTipo(),atrExpOr.getTipo()) ||
@@ -765,7 +751,6 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-		//FIXME
 		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
@@ -822,7 +807,6 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-//		FIXME
 		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
@@ -878,7 +862,6 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-//		FIXME
 		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
@@ -940,7 +923,6 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-//		FIXME
 		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
@@ -997,7 +979,6 @@ public class Sintactico{
 			//RExpMul ::= λ
 			return heredado;
 		}
-//		FIXME
 		if (lexico.reconoce(CategoriaLexica.TKCORCI )){
 			//RExpMul ::= λ
 			return heredado;
@@ -1078,7 +1059,6 @@ public class Sintactico{
 				Atributo b = new Atributo(new ExpresionTipo("bool"));
 				if (compatibles(atrFact.getTipo(),a.getTipo()) || 
 						compatibles(atrFact.getTipo(),b.getTipo())){
-					//int dir = ((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
 					codigo.genIns("apila_ind");
 					etq++;
 				}
@@ -1125,7 +1105,6 @@ public class Sintactico{
 
 	private Atributo Mem()throws Exception{
 		Atributo atrMem = new Atributo();
-		//ExpresionTipo tipo = new ExpresionTipo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
 		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
@@ -1344,7 +1323,6 @@ public class Sintactico{
 			else{
 				t.setTipo("error");
 				return t;
-				//throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
 			}
 		}
 		else

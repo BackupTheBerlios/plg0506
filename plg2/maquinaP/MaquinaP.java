@@ -551,7 +551,6 @@ public class MaquinaP {
 	public void apila_dir (int d) throws Exception{
 		System.out.println("apila-dir");
 		ST = ST + 1; 
-		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
 			if (d >= 0){
 				if ((Mem.size()>=d)&&(!Mem.isEmpty())){ 
