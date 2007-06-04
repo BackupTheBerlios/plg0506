@@ -35,6 +35,8 @@ public class Sintactico{
 	tablaSimbolos TS;
 	Codigo codigo;
 	int etq;
+	int nivel;
+	int numNiveles;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -173,6 +175,25 @@ public class Sintactico{
 		}
 		else
 			throw new Exception("Variable ya declarada en linea " + lexico.getLinea());
+	}
+	
+	public Atributo DecProc() throws Exception {//TODO
+		Atributo atrProc = new Atributo();
+		if (!lexico.reconoce(CategoriaLexica.TKPROC)) {
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
+		}
+		lexico.lexer();
+		//¿Falta algo?
+		Token tk = lexico.lexer();
+		if (!TS.existeID(tk.getLexema())) {
+			nivel++;
+			if (nivel > numNiveles) numNiveles = nivel;
+			lexico.setNivel(nivel);
+			TS.setNivel(nivel);//¿O es TS.setNivel(1)?
+			ExpresionTipo tipo = new ExpresionTipo();
+			tipo.setTipo("proc");
+		}
+		return atrProc;
 	}
 	
 	public Vector Campos() throws Exception{

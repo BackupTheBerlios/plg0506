@@ -36,6 +36,7 @@ public class Lexico {
 	Token lookahead;
 	RandomAccessFile fuente;
 	int posicion;
+	int nivel;
 	
 	/**
 	 * El constructor de la clase Lexico que slo tiene el buffer de lectura del fichero como parmetro de entrada.
@@ -518,5 +519,13 @@ private String leeComentario (int posicion)throws Exception, IOException {
 			aux = false;	
 		}
 		return aux;
+	}
+
+	public int getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
 	}
 }
