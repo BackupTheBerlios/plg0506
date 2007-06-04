@@ -1016,26 +1016,28 @@ public class Sintactico{
 			lexico.lexer(); //consumo el .
 				if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 					Token tk = lexico.lexer();
-					int desp = indiceCampo(atr.getId(),tk.getLexema());
-					if (desp != -1){
-						etRMem = ((Parametros)atr.getTipo().getParams().elementAt(desp)).getTipo();
-						if (etRMem.getTipo().equals("ref")){
-							atr.setTipo(((propiedades)TS.getTabla().get(etRMem.getId())).getTipo());
-							atr.setId(etRMem.getId());
-						}
-						else{
+					if (atr.getTipo().getTipo().equals("reg")){
+						//Es un registro
+						int desp = indiceCampo(atr.getId(),tk.getLexema());
+						if (desp != -1){
+							//Existe el campo
+							etRMem = ((Parametros)atr.getTipo().getParams().elementAt(desp)).getTipo();
+							etRMem = ref(etRMem);
 							atr.setTipo(etRMem);
+							codigo.genIns("apila",desp);
+							codigo.genIns("suma");
+							etq += 2;
+							atrRMem = RMem(atr);
+							if (atrRMem.getTipo() != null){
+								atr.setTipo(atrRMem.getTipo());
+							}
+						}else{
+							//No existe campo
+							atr.setTipo(new ExpresionTipo("error"));
 						}
-						codigo.genIns("apila",desp);
-						codigo.genIns("suma");
-						etq += 2;
-						atrRMem = RMem(atr);
-						if (atrRMem.getTipo() != null){
-							atr.setTipo(atrRMem.getTipo());
-						}
-					}
-					else{
-						throw new Exception(" Campo no existente en el registro, en linea: " + lexico.getLinea());	
+					}else{
+						//No es un registro
+						atr.setTipo(new ExpresionTipo("error"));
 					}
 				}
 		}

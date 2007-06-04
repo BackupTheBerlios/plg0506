@@ -36,8 +36,8 @@ public class tablaSimbolos {
 		this.dir = 0;
 		tamlocales = 0;
 		nivel = 0;
-		piladir = new Stack<Integer>();
-		pilatam = new Stack<Integer>();
+		piladir = new Stack();
+		pilatam = new Stack();
 	}
 
 	/**
@@ -177,15 +177,15 @@ public class tablaSimbolos {
 			tamlocales = 0;
 			nivel = n;
 		} else {
-			dir = (Integer)piladir.pop();
-			tamlocales = (Integer)pilatam.pop();
+			dir = ((Integer)piladir.pop()).intValue();
+			tamlocales = ((Integer)pilatam.pop()).intValue();
 			nivel = 0; //FIXME
 		}
 	}
 	
 	public void restoreNivel() {
-		dir = (Integer)piladir.pop();
-		tamlocales = (Integer)pilatam.pop();
+		dir = ((Integer)piladir.pop()).intValue();
+		tamlocales = ((Integer)pilatam.pop()).intValue();
 	}
 
 }
