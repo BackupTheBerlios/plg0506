@@ -188,4 +188,12 @@ public class tablaSimbolos {
 		tamlocales = ((Integer)pilatam.pop()).intValue();
 	}
 
+	public int getTamlocales() {
+		return tamlocales;
+	}
+
+	public void setTamlocales(int tamlocales) {
+		this.tamlocales = tamlocales;
+	}
+
 }

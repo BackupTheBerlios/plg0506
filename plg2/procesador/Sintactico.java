@@ -3,7 +3,6 @@ package procesador;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-//import java.util.Enumeration;
 import java.util.Hashtable;
 
 import tablaSimbolos.*;
@@ -197,9 +196,7 @@ public class Sintactico{
 		}
 		throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());		
 	}
-	public Atributo DecProc()throws Exception{
-		return new Atributo();
-	}
+	
 	public Atributo DecTipo() throws Exception{
 		Atributo atrTipo = Tipo();
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
@@ -215,6 +212,150 @@ public class Sintactico{
 		else
 			throw new Exception("Variable ya declarada en linea " + lexico.getLinea());
 	}
+	
+	/*
+	  private void decProc() {
+			Tipo tipo = null;
+			String iden;
+			int etqAux;
+			reconoce(Constantes.PROC);
+			if (tokenActual == Constantes.ID) {
+				iden = lexemaActual;
+				if (ts.dameTipo(lexemaActual) == -1) {
+					nivel++;
+					if (nivel>numNiveles)
+						numNiveles=nivel;
+					lexico.cambiarNivel(nivel);
+					ts.cambiaNivel(1);
+					tipo = new Tipo(5);
+					ts.rellenaTipo(iden, tipo);
+					id();
+					if (tokenActual == Constantes.PARENTAB) {
+						reconoce(Constantes.PARENTAB);
+						vectorParam=new Vector();
+						lfParam();
+						tipo = new Tipo(vectorParam);
+						if (tokenActual == Constantes.PARENTCERR) {
+							reconoce(Constantes.PARENTCERR);
+							etqAux=etq;
+							ts.rellenaTipo(iden, tipo);
+							ts.ponClase(iden, 4);
+							ts.ponDir(iden,etqAux);
+							bloque();
+							// Volvemos a la tabla padre y rellenamos su tipo
+							ts.borrarNivel(nivel);
+							nivel--;
+							ts.cambiaNivel(-1);
+							lexico.cambiarNivel(nivel);
+							
+							tipo.setTam(ts.dameTamLocales());
+							
+							
+						} else {
+							resultado.añadeError("error falta parentesis de cierre, en linea"
+											+ ts.dameNumLinea(iden) + " ");
+						}
+					} else {
+						resultado.añadeError("error falta parentesis, en linea"
+								+ ts.dameNumLinea(iden) + " ");
+					}
+				} else {
+					resultado
+							.añadeError("error por identificador duplicado, en linea "
+									+ ts.dameNumLinea(lexemaActual) + " ");
+				}
+
+			} else {
+				resultado
+						.añadeError("error falta el identificador del proc, en linea "
+								+ ts.dameNumLinea(lexemaActual) + " ");
+			}
+
+		}
+	*/
+	
+	public Atributo DecProc() throws Exception {//TODO
+		Atributo atrProc = new Atributo();
+		if (!lexico.reconoce(CategoriaLexica.TKPROC)) {
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
+		}
+		lexico.lexer();
+		//¿Falta algo?
+		Token tk = lexico.lexer();
+		if (!TS.existeID(tk.getLexema())) {
+			nivel++;
+			if (nivel > numniveles) numniveles = nivel;
+			lexico.setNivel(nivel);
+			TS.setNivel(nivel);//¿O es TS.setNivel(1)?
+			ExpresionTipo tipo = new ExpresionTipo();
+			atrProc.setTipo(tipo);
+			tipo.setTipo("proc");
+			tipo.setId(tk.getLexema());
+			Vector params = new Vector();
+			tipo.setParams(params);
+			if (!lexico.reconoce(CategoriaLexica.TKPAP)) {
+				throw new Exception("Falta '('. Declaracion incorrecta en linea " + lexico.getLinea());
+			}
+			lexico.lexer();
+			lfParam();
+			if (!lexico.reconoce(CategoriaLexica.TKPCI)) {
+				throw new Exception("Falta ')'. Declaracion incorrecta en linea " + lexico.getLinea());
+			}
+			lexico.lexer();
+			
+		}
+		return atrProc;
+	}
+	
+	private void lfParam() throws Exception{
+		  fParam();
+		  relfParam();
+	}
+	private void relfParam() throws Exception{
+	  if (lexico.reconoce(CategoriaLexica.TKCOMA)){
+		  lexico.lexer();
+		  fParam();
+		  relfParam();  
+	  }
+	}
+  private void fParam() throws Exception{
+	  ExpresionTipo tipo = new ExpresionTipo();
+	  boolean entsal = false;
+	  if (lexico.reconoce(CategoriaLexica.TKVAR)) {
+		  lexico.lexer();
+		  entsal = true;
+	  }
+	  if(!lexico.reconoce(CategoriaLexica.TKTYPE)) throw new Exception("Falta el tipo");
+	  Token tk = lexico.lexer();
+	  if (lexico.reconoce(CategoriaLexica.TKBOOL)) {
+		  tipo.setTipo("bool");
+	  } else if (lexico.reconoce(CategoriaLexica.TKINT)) {
+		  tipo.setTipo("int");
+	  }
+	  lexico.lexer();
+	  // dirm = dirm + tipo.tam;
+	  TS.setTamlocales(TS.getTamlocales() + 1);
+	  if(lexico.reconoce(CategoriaLexica.TKIDEN)){
+		  Token tk2 = lexico.lexer();
+		  //ts.ponTipoFull(lexemaActual,tipo);
+		  //ts.ponClase(lexemaActual, 3);
+		  //vectorParam.add(new Par(true,tipo));
+	  }
+		  
+/*	  } else {
+		  tipo=tipo();
+		//  dirm = dirm + tipo.tam;
+		 ts.incTamLocales(tipo.tam);
+		  if(lexico.reconoce(CategoriaLexica.TKIDEN)){
+			  ts.ponTipoFull(lexemaActual,tipo);
+			  ts.ponClase(lexemaActual, 2);
+			  Par p=new Par(false,tipo);
+			  vectorParam.add(p);
+			  lexico.lexer();
+		  }
+		  
+	  }*/
+  }
 	
 	public Vector Campos() throws Exception{
 		Vector campos = new Vector();

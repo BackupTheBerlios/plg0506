@@ -223,5 +223,9 @@ public class CategoriaLexica {
 	 * Valor para reconocer la palabra reservada '['
 	 */
 	public static final int TKCORCI		= 42;
-
+	
+	/**
+	 * Valor para reconocer la coma, ','
+	 */
+	public static final int TKCOMA		= 43;
 }
