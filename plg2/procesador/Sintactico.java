@@ -75,6 +75,23 @@ public class Sintactico{
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
 	private boolean Prog() throws Exception{
+		System.out.println("Prog");
+		boolean errProg = true;
+		boolean errDecs = Decs();
+		etq = 0;
+		if (lexico.reconoce(CategoriaLexica.TKLLAP)){
+			lexico.lexer(); //consumo {
+			boolean errIs = Is();
+			if (lexico.reconoce(CategoriaLexica.TKLLCI)){
+				lexico.lexer(); // consumo }
+				errProg = errDecs || errIs;
+				codigo.genIns("stop");
+			}
+		}
+		return errProg;
+	}
+/* LETICIA, NO FUNCIONA
+ private boolean Prog() throws Exception{
 		int etqaux, etqinic;
 		codigo.genIns("inicio");
 		etqinic = etq;
@@ -102,6 +119,7 @@ public class Sintactico{
 		return errProg;
 	}
 
+ * */
 	/**
 	 * 
 	 * @return
@@ -323,12 +341,12 @@ public class Sintactico{
 			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
 			et.setTipo("array");
 			et.setTam(b.getTipo().getTam() * et.getTam());
-			//System.out.println("El tamaÃ±o es: " + et.getTam());
+			//System.out.println("El tamaÃƒÂ±o es: " + et.getTam());
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("ERROR: Necesitas un ']'");
 			}
 			atrTipo.setTipo(et);
-			return atrTipo;			
+			return atrTipo;		
 		}
 
 		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
@@ -1069,7 +1087,7 @@ public class Sintactico{
 			codigo.genIns("multiplica");
 			codigo.genIns("suma");
 			etq = etq + 3;
-			atr = RMem(atr);	
+			atr = RMem(atr);
 		}
 		return atr;
 	}
@@ -1199,7 +1217,7 @@ public class Sintactico{
 			if (TS.existeID(t.getId())) {
 				t = (ExpresionTipo)((propiedades)((TS.getTabla()).get(t.getId()))).getTipo();
 				return ref(t);
-			}
+			} 
 			else{
 				t.setTipo("error");
 				return t;
