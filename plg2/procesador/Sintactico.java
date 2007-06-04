@@ -219,13 +219,13 @@ public class Sintactico{
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 		}
 		lexico.lexer();
-		//¿Falta algo?
+		//Â¿Falta algo?
 		Token tk = lexico.lexer();
 		if (!TS.existeID(tk.getLexema())) {
 			nivel++;
 			if (nivel > numniveles) numniveles = nivel;
 			lexico.setNivel(nivel);
-			TS.setNivel(nivel);//¿O es TS.setNivel(1)?
+			TS.setNivel(nivel);//Â¿O es TS.setNivel(1)?
 			ExpresionTipo tipo = new ExpresionTipo();
 			atrProc.setTipo(tipo);
 			tipo.setTipo("proc");
@@ -402,7 +402,11 @@ public class Sintactico{
 			Vector campos = new Vector();
 			campos = Campos();
 			et.setParams(campos);
-			et.setTam(campos.size());
+			int tam = 0;
+			for (int i=0;i<campos.size();i++){
+				tam += ((Atributo)campos.elementAt(i)).getTipo().getTam();
+			}
+			et.setTam(tam);
 			et.setTipo("reg");
 			atrTipo.setTipo(et);
 			if (!lexico.reconoce(CategoriaLexica.TKLLCI)){
@@ -437,7 +441,7 @@ public class Sintactico{
 			Token tk = lexico.lexer(); //consumo el entero
 			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
 			et.setTipo("array");
-			et.setTam(b.getTipo().getTam() * et.getTam());
+			et.setTam(b.getTipo().getTam() * et.getElems());
 			//System.out.println("El tamaÃƒÂ±o es: " + et.getTam());
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("ERROR: Necesitas un ']'");
@@ -453,6 +457,9 @@ public class Sintactico{
 				if (p.getClase().equals("tipo")){
 					et.setTipo("ref");
 					et.setId(tk.getLexema());
+					et.setTam(p.getTipo().getTam());
+					et.setParams(p.getTipo().getParams());
+					et.setElems(p.getTipo().getElems());
 					atrTipo.setTipo(et);
 					return atrTipo;
 				}
@@ -1108,10 +1115,12 @@ public class Sintactico{
 
 	private Atributo Mem()throws Exception{
 		Atributo atrMem = new Atributo();
+		//ExpresionTipo tipo = new ExpresionTipo();
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
 		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
-		ExpresionTipo tipo = new ExpresionTipo(((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo())));
+		propiedades p = ((propiedades) TS.getTabla().get(tk.getLexema()));
+		ExpresionTipo tipo = new ExpresionTipo(p.getTipo());
 		tipo = ref(tipo);
 		atrMem.setTipo(tipo);
 		Atributo atrRMem2 = null;
@@ -1135,6 +1144,9 @@ public class Sintactico{
 		Atributo atrRMem = null;
 		ExpresionTipo etRMem = null; 
 		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
+			atrRMem = new Atributo();
+			etRMem = new ExpresionTipo();
+			atrRMem.setTipo(etRMem);
 			lexico.lexer(); //consumo el .
 				if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 					Token tk = lexico.lexer();
@@ -1143,9 +1155,10 @@ public class Sintactico{
 						int desp = indiceCampo(atr.getId(),tk.getLexema());
 						if (desp != -1){
 							//Existe el campo
-							etRMem = ((Parametros)atr.getTipo().getParams().elementAt(desp)).getTipo();
+							etRMem = ((Atributo)atr.getTipo().getParams().elementAt(desp)).getTipo();
 							etRMem = ref(etRMem);
 							atr.setTipo(etRMem);
+							atr.setId(tk.getLexema());
 							codigo.genIns("apila",desp);
 							codigo.genIns("suma");
 							etq += 2;
