@@ -22,6 +22,7 @@ public class ExpresionTipo {
 	 */
 	public ExpresionTipo() {
 		super();
+		this.id = "";
 		this.t = "";
 		this.tbase = null;
 		this.nelems = 0;
@@ -31,6 +32,7 @@ public class ExpresionTipo {
 	
 	public ExpresionTipo(String tipo) {
 		super();
+		this.id = "";
 		this.t = tipo;
 		this.tbase = null;
 		this.nelems = 0;
@@ -43,6 +45,7 @@ public class ExpresionTipo {
 	 *
 	 */
 	public ExpresionTipo(ExpresionTipo a){
+		this.id = a.getId();
 		this.t = a.getTipo();
 		if (a.getTbase()==null){
 			this.tbase=null;
