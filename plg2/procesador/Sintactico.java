@@ -1036,7 +1036,7 @@ public class Sintactico{
 
 	private Atributo RMem (Atributo atr) throws Exception{
 		Atributo atrRMem = null;
-		ExpresionTipo etRMem = new ExpresionTipo(); 
+		ExpresionTipo etRMem = null; 
 		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 			lexico.lexer(); //consumo el .
 				if (lexico.reconoce(CategoriaLexica.TKIDEN)){
@@ -1083,6 +1083,7 @@ public class Sintactico{
 			else{
 				et2.setTipo("error");
 			}
+			atr.setTipo(et2);
 			codigo.genIns("apila", atr.getTipo().getTam());
 			codigo.genIns("multiplica");
 			codigo.genIns("suma");
