@@ -1,6 +1,7 @@
 package tablaSimbolos;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Stack;
 import java.util.Vector;
 import procesador.*;
 
@@ -21,6 +22,10 @@ public class tablaSimbolos {
 	Hashtable tabla;
 	int dir;
 	tablaSimbolos tsPadre;
+	Stack piladir;
+	Stack pilatam;
+	int tamlocales;
+	int nivel;
 
 	/**
 	 * Constructor de la clase y no necesita parametros.
@@ -29,6 +34,10 @@ public class tablaSimbolos {
 		super();
 		this.tabla = new Hashtable();
 		this.dir = 0;
+		tamlocales = 0;
+		nivel = 0;
+		piladir = new Stack<Integer>();
+		pilatam = new Stack<Integer>();
 	}
 
 	/**
@@ -158,6 +167,25 @@ public class tablaSimbolos {
 			i++;
 		}
 		return enc;
+	}
+	
+	public void setNivel(int n) {
+		if (n > 0) {
+			piladir.push(new Integer(dir));
+			pilatam.push(new Integer(tamlocales));
+			dir = 0;
+			tamlocales = 0;
+			nivel = n;
+		} else {
+			dir = (Integer)piladir.pop();
+			tamlocales = (Integer)pilatam.pop();
+			nivel = 0; //FIXME
+		}
+	}
+	
+	public void restoreNivel() {
+		dir = (Integer)piladir.pop();
+		tamlocales = (Integer)pilatam.pop();
 	}
 
 }
