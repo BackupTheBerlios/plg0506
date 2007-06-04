@@ -1020,21 +1020,19 @@ public class Sintactico{
 				throw new Exception("Falta un corchete de cierre");
 			}
 			lexico.lexer();//consumo el ']'
-			/*
-			 * tipoh2 ← si tipoh0.t = array  tipo1.t = int
-					ref!(tipoh0.tbase, ts)
-				si no <t: err>;
-			emite(apila(tipoh0.tam));
-			emite( multiplica);
-			emite(suma;);
-		etq ← etq + 3;
-			RMem(in tipoh2; out tipo2);
-			tipo0 ← tipo2;
-				fsi
-			 */
+			etRMem = atr.getTipo().getTbase(); 
+			ExpresionTipo et2= new ExpresionTipo();
 			if (atrRMem.getTipo().getTipo().equals("int") && atr.getTipo().getTipo().equals("array")){
-				
+				et2 = ref(etRMem);
 			}
+			else{
+				et2.setTipo("error");
+			}
+			codigo.genIns("apila", atr.getTipo().getTam());
+			codigo.genIns("multiplica");
+			codigo.genIns("suma");
+			etq = etq + 3;
+			atr = RMem(atr);	
 		}
 		return atr;
 	}
@@ -1159,13 +1157,27 @@ public class Sintactico{
 		return despla;
 	}
 	
+	/**
+	 * fun ref!(exp,ts)
+		si exp.t = ref entonces
+			si existeID(ts,exp.id)
+				devuelve ref!(ts[exp.id].tipo,ts)
+			si no <t:err>
+		si no devuelve exp
+		ffun
+	 * @param t
+	 * @return
+	 * @throws Exception
+	 */
 	private ExpresionTipo ref(ExpresionTipo t) throws Exception{
 		if (t.getTipo().equals("ref")) {
 			if (TS.existeID(t.getId())) {
 				t = (ExpresionTipo)((propiedades)((TS.getTabla()).get(t.getId()))).getTipo();
 				return ref(t);
 			} else{
-				throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
+				t.setTipo("error");
+				return t;
+				//throw new Exception (" Campo de registro mal referenciado, en linea: " + lexico.getLinea());
 			}
 		}
 		else
