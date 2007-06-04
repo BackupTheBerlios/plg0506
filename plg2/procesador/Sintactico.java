@@ -1014,7 +1014,7 @@ public class Sintactico{
 		Token tk = lexico.getNextToken();
 		atrMem.setId(tk.getLexema());
 		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
-		ExpresionTipo tipo = ((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo()));
+		ExpresionTipo tipo = new ExpresionTipo(((ExpresionTipo)(((propiedades)TS.getTabla().get(tk.getLexema())).getTipo())));
 		tipo = ref(tipo);
 		atrMem.setTipo(tipo);
 		Atributo atrRMem2 = null;
