@@ -348,10 +348,10 @@ public class MaquinaP {
 					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("apila-ret")==0)
 					apila_ret((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("prologo")==0)
+				/*else if (linea[0].compareTo("prologo")==0)
 					prologo((new Integer(Integer.parseInt(linea[1]))).intValue(),(new Integer(Integer.parseInt(linea[2]))).intValue());
 				else if (linea[0].compareTo("epilogo")==0)
-					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
+					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());*/
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
 				else{
@@ -684,7 +684,8 @@ public class MaquinaP {
 		suma();
 		desapila_dir(0);
 		//
-		PC = pc + 1;
+		//PC = pc + 1;
+		PC = pc;
 	}
 	
 	private void copia() throws Exception {
@@ -724,7 +725,8 @@ public class MaquinaP {
 		apila_ind();
 		desapila_dir(nivel + 1);
 		//
-		PC = pc + 1;
+		//PC = pc + 1;
+		PC = pc;
 	}
 	
 	public void pasoParametro(String modoReal, propiedades pformal) throws Exception {

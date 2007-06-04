@@ -196,4 +196,10 @@ public class tablaSimbolos {
 		this.tamlocales = tamlocales;
 	}
 
+	public void insertTipo(String id, ExpresionTipo tipo) {//FIXME
+		propiedades p = (propiedades)tabla.get(id);
+		p.setTipo(tipo);
+		p.setDir(dir);
+		dir += tipo.getTam();
+	}
 }
