@@ -39,6 +39,16 @@ public class Sintactico{
 	int numniveles;
 	static final int longinicio = 4;
 	int dirm;
+	
+	public static final int longApilaRet = 3;
+	public static final int longPrologo = 13;
+	public static final int longInicio = 4;
+	public static final int longEpilogo = 13;
+	public static final int longInicioPaso = 3;
+	public static final int longFinPaso = 1;
+	public static final int longPasoParametro = 4;
+	
+	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
 	 * 

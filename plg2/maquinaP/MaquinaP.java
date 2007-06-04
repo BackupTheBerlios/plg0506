@@ -47,6 +47,7 @@ public class MaquinaP {
 	private Stack pila;
 	private int PC;
 	private int H;
+	private int NumNiveles;
 	private int ST;
 	private Vector Prog;
 	private Vector Mem;
@@ -705,6 +706,15 @@ public class MaquinaP {
 		return tipo.equals("int") || tipo.equals("bool");
 	}
 	
+	public void inicio(/*int numNiveles, int tamDatos*/) throws Exception {
+		//this.emite("apila", numNiveles+1);
+		apila(0); //etq
+		desapila_dir(2);
+		//this.emite("apila", 1+numNiveles+tamDatos);
+		apila(0);//etq+2
+		desapila_dir(1);
+	}
+		
 	public void epilogo(int nivel) throws Exception {
 		System.out.println("epilogo");
 		int pc = PC;
