@@ -87,10 +87,17 @@ public class tablaSimbolos {
 		else{
 			propiedades prop = new propiedades(tipo, this.dir);
 			prop.setClase(clase);
-			if (tipo.getTipo().equals("reg"))
-				this.dir = this.dir + tipo.getParams().size();
-			else
-				this.dir ++;
+			if(!clase.equals("tipo")){
+				if (tipo.getTipo().equals("reg"))
+					this.dir = this.dir + tipo.getTam();
+				else if (tipo.getTipo().equals("array"))
+					this.dir = this.dir + tipo.getTam();
+				else if (tipo.getTipo().equals("ref")){
+					this.dir = this.dir + tipo.getTam();
+				}
+				else
+					this.dir ++;
+			}
 			this.tabla.put(id,prop);
 			return true;	
 		}	
