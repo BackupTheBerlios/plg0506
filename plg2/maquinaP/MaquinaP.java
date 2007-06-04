@@ -648,18 +648,19 @@ public class MaquinaP {
 	 */
 	
 	public void apila_ret(int d) throws Exception {
+		int pc = PC;
 		System.out.println("apila_ret");
 		apila_dir(0);
 		apila(1);
 		suma();
 		apila(d);
 		desapila_ind();
-		PC++;
+		PC = pc + 1;
 	}
 	
 	public void prologo(int nivel, int tamlocales) throws Exception {
 		System.out.println("prologo");
-		int pc = PC + 1;
+		int pc = PC;
 		//
 		apila_dir(0);
 		apila(2);
@@ -677,7 +678,7 @@ public class MaquinaP {
 		suma();
 		desapila_dir(0);
 		//
-		PC = pc;
+		PC = pc + 1;
 	}
 	
 	private void copia() throws Exception {
@@ -693,9 +694,13 @@ public class MaquinaP {
 		pila.push(i);
 	}
 	
+	private boolean tipoBasico(String tipo) {
+		return tipo.equals("int") || tipo.equals("bool");
+	}
+	
 	public void epilogo(int nivel) throws Exception {
 		System.out.println("epilogo");
-		int pc = PC + 1;
+		int pc = PC;
 		//
 		apila_dir(nivel + 1);
 		apila(2);
@@ -713,11 +718,22 @@ public class MaquinaP {
 		apila_ind();
 		desapila_dir(nivel + 1);
 		//
-		PC = pc;
+		PC = pc + 1;
 	}
 	
-	public void pasoParametro(String modoReal, String pformal) {
-		//TODO
+	public void pasoParametro(String modoReal, propiedades pformal) throws Exception {
+		int pc = PC;
+		apila(pformal.getDir());
+		suma();
+		flip();
+		Parametros p = (Parametros)(pformal.getTipo().getParams().elementAt(0));
+		if (p.getModo().equals("val")
+				&& modoReal.equals("var")
+				&& !tipoBasico(pformal.getTipo().getTipo())) {
+			mueve(pformal.getTipo().getTam());
+		} else {
+			desapila_ind();
+		}
 	}
 	
 	public void accesoVar(String infoID) {
