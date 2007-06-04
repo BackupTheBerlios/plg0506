@@ -1155,10 +1155,12 @@ public class Sintactico{
 						int desp = indiceCampo(atr.getId(),tk.getLexema());
 						if (desp != -1){
 							//Existe el campo
-							etRMem = ((Atributo)atr.getTipo().getParams().elementAt(desp)).getTipo();
+							etRMem = ((Atributo)atr.getTipo().getParams().elementAt(desp)).getTipo();							
+							if (etRMem.getTipo().equals("ref")){
+								atr.setId(etRMem.getId());
+							}
 							etRMem = ref(etRMem);
 							atr.setTipo(etRMem);
-							atr.setId(tk.getLexema());
 							codigo.genIns("apila",desp);
 							codigo.genIns("suma");
 							etq += 2;
