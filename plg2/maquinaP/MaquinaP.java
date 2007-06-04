@@ -346,6 +346,12 @@ public class MaquinaP {
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("mueve")==0)
 					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
+				else if (linea[0].compareTo("apila-ret")==0)
+					apila_ret((new Integer(Integer.parseInt(linea[1]))).intValue());
+				else if (linea[0].compareTo("prologo")==0)
+					prologo((new Integer(Integer.parseInt(linea[1]))).intValue(),(new Integer(Integer.parseInt(linea[2]))).intValue());
+				else if (linea[0].compareTo("epilogo")==0)
+					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
 				else{
@@ -734,10 +740,13 @@ public class MaquinaP {
 		} else {
 			desapila_ind();
 		}
+		PC = pc;
 	}
 	
 	public void accesoVar(String infoID) {
+		int pc = PC;
 		//TODO
+		PC = pc;
 	}
 	
 	/**
