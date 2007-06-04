@@ -112,7 +112,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo RDecs(Atributo heredado)throws Exception{
-		//System.out.println("RDecs");
+		System.out.println("RDecs");
 		Atributo atrRDecs = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			//RDecs ::= λ
@@ -138,6 +138,7 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private Atributo Dec() throws Exception{
+		System.out.println("Dec");
 		Atributo a = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKTYPE)){
 			lexico.lexer(); //consumo TYPE
@@ -158,6 +159,7 @@ public class Sintactico{
 	}
 	
 	public Atributo DecTipo() throws Exception{
+		System.out.println("DecTipo");
 		Atributo atrTipo = Tipo();
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
@@ -176,7 +178,6 @@ public class Sintactico{
 	public Vector Campos() throws Exception{
 		Vector campos = new Vector();
 		Atributo atrCampo = Campo();
-//		int despla = 0;
 		campos = RCampos(campos,atrCampo);
 		return campos;
 	}
@@ -197,8 +198,6 @@ public class Sintactico{
 	}
 	
 	public Vector RCampos(Vector v, Atributo campo)throws Exception{
-//		campo.setDesplazamiento(despla);
-//		System.out.println("Campo : " + campo.getId() + " : " + campo.getDesplazamiento());
 		if (!v.contains(campo)){
 			v.add(campo);
 		}
@@ -208,7 +207,6 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer(); //consumo ;
 			campo = Campo();
-			//despla++;
 			RCampos(v,campo);
 			return v;
 		}
@@ -220,9 +218,11 @@ public class Sintactico{
 	
 	
 	public Atributo DecVar() throws Exception{
+		System.out.println("DecVar");
 		Atributo atrTipo = Tipo();
 		Atributo atrDec = new Atributo();
 		Token tk = lexico.lexer(); //consumo el tipo
+		System.out.println("He consumido: " + tk.muestraToken());
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
 		}
@@ -239,6 +239,7 @@ public class Sintactico{
 	 * @throws IOException 
 	 */
 	private Atributo Tipo() throws Exception{
+		System.out.println("Tipo");
 		Atributo atrTipo = new Atributo();
 		ExpresionTipo et = new ExpresionTipo();
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
@@ -273,9 +274,11 @@ public class Sintactico{
 			System.out.println(lexico.getNextToken().getLexema());
 			return atrTipo;
 		}
+		// array bool [5] a
 		else if (lexico.reconoce(CategoriaLexica.TKARRAY)){
 			lexico.lexer(); //consumo array
 			Atributo b = Tipo();
+			//System.out.println("El tipo que he leido " + b.getTipo().getTipo());
 			if (referenciaErronea(b.getTipo())){
 					throw new Exception("Referencia erronea en linea " + lexico.getLinea());
 			}
@@ -284,18 +287,22 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORAP)){
 				throw new Exception("ERROR: Necesitas un [");
 			}
+			//Token tk2 = 
 			lexico.lexer(); //consumo '['
-			if (!lexico.reconoce(CategoriaLexica.TKINT)){
+			//System.out.println("He consumido: " + tk2.muestraToken());
+			//tk2 = lexico.getNextToken();
+			//System.out.println("Lo que tengo es: " + tk2.muestraToken());
+			if (!lexico.reconoce(CategoriaLexica.TKNUM)){
 				throw new Exception("ERROR: Necesitas un entero para definir el valor del array");
 			}
 			Token tk = lexico.lexer(); //consumo el entero
 			et.setElems(new Integer(Integer.parseInt(tk.getLexema())).intValue());
 			et.setTipo("array");
 			et.setTam(b.getTipo().getTam() * et.getTam());
+			//System.out.println("El tamaño es: " + et.getTam());
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("ERROR: Necesitas un ']'");
 			}
-			lexico.lexer(); //consumo ']'			
 			atrTipo.setTipo(et);
 			return atrTipo;			
 		}
@@ -550,13 +557,18 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN)){
 			throw new Exception("Error en la asignacion en linea: " + lexico.getLinea());
 	    }
+		
 		lexico.lexer();//consumo =
 //		int dir = ((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 		Atributo atrExpOr= ExpOr();
+		System.out.println("El tipo de ExpOr es: " + atrExpOr.getTipo().getTipo());
+		System.out.println("Son Compatibles??: " + compatibles(atrIAsig.getTipo(),atrExpOr.getTipo()));
 		if ((atrIAsig.getTipo().getTipo().equals("error")) ||
 				!compatibles(atrIAsig.getTipo(),atrExpOr.getTipo()) ||
-				(atrExpOr.getTipo().getTipo().equals("error")))
+				(atrExpOr.getTipo().getTipo().equals("error"))){
+			System.out.println("Estoy entrando aqui... bazura");
 			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
+		}
 		et = new ExpresionTipo("int");
 		ExpresionTipo et2 = new ExpresionTipo("bool");		
 		if (compatibles(atrIAsig.getTipo(),et) ||
@@ -1019,9 +1031,11 @@ public class Sintactico{
 			if (!lexico.reconoce(CategoriaLexica.TKCORCI)){
 				throw new Exception("Falta un corchete de cierre");
 			}
-			lexico.lexer();//consumo el ']'
+			Token tk = lexico.lexer();//consumo el ']'
+			System.out.println("He consumido: " + tk.muestraToken());
 			etRMem = atr.getTipo().getTbase(); 
 			ExpresionTipo et2= new ExpresionTipo();
+			System.out.println("Lo que tengo en ExpOr es: " + atrRMem.getTipo().getTipo());
 			if (atrRMem.getTipo().getTipo().equals("int") && atr.getTipo().getTipo().equals("array")){
 				et2 = ref(etRMem);
 			}
@@ -1191,6 +1205,8 @@ public class Sintactico{
 	
 	private boolean compatibles2 (ExpresionTipo t1, ExpresionTipo t2, Vector visitados){
 		Tupla pareja = new Tupla (t1,t2);
+		System.out.println("Tengo como t1: " + t1.getTipo());
+		System.out.println("Tengo como t2: " + t2.getTipo());
 		if (visitados.contains(pareja))
 			return true;
 		else{
@@ -1220,6 +1236,7 @@ public class Sintactico{
 						atr1 = (Parametros)t1.getParams().elementAt(i);
 						atr2 = (Parametros)t2.getParams().elementAt(i);
 						if (!compatibles2(atr1.getTipo(),atr2.getTipo(),visitados))
+							System.out.println("Estoy entrando aqui... bazura2");
 							return false;
 					}
 					return true;
@@ -1232,12 +1249,14 @@ public class Sintactico{
 					Parametros a2 = (Parametros)t2.getParams().elementAt(i);
 					if (!compatibles2(a1.getTipo(), a2.getTipo(), visitados)
 							|| (a2.getModo().equals("var") && !a1.getModo().equals("var"))) {
+						System.out.println("Estoy entrando aqui... bazura3");
 						return false;
 					}
 				}
 				return true;
 			}
 			else
+				System.out.println("Estoy entrando aqui... bazura4");
 				return false;
 		}
 	}
