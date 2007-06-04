@@ -118,6 +118,14 @@ public class Codigo {
 		cod.setElementAt(i,a);
 		//System.out.println("Paso por parchea con: "+ cod.get(a) + "He aadido: " + b);
 	}
+	public void parcheaInicio (int numniveles, int tamdatos, int etq){
+	int b = 1 + numniveles;
+	String i = (String)cod.elementAt(etq) + " " + b;
+	cod.setElementAt(i,etq);
+	b = b + tamdatos;
+	i = (String)cod.elementAt(etq+2) + " " + b;
+	cod.setElementAt(i,etq);
+	}
 	
 	
 	/**
