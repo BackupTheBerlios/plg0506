@@ -1,4 +1,3 @@
-
 package procesador; 
 /**
  * La clase <B>Token</B> define los atributos y mtodos relacionados con los token que usan nuestro lenguaje.
@@ -12,7 +11,7 @@ package procesador;
  */
 public class Token {
 	
-	/**
+	/*
 	 * Atributos de la clase:
 	 * 
 	 * categoria lexica nos indica a que categoria Lexica pertenece el Token,

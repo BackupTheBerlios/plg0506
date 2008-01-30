@@ -7,17 +7,8 @@ package tablaSimbolos;
  */
 public class propiedades {
 
-	/**
-	 * ExpresionTipo tipo;
-	 * String clase;
-	 * int dir;
-	 * int tam;
-	 */
-	
-	ExpresionTipo tipo;
+	String tipo;
 	int dir;
-	String clase;
-	int nivel;
 	
 	/**
 	 * Constructor de la clase sin parametros.
@@ -31,7 +22,7 @@ public class propiedades {
 	 * @param tipo String con el tipo del token.
 	 * @param dir Entero con la direccion de memoria de la variable.
 	 */
-	public propiedades(ExpresionTipo tipo, int dir) {
+	public propiedades(String tipo, int dir) {
 		super();
 		this.tipo = tipo;
 		this.dir = dir;
@@ -41,7 +32,7 @@ public class propiedades {
 	 * Accesor para el atributo tipo de la clase.
 	 * @return Devuelve el tipo que contiene el atributo.
 	 */
-	public ExpresionTipo getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 
@@ -49,7 +40,7 @@ public class propiedades {
 	 * Mutador el atributo tipo de la clase.
 	 * @param tipo Nuevo valor para el atributo tipo
 	 */
-	public void setTipo(ExpresionTipo tipo) {
+	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 
@@ -68,6 +59,26 @@ public class propiedades {
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
+
+	/**
+	 * Metodo que convierte en un String la lista de Atributos
+	 * @return Devuelve un String con los valores que contienen sus atributos
+	 */
+	public String toString(){
+		if (this != null){	
+			String aux;
+			aux = "( ";
+			aux = aux.concat(this.tipo);
+			aux = aux.concat(", ");
+			aux = aux.concat(new Integer (this.dir).toString());
+			aux = aux.concat(" )");
+			return aux;
+		}
+		else {
+			return "null";
+		}
+	}
+	
 	/**
 	 * Metodo que devuelve un booleano con la igualdad de los atributos
 	 * @param a Atributo con el que queremos comparar la igualdad
@@ -75,21 +86,5 @@ public class propiedades {
 	 */
 	public boolean equals(propiedades a){
 		return (this.getTipo() ==a.getTipo());
-	}
-
-	public String getClase() {
-		return clase;
-	}
-
-	public void setClase(String clase) {
-		this.clase = clase;
-	}
-
-	public int getNivel() {
-		return nivel;
-	}
-
-	public void setNivel(int nivel) {
-		this.nivel = nivel;
 	}
 }

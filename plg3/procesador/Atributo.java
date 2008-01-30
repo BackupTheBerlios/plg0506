@@ -1,7 +1,5 @@
 package procesador;
 
-import tablaSimbolos.ExpresionTipo;
-
 /**
  * La clase <B>Atributos</B> guarda el tipo y el nombre o identificador de un token. Contiene accesores y mutadores
  * de ambos parametros.
@@ -15,23 +13,17 @@ import tablaSimbolos.ExpresionTipo;
  *
  */public class Atributo {
 
-	ExpresionTipo tipo;
+	String tipo;
 	String id;
-	String clase;
 	
 	public Atributo() {
 		super();
 	}
 	
-	public Atributo(ExpresionTipo tipo, String id) {
+	public Atributo(String tipo, String id) {
 		super();
 		this.tipo = tipo;
 		this.id = id;
-	}
-	
-	public Atributo(ExpresionTipo tipo) {
-		super();
-		this.tipo = tipo;
 	}
 
 	public String getId() {
@@ -41,20 +33,12 @@ import tablaSimbolos.ExpresionTipo;
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public String getClase() {
-		return clase;
-	}
 
-	public void setClase(String clase) {
-		this.clase = clase;
-	}
-
-	public ExpresionTipo getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(ExpresionTipo tipo) {
+	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 }

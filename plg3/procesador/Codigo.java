@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-/**
+/** 
  * La clase <B>Codigo</B> se encarga de manejar el cdigo generado por las instrucciones del lenguaje.
  * <P>Tiene dos atributos:
  * <UL><LI><CODE>cod:</CODE> string donde se almacena el cdigo del lenguaje objeto, que es el cdigo de la mquina P. Como la mquina P de momento no existe, este el contenido de este atributo se mostrar por pantalla.</LI></UL>

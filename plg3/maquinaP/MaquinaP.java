@@ -27,8 +27,6 @@ import java.util.Stack;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
-import tablaSimbolos.*;
-
 public class MaquinaP {
 
 	/*
@@ -47,7 +45,6 @@ public class MaquinaP {
 	private Stack pila;
 	private int PC;
 	private int H;
-	private int NumNiveles;
 	private int ST;
 	private Vector Prog;
 	private Vector Mem;
@@ -67,7 +64,7 @@ public class MaquinaP {
 		pila = new Stack();
 		PC = 0;
 		H = 0;
-		tamMem = Integer.MAX_VALUE;
+		tamMem= Integer.MAX_VALUE;
 		ST = -1;
 		Mem= new Vector();
 		int i= f.length();
@@ -266,7 +263,7 @@ public class MaquinaP {
 	 * @param l Instruccion que se esta ejecutando.
 	 */
 	private boolean hasInt(String l) {
-//		System.out.println("hasInt");
+		System.out.println("hasInt");
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
 	}
 	
@@ -307,10 +304,6 @@ public class MaquinaP {
 				else if (linea[0].compareTo("suma")==0){
 					suma();
 				}
-				else if (linea[0].compareTo("apila_ind")==0)
-					apila_ind();
-				else if (linea[0].compareTo("desapila_ind")==0)
-					desapila_ind();
 				else if (linea[0].compareTo("resta")==0)
 					resta();
 				else if (linea[0].compareTo("multiplica")==0)
@@ -341,18 +334,6 @@ public class MaquinaP {
 					igual();
 				else if (linea[0].compareTo("distinto")==0)
 					distinto();
-				else if (linea[0].compareTo("ir-a")==0)
-					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("ir-f")==0)
-					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("mueve")==0)
-					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("apila-ret")==0)
-					apila_ret((new Integer(Integer.parseInt(linea[1]))).intValue());
-				/*else if (linea[0].compareTo("prologo")==0)
-					prologo((new Integer(Integer.parseInt(linea[1]))).intValue(),(new Integer(Integer.parseInt(linea[2]))).intValue());
-				else if (linea[0].compareTo("epilogo")==0)
-					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());*/
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
 				else{
@@ -551,6 +532,7 @@ public class MaquinaP {
 	public void apila_dir (int d) throws Exception{
 		System.out.println("apila-dir");
 		ST = ST + 1; 
+		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
 			if (d >= 0){
 				if ((Mem.size()>=d)&&(!Mem.isEmpty())){ 
@@ -603,163 +585,6 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 
-	public void apila_ind() throws Exception{
-		System.out.println("apila_ind");
-		int c1 = ((Integer)pila.pop()).intValue();
-		if(c1 < tamMem){
-			if (c1 >= 0){
-				if ((Mem.size() >= c1)&&(!Mem.isEmpty())){
-					if (Mem.elementAt(c1) != null)
-						pila.push(Mem.elementAt(c1));
-					else 
-						throw new Exception("ERROR: Variable sin inicializar.");
-					PC = PC + 1;
-				}else {				
-					throw new Exception("ERROR: Variable sin inicializar.");
-				}
-			}
-		}
-		else{
-			throw new Exception("ERROR: Variable sin declarar.");
-		}
-	}
-	
-	public void desapila_ind() throws Exception{
-		System.out.println("desapila_ind");
-		if (ST == -1){
-			throw new Exception("ERROR: Desapila_ind. La pila vacia.");
-		}		
-		int c1 = ((Integer)pila.pop()).intValue();
-		int c2 = ((Integer)pila.pop()).intValue();
-		if (c2 < tamMem){
-			if (c2 >= 0){
-				if (c2 >= Mem.size()){
-					aumentoMem(c2);
-					Mem.set(c2, new Integer(c1));
-				}
-				else{
-					Mem.set(c2, new Integer(c1));
-				}
-			}
-		}
-		ST = ST - 2;
-		PC = PC + 1;
-	}
-	
-	/**
-	 * apila_ret salva la dir. de retorno de un procedimiento.
-	 * 
-	 * @param ret Dir. de retorno
-	 * @throws Exception
-	 */
-	
-	public void apila_ret(int d) throws Exception {
-		int pc = PC;
-		System.out.println("apila_ret");
-		apila_dir(0);
-		apila(1);
-		suma();
-		apila(d);
-		desapila_ind();
-		PC = pc + 1;
-	}
-	
-	public void prologo(int nivel, int tamlocales) throws Exception {
-		System.out.println("prologo");
-		int pc = PC;
-		//
-		apila_dir(0);
-		apila(2);
-		suma();
-		apila_dir(nivel + 1);
-		desapila_ind();
-		//
-		apila_dir(0);
-		apila(3);
-		suma();
-		desapila_dir(nivel + 1);
-		//
-		apila_dir(0);
-		apila(tamlocales + 2);
-		suma();
-		desapila_dir(0);
-		//
-		//PC = pc + 1;
-		PC = pc;
-	}
-	
-	private void copia() throws Exception {
-		Integer i = (Integer)pila.pop();
-		pila.push(i);
-		pila.push(i);
-	}
-	
-	private void flip() throws Exception {
-		Integer i = (Integer)pila.pop();
-		Integer j = (Integer)pila.pop();
-		pila.push(j);
-		pila.push(i);
-	}
-	
-	private boolean tipoBasico(String tipo) {
-		return tipo.equals("int") || tipo.equals("bool");
-	}
-	
-	public void inicio(/*int numNiveles, int tamDatos*/) throws Exception {
-		//this.emite("apila", numNiveles+1);
-		apila(0); //etq
-		desapila_dir(2);
-		//this.emite("apila", 1+numNiveles+tamDatos);
-		apila(0);//etq+2
-		desapila_dir(1);
-	}
-		
-	public void epilogo(int nivel) throws Exception {
-		System.out.println("epilogo");
-		int pc = PC;
-		//
-		apila_dir(nivel + 1);
-		apila(2);
-		resta();
-		apila_ind();
-		//
-		apila_dir(nivel + 1);
-		apila(3);
-		resta();
-		copia();
-		desapila_dir(0);
-		//
-		apila(2);
-		suma();
-		apila_ind();
-		desapila_dir(nivel + 1);
-		//
-		//PC = pc + 1;
-		PC = pc;
-	}
-	
-	public void pasoParametro(String modoReal, propiedades pformal) throws Exception {
-		int pc = PC;
-		apila(pformal.getDir());
-		suma();
-		flip();
-		Parametros p = (Parametros)(pformal.getTipo().getParams().elementAt(0));
-		if (p.getModo().equals("val")
-				&& modoReal.equals("var")
-				&& !tipoBasico(pformal.getTipo().getTipo())) {
-			mueve(pformal.getTipo().getTam());
-		} else {
-			desapila_ind();
-		}
-		PC = pc;
-	}
-	
-	public void accesoVar(String infoID) {
-		int pc = PC;
-		//TODO
-		PC = pc;
-	}
-	
 	/**
 	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de fichero.
 	 * 
@@ -1085,57 +910,6 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 	
-	/**
-	 *   ir-a (cont) 
-	 *	 PC = cont
-	 * @param cont
-	 * @throws Exception
-	 */
-	public void ir_a(int cont) throws Exception{
-		System.out.println("ir-a");
-		PC = cont;
-	}
-	
-	/**
-	 * ir-f (cont) 
-		si Pila[ST] = 0 entonces
-		PC = cont
-		Sino 
-		PC = PC+1
-		ST = ST+1	
-
-	 * @param cont
-	 * @throws Exception
-	 */
-	public void ir_f (int cont) throws Exception{
-		System.out.println("ir-f");
-		int c1= ((Integer)pila.pop()).intValue();
-		if (c1==0){
-			PC = cont;
-		}
-		else{
-			PC= PC + 1;
-		}
-		ST = ST - 1;
-	}
-	
-	public void mueve (int s){
-		System.out.println("mueve");
-		int c1= ((Integer)pila.pop()).intValue();
-		int c2= ((Integer)pila.pop()).intValue();
-		if ((c2 + s) < tamMem){
-			for (int i=0;i<s;i++){
-				Mem.set(c2+i, Mem.get(c1+i)); 
-			}
-		}else{
-			aumentoMem(c2 + s);
-			for (int i=0;i<s;i++){
-				Mem.set(c2+i, Mem.get(c1+i)); 
-			}
-		}
-		ST = ST - 2;
-		PC = PC + 1;
-	}
 	/**
 	 * Metodo que obtiene el contenido de la pila en un String para ver su contenido.
 	 * 
