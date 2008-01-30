@@ -59,27 +59,30 @@ public class Sintactico{
 		}
 	}
 
-	/**
-	 * Evalua el programa.  Primero lee las declaraciones de variables (identificadores), que se encuentran
-	 * separados del conjunto de instrucciones "Is" mediante un "#".  Acto seguido, procesa cada instruccisn de Is.
-	 * 
-	 * @return errDeProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
-	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
-	 */	
 	private boolean Prog() throws Exception{
-		//System.out.println("Prog");
 		boolean errProg = true;
-		boolean errDecs = Decs();
-		if (lexico.reconoce(CategoriaLexica.TKLLAP)){
-			lexico.lexer(); //consumo {
-			boolean errIs = Is();
-			if (lexico.reconoce(CategoriaLexica.TKLLCI)){
-				lexico.lexer(); // consumo }
-				errProg = errDecs || errIs;
-				codigo.genIns("stop");
-			}
+		ProgDec();
+		if (lexico.reconoce(CategoriaLexica.TKVAR)){
+			lexico.lexer();//consumo VAR
+			boolean errDecs = Decs();
+			boolean errBloque = Bloque();
+			errProg = errDecs || errBloque;
+			codigo.genIns("stop");
 		}
 		return errProg;
+	}
+
+	private void ProgDec() throws Exception{
+		TS = new tablaSimbolos();
+		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+			Token tk = lexico.lexer(); //consumo iden
+			TS.addID(tk.getLexema(),"");
+			while (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+				lexico.lexer();
+			}
+		}else{
+			throw new Exception("El Programa tiene que tener un nombre");
+		}
 	}
 
 	/**
@@ -90,7 +93,7 @@ public class Sintactico{
 	private boolean Decs() throws Exception{
 		//System.out.println("Decs");
 		Atributo atrDec = Dec();
-		TS = new tablaSimbolos();
+//		TS = new tablaSimbolos();
 		TS.addID(atrDec.getId(),atrDec.getTipo());
 		Atributo atrRDecs = RDecs(atrDec);
 		if (atrRDecs.getTipo().equals("error")){
@@ -164,6 +167,22 @@ public class Sintactico{
 			return atrTipo;
 		}
 		throw new Exception("Tipo incorrecto en linea " + lexico.getLinea());
+	}
+	
+	private boolean Bloque() throws Exception{
+		boolean errBloque = true;
+		if (lexico.reconoce(CategoriaLexica.TKBEGIN)){
+			lexico.lexer();
+			boolean errIs = Is();
+			if (lexico.reconoce(CategoriaLexica.TKEND)){
+				errBloque = errIs;
+			}
+			else
+				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
+		}
+		else
+			throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
+		return errBloque;
 	}
 	
 	/**
