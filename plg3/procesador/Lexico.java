@@ -161,8 +161,10 @@ public class Lexico {
 			case '-':	return new Token("-",CategoriaLexica.TKRESTA);
 			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
-			case '%':	return new Token("%",CategoriaLexica.TKMOD);
-			case '/': compara = cmp (posicion, "//");
+			case '.':	return new Token(".",CategoriaLexica.TKPUNTO);
+			case '=':	return new Token("=",CategoriaLexica.TKIG);			
+//			case '%':	return new Token("%",CategoriaLexica.TKMOD);
+/*			case '/': compara = cmp (posicion, "//");
 						if (compara){
 							leeComentario(--posicion);
 							linea ++;
@@ -170,8 +172,8 @@ public class Lexico {
 						}
 						else{
 							return new Token("/",CategoriaLexica.TKDIV);
-						}
-			case '&': compara = cmp (posicion, "&&");
+						}*/
+/*			case '&': compara = cmp (posicion, "&&");
 						if (compara){
 							return new Token("&&", CategoriaLexica.TKAND);
 						}
@@ -185,28 +187,28 @@ public class Lexico {
 				}
 				else{
 					throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
-				}
+				}*/
 	
 			/*
 			 * Si detectamos '=' hay que discernir si es el operador de asignacion o un ==.
 			 */
-			case '=':	compara = cmp(posicion, "==");
+			case ':':	compara = cmp(posicion, ":=");
 						if (compara){
-							return new Token("==",CategoriaLexica.TKIG);
+							return new Token(":=",CategoriaLexica.TKASIGN);
 						}	
 						else{
-							return new Token("=",CategoriaLexica.TKASIGN);
+							return new Token(":",CategoriaLexica.TKDOSPUNTOS);
 						}
 			/*
 			 * Si detectamos '!' hay que discernir si es el operador not o !=.
 			 */
-			case '!':	compara = cmp(posicion, "!=");
+/*			case '!':	compara = cmp(posicion, "!=");
 						if (compara){
 							return new Token("!=",CategoriaLexica.TKDIF);
 						}
 						else{
 							return new Token("!",CategoriaLexica.TKNOT);
-						}
+						}*/
 
 			/*
 			 * Si detectamos '<' hay que discernir si es el operador 'menor que' o 'menor o igual que'
@@ -216,7 +218,13 @@ public class Lexico {
 							return new Token("<=",CategoriaLexica.TKMENIG);
 							}
 						else{
-							return new Token("<",CategoriaLexica.TKMEN);
+							compara = cmp(posicion,"<>");
+							if (compara){
+								return new Token ("<>",CategoriaLexica.TKDIF);
+							}
+							else{
+								return new Token("<",CategoriaLexica.TKMEN);
+							}
 						}
 	
 			/*

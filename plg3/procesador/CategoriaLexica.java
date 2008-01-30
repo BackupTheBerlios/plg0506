@@ -48,15 +48,15 @@ public class CategoriaLexica {
 	 */
 	public static final int TKMULT		= 7; 
 	
-	/**
-	 * Valor para reconocer un signo de division '/'.
-	 */
-	public static final int TKDIV	 	= 8;
+//	/**
+//	 * Valor para reconocer un signo de division '/'.
+//	 */
+//	public static final int TKDIV	 	= 8;
 	
-	/**
-	 * Valor para reconocer un signo de division '%'.
-	 */
-	public static final int TKMOD	 	= 9;
+//	/**
+//	 * Valor para reconocer un signo de division '%'.
+//	 */
+//	public static final int TKMOD	 	= 9;
 	
 	/**
 	 * valor para reconocer un parentesis de apertura '('.
@@ -94,24 +94,24 @@ public class CategoriaLexica {
 	public static final int TKIG			= 16;
 	
 	/**
-	 * Valor para reconocer el operador de distinto.
+	 * Valor para reconocer un '<>'.
 	 */
 	public static final int TKDIF		= 17;
 	
 	/**
 	 * Valor para reconocer el operador '&&'.
 	 */
-	public static final int TKAND		= 18;
+//	public static final int TKAND		= 18;
 	
 	/**
 	 * Valor para reconocer el operador '||'.
 	 */
-	public static final int TKOR			= 19;
+//	public static final int TKOR			= 19;
 	
 	/**
 	 * Valor para reconocer el operador '!'.
 	 */
-	public static final int TKNOT		= 20;
+//	public static final int TKNOT		= 20;
 	
 	/**
 	 * Valor para reconocer el valor booleano 'true'.
@@ -152,4 +152,69 @@ public class CategoriaLexica {
 	 * Valor para reconocer el caracter '}'
 	 */
 	public static final int TKLLCI		= 28;
+	
+	/**
+	 * Valor para reconocer el caracter '.'
+	 */
+	public static final int TKPUNTO		= 29;
+	
+	/**
+	 * Valor para reconocer el caracter ':'
+	 */
+	public static final int TKDOSPUNTOS	= 30;
+	
+	/**
+	 * Valor para reconocer palabra reservada PROGRAM
+	 */
+	public static final int TKPROGRAM	= 31;
+	
+	/**
+	 * Valor para reconocer palabra reservada VAR
+	 */
+	public static final int TKVAR	= 32;
+	
+	/**
+	 * Valor para reconocer palabra reservada BEGIN
+	 */
+	public static final int TKBEGIN	= 33;
+	
+	/**
+	 * Valor para reconocer palabra reservada END
+	 */
+	public static final int TKEND		= 34;
+	
+	/**
+	 * Valor para reconocer palabra reservada AND
+	 */
+	public static final int TKAND		= 35;
+	
+	/**
+	 * Valor para reconocer palabra reservada OR
+	 */
+	public static final int TKOR		= 36;
+
+	/**
+	 * Valor para reconocer palabra reservada NOT
+	 */
+	public static final int TKNOT		= 37;
+
+	/**
+	 * Valor para reconocer palabra reservada DIV
+	 */
+	public static final int TKDIV		= 38;
+	
+	/**
+	 * Valor para reconocer palabra reservada MOD
+	 */
+	public static final int TKMOD		= 39;
+	
+	/**
+	 * Valor para reconocer palabra reservada READ
+	 */
+	public static final int TKREAD		= 40;
+	
+	/**
+	 * Valor para reconocer palabra reservada WRITE
+	 */
+	public static final int TKWRITE		= 41;
 }
