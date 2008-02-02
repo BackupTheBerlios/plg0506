@@ -431,7 +431,7 @@ private String leeComentario (int posicion)throws Exception, IOException {
 	 * @throws IOException 
 	 * 
 	 */
-	public boolean reconoce(int tk) throws IOException, Exception{
+	public boolean reconoce(CategoriaLexica tk) throws IOException, Exception{
 		boolean aux = true;
 		if (tk == getNextToken().getCategoriaLexica()){
 			aux = true;

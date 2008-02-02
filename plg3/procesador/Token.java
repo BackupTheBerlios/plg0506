@@ -17,7 +17,7 @@ public class Token {
 	 * categoria lexica nos indica a que categoria Lexica pertenece el Token,
 	 * lexema es un string que nos da una representacion de lex del Token.
 	 */
-	private int categoriaLexica;
+	private CategoriaLexica categoriaLexica;
 	private String lexema;
 	
 	/**
@@ -25,7 +25,7 @@ public class Token {
 	 */
 	public Token() {
 		lexema = "";
-		categoriaLexica = 0;
+		categoriaLexica = CategoriaLexica.TKLAMBDA;
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class Token {
 	 * @param tipo entero con el tipo del Token.
 	 *  
 	 */
-	public Token(String lex, int tipo) {
+	public Token(String lex, CategoriaLexica tipo) {
 		lexema = lex;
 		categoriaLexica = tipo;
 	}
@@ -44,7 +44,7 @@ public class Token {
 	 * Accesor el atributo de la clase categoriaLexica.
 	 * @return Entero que indica a que categora lexica pertenece el token.
 	 */
-	public int getCategoriaLexica() {
+	public CategoriaLexica getCategoriaLexica() {
 		return categoriaLexica;
 	}
 	
@@ -52,7 +52,7 @@ public class Token {
 	 * Mutador el atributo de la clase categoriaLexica.
 	 * @param categoriaLexica Entero que indica a que categora lexica pertenece el token.
 	 */
-	public void setCategoriaLexica(int categoriaLexica) {
+	public void setCategoriaLexica(CategoriaLexica categoriaLexica) {
 		this.categoriaLexica = categoriaLexica;
 	}
 	
@@ -92,7 +92,7 @@ public class Token {
 	public String muestraToken(){
 		String aux= "(";
 		aux= aux.concat(lexema);
-		String aux2= (new Integer(categoriaLexica)).toString();
+		String aux2= (categoriaLexica).toString();
 		aux= aux.concat(" , ");
 		aux= aux.concat(aux2);
 		aux= aux.concat(")");
