@@ -42,6 +42,8 @@ public class MaquinaP {
 	 * fichero: Fichero donde se encuetra el codigo que va a ejecutar la MaquinaP.
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
+	
+	/*
 	private Stack pila;
 	private int PC;
 	private int H;
@@ -51,7 +53,24 @@ public class MaquinaP {
 	private FileReader fichero;
 	private String pasos;
 	private int tamMem;
-
+	*/
+	
+	private Stack pila = new Stack();
+	private int PC = 0;
+	private int H = 0;
+	private int ST = -1;
+	private Vector Prog;
+	private Vector Mem = new Vector();
+	private FileReader fichero;
+	private String pasos = "";
+	private int tamMem = Integer.MAX_VALUE;
+	private boolean traza = false;
+	
+	public MaquinaP(Vector p, boolean sbs) {
+		Prog = p;
+		traza = sbs;
+	}
+	
 	/**
 	 * El constructor de la clase MaquinaP que solo tiene el buffer de lectura del fichero como parametro de entrada.
 	 * @param file Recibe como parametro el fichero a ejecutar para poder inicializar todo.
@@ -334,6 +353,10 @@ public class MaquinaP {
 					igual();
 				else if (linea[0].compareTo("distinto")==0)
 					distinto();
+				else if (linea[0].compareTo("read")==0)
+					read();
+				else if (linea[0].compareTo("write")==0)
+					write();
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
 				else{
@@ -343,11 +366,21 @@ public class MaquinaP {
 					pasos= pasos.concat("La pila ahora esta vacia\n");
 				else
 					pasos= pasos.concat("La cima de la pila ha cambiado a: "+ pila.peek() + "\n");
+				
+				// Ejecucion en modo traza
+				if (traza) muestraTraza();
 			}
 			else
 				eof();
 		}
 		return pasos;
+	}
+	
+	private void muestraTraza() throws Exception {
+		System.out.println(resultadoMem());
+		System.out.println(muestraPila());
+		System.out.println("PULSE ENTER PARA CONTINUAR");
+		System.in.read();
 	}
 	
 	/**
@@ -386,7 +419,7 @@ public class MaquinaP {
 	 */
 
 	public void suma() throws Exception{
-		System.out.println("suma");
+		if (traza) System.out.println("suma");
 		if (ST<1){
 			throw new Exception("ERROR: Suma. La pila no contiene los datos necesarios.");
 		}
@@ -411,7 +444,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void resta()throws Exception{
-		System.out.println("resta");
+		if (traza) System.out.println("resta");
 		if (ST<1){
 			throw new Exception("ERROR: Resta. La pila no contiene los datos necesarios.");
 		}
@@ -436,7 +469,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void multiplica()throws Exception{
-		System.out.println("multiplica");
+		if (traza) System.out.println("multiplica");
 		if (ST<1){
 			throw new Exception("ERROR: Multiplica. La pila no contiene los datos necesarios.");
 		}
@@ -461,7 +494,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void divide()throws Exception{
-		System.out.println("divide");
+		if (traza) System.out.println("divide");
 		if (ST<1){
 			throw new Exception("ERROR: Divide. La pila no contiene los datos necesarios.");
 		}
@@ -486,7 +519,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void modulo()throws Exception{
-		System.out.println("modulo");
+		if (traza) System.out.println("modulo");
 		if (ST<1){
 			throw new Exception("ERROR: Modulo. La pila no contiene los datos necesarios.");
 		}
@@ -510,7 +543,7 @@ public class MaquinaP {
 	 * @param n
 	 */
 	public void apila (int n){
-		System.out.println("apila");
+		if (traza) System.out.println("apila");
 		ST=ST+1;
 		pila.push(new Integer (n));
 		PC=PC+1;
@@ -530,7 +563,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void apila_dir (int d) throws Exception{
-		System.out.println("apila-dir");
+		if (traza) System.out.println("apila-dir");
 		ST = ST + 1; 
 		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
@@ -566,7 +599,7 @@ public class MaquinaP {
 	public void desapila_dir(int d) throws Exception{
 		//Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
-		System.out.println("desapila_dir");
+		if (traza) System.out.println("desapila_dir");
 		if (ST<0){
 			throw new Exception("ERROR: Desapila_dir. La pila no contiene los datos necesarios.");
 		}
@@ -621,7 +654,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void and() throws Exception{
-		System.out.println("and");
+		if (traza) System.out.println("and");
 		if (ST<1){
 			throw new Exception("ERROR: And. La pila no contiene los datos necesarios.");
 		}
@@ -651,7 +684,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void or()throws Exception{
-		System.out.println("or");
+		if (traza) System.out.println("or");
 		if (ST<1){
 			throw new Exception("ERROR: Or. La pila no contiene los datos necesarios.");
 		}
@@ -679,7 +712,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void not()throws Exception{
-		System.out.println("not");
+		if (traza) System.out.println("not");
 		if (ST<0){
 			throw new Exception("ERROR: Not. La pila no contiene los datos necesarios.");
 		}
@@ -705,7 +738,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void menos()throws Exception{
-		System.out.println("menos");
+		if (traza) System.out.println("menos");
 		if (ST<0){
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
 		}
@@ -726,7 +759,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mas()throws Exception{
-		System.out.println("mas");
+		if (traza) System.out.println("mas");
 		if (ST<0){
 			throw new Exception("ERROR: Neg. La pila no contiene los datos necesarios.");
 		}
@@ -744,7 +777,7 @@ public class MaquinaP {
 	 *	PC <-- PC + 1
 	 */
 	public void menor()throws Exception{
-		System.out.println("menor");
+		if (traza) System.out.println("menor");
 		if (ST<1){
 			throw new Exception("ERROR: Menor. La pila no contiene los datos necesarios.");
 		}
@@ -774,7 +807,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void menorIgual()throws Exception{
-		System.out.println("menorIgual");
+		if (traza) System.out.println("menorIgual");
 		if (ST<1){
 			throw new Exception("ERROR: Menor o igual. Memoria sin inicializar.");
 		}
@@ -804,7 +837,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mayor()throws Exception{
-		System.out.println("mayor");
+		if (traza) System.out.println("mayor");
 		if (ST<1){
 			throw new Exception("ERROR: Mayor. La pila no contiene los datos necesarios.");
 		}
@@ -834,7 +867,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void mayorIgual()throws Exception{
-		System.out.println("mayorIgual");
+		if (traza) System.out.println("mayorIgual");
 		if (ST<1){
 			throw new Exception("ERROR: Mayor o igual. La pila no contiene los datos necesarios.");
 		}
@@ -864,7 +897,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void igual()throws Exception{
-		System.out.println("igual");
+		if (traza) System.out.println("igual");
 		if (ST<1){
 			throw new Exception("ERROR: Igual. La pila no contiene los datos necesarios.");
 		}
@@ -894,7 +927,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public void distinto()throws Exception{
-		System.out.println("distinto");
+		if (traza) System.out.println("distinto");
 		if (ST<1){
 			throw new Exception("ERROR: Distinto. La pila no contiene los datos necesarios.");
 		}
@@ -908,6 +941,30 @@ public class MaquinaP {
 		}
 		ST = ST -1;
 		PC = PC + 1;
+	}
+	
+	public void read() throws Exception {
+		if (traza) System.out.println("read");
+		int num; // De momento read solamente lee enteros.
+		try {
+			num = System.in.read();
+		} catch (IOException e) {
+			throw new Exception("ERROR: Read. Error al leer.");
+		}
+		pila.push(new Integer(num));
+		ST++;
+		PC--;
+	}
+	
+	public void write() throws Exception {
+		if (traza) System.out.println("write");
+		if (ST < 1) {
+			throw new Exception("ERROR: Write. La pila no contiene los datos necesarios.");
+		}
+		int num = ((Integer)pila.pop()).intValue();
+		System.out.println(num);
+		ST--;
+		PC--;
 	}
 	
 	/**
