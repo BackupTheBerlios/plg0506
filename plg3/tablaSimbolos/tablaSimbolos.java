@@ -16,7 +16,7 @@ import java.util.Hashtable;
 public class tablaSimbolos {
 
 		
-	Hashtable tabla;
+	Hashtable<Object,Object> tabla;
 	int dir;
 
 	/**
@@ -24,7 +24,7 @@ public class tablaSimbolos {
 	 */
 	public tablaSimbolos() {
 		super();
-		this.tabla = new Hashtable();
+		this.tabla = new Hashtable<Object,Object>();
 		this.dir = 0;
 	}
 

@@ -19,7 +19,6 @@ package maquinaP;
  *
  */
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -55,12 +54,12 @@ public class MaquinaP {
 	private int tamMem;
 	*/
 	
-	private Stack pila = new Stack();
+	private Stack<Object> pila = new Stack();
 	private int PC = 0;
 	private int H = 0;
 	private int ST = -1;
-	private Vector Prog;
-	private Vector Mem = new Vector();
+	private Vector<Object> Prog;
+	private Vector<Object> Mem = new Vector<Object>();
 	private FileReader fichero;
 	private String pasos = "";
 	private int tamMem = Integer.MAX_VALUE;
@@ -76,7 +75,7 @@ public class MaquinaP {
 	 * @param file Recibe como parametro el fichero a ejecutar para poder inicializar todo.
 	 *
 	 */	
-	public MaquinaP(File file) {
+	/*public MaquinaP(File file) {
 		super();
 		System.out.println("Constructor Maquina P");
 		String f = file.toString();
@@ -85,7 +84,7 @@ public class MaquinaP {
 		H = 0;
 		tamMem= Integer.MAX_VALUE;
 		ST = -1;
-		Mem= new Vector();
+		Mem= new Vector<Object>();
 		int i= f.length();
 		String fcod = new String(f.substring( 0,i-3));
 		fcod = fcod.concat("obj");
@@ -98,7 +97,7 @@ public class MaquinaP {
 		}
 		Prog = damePrograma(fichero);
 		pasos="";
-	}
+	}*/
 	
 	/**
 	 * Accesor para el atributo de la clase, pasos. 
@@ -246,7 +245,7 @@ public class MaquinaP {
 	 */
 	private Vector damePrograma(FileReader f){
 		System.out.println("damePrograma");
-		Vector v=new Vector();
+		Vector<Object> v=new Vector();
 		BufferedReader entrada = null;
 	    try {
 	      entrada = new BufferedReader(f);
@@ -974,7 +973,7 @@ public class MaquinaP {
 	 */
 	public String muestraPila(){
 		System.out.println("muestraPila");
-		Stack aux = new Stack();
+		Stack<Object> aux = new Stack<Object>();
 		String pilas="El contenido de la pila es: \n";
 		while(!pila.isEmpty()){
 			Integer n = (Integer)pila.pop();

@@ -1,8 +1,7 @@
-import java.io.File;
-import java.util.Vector;
+//import java.util.Vector;
 
-import procesador.*;
-import maquinaP.MaquinaP;
+//import procesador.*;
+//import maquinaP.MaquinaP;
 
 public class pruebaMaquinaP {
 
@@ -11,7 +10,7 @@ public class pruebaMaquinaP {
 	 * @param args
 	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 			String f = new String ("Ejemplo.txt");
 			File file = new File(f);
 			Procesador p = new Procesador();
@@ -24,5 +23,5 @@ public class pruebaMaquinaP {
 			MP.setProg(cod2);
 			MP.ejecuta();
 			System.out.print(MP.resultadoMem());
-	}
+	}*/
 }

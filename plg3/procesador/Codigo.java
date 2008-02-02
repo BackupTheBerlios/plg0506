@@ -24,7 +24,7 @@ public class Codigo {
 	 *  El String cod guarda el codigo del lenguaje objeto, que es el codigo de la maquina P.
 	 *  En el fichero se guarda tambien el codigo generado, por si se quiere ejecutar en otra ocasin. El fichero se guarda con extension '.obj'
 	 */
-	Vector cod;
+	Vector<String> cod;
 	FileOutputStream fichero;
 	
 	/**

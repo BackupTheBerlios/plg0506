@@ -147,7 +147,7 @@ public class GUI {
              } 
         	 else {
 	        	texto1.setText(null);
-	        	maquinap = new MaquinaP(file);
+	        	//maquinap = new MaquinaP(file);
 	        	//Codigo c = procesador.getCod();
 	        	maquinap.setProg(codigo.getCod());
 	        	try {
