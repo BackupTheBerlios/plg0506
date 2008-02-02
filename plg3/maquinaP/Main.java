@@ -14,7 +14,7 @@ public class Main {
 		boolean traza = false;
 		String filename = "";
 		
-		if (args.length > 1 && args[0] == "-s") {
+		if (args.length > 1 && args[0].equals("-s")) {
 			traza = true;
 			filename = args[1];
 		} else if (args.length == 1) {

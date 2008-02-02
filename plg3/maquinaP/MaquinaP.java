@@ -971,7 +971,7 @@ public class MaquinaP {
 	 * @return String con el contenido de la Pila
 	 */
 	public String muestraPila(){
-		System.out.println("muestraPila");
+		//System.out.println("muestraPila");
 		Stack<Object> aux = new Stack<Object>();
 		String pilas="El contenido de la pila es: \n";
 		while(!pila.isEmpty()){
