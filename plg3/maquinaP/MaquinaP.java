@@ -54,7 +54,7 @@ public class MaquinaP {
 	private int tamMem;
 	*/
 	
-	private Stack<Object> pila = new Stack();
+	private Stack<Object> pila = new Stack<Object>();
 	private int PC = 0;
 	private int H = 0;
 	private int ST = -1;
@@ -245,7 +245,7 @@ public class MaquinaP {
 	 */
 	private Vector damePrograma(FileReader f){
 		System.out.println("damePrograma");
-		Vector<Object> v=new Vector();
+		Vector<Object> v=new Vector<Object>();
 		BufferedReader entrada = null;
 	    try {
 	      entrada = new BufferedReader(f);

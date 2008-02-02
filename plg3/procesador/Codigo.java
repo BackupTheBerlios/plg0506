@@ -33,7 +33,7 @@ public class Codigo {
 	 * @param fich String que guarda la ruta del fichero donde se almacenara el cdigo. Este se almacena en el mismo directorio que se encuentra el cdigo fuente.
 	 */
 	public Codigo(File fich){		
-		cod = new Vector();
+		cod = new Vector<String>();
 		String fcod;
 		int i= fich.toString().length();
 		fcod = new String(fich.toString().substring( 0,i-3));
@@ -57,7 +57,7 @@ public class Codigo {
 	 * Este mtodo inicializa el atributo cod con la cadena vaca. No cuenta con parmetros de entrada ni de salida. No devuelve nada.
 	 */
 	public void inicializaCodigo(){
-		cod = new Vector();
+		cod = new Vector<String>();
 	}
 	
 	/**
