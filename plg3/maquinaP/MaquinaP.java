@@ -390,7 +390,7 @@ public class MaquinaP {
 	 * @return String con el contenido del vector Memoria.
 	 */
 	public String resultadoMem(){
-		System.out.println("resultadoMem");
+		//System.out.println("resultadoMem");
 		String s="\n"+"Memoria :"+"\n";
 		for (int i=0;i<Mem.size();i++){
 			if(Mem.elementAt(i)!=null){
