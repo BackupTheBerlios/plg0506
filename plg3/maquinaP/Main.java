@@ -35,6 +35,7 @@ public class Main {
 			resultado = mp.ejecuta();
 		} catch (Exception e) {
 			System.out.println("Error: excepcion ejecutando el programa");
+			System.out.println(e.toString());
 			System.exit(1);
 		}
 		System.out.println("=== RESULTADO FINAL DE LA EJECUCION ===");

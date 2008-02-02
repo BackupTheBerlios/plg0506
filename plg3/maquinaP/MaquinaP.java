@@ -303,14 +303,14 @@ public class MaquinaP {
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
-				if (hasInt(linea[0])){
+				/*if (hasInt(linea[0])){
 					System.out.println(linea[0] + "  " + linea[1]);
 				}
 				else{
 					System.out.println(linea[0] + "  ");
-				}
+				}*/
 				pasos = pasos.concat("Num. de instr.: (" + PC + ") - " + linea[0] + "  ");
-				
+
 				if (hasInt(linea[0]))
 					pasos = pasos.concat(linea[1]);
 				pasos = pasos.concat("\n");
@@ -366,7 +366,7 @@ public class MaquinaP {
 					pasos= pasos.concat("La pila ahora esta vacia\n");
 				else
 					pasos= pasos.concat("La cima de la pila ha cambiado a: "+ pila.peek() + "\n");
-				
+
 				// Ejecucion en modo traza
 				if (traza) muestraTraza();
 			}
@@ -951,18 +951,18 @@ public class MaquinaP {
 		Integer num = new Integer(line);
 		pila.push(num);
 		ST++;
-		PC--;
+		PC++;
 	}
 	
 	public void write() throws Exception {
 		if (traza) System.out.println("write");
-		if (ST < 1) {
+		if (ST < 0) {
 			throw new Exception("ERROR: Write. La pila no contiene los datos necesarios.");
 		}
 		int num = ((Integer)pila.pop()).intValue();
 		System.out.println(num);
 		ST--;
-		PC--;
+		PC++;
 	}
 	
 	/**

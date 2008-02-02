@@ -10,6 +10,7 @@ public class PruebasConMaquinaP {
 		Vector<Object> prog = new Vector<Object>();
 		// Codigo del programa para MaquinaP
 		prog.add("read");
+		prog.add("read");
 		prog.add("write");
 		// Fin del codigo
 		FileOutputStream fos = null;
