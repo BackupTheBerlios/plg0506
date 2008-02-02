@@ -11,11 +11,11 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		boolean stepbystep = false;
+		boolean traza = false;
 		String filename = "";
 		
 		if (args.length > 1 && args[0] == "-s") {
-			stepbystep = true;
+			traza = true;
 			filename = args[1];
 		} else if (args.length == 1) {
 			filename = args[0];
@@ -24,9 +24,12 @@ public class Main {
 			System.exit(1);
 		}
 		
-		Vector prog = deserialize(filename);
+		//Para hacer pruebas:
+		new PruebasConMaquinaP(filename);
 		
-		MaquinaP mp = new MaquinaP(prog, stepbystep);
+		Vector<Object> prog = deserialize(filename);
+		
+		MaquinaP mp = new MaquinaP(prog, traza);
 		String resultado = "";
 		try {
 			resultado = mp.ejecuta();
@@ -40,15 +43,16 @@ public class Main {
 	}
 
 	
-	private static Vector deserialize(String filename) {
+	private static Vector<Object> deserialize(String filename) {
 		
-		Vector prog = null;
+		Vector<Object> prog = null;
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
 		try {
 			fis = new FileInputStream(filename);
 			ois = new ObjectInputStream(fis);
-			prog = (Vector)ois.readObject();
+			prog = (Vector<Object>)ois.readObject();
+			ois.close();
 		} catch (Exception e) {
 			System.out.println("Error: excepcion leyendo el archivo");
 			System.exit(1);

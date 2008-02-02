@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Stack;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -65,9 +66,9 @@ public class MaquinaP {
 	private int tamMem = Integer.MAX_VALUE;
 	private boolean traza = false;
 	
-	public MaquinaP(Vector p, boolean sbs) {
+	public MaquinaP(Vector<Object> p, boolean t) {
 		Prog = p;
-		traza = sbs;
+		traza = t;
 	}
 	
 	/**
@@ -281,7 +282,7 @@ public class MaquinaP {
 	 * @param l Instruccion que se esta ejecutando.
 	 */
 	private boolean hasInt(String l) {
-		System.out.println("hasInt");
+		//System.out.println("hasInt");
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
 	}
 	
@@ -294,7 +295,7 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public String ejecuta() throws Exception{
-		System.out.println("ejecuta");
+		//System.out.println("ejecuta");
 		String i;
 		String[] linea;
 		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
@@ -944,13 +945,11 @@ public class MaquinaP {
 	
 	public void read() throws Exception {
 		if (traza) System.out.println("read");
-		int num; // De momento read solamente lee enteros.
-		try {
-			num = System.in.read();
-		} catch (IOException e) {
-			throw new Exception("ERROR: Read. Error al leer.");
-		}
-		pila.push(new Integer(num));
+		InputStreamReader converter = new InputStreamReader(System.in);
+		BufferedReader in = new BufferedReader(converter);
+		String line = in.readLine();
+		Integer num = new Integer(line);
+		pila.push(num);
 		ST++;
 		PC--;
 	}
