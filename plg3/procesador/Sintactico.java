@@ -482,7 +482,7 @@ public class Sintactico{
 				&& !lexico.reconoce(CategoriaLexica.TKMEN)&& !lexico.reconoce(CategoriaLexica.TKMENIG)){
 			return heredado;
 		}
-		String op = genOpRel((lexico.lexer()).getLexema());
+		String op = OpRel((lexico.lexer()).getLexema());
 		
 		atrRExpRel = ExpAd();
 		if (heredado.getTipo().equals("error") || atrRExpRel.getTipo().equals("error")){
@@ -533,7 +533,7 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKSUMA) && !lexico.reconoce(CategoriaLexica.TKRESTA)){
 			return heredado;
 		}
-		String op = genOpAd((lexico.lexer()).getLexema());
+		String op = OpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
 		if (!atrExpMul.getTipo().equals("int") || !heredado.getTipo().equals("int")){
 			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
@@ -582,7 +582,7 @@ public class Sintactico{
 		if (!lexico.reconoce(CategoriaLexica.TKDIV) && !lexico.reconoce(CategoriaLexica.TKMOD)&& !lexico.reconoce(CategoriaLexica.TKMULT)){
 			return heredado;
 		}
-		String op = genOpMul((lexico.lexer()).getLexema());
+		String op = OpMul((lexico.lexer()).getLexema());
 		Atributo atrFact = Fact();
 		if ((atrFact.getTipo()).equals("int") && heredado.getTipo().equals("int")){
 			atrRExpMul.setTipo("int");
@@ -654,7 +654,7 @@ public class Sintactico{
 		}
 
 		if (lexico.reconoce(CategoriaLexica.TKNOT)){
-			String op = genOpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
+			String op = OpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
 			atrFact = Fact();
 			codigo.emite(op);
 			if (!atrFact.getTipo().equals("bool")){
@@ -668,7 +668,7 @@ public class Sintactico{
 		}
 		
 		if ( (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
-			String op = genOpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
+			String op = OpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
 			atrFact = Fact();
 			codigo.emite(op);
 			if (!atrFact.getTipo().equals("int")){
@@ -685,13 +685,23 @@ public class Sintactico{
 		return atrFact;
 	}
 	
+	/*
+	 * OpUnario ::= + | - | NOT 
+OpAd ::= + | - 
+OpOr::= OR
+OpMul ::= * | DIV | MOD
+OpAnd ::= AND
+OpRel ::= < | > | <= | >= | = | <>
+*/
+	
+	
 	/**
 	 * 
 	 * @param opDeOpAnd
 	 * @throws Exception 
 	 */
-	private String genOpAnd(String opDeOpAnd){
-		if (opDeOpAnd == "&&")
+	private String OpAnd(String opDeOpAnd){
+		if (opDeOpAnd == "and")
 			return "and";
 		else
 			return "";
@@ -701,8 +711,8 @@ public class Sintactico{
 	 * 
 	 * @param opDeOpOr
 	 */
-	private String genOpOr(String opDeOpOr){
-		if (opDeOpOr == "||")
+	private String OpOr(String opDeOpOr){
+		if (opDeOpOr == "or")
 			return ("or");
 		else return "";
 	}
@@ -711,7 +721,7 @@ public class Sintactico{
 	 * 
 	 * @param opDeOpAd
 	 */
-	private String genOpAd(String opDeOpAd){
+	private String OpAd(String opDeOpAd){
 		if (opDeOpAd == "+")
 			return ("suma");
 		else if (opDeOpAd.equals("-"))
@@ -723,12 +733,12 @@ public class Sintactico{
 	 * 
 	 * @param opDeOpMul
 	 */
-	private String genOpMul(String opDeOpMul){
+	private String OpMul(String opDeOpMul){
 		if (opDeOpMul == "*")
 			return("multiplica");
-		else if (opDeOpMul.equals("/")){
+		else if (opDeOpMul.equals("div")){
 			return("divide");}
-		else if (opDeOpMul.equals("%"))
+		else if (opDeOpMul.equals("mod"))
 			return("modulo");
 		else return "";
 	}
@@ -738,7 +748,7 @@ public class Sintactico{
 	 * @param opDeOpUn
 	 * @return
 	 */
-	private String genOpUnarioArit(String opDeOpUn){
+	private String OpUnarioArit(String opDeOpUn){
 		if (opDeOpUn == "+")
 			return("positivo");
 		else if (opDeOpUn.equals("-"))
@@ -751,8 +761,8 @@ public class Sintactico{
 	 * @param opDeOpUn
 	 * @return
 	 */
-	private String genOpUnarioLog(String opDeOpUn){
-		if (opDeOpUn.equals("!"))
+	private String OpUnarioLog(String opDeOpUn){
+		if (opDeOpUn.equals("not"))
 			return("not");
 		else return "";
 	}
@@ -762,7 +772,7 @@ public class Sintactico{
 	 * @param opDeOpComp
 	 * @return
 	 */
-	private String genOpRel(String opDeOpComp){
+	private String OpRel(String opDeOpComp){
 		
 		if (opDeOpComp == "<="){
 			return("menorIgual");
@@ -779,7 +789,7 @@ public class Sintactico{
 		else if (opDeOpComp == "=="){
 			return("igual");
 		}	
-		else if (opDeOpComp == "!="){
+		else if (opDeOpComp == "<>"){
 				return("distinto");
 		}
 		else return "";
