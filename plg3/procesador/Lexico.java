@@ -143,103 +143,57 @@ public class Lexico {
 			posicion ++;
 			a = Character.toLowerCase(a);
 			switch (a){
-			
-			/*
-			 * En primer lugar identificamos todos los caracteres especiales.
-			 */
+			//s0
 			case '\n':	linea ++;
 						break;			
 			case '\t':	break;
-			case ' ':	break;
 			case '\f':	break;
 			case '\r':	break;
-			case '0':	return new Token("0",CategoriaLexica.TKNUM);
-			case '(':	return new Token("(",CategoriaLexica.TKPAP);
-			case ')':	return new Token(")",CategoriaLexica.TKPCI);
-			case '{':	return new Token("{",CategoriaLexica.TKLLAP);
-			case '}':	return new Token("}",CategoriaLexica.TKLLCI);
-			case '+':	return new Token("+",CategoriaLexica.TKSUMA);
-			case '-':	return new Token("-",CategoriaLexica.TKRESTA);
-			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
-			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
-			case '.':	return new Token(".",CategoriaLexica.TKPUNTO);
-			case ',':	return new Token(",",CategoriaLexica.TKCOMA);
-			case '=':	return new Token("=",CategoriaLexica.TKIG);			
-//			case '%':	return new Token("%",CategoriaLexica.TKMOD);
-/*			case '/': compara = cmp (posicion, "//");
-						if (compara){
-							leeComentario(--posicion);
-							linea ++;
-							break;
-						}
-						else{
-							return new Token("/",CategoriaLexica.TKDIV);
-						}*/
-/*			case '&': compara = cmp (posicion, "&&");
-						if (compara){
-							return new Token("&&", CategoriaLexica.TKAND);
-						}
-						else{
-							throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
-						}
-			
-			case '|': compara = cmp (posicion, "||");
-				if (compara){
-					return new Token("||", CategoriaLexica.TKOR);
-				}
-				else{
-					throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
-				}*/
-	
-			/*
-			 * Si detectamos '=' hay que discernir si es el operador de asignacion o un ==.
-			 */
+			case ' ':	break;
+			//s1
+			case '=':	return new Token("=",CategoriaLexica.TKIG); 
+			//s2 
 			case ':':	compara = cmp(posicion, ":=");
 						if (compara){
 							return new Token(":=",CategoriaLexica.TKASIGN);
 						}	
-						else{
+						else{ // s5
 							return new Token(":",CategoriaLexica.TKDOSPUNTOS);
 						}
-			/*
-			 * Si detectamos '!' hay que discernir si es el operador not o !=.
-			 */
-/*			case '!':	compara = cmp(posicion, "!=");
-						if (compara){
-							return new Token("!=",CategoriaLexica.TKDIF);
+			case '>':	compara = cmp(posicion, ">=");
+						if (compara){//s3
+							return new Token(">=",CategoriaLexica.TKMAYIG);
 						}
-						else{
-							return new Token("!",CategoriaLexica.TKNOT);
-						}*/
-
-			/*
-			 * Si detectamos '<' hay que discernir si es el operador 'menor que' o 'menor o igual que'
-			 */
+						else{//s5
+							return new Token(">",CategoriaLexica.TKMAY);
+						}
 			case '<':	compara = cmp(posicion, "<=");
-						if (compara){
+						if (compara){//s4
 							return new Token("<=",CategoriaLexica.TKMENIG);
 							}
 						else{
 							compara = cmp(posicion,"<>");
-							if (compara){
+							if (compara){//s6
 								return new Token ("<>",CategoriaLexica.TKDIF);
 							}
-							else{
+							else{//s5
 								return new Token("<",CategoriaLexica.TKMEN);
 							}
 						}
-	
-			/*
-			 * Si detectamos '>' hay que discernir si es el operador 'mayor que' o 'mayor o igual que' 
-			 */
-			case '>':	compara = cmp(posicion, ">=");
-						if (compara){
-							return new Token(">=",CategoriaLexica.TKMAYIG);
-						}
-						else{
-							return new Token(">",CategoriaLexica.TKMAY);
-						}
-						
+			//s7
+			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
+			case '.':	return new Token(".",CategoriaLexica.TKPUNTO);
+			case ',':	return new Token(",",CategoriaLexica.TKCOMA);
+			case '(':	return new Token("(",CategoriaLexica.TKPAP);
+			case ')':	return new Token(")",CategoriaLexica.TKPCI);
+			case '{':	return new Token("{",CategoriaLexica.TKLLAP);
+			case '}':	return new Token("}",CategoriaLexica.TKLLCI);
+			case '*':	return new Token("*",CategoriaLexica.TKMULT);
+			//s8
+			case '+':	return new Token("+",CategoriaLexica.TKSUMA);
+			case '-':	return new Token("-",CategoriaLexica.TKRESTA);
+			//s11
+			case '0':	return new Token("0",CategoriaLexica.TKNUM);						
 			/*
 			 * Si detectamos 't' hay que discernir si es el valor boolenao 'true' o es un identificador.
 			 * Para leer identificadores, usamos leeIdentificador().  
@@ -491,7 +445,7 @@ public class Lexico {
 		return s;
 	}
 	
-private String leeComentario (int posicion)throws Exception, IOException {
+/*private String leeComentario (int posicion)throws Exception, IOException {
 	int a;
 	String s = new String();
 	fuente.seek(--posicion);
@@ -505,7 +459,7 @@ private String leeComentario (int posicion)throws Exception, IOException {
 	fuente.seek(--posicion);
 	setPosicion(posicion);
 	return s;
-}
+}*/
 
 	/**
 	 * El metodo getNextToken devuelve el siguiente Token para poder realizar el preanalisis. 
