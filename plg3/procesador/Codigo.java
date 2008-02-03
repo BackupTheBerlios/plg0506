@@ -49,7 +49,7 @@ public class Codigo {
 	 * Accesor para el atributo cod de la clase Cdigo. 
 	 * @return Devuelve el codigo generado hasta ese momento
 	 */
-	public Vector getCod() {
+	public Vector<String> getCod() {
 		return cod;
 	}
 
@@ -68,7 +68,7 @@ public class Codigo {
 	 * @param num Entero indica el nmero de lnea.
 	 * 
 	 */
-	public void genIns(String instr, int num){
+	public void emite(String instr, int num){
 		String i =instr + " " + num;
 		cod.add(i);
 	}
@@ -78,7 +78,7 @@ public class Codigo {
 	 * @param num Entero que indica el nmero de lnea
 	 * @param dir entero que indica la direccin
 	 */
-	public void genIns(String instr, int num, int dir){
+	public void emite(String instr, int num, int dir){
 		String i =instr + " " + num + " " + dir;
 		cod.add(i);
 	}
@@ -90,7 +90,7 @@ public class Codigo {
 	 * @param instr String con la instruccion que ha codificado.
 	 * 
 	 */
-	public void genIns(String instr){
+	public void emite(String instr){
 		String i= instr;
 		cod.add(i);
 		i= i.concat("\n");
@@ -100,7 +100,8 @@ public class Codigo {
 	 * Método que genera el código necesario para hacer ir-f o ir-a
 	 * @param s String contiene el código ir-f o ir-a
 	 */
-	public void emite(String s){
+/*//FIXME: Esto no hay que hacerlo en esta iteración
+  	public void emite(String s){
 		if (s.startsWith("ir-f")){
 			genIns(s);
 		}
@@ -108,6 +109,7 @@ public class Codigo {
 			genIns(s);
 		}
 	}
+*/
 	/**
 	 * Método que parchea la dirección a sumándole la dirección de b
 	 * @param a int a parchear

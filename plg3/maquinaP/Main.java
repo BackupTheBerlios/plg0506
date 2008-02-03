@@ -27,7 +27,7 @@ public class Main {
 		//Para hacer pruebas:
 		new PruebasConMaquinaP(filename);
 		
-		Vector<Object> prog = deserialize(filename);
+		Vector<String> prog = deserialize(filename);
 		
 		MaquinaP mp = new MaquinaP(prog, traza);
 		String resultado = "";
@@ -44,15 +44,15 @@ public class Main {
 	}
 
 	
-	private static Vector<Object> deserialize(String filename) {
-		
-		Vector<Object> prog = null;
+	@SuppressWarnings("unchecked")
+	private static Vector<String> deserialize(String filename) {
+		Vector<String> prog = null;
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
 		try {
 			fis = new FileInputStream(filename);
 			ois = new ObjectInputStream(fis);
-			prog = (Vector<Object>)ois.readObject();
+			prog = (Vector<String>)ois.readObject();
 			ois.close();
 		} catch (Exception e) {
 			System.out.println("Error: excepcion leyendo el archivo");

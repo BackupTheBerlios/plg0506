@@ -2,6 +2,8 @@ package tablaSimbolos;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+//import maquinaP.*;
+
 /**
  * La clase <B>tablaSimbolos</B> define los atributos y mtodos relacionados con la tabla de smbolos.
  * <P>Esta clase cuenta con el siguiente atributo:
@@ -17,7 +19,6 @@ public class tablaSimbolos {
 
 		
 	Hashtable<Object,Object> tabla;
-	int dir;
 
 	/**
 	 * Constructor de la clase y no necesita parametros.
@@ -25,7 +26,6 @@ public class tablaSimbolos {
 	public tablaSimbolos() {
 		super();
 		this.tabla = new Hashtable<Object,Object>();
-		this.dir = 0;
 	}
 
 	/**
@@ -33,10 +33,9 @@ public class tablaSimbolos {
 	 * 
 	 * @param tabla Nuevo valor de la tabla de simbolos.
 	 */
-	public tablaSimbolos(Hashtable tabla) {
+	public tablaSimbolos(Hashtable<Object,Object> tabla) {
 		super();
 		this.tabla = tabla;
-		this.dir = 0;
 	}
 	
 	/**
@@ -51,20 +50,19 @@ public class tablaSimbolos {
 	}
 	
 	/**
-	 * Metodo para aÃ±adir un nuevo identificador a la tabla de simbolos. 
+	 * Metodo para añadir un nuevo identificador a la tabla de simbolos. 
 	 * 
-	 * @param id Nombre del identificador que se va aÃ±adir.
-	 * @param tipo Tipo del nuevo identificador a aÃ±adir.
+	 * @param id Nombre del identificador que se va añadir.
+	 * @param tipo Tipo del nuevo identificador a añadir.
 	 * @return boolean Se devuelve verdadero si todo ha sido correcto. Falso en caso contrario.
 	 * @throws Exception Excepcion generada si el identificador ya existe, se capturara en otro lugar.
 	 */
-	public boolean addID(String id, String tipo) throws Exception{
+	public boolean addID(String id, String tipo, int dir) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			propiedades prop = new propiedades(tipo, this.dir);
-			this.dir ++;
+			propiedades prop = new propiedades(tipo, dir);
 			this.tabla.put(id,prop);
 			return true;	
 		}	
@@ -74,7 +72,7 @@ public class tablaSimbolos {
 	 * Accesor del atributo que contiene la tabla de simbolos
 	 * @return hashtable Tabla de simbolos con la que se esta trabajando en ese momento.
 	 */
-	public Hashtable getTabla() {
+	public Hashtable<Object,Object> getTabla() {
 		return tabla;
 	}
 
@@ -82,32 +80,16 @@ public class tablaSimbolos {
 	 * Mutador del atributo tabla.
 	 * @param tabla Nuevo valor de la tabla.
 	 */
-	public void setTabla(Hashtable tabla) {
+	public void setTabla(Hashtable<Object,Object> tabla) {
 		this.tabla = tabla;
 	}
 	
-	/**
-	 * Accesor del atributo que contiene la ultima direccion de la tabla de simbolos
-	 * @return entero con la direccion.
-	 */
-	public int getDir() {
-		return dir;
-	}
-
-	/**
-	 * Mutador del atributo direccion.
-	 * @param dir
-	 */
-	public void setDir(int dir) {
-		this.dir = dir;
-	}
-
 	/**
 	 * Metodo para mostrar el contenido de la tabla de simbolos. Se pasa el contenido de la tabla a un String y luego se imprime por pantalla.
 	 *
 	 */
 	public void mostrar(){
-		Enumeration e = this.tabla.keys();
+		Enumeration<Object> e = this.tabla.keys();
 		String aux = new String();
 		String id = new String();
 		propiedades p = new propiedades();

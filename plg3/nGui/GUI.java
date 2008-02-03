@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.util.Vector;
+
 import javax.swing.*;   
 
 import java.awt.*;
@@ -149,7 +151,7 @@ public class GUI {
 	        	texto1.setText(null);
 	        	//maquinap = new MaquinaP(file);
 	        	//Codigo c = procesador.getCod();
-	        	maquinap.setProg(codigo.getCod());
+	        	maquinap.setProg((Vector<String>)codigo.getCod());
 	        	try {
 	        		texto1.append(maquinap.ejecuta() + maquinap.resultadoMem());
 	        	} catch(Exception ex) {

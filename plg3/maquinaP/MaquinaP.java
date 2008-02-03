@@ -59,14 +59,14 @@ public class MaquinaP {
 	private int PC = 0;
 	private int H = 0;
 	private int ST = -1;
-	private Vector<Object> Prog;
+	private Vector<String> Prog;
 	private Vector<Object> Mem = new Vector<Object>();
 	private FileReader fichero;
 	private String pasos = "";
 	private int tamMem = Integer.MAX_VALUE;
 	private boolean traza = false;
 	
-	public MaquinaP(Vector<Object> p, boolean t) {
+	public MaquinaP(Vector<String> p, boolean t) {
 		Prog = p;
 		traza = t;
 	}
@@ -131,7 +131,7 @@ public class MaquinaP {
 	 * Accesor para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
 	 * @return Vector donde cada celda es una posicion de Memoria.
 	 */
-	public Vector getMem() {
+	public Vector<Object> getMem() {
 		System.out.println("getMem");
 		return Mem;
 	}
@@ -140,7 +140,7 @@ public class MaquinaP {
 	 * Mutador para el atributo de la clase, Mem. Que indica el estado de la memoria del Programa. 
 	 * @param mem Se recibe un vector a modo de memoria de Progrma.
 	 */
-	public void setMem(Vector mem) {
+	public void setMem(Vector<Object> mem) {
 		System.out.println("setMem");
 		Mem = mem;
 	}
@@ -167,7 +167,7 @@ public class MaquinaP {
 	 * Accesor para el atributo de la clase, pila. Pila del programa. 
 	 * @return Devuelve la pila del programa.
 	 */
-	public Stack getPila() {
+	public Stack<Object> getPila() {
 		System.out.println("getPila");
 		return pila;
 	}
@@ -176,7 +176,7 @@ public class MaquinaP {
 	 * Mutador para el atributo de la clase, pila. Se actualizara la pila del programa.
 	 * @param pila una nueva pila con valores y operaciones.
 	 */
-	public void setPila(Stack pila) {
+	public void setPila(Stack<Object> pila) {
 		System.out.println("setPila");
 		this.pila = pila;
 	}
@@ -185,7 +185,7 @@ public class MaquinaP {
 	 * Accesor para el atributo de la clase, Prog. Vector con las intrucciones del programa que se ha de ejecutar.
 	 * @return Vector con el contenido del programa.
 	 */
-	public Vector getProg() {
+	public Vector<String> getProg() {
 		System.out.println("getProg");
 		return Prog;
 	}
@@ -194,7 +194,7 @@ public class MaquinaP {
 	 * Mutador para el atributo de la clase, Prog. Se actualizaran el vector con las instrucciones del Programa.
 	 * @param prog Se recibe el vector con el nuevo programa.
 	 */
-	public void setProg(Vector prog) {
+	public void setProg(Vector<String> prog) {
 		System.out.println("setProg");
 		Prog = prog;
 	}
@@ -244,9 +244,9 @@ public class MaquinaP {
 	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo metodo.
 	 * @exception java.io.IOException Se lanza y se captura en este mismo metodo.
 	 */
-	private Vector damePrograma(FileReader f){
+	private Vector<String> damePrograma(FileReader f){
 		System.out.println("damePrograma");
-		Vector<Object> v=new Vector<Object>();
+		Vector<String> v=new Vector<String>();
 		BufferedReader entrada = null;
 	    try {
 	      entrada = new BufferedReader(f);

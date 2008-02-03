@@ -162,6 +162,7 @@ public class Lexico {
 			case '*':	return new Token("*",CategoriaLexica.TKMULT);	
 			case ';':	return new Token(";",CategoriaLexica.TKPYCOMA);
 			case '.':	return new Token(".",CategoriaLexica.TKPUNTO);
+			case ',':	return new Token(",",CategoriaLexica.TKCOMA);
 			case '=':	return new Token("=",CategoriaLexica.TKIG);			
 //			case '%':	return new Token("%",CategoriaLexica.TKMOD);
 /*			case '/': compara = cmp (posicion, "//");
@@ -287,7 +288,18 @@ public class Lexico {
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
-
+			/*
+			 * Si detectamos 'p' hay que discernir si es la palabra reservada program o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'p':	compara = cmp(posicion, "program");
+						if (compara){
+							return new Token("program",CategoriaLexica.TKPROGRAM);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
 			/*
 			 * En el caso por defecto detectamos las secuencias de digitos y los indentificadores.
 			 * Si es un digito, llamamos a leerNumero.
