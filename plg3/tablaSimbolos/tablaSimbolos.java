@@ -50,10 +50,10 @@ public class tablaSimbolos {
 	}
 	
 	/**
-	 * Metodo para aÃ±adir un nuevo identificador a la tabla de simbolos. 
+	 * Metodo para añadir un nuevo identificador a la tabla de simbolos. 
 	 * 
-	 * @param id Nombre del identificador que se va aÃ±adir.
-	 * @param tipo Tipo del nuevo identificador a aÃ±adir.
+	 * @param id Nombre del identificador que se va añadir.
+	 * @param tipo Tipo del nuevo identificador a añadir.
 	 * @return boolean Se devuelve verdadero si todo ha sido correcto. Falso en caso contrario.
 	 * @throws Exception Excepcion generada si el identificador ya existe, se capturara en otro lugar.
 	 */
@@ -66,6 +66,19 @@ public class tablaSimbolos {
 			this.tabla.put(id,prop);
 			return true;	
 		}	
+	}
+	
+	/**
+	 * Metodo para Obtener las propiedades de un identificador
+	 */
+	public propiedades getProps(String id) throws Exception{
+		if (!this.tabla.containsKey(id)){
+			throw new Exception ("El identificador " + id 
+					+ " no esta en la tabla de simbolos.");
+		}
+		else{
+			return (propiedades)this.tabla.get(id);			
+		}
 	}
 	
 	/**

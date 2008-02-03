@@ -1,4 +1,5 @@
 program miprog;
+var
 x : integer;
 begin
 end.

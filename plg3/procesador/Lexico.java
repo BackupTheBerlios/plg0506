@@ -141,6 +141,7 @@ public class Lexico {
 			
 			a = (char) error;
 			posicion ++;
+			a = Character.toLowerCase(a);
 			switch (a){
 			
 			/*
@@ -268,21 +269,39 @@ public class Lexico {
 			 * Si detectamos 'i' hay que discernir si es el identificador de tipo 'int' o es un identificador.
 			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
-			case 'i':	compara = cmp(posicion, "int");
+			case 'i':	compara = cmp(posicion, "integer");
 						if (compara){
-							return new Token("int",CategoriaLexica.TKINT);
+							return new Token("integer",CategoriaLexica.TKINT);
 						}
 						else{
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
 			/*
-			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool' o es un identificador.
+			 * Si detectamos 'b' hay que discernir si es el identificador de tipo 'bool', 'begin' o es un identificador.
 			 * Para leer identificadores, usamos leeIdentificador().  
 			 */
-			case 'b':	compara = cmp(posicion, "bool");
+			case 'b':	compara = cmp(posicion, "boolean");
 						if (compara){
-							return new Token("bool",CategoriaLexica.TKBOOL);
+							return new Token("boolean",CategoriaLexica.TKBOOL);
+						}
+						else {
+							compara = cmp(posicion,"begin");
+							if (compara){
+								return new Token("begin",CategoriaLexica.TKBEGIN);
+							}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+							}
+						}
+			/*
+			 * Si detectamos 'e' hay que discernir si es el identificador de tipo 'end' o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'e':	compara = cmp(posicion, "end");
+						if (compara){
+							return new Token("end",CategoriaLexica.TKEND);
 						}
 						else{
 							String aux = leeIdentificador(posicion);
@@ -295,6 +314,90 @@ public class Lexico {
 			case 'p':	compara = cmp(posicion, "program");
 						if (compara){
 							return new Token("program",CategoriaLexica.TKPROGRAM);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'v' hay que discernir si es la palabra reservada var o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'v':	compara = cmp(posicion, "var");
+						if (compara){
+							return new Token("var",CategoriaLexica.TKVAR);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'a' hay que discernir si es la palabra reservada and o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'a':	compara = cmp(posicion, "and");
+						if (compara){
+							return new Token("and",CategoriaLexica.TKAND);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'o' hay que discernir si es la palabra reservada or o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'o':	compara = cmp(posicion, "or");
+						if (compara){
+							return new Token("or",CategoriaLexica.TKOR);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'n' hay que discernir si es la palabra reservada and o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'n':	compara = cmp(posicion, "not");
+						if (compara){
+							return new Token("not",CategoriaLexica.TKNOT);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}			
+			/*
+			 * Si detectamos 'a' hay que discernir si es la palabra reservada and o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'r':	compara = cmp(posicion, "read");
+						if (compara){
+							return new Token("read",CategoriaLexica.TKREAD);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'a' hay que discernir si es la palabra reservada and o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'd':	compara = cmp(posicion, "div");
+						if (compara){
+							return new Token("div",CategoriaLexica.TKDIV);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
+			/*
+			 * Si detectamos 'a' hay que discernir si es la palabra reservada and o es un identificador.
+			 * Para leer identificadores, usamos leeIdentificador().  
+			 */
+			case 'm':	compara = cmp(posicion, "mod");
+						if (compara){
+							return new Token("mod",CategoriaLexica.TKMOD);
 						}
 						else{
 							String aux = leeIdentificador(posicion);
@@ -345,7 +448,7 @@ public class Lexico {
 			s = s.concat(Character.toString((char)a));
 			a = fuente.read();
 		}
-		match = string.equals(s);
+		match = string.equalsIgnoreCase(s);
 		if (match) {
 			pos += string.length() - 1;
 		}

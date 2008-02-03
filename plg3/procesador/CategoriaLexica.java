@@ -1,7 +1,7 @@
 package procesador;
 
 public enum CategoriaLexica {
-TKLAMBDA,
+TKLAMBDA, 
 TKAND,
 TKASIGN,
 TKBEGIN,
