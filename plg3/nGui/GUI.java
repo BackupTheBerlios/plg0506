@@ -130,7 +130,7 @@ public class GUI {
             	texto0.setText("\n### ERROR: selecciona un archivo ###");
             } else {
             	texto0.setText(null);
-            	procesador.procesa(file);
+            	//procesador.procesa(file);
             	codigo = procesador.getCod();
             	texto0.append(codigo.getString());
             }

@@ -24,11 +24,12 @@ public class Procesador {
 	 * IOException procedente de la funcin de RandomAccessFile de JAVA si no se encuentra el fichero de entrada.
 	 * 
 	 * @param f String con la ruta del fichero.
+	 * @throws Exception 
 	 * 
 	 */
-	public void procesa(File f){
+	public void procesa(File f) throws Exception{
 		
-			try {
+			//try {
 				/*
 				 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
 				 * se recoge mas abajo.
@@ -37,10 +38,10 @@ public class Procesador {
 				System.out.println("Inicio del analisis\n");
 				sintactico.startParsing();
 				System.out.println("Fin del analisis");
-			} 
-			catch (Exception e) {
+			//} 
+			/*catch (Exception e) {
 				JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-			}
+			}*/
 	}
 	
 	/**

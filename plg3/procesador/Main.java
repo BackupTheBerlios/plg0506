@@ -6,12 +6,6 @@ import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 public class Main {
-	
-	/*
-	 * Esta clase es para hacer pruebas.
-	 * 
-	 * -- Alberto
-	 */
 
 	/**
 	 * @param args
@@ -20,7 +14,7 @@ public class Main {
 		String filein, fileout;
 		
 		if (args.length < 2) {
-			System.out.println("Debe especificar un archivo de entrada y otro de salida");
+			System.out.println("Error: debe especificar un archivo de entrada y otro de salida");
 			System.exit(1);
 		}
 		
@@ -28,7 +22,13 @@ public class Main {
 		fileout = args[1];
 		
 		Procesador procesador = new Procesador();
-		procesador.procesa(new File(filein)); //FIXME: no continuar si hay errores
+		try {
+			procesador.procesa(new File(filein));
+		} catch (Exception e) {
+			// Si hay errores no prosigue
+			System.out.println(e.toString());
+			System.exit(1);
+		}
 		Codigo codigo = procesador.getCod();
 		Vector<String> prog = codigo.getCod();
 		FileOutputStream fos = null;
