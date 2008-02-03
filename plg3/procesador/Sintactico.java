@@ -334,7 +334,7 @@ public class Sintactico{
 			throw new Exception ("Se esperaba \":?\"");
 		if (!TS.existeID(tk.getLexema())){
 			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
-			return true; 
+			return true;
 		}
 		String tipoExpRel = ExpRel();
 		propiedades idTSProps = TS.getProps(tk.getLexema());
@@ -452,13 +452,13 @@ public class Sintactico{
 		String tipo1 = ExpAd();
 		if (tipo1.equals("error"))
 			return tipo;
-		String codigo = OpRel();
+		String cod = OpRel();
 		String tipo2 = ExpAd();
 		if (tipo2.equals("error"))
 			return tipo;
 		if (tipo1.equals(tipo2))
 			tipo = "boolean";
-		emite(codigo);
+		codigo.emite(cod);
 		return tipo;
 	}
 	
