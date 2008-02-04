@@ -441,7 +441,7 @@ public class Sintactico{
 		//System.out.println("ExpMul");
 		String tipo = "error";
 		String tipo1 = "";
-		String cod = OpAd(); //Reconoce menorigual, igual, diferente, etc
+		String cod = OpMul(); //Reconoce menorigual, igual, diferente, etc
 		if (cod.length()>0){
 			tipo1 = Fact();
 			if (tipoh.equals("integer") && tipo1.equals(tipoh))
@@ -449,7 +449,7 @@ public class Sintactico{
 			codigo.emite(cod);
 			return RExpMul(tipo);
 		}
-		cod = OpOr();
+		cod = OpAnd();
 		if (cod.length()>0){
 			tipo1 = Fact();
 			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
