@@ -297,6 +297,9 @@ public class Sintactico{
 	private boolean Is() throws Exception{
 		//System.out.println("Is");
 		boolean errI = I();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			lexico.lexer();
+		} else throw new Exception("Se esperaba \";\"");
 		errI = errI || RIs();
 		return errI;
 	}
@@ -307,10 +310,15 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private boolean RIs() throws Exception{
+		System.out.println ("RIs");
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			return false;
 		}
+		System.out.println (lexico.getNextToken().muestraToken());
 		boolean errI = I();
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			lexico.lexer();
+		} else throw new Exception("Se esperaba \";\"");
 		errI = errI || RIs();
 		return errI;
 	}
@@ -345,11 +353,13 @@ public class Sintactico{
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
 			throw new Exception ("Se esperaba \":?\"");
+		lexico.lexer();
 		if (!TS.existeID(tk.getLexema())){
 			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
 			return true;
 		}
 		String tipoExpRel = ExpRel();
+		System.out.println (tipoExpRel);
 		propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!tipoExpRel.equals(idTSProps.getTipo()))
 			return true;
@@ -419,6 +429,7 @@ public class Sintactico{
 	private String ExpRel() throws Exception{
 		//System.out.println("ExpRel");
 		String tipo1 = ExpAd();
+		System.out.println (tipo1 + " Estoy en ExpRel");
 		return RExpRel (tipo1);
 	}
 	
@@ -450,6 +461,7 @@ public class Sintactico{
 	 */
 	private String ExpAd() throws Exception{
 		String tipo1 = ExpMul();
+		System.out.println (tipo1 + " Estoy en ExpAd");
 		return RExpAd(tipo1);
 	}
 
@@ -493,6 +505,7 @@ public class Sintactico{
 	private String ExpMul() throws Exception{
 		//System.out.println("ExpMul");
 		String tipo1 = Fact();
+		System.out.println (tipo1 + " Estoy en ExpMul");
 		return RExpMul(tipo1);
 	}
 
@@ -535,6 +548,7 @@ public class Sintactico{
 	private String Fact() throws Exception{
 		//System.out.println("Fact");
 		String tipo0 = "error";
+		System.out.println (lexico.lookahead.muestraToken());
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
 			tipo0 = "int";
 			lexico.lexer(); //Cosumimos el entero
@@ -562,8 +576,10 @@ public class Sintactico{
 			lexico.lexer(); //Cosumimos ')'
 			return tipo0;
 		}
+		System.out.println ("Estoy en Fact 1");
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
+			System.out.println ("Estoy en Fact 2");
 			if (TS.existeID(tk.getLexema())){
 				//atrFact.setId(tk.getLexema());
 				//String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
