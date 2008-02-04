@@ -345,101 +345,6 @@ public class Sintactico{
 	
 	}
 	 
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	private Atributo ExpOr() throws Exception{
-		//System.out.println("ExpOr");
-		Atributo atrExpAnd = ExpAnd();
-		Atributo atrRExpOr = RExpOr(atrExpAnd);
-		return atrRExpOr;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	private Atributo RExpOr(Atributo heredado) throws Exception{
-		//System.out.println("RExpOr");
-		Atributo atrRExpOr = new Atributo();
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpOr ::= \lambda
-			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
-			//RExpMul ::= 
-			return heredado;
-		}
-		if (!lexico.reconoce(CategoriaLexica.TKOR)){
-			return heredado;
-		}
-		String op = genOpOr((lexico.lexer()).getLexema());
-		Atributo atrExpAnd = ExpAnd();
-		if (!atrExpAnd.getTipo().equals("bool") || !heredado.getTipo().equals("bool")){
-			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-		}
-		else{
-			atrExpAnd.setTipo("bool");
-			if (op != ""){
-				codigo.emite(op);
-			}
-			else{
-				throw new Exception("Error en linea " + lexico.getLinea() + ": operador no válido");
-			}
-		}
-		atrRExpOr = RExpOr(atrExpAnd);
-		return atrRExpOr;
-	}
-
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 *//*
-	private Atributo ExpAnd() throws Exception{
-		//System.out.println("ExpAnd");
-		Atributo atrExpRel = ExpRel();
-		Atributo atrRExpAnd = RExpAnd(atrExpRel);
-		return atrRExpAnd;
-	}*/
-	
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	/*private Atributo RExpAnd(Atributo heredado) throws Exception{
-		//System.out.println("RExpAnd");
-		Atributo atrRExpAnd = new Atributo();
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpOr ::= \lambda
-			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
-			//RExpMul ::= \lambda
-			return heredado;
-		}
-		if (!lexico.reconoce(CategoriaLexica.TKAND)){
-			return heredado;
-		}
-		String op = genOpAnd((lexico.lexer()).getLexema());
-		Atributo atrExpRel = ExpRel();
-		if (!atrExpRel.getTipo().equals("bool") || !heredado.getTipo().equals("bool")){
-			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-		}
-		else{
-			atrExpRel.setTipo("bool");
-			if (op != ""){
-				codigo.emite(op);
-			}
-			else{
-				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
-			}
-		}
-		atrRExpAnd = RExpOr(atrExpRel);
-		return atrRExpAnd;
-	}*/
 	
 	/**
 	 * 
@@ -448,18 +353,8 @@ public class Sintactico{
 	 */
 	private String ExpRel() throws Exception{
 		//System.out.println("ExpRel");
-		String tipo = "error";
 		String tipo1 = ExpAd();
-		if (tipo1.equals("error"))
-			return tipo;
-		String cod = OpRel();
-		String tipo2 = ExpAd();
-		if (tipo2.equals("error"))
-			return tipo;
-		if (tipo1.equals(tipo2))
-			tipo = "boolean";
-		codigo.emite(cod);
-		return tipo;
+		return RExpRel (tipo1);
 	}
 	
 	/**
@@ -467,60 +362,70 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	private String RExpRel(String heredado) throws Exception{
-		//System.out.println("RExpRel");
-		Atributo atrRExpRel = new Atributo();
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpOr ::= lambda
-			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
-			//RExpMul ::= lambda
-			return heredado;
+	private String RExpRel(String tipoh) throws Exception{
+		//System.out.println("ExpRel");
+		String tipo = "error";
+		String cod = OpRel(); //Reconoce menorigual, igual, diferente, etc
+		if (cod.length()>0){
+			String tipo1 = ExpAd();
+			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
+				tipo = "boolean";
+			codigo.emite(cod);
+			return RExpRel(tipo);
 		}
-		if (!lexico.reconoce(CategoriaLexica.TKIG) && !lexico.reconoce(CategoriaLexica.TKDIF)
-				&& !lexico.reconoce(CategoriaLexica.TKMAY)&& !lexico.reconoce(CategoriaLexica.TKMAYIG)
-				&& !lexico.reconoce(CategoriaLexica.TKMEN)&& !lexico.reconoce(CategoriaLexica.TKMENIG)){
-			return heredado;
-		}
-		String op = OpRel((lexico.lexer()).getLexema());
-		
-		atrRExpRel = ExpAd();
-		if (heredado.getTipo().equals("error") || atrRExpRel.getTipo().equals("error")){
-			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-		}
-		else if (!heredado.getTipo().equals(atrRExpRel.getTipo())) {
-			atrRExpRel.setTipo("error");
-		}
-		else{
-			atrRExpRel.setTipo("bool");
-			if (op != ""){
-				codigo.emite(op);
-			}
-			else{
-				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
-			}
-		}
-		return atrRExpRel;
+		else //lambda
+			return tipoh;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	private String ExpAd() throws Exception{
-		//System.out.println("ExpAd");
-		String tipo1 = ExpMul();
-		String tipo2 = RExpAd(tipo1);
-		return tipo2;
-	}
 
 	/**
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	private String RExpAd(String heredado) throws Exception{
+	private String ExpAd() throws Exception{
+		String tipo1 = ExpMul();
+		return RExpAd(tipo1);
+	}
+
+	
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private String RExpAd(String tipoh) throws Exception{
+		//System.out.println("ExpRel");
+		String tipo = "error";
+		String tipo1 = "";
+		String cod = OpAd(); //Reconoce menorigual, igual, diferente, etc
+		if (cod.length()>0){
+			tipo1 = ExpMul();
+			if (tipoh.equals("integer") && tipo1.equals(tipoh))
+				tipo = "integer";
+			codigo.emite(cod);
+			return RExpAd(tipo);
+		}
+		cod = OpOr();
+		if (cod.length()>0){
+			tipo1 = ExpMul();
+			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
+				tipo = "boolean";
+			codigo.emite(cod);
+			return RExpAd(tipo);
+		}
+		else //lambda
+			return tipoh;
+	}
+	
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+/*	private String RExpAd(String heredado) throws Exception{
 		//System.out.println("RExpAd");
 		Atributo atrRExpAd = new Atributo();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -535,7 +440,7 @@ public class Sintactico{
 		}
 		String op = OpAd((lexico.lexer()).getLexema());
 		Atributo atrExpMul = ExpMul();
-		if (!atrExpMul.getTipo().equals("int") || !heredado.getTipo().equals("int")){
+		if (!atrExpMul.getTipo().equalsIgnoreCase("int") || !heredado.getTipo().equalsIgnoreCase("int")){
 			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 		}
 		else{
@@ -550,7 +455,7 @@ public class Sintactico{
 		atrRExpAd = RExpAd(atrRExpAd);
 		return atrRExpAd;
 	}
-	
+*/	
 	/**
 	 * 
 	 * @return
@@ -585,7 +490,7 @@ public class Sintactico{
 		if(!lexico.reconoce(CategoriaLexica.TKDIV) && !lexico.reconoce(CategoriaLexica.TKMOD)&& !lexico.reconoce(CategoriaLexica.TKMULT)){
 			String op = OpMul((lexico.lexer()).getLexema());
 			String atrFact = Fact();
-			if ((atrFact).equals("int") && heredado.equals("int")){
+			if ((atrFact).equalsIgnoreCase("int") && heredado.equalsIgnoreCase("int")){
 				atrRExpMul = "int";
 				if (op != ""){
 					codigo.emite(op);
@@ -594,7 +499,7 @@ public class Sintactico{
 					throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
 				}
 			}
-			else if (atrFact.equals("bool") && heredado.equals("bool")){
+			else if (atrFact.equalsIgnoreCase("bool") && heredado.equalsIgnoreCase("bool")){
 				atrRExpMul = "bool";
 			}
 			else{
@@ -604,7 +509,7 @@ public class Sintactico{
 		else{
 			String op = OpAnd((lexico.lexer()).getLexema());
 			String atrFact = Fact();
-			if (!atrFact.equals("bool") || !heredado.equals("bool")){
+			if (!atrFact.equalsIgnoreCase("bool") || !heredado.equalsIgnoreCase("bool")){
 				throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
 			else{
@@ -676,7 +581,7 @@ public class Sintactico{
 			String op = OpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
 			atrFact = Fact();
 			codigo.emite(op);
-			if (!atrFact.equals("bool")){
+			if (!atrFact.equalsIgnoreCase("bool")){
 					atrFact="error";
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
@@ -690,7 +595,7 @@ public class Sintactico{
 			String op = OpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
 			atrFact = Fact();
 			codigo.emite(op);
-			if (!atrFact.equals("int")){
+			if (!atrFact.equalsIgnoreCase("int")){
 					//atrFact = "error";
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
@@ -743,7 +648,7 @@ OpRel ::= < | > | <= | >= | = | <>
 	private String OpAd(String opDeOpAd){
 		if (opDeOpAd == "+")
 			return ("suma");
-		else if (opDeOpAd.equals("-"))
+		else if (opDeOpAd.equalsIgnoreCase("-"))
 			return("resta");
 		else return "";
 	}
@@ -755,9 +660,9 @@ OpRel ::= < | > | <= | >= | = | <>
 	private String OpMul(String opDeOpMul){
 		if (opDeOpMul == "*")
 			return("multiplica");
-		else if (opDeOpMul.equals("div")){
+		else if (opDeOpMul.equalsIgnoreCase("div")){
 			return("divide");}
-		else if (opDeOpMul.equals("mod"))
+		else if (opDeOpMul.equalsIgnoreCase("mod"))
 			return("modulo");
 		else return "";
 	}
@@ -770,7 +675,7 @@ OpRel ::= < | > | <= | >= | = | <>
 	private String OpUnarioArit(String opDeOpUn){
 		if (opDeOpUn == "+")
 			return("positivo");
-		else if (opDeOpUn.equals("-"))
+		else if (opDeOpUn.equalsIgnoreCase("-"))
 			return("menos");
 		else return "";
 	}
@@ -781,7 +686,7 @@ OpRel ::= < | > | <= | >= | = | <>
 	 * @return
 	 */
 	private String OpUnarioLog(String opDeOpUn){
-		if (opDeOpUn.equals("not"))
+		if (opDeOpUn.equalsIgnoreCase("not"))
 			return("not");
 		else return "";
 	}
@@ -791,25 +696,30 @@ OpRel ::= < | > | <= | >= | = | <>
 	 * @param opDeOpComp
 	 * @return
 	 */
-	private String OpRel(String opDeOpComp){
-		
-		if (opDeOpComp == "<="){
+	private String OpRel() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKMENIG)){
+			lexico.lexer();
 			return("menorIgual");
-		}	
-		else if (opDeOpComp == "<"){
-				return("menor");
 		}
-		else if (opDeOpComp == ">="){
+		else if (lexico.reconoce(CategoriaLexica.TKMEN)){
+			lexico.lexer();
+			return("menor");
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKMAYIG)){
+			lexico.lexer();
 			return("mayorIgual");
 		}	
-		else if (opDeOpComp == ">"){
-				return("mayor");
+		else if (lexico.reconoce(CategoriaLexica.TKMAY)){
+			lexico.lexer();
+			return("mayor");
 		}
-		else if (opDeOpComp == "=="){
+		else if (lexico.reconoce(CategoriaLexica.TKIG)){
+			lexico.lexer();
 			return("igual");
 		}	
-		else if (opDeOpComp == "<>"){
-				return("distinto");
+		else if (lexico.reconoce(CategoriaLexica.TKDIF)){
+			lexico.lexer();
+			return("distinto");
 		}
 		else return "";
 	}
