@@ -469,80 +469,80 @@ public class Sintactico{
 	 */
 	private String Fact() throws Exception{
 		//System.out.println("Fact");
-		String atrFact = "error";
+		String tipo0 = "error";
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
-			atrFact = "int";
+			tipo0 = "int";
 			lexico.lexer(); //Cosumimos el entero
 			codigo.emite("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
-			return atrFact;
+			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
-			atrFact = "bool";
+			tipo0 = "bool";
 			codigo.emite("apila",1);
 			lexico.lexer(); //Cosumimos 'true'
-			return atrFact;
+			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
-			atrFact = "bool";
+			tipo0 = "bool";
 			codigo.emite("apila",0);
 			lexico.lexer(); //Cosumimos 'false'
-			return atrFact;
+			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKPAP)) {
 			lexico.lexer(); //Cosumimos '('
-			atrFact = ExpRel();
+			tipo0 = ExpRel();
 			if (!lexico.reconoce(CategoriaLexica.TKPCI)){
 				throw new Exception(" Error de parentizacion, en linea: " + lexico.getLinea());
 			}
 			lexico.lexer(); //Cosumimos ')'
-			return atrFact;
+			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
 			if (TS.existeID(tk.getLexema())){
 				//atrFact.setId(tk.getLexema());
 				//String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
-				atrFact = ((propiedades)TS.getTabla().get(tk.getLexema())).getTipo();
+				tipo0 = ((propiedades)TS.getTabla().get(tk.getLexema())).getTipo();
 				//int dir =((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
 				int dir =((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 				codigo.emite("apila-dir", dir);
 			}
 			else{
-				atrFact="error";
+				tipo0="error";
 			}
-			return atrFact;
+			return tipo0;
 		}
 
 		if (lexico.reconoce(CategoriaLexica.TKNOT)){
-			String op = OpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
-			atrFact = Fact();
+			String op = OpUnarioLog(); //Consumimos operador unario logico
+			tipo0 = Fact();
 			codigo.emite(op);
-			if (!atrFact.equalsIgnoreCase("bool")){
-					atrFact="error";
+			if (!tipo0.equalsIgnoreCase("bool")){
+					tipo0="error";
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
 			else{
-				atrFact="bool";
+				tipo0="bool";
 			}
-			return atrFact;
+			return tipo0;
 		}
 		
 		if ( (lexico.reconoce(CategoriaLexica.TKSUMA)) || (lexico.reconoce(CategoriaLexica.TKRESTA))){
-			String op = OpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
-			atrFact = Fact();
+			String op = OpUnarioArit(); //Consumimos operador unario aritmetico
+			tipo0 = Fact();
 			codigo.emite(op);
-			if (!atrFact.equalsIgnoreCase("int")){
+			if (!tipo0.equalsIgnoreCase("int")){
 					//atrFact = "error";
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
 			else{
-				atrFact = "int";
+				tipo0 = "int";
 			}
-			return atrFact;
+			return tipo0;
 		}
 		
-		atrFact = "error";
-		return atrFact;
+		tipo0 = "error";
+		return tipo0;
 	}
 	
 	/*
