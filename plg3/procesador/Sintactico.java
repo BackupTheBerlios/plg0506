@@ -385,27 +385,28 @@ public class Sintactico{
 		return false;
 	}
 	
-	/*IWrite ::= WRITE (ExpAd)
-IWrite.err = ExpAd.tipo ? INTEGER
-IWrite.cod = ExpAd.cod || write*/
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean IWrite() throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKWRITE )){
 			throw new Exception ("Se esperaba un la palabra reservada write");
 		}
-		Token tk = lexico.lexer(); //Consumo write
+		lexico.lexer(); //Consumo write
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
-			throw new Exception ("Se esperaba \":?\"");
-		if (!TS.existeID(tk.getLexema())){
-			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
+			throw new Exception ("Se esperaba '(' ");
+		lexico.lexer(); //Consumo (
+		String tipoExpAd = ExpAd();
+		
+		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
+			throw new Exception ("Se esperaba '(' ");
+		lexico.lexer(); //Consumo )
+		if (!tipoExpAd.equals("int"))
 			return true;
-		}
-		String tipoExpRel = ExpRel();
-		propiedades idTSProps = TS.getProps(tk.getLexema());
-		if (!tipoExpRel.equals(idTSProps.getTipo()))
-			return true;
-		codigo.emite("desapila-dir", idTSProps.getDir());
+		codigo.emite("write");
 		return false;
-	
 	}
 	
 	/**
