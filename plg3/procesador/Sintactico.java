@@ -279,7 +279,8 @@ public class Sintactico{
 				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
 		}
 		else
-			throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
+			return true;
+			//throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
 		return errBloque;
 	}
 	
@@ -317,6 +318,15 @@ public class Sintactico{
 	private boolean I() throws Exception{
 		boolean errI = false;//System.out.println("I");
 		errI = IAsig();
+		if (errI){
+			errI = Bloque();
+			if (errI){
+				errI = IRead();
+				if (errI){
+					errI = IWrite();
+				}
+			}
+		}
 		return errI;
 	}
 	
@@ -327,7 +337,8 @@ public class Sintactico{
 	 */
 	private boolean IAsig() throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception ("Se esperaba un identificador");
+			return true;
+			//throw new Exception ("Se esperaba un identificador");
 		}
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
@@ -344,7 +355,58 @@ public class Sintactico{
 		return false;
 	
 	}
-	 
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean IRead() throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKREAD )){
+			return true;
+			//throw new Exception ("Se esperaba un read");
+		}
+		Token tk = lexico.lexer(); //Consumo read
+		if (!lexico.reconoce(CategoriaLexica.TKPAP))
+			throw new Exception ("Se esperaba '(' ");
+		tk = lexico.lexer();//Consumo (
+		tk = lexico.lexer(); // Consumo iden
+		if (!TS.existeID(tk.getLexema())){
+			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
+			return true;
+		}
+		if (!lexico.reconoce(CategoriaLexica.TKPCI))
+			throw new Exception ("Se esperaba ')' ");
+		propiedades idTSProps = TS.getProps(tk.getLexema());
+		if (!idTSProps.getTipo().equals("int"))
+			return true;
+		codigo.emite("read");
+		codigo.emite("desapila-dir", idTSProps.getDir());
+		return false;
+	}
+	
+	/*IWrite ::= WRITE (ExpAd)
+IWrite.err = ExpAd.tipo ? INTEGER
+IWrite.cod = ExpAd.cod || write*/
+	private boolean IWrite() throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKWRITE )){
+			throw new Exception ("Se esperaba un la palabra reservada write");
+		}
+		Token tk = lexico.lexer(); //Consumo write
+		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
+			throw new Exception ("Se esperaba \":?\"");
+		if (!TS.existeID(tk.getLexema())){
+			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
+			return true;
+		}
+		String tipoExpRel = ExpRel();
+		propiedades idTSProps = TS.getProps(tk.getLexema());
+		if (!tipoExpRel.equals(idTSProps.getTipo()))
+			return true;
+		codigo.emite("desapila-dir", idTSProps.getDir());
+		return false;
+	
+	}
 	
 	/**
 	 * 
