@@ -425,106 +425,42 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-/*	private String RExpAd(String heredado) throws Exception{
-		//System.out.println("RExpAd");
-		Atributo atrRExpAd = new Atributo();
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpAd ::= lambda
-			return heredado;
-		}if (lexico.reconoce(CategoriaLexica.TKLLCI )){
-			//RExpMul ::= lambda
-			return heredado;
-		}
-		if (!lexico.reconoce(CategoriaLexica.TKSUMA) && !lexico.reconoce(CategoriaLexica.TKRESTA)){
-			return heredado;
-		}
-		String op = OpAd((lexico.lexer()).getLexema());
-		Atributo atrExpMul = ExpMul();
-		if (!atrExpMul.getTipo().equalsIgnoreCase("int") || !heredado.getTipo().equalsIgnoreCase("int")){
-			throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-		}
-		else{
-			atrRExpAd.setTipo("int");
-			if (op != ""){
-				codigo.emite(op);
-			}
-			else{
-				throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
-			}
-		}
-		atrRExpAd = RExpAd(atrRExpAd);
-		return atrRExpAd;
-	}
-*/	
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
 	private String ExpMul() throws Exception{
 		//System.out.println("ExpMul");
-		String atrFact = Fact();
-		String atrRExpMul = RExpMul(atrFact);
-		return atrRExpMul;
+		String tipo1 = Fact();
+		return RExpMul(tipo1);
 	}
+
 
 	/**
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	private String RExpMul(String heredado) throws Exception{
-		//System.out.println("RExpMul");
-		String atrRExpMul = "error";
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			//RExpMul ::= \lambda
-			return heredado;
+	private String RExpMul(String tipoh) throws Exception{
+		//System.out.println("ExpMul");
+		String tipo = "error";
+		String tipo1 = "";
+		String cod = OpAd(); //Reconoce menorigual, igual, diferente, etc
+		if (cod.length()>0){
+			tipo1 = Fact();
+			if (tipoh.equals("integer") && tipo1.equals(tipoh))
+				tipo = "integer";
+			codigo.emite(cod);
+			return RExpMul(tipo);
 		}
-		if (lexico.reconoce(CategoriaLexica.TKLLCI )){
-			//RExpMul ::= \lambda
-			return heredado;
+		cod = OpOr();
+		if (cod.length()>0){
+			tipo1 = Fact();
+			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
+				tipo = "boolean";
+			codigo.emite(cod);
+			return RExpMul(tipo);
 		}
-		if (!lexico.reconoce(CategoriaLexica.TKDIV) && !lexico.reconoce(CategoriaLexica.TKMOD)&& !lexico.reconoce(CategoriaLexica.TKMULT) && !lexico.reconoce(CategoriaLexica.TKAND)){
-			return heredado;
-		}
-		if(!lexico.reconoce(CategoriaLexica.TKDIV) && !lexico.reconoce(CategoriaLexica.TKMOD)&& !lexico.reconoce(CategoriaLexica.TKMULT)){
-			String op = OpMul((lexico.lexer()).getLexema());
-			String atrFact = Fact();
-			if ((atrFact).equalsIgnoreCase("int") && heredado.equalsIgnoreCase("int")){
-				atrRExpMul = "int";
-				if (op != ""){
-					codigo.emite(op);
-				}
-				else{
-					throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
-				}
-			}
-			else if (atrFact.equalsIgnoreCase("bool") && heredado.equalsIgnoreCase("bool")){
-				atrRExpMul = "bool";
-			}
-			else{
-				throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-			}
-		}
-		else{
-			String op = OpAnd((lexico.lexer()).getLexema());
-			String atrFact = Fact();
-			if (!atrFact.equalsIgnoreCase("bool") || !heredado.equalsIgnoreCase("bool")){
-				throw new Exception("Error de tipos en linea: " + lexico.getLinea());
-			}
-			else{
-				atrFact = "bool";
-				if (op != ""){
-					codigo.emite(op);
-				}
-				else{
-					throw new Exception("Error en linea: " + lexico.getLinea() + " Operador no valido");
-				}
-			}
-		}
-		atrRExpMul = RExpMul(atrRExpMul);
-		return atrRExpMul;
+		else //lambda
+			return tipoh;
 	}
+	
 	
 	/**
 	 * 
@@ -624,20 +560,30 @@ OpRel ::= < | > | <= | >= | = | <>
 	 * @param opDeOpAnd
 	 * @throws Exception 
 	 */
-	private String OpAnd(String opDeOpAnd){
-		if (opDeOpAnd == "and")
+	private String OpAnd() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKAND)){
+			lexico.lexer();
+			return("and");
+		}
+		else return "";
+	}	
+		
+		
+/*		if (opDeOpAnd == "and")
 			return "and";
 		else
 			return "";
 	}
-	
+*/	
 	/**
 	 * 
 	 * @param opDeOpOr
 	 */
-	private String OpOr(String opDeOpOr){
-		if (opDeOpOr == "or")
-			return ("or");
+	private String OpOr() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKOR)){
+			lexico.lexer();
+			return("or");
+		}
 		else return "";
 	}
 	
@@ -645,25 +591,36 @@ OpRel ::= < | > | <= | >= | = | <>
 	 * 
 	 * @param opDeOpAd
 	 */
-	private String OpAd(String opDeOpAd){
-		if (opDeOpAd == "+")
-			return ("suma");
-		else if (opDeOpAd.equalsIgnoreCase("-"))
+	private String OpAd() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKSUMA)){
+			lexico.lexer();
+			return("suma");
+		}
+		if (lexico.reconoce(CategoriaLexica.TKRESTA)){
+			lexico.lexer();
 			return("resta");
+		}
 		else return "";
 	}
+		
 	
 	/**
 	 * 
 	 * @param opDeOpMul
 	 */
-	private String OpMul(String opDeOpMul){
-		if (opDeOpMul == "*")
+	private String OpMul() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKMULT)){
+			lexico.lexer();
 			return("multiplica");
-		else if (opDeOpMul.equalsIgnoreCase("div")){
-			return("divide");}
-		else if (opDeOpMul.equalsIgnoreCase("mod"))
+		}
+		if (lexico.reconoce(CategoriaLexica.TKDIV)){
+			lexico.lexer();
+			return("divide");
+		}
+		if (lexico.reconoce(CategoriaLexica.TKMOD)){
+			lexico.lexer();
 			return("modulo");
+		}
 		else return "";
 	}
 	
@@ -672,11 +629,15 @@ OpRel ::= < | > | <= | >= | = | <>
 	 * @param opDeOpUn
 	 * @return
 	 */
-	private String OpUnarioArit(String opDeOpUn){
-		if (opDeOpUn == "+")
-			return("positivo");
-		else if (opDeOpUn.equalsIgnoreCase("-"))
+	private String OpUnarioArit() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKSUMA)){
+			lexico.lexer();
+			return("mas");
+		}	
+		else if (lexico.reconoce(CategoriaLexica.TKRESTA)){
+			lexico.lexer();
 			return("menos");
+		}
 		else return "";
 	}
 	
@@ -685,9 +646,11 @@ OpRel ::= < | > | <= | >= | = | <>
 	 * @param opDeOpUn
 	 * @return
 	 */
-	private String OpUnarioLog(String opDeOpUn){
-		if (opDeOpUn.equalsIgnoreCase("not"))
+	private String OpUnarioLog() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKNOT)){
+			lexico.lexer();
 			return("not");
+		}
 		else return "";
 	}
 		
