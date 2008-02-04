@@ -323,15 +323,12 @@ public class Sintactico{
 	private boolean I() throws Exception{
 		boolean errI = false;//System.out.println("I");
 		errI = IAsig();
-		if (errI){
+		if (errI)
 			errI = Bloque();
-			if (errI){
-				errI = IRead();
-				if (errI){
-					errI = IWrite();
-				}
-			}
-		}
+		if (errI)
+			errI = IRead();
+		if (errI)
+			errI = IWrite();
 		return errI;
 	}
 	
