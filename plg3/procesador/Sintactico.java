@@ -230,6 +230,11 @@ public class Sintactico{
 		}
 		Token tk = lexico.lexer(); //consumo el iden
 		atrib.setId(tk.getLexema());
+		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS )){
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
+		}
+		tk = lexico.lexer(); //consumo :
+		
 		err0 = Tipo(atrib);
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
