@@ -1,7 +1,11 @@
 program miprog;
 var
 x : integer;
+y : boolean;
 begin
-x := 1;
+x:=5;
+x := -1 * (-x + 5) * 2 ;
+y := true; 
+y:= y and (false or false);
 end.
 

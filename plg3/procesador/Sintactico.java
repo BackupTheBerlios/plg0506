@@ -68,7 +68,8 @@ public class Sintactico{
 			errProg = errProg || Bloque();
 			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 				lexico.lexer();//consumo .
-				codigo.emite("stop");				
+				codigo.emite("stop");	
+System.out.println(codigo.getString());
 			}
 			else throw new Exception ("Se esperaba \".\"");			
 		}
@@ -279,6 +280,7 @@ public class Sintactico{
 			boolean errIs = Is();
 			if (lexico.reconoce(CategoriaLexica.TKEND)){
 				errBloque = errIs;
+				lexico.lexer();
 			}
 			else
 				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
@@ -310,11 +312,9 @@ public class Sintactico{
 	 * @throws Exception
 	 */
 	private boolean RIs() throws Exception{
-		System.out.println ("RIs");
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			return false;
 		}
-		System.out.println (lexico.getNextToken().muestraToken());
 		boolean errI = I();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
@@ -359,7 +359,6 @@ public class Sintactico{
 			return true;
 		}
 		String tipoExpRel = ExpRel();
-		System.out.println (tipoExpRel);
 		propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!tipoExpRel.equals(idTSProps.getTipo()))
 			return true;
@@ -404,7 +403,8 @@ public class Sintactico{
 	 */
 	private boolean IWrite() throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKWRITE )){
-			throw new Exception ("Se esperaba un la palabra reservada write");
+			//throw new Exception ("Se esperaba la palabra reservada write");
+			return true;
 		}
 		lexico.lexer(); //Consumo write
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
@@ -429,7 +429,6 @@ public class Sintactico{
 	private String ExpRel() throws Exception{
 		//System.out.println("ExpRel");
 		String tipo1 = ExpAd();
-		System.out.println (tipo1 + " Estoy en ExpRel");
 		return RExpRel (tipo1);
 	}
 	
@@ -444,8 +443,8 @@ public class Sintactico{
 		String cod = OpRel(); //Reconoce menorigual, igual, diferente, etc
 		if (cod.length()>0){
 			String tipo1 = ExpAd();
-			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
-				tipo = "boolean";
+			if (tipoh.equals("bool") && tipo1.equals(tipoh))
+				tipo = "bool";
 			codigo.emite(cod);
 			return RExpRel(tipo);
 		}
@@ -461,7 +460,6 @@ public class Sintactico{
 	 */
 	private String ExpAd() throws Exception{
 		String tipo1 = ExpMul();
-		System.out.println (tipo1 + " Estoy en ExpAd");
 		return RExpAd(tipo1);
 	}
 
@@ -476,19 +474,19 @@ public class Sintactico{
 		//System.out.println("ExpRel");
 		String tipo = "error";
 		String tipo1 = "";
-		String cod = OpAd(); //Reconoce menorigual, igual, diferente, etc
+		String cod = OpAd();
 		if (cod.length()>0){
 			tipo1 = ExpMul();
-			if (tipoh.equals("integer") && tipo1.equals(tipoh))
-				tipo = "integer";
+			if (tipoh.equals("int") && tipo1.equals(tipoh))
+				tipo = "int";
 			codigo.emite(cod);
 			return RExpAd(tipo);
 		}
 		cod = OpOr();
 		if (cod.length()>0){
 			tipo1 = ExpMul();
-			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
-				tipo = "boolean";
+			if (tipoh.equals("bool") && tipo1.equals(tipoh))
+				tipo = "bool";
 			codigo.emite(cod);
 			return RExpAd(tipo);
 		}
@@ -505,7 +503,6 @@ public class Sintactico{
 	private String ExpMul() throws Exception{
 		//System.out.println("ExpMul");
 		String tipo1 = Fact();
-		System.out.println (tipo1 + " Estoy en ExpMul");
 		return RExpMul(tipo1);
 	}
 
@@ -522,16 +519,16 @@ public class Sintactico{
 		String cod = OpMul(); //Reconoce menorigual, igual, diferente, etc
 		if (cod.length()>0){
 			tipo1 = Fact();
-			if (tipoh.equals("integer") && tipo1.equals(tipoh))
-				tipo = "integer";
+			if (tipoh.equals("int") && tipo1.equals(tipoh))
+				tipo = "int";
 			codigo.emite(cod);
 			return RExpMul(tipo);
 		}
 		cod = OpAnd();
 		if (cod.length()>0){
 			tipo1 = Fact();
-			if (tipoh.equals("boolean") && tipo1.equals(tipoh))
-				tipo = "boolean";
+			if (tipoh.equals("bool") && tipo1.equals(tipoh))
+				tipo = "bool";
 			codigo.emite(cod);
 			return RExpMul(tipo);
 		}
@@ -548,7 +545,6 @@ public class Sintactico{
 	private String Fact() throws Exception{
 		//System.out.println("Fact");
 		String tipo0 = "error";
-		System.out.println (lexico.lookahead.muestraToken());
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
 			tipo0 = "int";
 			lexico.lexer(); //Cosumimos el entero
@@ -576,10 +572,8 @@ public class Sintactico{
 			lexico.lexer(); //Cosumimos ')'
 			return tipo0;
 		}
-		System.out.println ("Estoy en Fact 1");
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
-			System.out.println ("Estoy en Fact 2");
 			if (TS.existeID(tk.getLexema())){
 				//atrFact.setId(tk.getLexema());
 				//String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
