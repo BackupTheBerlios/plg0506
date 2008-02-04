@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.Character;
+import java.util.*;
 
 
 
@@ -37,7 +38,8 @@ public class LexicoB {
 	Token lookahead;
 	String buff;
 	RandomAccessFile fuente;
-	Character a;
+	//Character a;
+	String a;
 	int posicion;
 	int estado;
 	PalabrasReservadas palReserv = new PalabrasReservadas();
@@ -139,43 +141,50 @@ public class LexicoB {
 		int error;
 		//boolean compara;
 		Token tk = new Token("error",CategoriaLexica.TKLAMBDA);
+		estado = 0;
+		if (posicion !=0){
+			fuente.seek(posicion-1);
+			posicion--;
+		}
 		
 		while ((error = fuente.read())!=-1){
 			
-			a = new Character((char)error);
 			posicion ++;
-			a = Character.toLowerCase(a);
-			estado = 0;
+			a = "" + ((char)error);
+			//a = Character.toLowerCase(a);
 			switch (estado) {
 				case 0:
 					buff = "";
-					if ((a == '\n') || (a == '\t') || (a == ' '))
+					if ((a.matches("\\n")) || 
+							(a.matches("\\t")) || 
+							(a.matches("\\s")) ||
+							(a.matches("\\r")))
 						transita(0);
-					else if (a=='=')
+					else if (a.equals("="))
 						transita(1);
-					else if (a==':')
+					else if (a.equals(":"))
 						transita(2);
-					else if (a=='>')
+					else if (a.equals(">"))
 						transita(3);
-					else if (a=='<')
+					else if (a.equals("<"))
 						transita(4);
-					else if ((a == '.') || 
-							(a == ',') || 
-							(a == ';') ||
-							(a == '(') ||
-							(a == ')') ||
-							(a == '{') ||
-							(a == '}') ||
-							(a == '*'))
+					else if ((a.equals(".")) || 
+							(a.equals(",")) || 
+							(a.equals(";")) ||
+							(a.equals("(")) ||
+							(a.equals(")")) ||
+							(a.equals("{")) ||
+							(a.equals("}")) ||
+							(a.equals("*")))
 						transita(7);
-					else if ((a == '+') || 
-							(a == '-'))
+					else if ((a.equals("+")) || 
+							(a.equals("-")))
 						transita(8);
-					else if (a >= '1' && a <= '9')
+					else if (a.matches("[1-9]*"))
 						transita(9);
-					else if (a == '0')
+					else if (a.matches("0"))
 						transita(11);
-					else if (a >= 'a' && a <= 'z')
+					else if (a.matches("[a-z]*"))
 						transita(12);
 					else
 						throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
@@ -183,90 +192,89 @@ public class LexicoB {
 				case 1:
 					return new Token (a.toString(),CategoriaLexica.TKIG);
 				case 2:
-					if (a == '=')
+					if (a.equals("="))
 						transita(5);
 					else
-						return new Token (a.toString(),CategoriaLexica.TKDOSPUNTOS);
+						return new Token (buff.toString(),CategoriaLexica.TKDOSPUNTOS);
 					break;
 				case 3:
-					if (a == '=')
+					if (a.equals("="))
 						transita(13);
 					else
-						return new Token (a.toString(),CategoriaLexica.TKMAY);
+						return new Token (buff.toString(),CategoriaLexica.TKMAY);
 					break;
 				case 4:
-					if (a == '=')
+					if (a.equals("="))
 						transita(14);
-					else if (a == '>')
+					else if (a.equals(">"))
 						transita(6);
 					else
 						return new Token (a.toString(),CategoriaLexica.TKMEN);
 					break;
 				case 5:
-					return new Token (a.toString(),CategoriaLexica.TKASIGN);
+					return new Token (buff.toString(),CategoriaLexica.TKASIGN);
 				case 6:
 					return new Token (a.toString(),CategoriaLexica.TKDIF);
 				case 7:
-					if (a == '.') 
-							return new Token(a.toString(),CategoriaLexica.TKPUNTO);
-					else if (a == ',')
-						return new Token(a.toString(),CategoriaLexica.TKCOMA);
-					else if (a == ';')
-						return new Token(a.toString(),CategoriaLexica.TKPYCOMA);
-					else if (a == '(')
-						return new Token(a.toString(),CategoriaLexica.TKPAP);
-					else if (a == ')')
-						return new Token(a.toString(),CategoriaLexica.TKPCI);
-					else if (a == '{')
-						return new Token(a.toString(),CategoriaLexica.TKLLAP);
-					else if (a == '}')
-						return new Token(a.toString(),CategoriaLexica.TKLLCI);
+					if (buff.equals(".")) 
+							return new Token(buff.toString(),CategoriaLexica.TKPUNTO);
+					else if (buff.equals(","))
+						return new Token(buff.toString(),CategoriaLexica.TKCOMA);
+					else if (buff.equals(";"))
+						return new Token(buff.toString(),CategoriaLexica.TKPYCOMA);
+					else if (buff.equals("("))
+						return new Token(buff.toString(),CategoriaLexica.TKPAP);
+					else if (buff.equals(")"))
+						return new Token(buff.toString(),CategoriaLexica.TKPCI);
+					else if (buff.equals("{"))
+						return new Token(buff.toString(),CategoriaLexica.TKLLAP);
+					else if (buff.equals("}"))
+						return new Token(buff.toString(),CategoriaLexica.TKLLCI);
 					else // *
-						return new Token(a.toString(),CategoriaLexica.TKMULT);
+						return new Token(buff.toString(),CategoriaLexica.TKMULT);
 				case 8:
-					if (a >= '0' && a <= '9')
+					if (a.matches("[0-9]*"))
 						transita(10);
-					else if (a == '+')
-						return new Token (a.toString(),CategoriaLexica.TKSUMA);
-					else if (a == '-')
-						return new Token (a.toString(),CategoriaLexica.TKRESTA);
+					else if (buff.equals("+"))
+						return new Token (buff.toString(),CategoriaLexica.TKSUMA);
+					else if (buff.equals("-"))
+						return new Token (buff.toString(),CategoriaLexica.TKRESTA);
 					break;
 				case 9:
-					if (a >= '0' && a <= '9')
+					if (a.matches("[0-9]*"))
 						transita(10);
 					else{
-						String aux = leeNumero(posicion);
+						String aux = buff;//leeNumero(posicion);
 						return new Token (aux,CategoriaLexica.TKNUM);
 					}
 					break;
 				case 10:
-					if (a >= '0' && a <= '9')
+					if (a.matches("[0-9]*"))
 						transita(10);
 					else{
-						String aux = leeNumero(posicion);
+						String aux = buff;//leeNumero(posicion);
 						return new Token (aux,CategoriaLexica.TKNUM);
 					}
 					break;
 				case 11:
-					String aux = leeNumero(posicion);
+					String aux = buff;//leeNumero(posicion);
 					return new Token (aux,CategoriaLexica.TKNUM);
 				case 12:
-					if ((a >= '0' && a <= '9') || (a >= 'a' && a <= 'z'))
+					if (a.matches("[0-9a-z]*"))
 						transita(12);
-					else{
-						String aux2 = leeIdentificador(posicion);
-						if (!palReserv.esPalabraReservada(aux2))
-							return new Token (aux2,CategoriaLexica.TKIDEN);
+					else{				
+						if (!palReserv.esPalabraReservada(buff))
+							return new Token (buff,CategoriaLexica.TKIDEN);
 						else{
-							tk = palReserv.reconoceCategoria(aux2);
+							tk = palReserv.reconoceCategoria(buff);
 							return tk;
 						}
 					}
 					break;
 				case 13:
-					return new Token(a.toString(),CategoriaLexica.TKMAYIG);
+					return new Token(buff.toString(),CategoriaLexica.TKMAYIG);
 				case 14:
-					return new Token(a.toString(),CategoriaLexica.TKMENIG);
+					return new Token(buff.toString(),CategoriaLexica.TKMENIG);
 			}
 		}
 		/*
@@ -279,12 +287,11 @@ public class LexicoB {
 					
 	
 	private void transita(int s){
-		System.out.println(a.toString());
-		buff.concat(a.toString((char)a));
-		estado = s+1;
+		buff = buff + a;
+		estado = s;
 	}
 		
-	private String leeIdentificador(int pos) throws IOException, Exception {
+/*	private String leeIdentificador(int pos) throws IOException, Exception {
 		int a;
 		String s = new String();
 		fuente.seek(--pos);
@@ -298,9 +305,9 @@ public class LexicoB {
 		fuente.seek(--pos);
 		setPosicion(pos);
 		return s;
-	}
+	}*/
 
-	private String leeNumero(int posicion) throws Exception, IOException {
+/*	private String leeNumero(int posicion) throws Exception, IOException {
 		int a;
 		String s = new String();
 		fuente.seek(--posicion);
@@ -316,7 +323,7 @@ public class LexicoB {
 		if ((s.charAt(0) == '0') && (s.length() > 1))
 			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
 		return s;
-	}
+	}*/
 	
 /*private String leeComentario (int posicion)throws Exception, IOException {
 	int a;
@@ -388,7 +395,8 @@ public class LexicoB {
 		LexicoB l = new LexicoB(new File("Ejemplo.txt"));
 		try {
 		Token tk = l.lexer();
-		while (tk.getCategoriaLexica()!=CategoriaLexica.TKFF){
+		//while (tk.getCategoriaLexica()!=CategoriaLexica.TKFF){
+		while (tk.getCategoriaLexica()!=CategoriaLexica.TKPUNTO){
 			System.out.println(tk.getLexema() + " -> " + tk.getCategoriaLexica());
 			tk = l.lexer();
 		}

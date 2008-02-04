@@ -5,7 +5,7 @@ import java.util.TreeMap;
 public class PalabrasReservadas {
 	private TreeMap conjunto;
 	
-	void PalabrasReservadas(){
+	PalabrasReservadas(){
 		conjunto = new TreeMap();
 		String s = new String();
 		
@@ -39,6 +39,7 @@ public class PalabrasReservadas {
 	}
 	
 	public boolean esPalabraReservada(String s){
+		s = s.toUpperCase();
 		if (conjunto.containsKey(s))
 			return true;
 		else
