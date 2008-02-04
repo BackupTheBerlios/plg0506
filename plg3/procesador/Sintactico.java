@@ -608,30 +608,30 @@ public class Sintactico{
 	 * @return
 	 * @throws Exception
 	 */
-	private Atributo Fact() throws Exception{
+	private String Fact() throws Exception{
 		//System.out.println("Fact");
-		Atributo atrFact = new Atributo();
+		String atrFact = "error";
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
-			atrFact.setTipo("int");
+			atrFact = "int";
 			lexico.lexer(); //Cosumimos el entero
 			codigo.emite("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
 			return atrFact;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
-			atrFact.setTipo("bool");
+			atrFact = "bool";
 			codigo.emite("apila",1);
 			lexico.lexer(); //Cosumimos 'true'
 			return atrFact;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
-			atrFact.setTipo("bool");
+			atrFact = "bool";
 			codigo.emite("apila",0);
 			lexico.lexer(); //Cosumimos 'false'
 			return atrFact;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKPAP)) {
 			lexico.lexer(); //Cosumimos '('
-			atrFact = ExpOr();
+			atrFact = ExpRel();
 			if (!lexico.reconoce(CategoriaLexica.TKPCI)){
 				throw new Exception(" Error de parentizacion, en linea: " + lexico.getLinea());
 			}
@@ -641,14 +641,15 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
 			if (TS.existeID(tk.getLexema())){
-				atrFact.setId(tk.getLexema());
-				String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
-				atrFact.setTipo(tipo);
-				int dir =((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
+				//atrFact.setId(tk.getLexema());
+				//String tipo = ((propiedades)TS.getTabla().get(atrFact.getId())).getTipo();
+				atrFact = ((propiedades)TS.getTabla().get(tk.getLexema())).getTipo();
+				//int dir =((propiedades)TS.getTabla().get(atrFact.getId())).getDir();
+				int dir =((propiedades)TS.getTabla().get(tk.getLexema())).getDir();
 				codigo.emite("apila-dir", dir);
 			}
 			else{
-				atrFact.setTipo("error");
+				atrFact="error";
 			}
 			return atrFact;
 		}
@@ -657,12 +658,12 @@ public class Sintactico{
 			String op = OpUnarioLog(lexico.lexer().getLexema()); //Consumimos operador unario logico
 			atrFact = Fact();
 			codigo.emite(op);
-			if (!atrFact.getTipo().equals("bool")){
-					atrFact.setTipo("error");
+			if (!atrFact.equals("bool")){
+					atrFact="error";
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
 			else{
-				atrFact.setTipo("bool");
+				atrFact="bool";
 			}
 			return atrFact;
 		}
@@ -671,17 +672,17 @@ public class Sintactico{
 			String op = OpUnarioArit(lexico.lexer().getLexema()); //Consumimos operador unario aritmetico
 			atrFact = Fact();
 			codigo.emite(op);
-			if (!atrFact.getTipo().equals("int")){
-					atrFact.setTipo("error");
+			if (!atrFact.equals("int")){
+					//atrFact = "error";
 					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
 			}
 			else{
-				atrFact.setTipo("int");
+				atrFact = "int";
 			}
 			return atrFact;
 		}
 		
-		atrFact.setTipo("error");
+		atrFact = "error";
 		return atrFact;
 	}
 	

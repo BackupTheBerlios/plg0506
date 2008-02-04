@@ -333,6 +333,15 @@ public class Lexico {
 							String aux = leeIdentificador(posicion);
 							return new Token (aux,CategoriaLexica.TKIDEN);
 						}
+						
+			case 'w':	compara = cmp(posicion, "write");
+						if (compara){
+							return new Token("write",CategoriaLexica.TKWRITE);
+						}
+						else{
+							String aux = leeIdentificador(posicion);
+							return new Token (aux,CategoriaLexica.TKIDEN);
+						}
 			/*
 			 * Si detectamos 'a' hay que discernir si es la palabra reservada and o es un identificador.
 			 * Para leer identificadores, usamos leeIdentificador().  
