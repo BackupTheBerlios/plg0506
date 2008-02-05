@@ -20,7 +20,7 @@ import tablaSimbolos.*;
 
 public class Sintactico{
 	
-	/*
+	/**
 	 * Atributos de la clase:
 	 * 
 	 * codigo: Se encarga de almacenar el codigo generado por las instrucciones del lenguaje.
@@ -43,6 +43,10 @@ public class Sintactico{
 		codigo = new Codigo(f);
 	}
 	
+	/**
+	 * Accesor para el atributo de la clase codigo.
+	 * @return codigo: El codigo generado.
+	 */
 	public Codigo getCodigo() {
 		return codigo;
 	}
@@ -58,7 +62,15 @@ public class Sintactico{
 			throw new Exception("El programa contiene errores");
 		}
 	}
-
+	
+	/**
+	 * Evalua el programa.  Primero lee el nombre del programa, luego las declaraciones de variables (identificadores), 
+	 * que se encuentran separados del bloque de instrucciones "Is" mediante un "BEGIN".  Acto seguido, procesa cada 
+	 * instruccion de Is, y  una vez terminado el bloque, lee "." que es donde acaba el programa.
+	 * 
+	 * @return errProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
+	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
+	 */	
 	private boolean Prog() throws Exception{
 		boolean errProg = false;
 		ProgDec();
@@ -77,6 +89,12 @@ System.out.println(codigo.getString());
 		return errProg;		
 	}
 
+	
+	
+	/**
+	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
+	 * @throws Exception Si sucede algún error en la cabecera del programa.
+	 */
 	private void ProgDec() throws Exception{
 		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
 			lexico.lexer();
@@ -99,9 +117,10 @@ System.out.println(codigo.getString());
 	
 	
 	/**
+	 * Procesa la seccion de declaraciones de las variables.
 	 * 
-	 * @return
-	 * @throws Exception
+	 * @return errorDecs: Es cierto si ocurre algún error en las declaraciones de variables.
+	 * @throws Exception Si ocurre algún error sintáctico en la declaración de alguna variable.
 	 */
 	private boolean Decs() throws Exception{
 		Atributo atrDec = new Atributo();
@@ -117,8 +136,9 @@ System.out.println(codigo.getString());
 	
 	/**
 	 * 
-	 * @return
-	 * @throws Exception
+	 * La usa
+	 * @return 
+	 * @throws Exception  Si ocurre algún error sintáctico en la declaración de alguna variable.
 	 */
 	private boolean RDecs (boolean errh0, int dirh0) throws Exception{//(Atributo heredado)throws Exception{
 		boolean err0 = errh0;
