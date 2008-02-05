@@ -199,11 +199,10 @@ public class LexicoB {
 							(a.equals(")")) ||
 							(a.equals("{")) ||
 							(a.equals("}")) ||
+							(a.equals("+")) || 
+							(a.equals("-")) ||
 							(a.equals("*")))
 						transita(7);
-					else if ((a.equals("+")) || 
-							(a.equals("-")))
-						transita(8);
 					else if (a.matches("[1-9]*"))
 						transita(9);
 					else if (a.matches("0"))
@@ -214,7 +213,7 @@ public class LexicoB {
 						throw new Exception("ERROR en linea "+linea+" y columna "+columna+": error de sintaxis");
 					break;
 				case 1:
-					return new Token (a.toString(),CategoriaLexica.TKIG);
+					return new Token (buff.toString(),CategoriaLexica.TKIG);
 				case 2:
 					if (a.equals("="))
 						transita(5);
@@ -233,12 +232,12 @@ public class LexicoB {
 					else if (a.equals(">"))
 						transita(6);
 					else
-						return new Token (a.toString(),CategoriaLexica.TKMEN);
+						return new Token (buff.toString(),CategoriaLexica.TKMEN);
 					break;
 				case 5:
 					return new Token (buff.toString(),CategoriaLexica.TKASIGN);
 				case 6:
-					return new Token (a.toString(),CategoriaLexica.TKDIF);
+					return new Token (buff.toString(),CategoriaLexica.TKDIF);
 				case 7:
 					if (buff.equals(".")) 
 							return new Token(buff.toString(),CategoriaLexica.TKPUNTO);
@@ -254,14 +253,12 @@ public class LexicoB {
 						return new Token(buff.toString(),CategoriaLexica.TKLLAP);
 					else if (buff.equals("}"))
 						return new Token(buff.toString(),CategoriaLexica.TKLLCI);
-					else // *
-						return new Token(buff.toString(),CategoriaLexica.TKMULT);
-				case 8:
-					if (buff.equals("+"))
+					else if (buff.equals("+"))
 						return new Token (buff.toString(),CategoriaLexica.TKSUMA);
 					else if (buff.equals("-"))
-						return new Token (buff.toString(),CategoriaLexica.TKRESTA);
-					break;
+						return new Token (buff.toString(),CategoriaLexica.TKRESTA); 
+					else // *
+						return new Token(buff.toString(),CategoriaLexica.TKMULT);
 				case 9:
 					if (a.matches("[0-9]*"))
 						transita(10);
