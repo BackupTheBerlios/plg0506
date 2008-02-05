@@ -61,10 +61,10 @@ public class Sintactico{
 
 	private boolean Prog() throws Exception{
 		boolean errProg = false;
-		errProg = ProgDec();
+		ProgDec();
 		if (lexico.reconoce(CategoriaLexica.TKVAR)){
 			lexico.lexer();//consumo VAR
-			errProg = Decs() || errProg;
+			errProg = Decs();
 			errProg = Bloque() || errProg;
 			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 				lexico.lexer();//consumo .
@@ -77,84 +77,27 @@ System.out.println(codigo.getString());
 		return errProg;		
 	}
 
-	private boolean ProgDec() throws Exception{
-		boolean err0 = false;
+	private void ProgDec() throws Exception{
 		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
 			lexico.lexer();
 			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 				Token tk = lexico.lexer(); //consumo iden
 				TS = new tablaSimbolos();
 				TS.addID(tk.getLexema(),"", 0);
-				err0 = RProgdec();
+				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
+					lexico.lexer();
+				else throw new Exception ("Se esperaba \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
+				
 			}else{
 				throw new Exception("El Programa tiene que tener un nombre en "+lexico.getLinea()+","+lexico.getColumna());		
 			}
 	
 		}
 		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
-		return err0;
 	}
 
 	
 	
-	private boolean RProgdec() throws Exception{
-		// TODO Auto-generated method stub
-		boolean err0 = false;
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			lexico.lexer();
-		}
-/*		else if (lexico.reconoce(CategoriaLexica.TKPAP)){
-			lexico.lexer();
-			err0 = Idens();
-			if (lexico.reconoce(CategoriaLexica.TKPCI))
-				lexico.lexer();
-			else throw new Exception ("Se esperaba \")\" en "+lexico.getLinea()+","+lexico.getColumna());		
-		}
-*/
-		else throw new Exception ("Se esperaba \"(\" o \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
-		return err0;
-	}
-
-	
-	
-	private boolean Idens() throws Exception {
-		// TODO Auto-generated method stub
-		boolean err0 = false;
-		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-			Token tk = lexico.lexer();
-			boolean errh1 = TS.existeID(tk.getLexema());
-			if (errh1)
-				System.out.println("El identificador " +
-						tk.getLexema() + " esta repetido en la linea "+lexico.getLinea());		
-			else TS.addID(tk.getLexema(),"",0);	
-			err0 = RIdens(errh1);
-		}
-		else throw new Exception("Se esperaba \"iden\" en "+lexico.getLinea()+","+lexico.getColumna());		
-		return err0;
-	}
-	
-	
-
-	private boolean RIdens(boolean errh0) throws Exception{
-		boolean err0 = false;
-		if (lexico.reconoce(CategoriaLexica.TKCOMA)){
-			lexico.lexer();
-			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-				Token tk = lexico.lexer();
-				boolean errh1aux = TS.existeID(tk.getLexema());
-				if (errh1aux)
-					System.out.println("El identificador " +
-							tk.getLexema() + " esta repetido en la linea "+lexico.getLinea());		
-				else TS.addID(tk.getLexema(), "", 0);
-				boolean errh1 = errh0 || errh1aux;
-				err0 = RIdens(errh1);			
-			} else throw new Exception("Se esperaba \"iden\" en "+lexico.getLinea()+","+lexico.getColumna());		
-		} else {
-			err0 = errh0;
-		}			
-		return err0;
-	}
-
 	/**
 	 * 
 	 * @return
@@ -450,7 +393,7 @@ System.out.println(codigo.getString());
 		String cod = OpRel(); //Reconoce menorigual, igual, diferente, etc
 		if (cod.length()>0){
 			String tipo1 = ExpAd();
-			if (tipo1.equals(tipoh))
+			if (comparables(tipo1,tipoh,cod))
 				tipo = "bool";
 			codigo.emite(cod);
 			return RExpRel(tipo);
