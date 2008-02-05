@@ -13,13 +13,18 @@ import java.util.*;*/
  * La clase <B>Lexico</B> analiza el fichero de entrada para reconocer tokens. Lanza una excepcin en caso de que esto no sea posible. Puede suceder
  * que el token sea erroneo o que ocurra algun problema con el fichero de lectura.
  * <P>La clase Lexico cuenta con los siguientes atributos:
- * <UL><LI><CODE>linea:</CODE> Entero que controla la lnea del cdigo donde se detecta el error.</LI>
- * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de prean?lisis.</LI>
+ * <UL><LI><CODE>linea:</CODE> Entero que controla la linea del codigo donde se detecta el error.</LI>
+ * <LI><CODE>columna:</CODE> Entero que controla la columna del codigo donde se detecta el error.</LI>
+ * <LI><CODE>lookahead:</CODE> Token que almacena los caracteres de preanálisis.</LI>
  * <LI><CODE>fuente:</CODE> RandomAccessFile que se utiliza para leer del fichero que contine que contine el cdigo a analizar.</LI>
  * <LI><CODE>posicion:</CODE> Entero que marca la posicin en la que se est leyendo dentro de una lnea.</LI>
+ * <LI><CODE>buff:</CODE> String utilizado para leer de fichero.</LI>
+ * <LI><CODE>estado:</CODE> Entero que nos dice en que estado del diagrama nos encontramos.</LI>
+ * <LI><CODE>palReserv:</CODE> De tipo PalabrasReservadas nos dice si estamos reconociendo una palabra reservada del lenguaje .</LI>
  * </UL></P>
  * 
- * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
+ * 
+ * @author Paloma de la Fuente, Ines Gonzalez, Federico G. Mon Trotti, Nicolas Mon Trotti y Alberto Velazquez
  *
  */
 
@@ -33,6 +38,9 @@ public class Lexico {
 	 * fuente se utiliza para leer del fichero que contiene el codigo a analizar.
 	 * posicion entero que marca la posicion dentro de una linea por donde se esta
 	 * leyendo.
+	 */
+	/*
+	 * Entero que controla la linea del codigo donde se detecta el error.
 	 */
 	int linea;
 	int columna;
@@ -304,13 +312,14 @@ public class Lexico {
 		 * Si se sale del while es que read detecto un error y lanzamos una excepcion de entrada/salida. 
 		 */
 		return new Token(buff.toString(),CategoriaLexica.TKFF);
-	/*	if (error != -1)
-			throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
-		return tk;
-		*/
+	
 	}
 					
-	
+	/**
+	 * Metodo para cambiar de estado al que nos indica el parametro que recibimos.
+	 * 
+	 * @param s Entero que indica cual es el estado al que vamos a movernos.
+	 */
 	private void transita(int s){
 		buff = buff + a;
 		estado = s;
@@ -369,12 +378,16 @@ public class Lexico {
 		return aux;
 	}
 	
+	/**
+	 * Main utilizado para las pruebas de funcionamiento de esta clase.
+	 * 
+	 * @param args
+	 */
 	public static void main(String args[]){
 		Lexico l = new Lexico(new File("Ejemplo.txt"));
 		try {
 		Token tk = l.lexer();
 		while (tk.getCategoriaLexica()!=CategoriaLexica.TKFF){
-	//	while (tk.getCategoriaLexica()!=CategoriaLexica.TKPUNTO){
 			System.out.println(tk.getLexema() + " -> " + tk.getCategoriaLexica());
 			tk = l.lexer();
 		}
