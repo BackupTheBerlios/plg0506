@@ -15,8 +15,8 @@ package maquinaP;
  * <LI><CODE>pasos:</CODE> String con todos los pasos que ejecuta la MaquinaP.</LI>
  * </UL></P>
  * 
- * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
- *
+ * @author Paloma de la Fuente, Ines Gonzalez, Federico G. Mon Trotti, Nicolas Mon Trotti y Alberto Velazquez
+ * 
  */
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

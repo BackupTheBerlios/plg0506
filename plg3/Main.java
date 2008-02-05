@@ -2,8 +2,9 @@ import nGui.GUI;
 
 /**
  * Clase que contiene el menu principal del compilador desde donde se llama a la Gui para que el usuario pueda manejar el compilador.
- * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez 
  *
+ * @author Paloma de la Fuente, Ines Gonzalez, Federico G. Mon Trotti, Nicolas Mon Trotti y Alberto Velazquez
+ * 
  */
 public class Main {
 	

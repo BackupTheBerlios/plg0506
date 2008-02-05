@@ -9,8 +9,8 @@ import java.io.File;
  * 
  * <P>No tiene atributos</P>
  * 
- * @author Paloma de la Fuente, Leticia Garcia, Ines Gonzalez, Emilia Rodriguez y Alberto Velazquez
- *
+ * @author Paloma de la Fuente, Ines Gonzalez, Federico G. Mon Trotti, Nicolas Mon Trotti y Alberto Velazquez
+ * 
  */
 public class Procesador {
 

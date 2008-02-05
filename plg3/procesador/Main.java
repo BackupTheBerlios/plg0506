@@ -10,8 +10,8 @@ import java.util.Vector;
  * Esta es la clase donde se encuentra el Main del procesador.
  * 
  * 
- * @author usuario_local
- *
+ * @author Paloma de la Fuente, Ines Gonzalez, Federico G. Mon Trotti, Nicolas Mon Trotti y Alberto Velazquez
+ * 
  */
 public class Main {
 
