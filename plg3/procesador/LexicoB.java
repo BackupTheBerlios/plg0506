@@ -233,9 +233,7 @@ public class LexicoB {
 					else // *
 						return new Token(buff.toString(),CategoriaLexica.TKMULT);
 				case 8:
-					if (a.matches("[0-9]*"))
-						transita(10);
-					else if (buff.equals("+"))
+					if (buff.equals("+"))
 						return new Token (buff.toString(),CategoriaLexica.TKSUMA);
 					else if (buff.equals("-"))
 						return new Token (buff.toString(),CategoriaLexica.TKRESTA);

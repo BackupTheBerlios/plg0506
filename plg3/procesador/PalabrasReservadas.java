@@ -3,10 +3,10 @@ package procesador;
 import java.util.TreeMap;
 
 public class PalabrasReservadas {
-	private TreeMap conjunto;
+	private TreeMap<String,String> conjunto;
 	
 	PalabrasReservadas(){
-		conjunto = new TreeMap();
+		conjunto = new TreeMap<String,String>();
 		String s = new String();
 		
 		//Se añaden al conjunto las Palabras Reservadas
@@ -35,6 +35,10 @@ public class PalabrasReservadas {
 		s = "TRUE";
 		conjunto.put(s,s);
 		s = "FALSE";
+		conjunto.put(s,s);
+		s = "READ";
+		conjunto.put(s,s);
+		s = "WRITE";
 		conjunto.put(s,s);
 	}
 	
@@ -75,6 +79,10 @@ public class PalabrasReservadas {
 			tk.setCategoriaLexica(CategoriaLexica.TKDIV);
 		else if (s.equalsIgnoreCase("MOD"))
 			tk.setCategoriaLexica(CategoriaLexica.TKMOD);
+		else if (s.equalsIgnoreCase("READ"))
+			tk.setCategoriaLexica(CategoriaLexica.TKREAD);
+		else if (s.equalsIgnoreCase("WRITE"))
+			tk.setCategoriaLexica(CategoriaLexica.TKWRITE);
 		return tk;
 	}
 

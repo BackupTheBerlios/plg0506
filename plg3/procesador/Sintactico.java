@@ -28,7 +28,7 @@ public class Sintactico{
  	 * TS: Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
  	 * dir: Entero que marca la posicin de la pila con la que estamos trabajando.
 	 */
-	Lexico lexico;
+	LexicoB lexico;
 	tablaSimbolos TS;
 	Codigo codigo;
 	
@@ -39,7 +39,7 @@ public class Sintactico{
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public Sintactico(File f) throws Exception{
-		lexico = new Lexico(f);		
+		lexico = new LexicoB(f);		
 		codigo = new Codigo(f);
 	}
 	
@@ -354,7 +354,7 @@ System.out.println(codigo.getString());
 		}
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
-			throw new Exception ("Se esperaba \":?\"");
+			throw new Exception ("Se esperaba \":=\"");
 		lexico.lexer();
 		if (!TS.existeID(tk.getLexema())){
 			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
@@ -446,7 +446,7 @@ System.out.println(codigo.getString());
 		String cod = OpRel(); //Reconoce menorigual, igual, diferente, etc
 		if (cod.length()>0){
 			String tipo1 = ExpAd();
-			if (tipoh.equals("bool") && tipo1.equals(tipoh))
+			if (tipo1.equals(tipoh))
 				tipo = "bool";
 			codigo.emite(cod);
 			return RExpRel(tipo);
