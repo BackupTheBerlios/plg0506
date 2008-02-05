@@ -35,6 +35,7 @@ public class LexicoB {
 	 * leyendo.
 	 */
 	int linea;
+	int columna;
 	Token lookahead;
 	String buff;
 	RandomAccessFile fuente;
@@ -50,7 +51,8 @@ public class LexicoB {
 	 * 
 	 */
 	public LexicoB(File f) {
-		linea = 0;
+		linea = 1;
+		columna = 0;
 		lookahead = new Token();
 		try {
 			fuente = new RandomAccessFile(f, "r");
@@ -74,6 +76,22 @@ public class LexicoB {
 	 */
 	public void setLinea(int linea) {
 		this.linea = linea;
+	}
+
+	/**
+	 * Accesor para el atributo de la clase, columna. 
+	 * @return Entero que controla la columna del cdigo donde se detecta el error.
+	 */
+	public int getColumna() {
+		return columna;
+	}
+	
+	/**
+	 * Mutador para el atributo de la clase columna. 
+	 * @param columna Entero que controla la columna del cdigo donde se detecta el error.
+	 */
+	public void setColumna(int columna) {
+		this.columna = columna;
 	}
 	
 	/**
@@ -145,18 +163,24 @@ public class LexicoB {
 		if (posicion !=0){
 			fuente.seek(posicion-1);
 			posicion--;
+			columna--;
 		}
 		
 		while ((error = fuente.read())!=-1){
 			
 			posicion ++;
+			columna ++;
 			a = "" + ((char)error);
 			//a = Character.toLowerCase(a);
 			switch (estado) {
 				case 0:
 					buff = "";
-					if ((a.matches("\\n")) || 
-							(a.matches("\\t")) || 
+					if (a.matches("\\n")) {
+						linea++;
+						columna = 0;
+						transita(0);
+					}
+					else if	((a.matches("\\t")) || 
 							(a.matches("\\s")) ||
 							(a.matches("\\r")))
 						transita(0);
@@ -187,7 +211,7 @@ public class LexicoB {
 					else if (a.matches("[a-z]*"))
 						transita(12);
 					else
-						throw new Exception("ERROR en linea "+linea+" y posicion "+posicion+": error de sintaxis");
+						throw new Exception("ERROR en linea "+linea+" y columna "+columna+": error de sintaxis");
 					break;
 				case 1:
 					return new Token (a.toString(),CategoriaLexica.TKIG);
@@ -289,55 +313,6 @@ public class LexicoB {
 		estado = s;
 	}
 		
-/*	private String leeIdentificador(int pos) throws IOException, Exception {
-		int a;
-		String s = new String();
-		fuente.seek(--pos);
-		a = fuente.read();
-		pos++;
-		while((a != -1) && (Character.isLetterOrDigit((char)a))) {
-			s = s.concat(Character.toString((char)a));
-			a = fuente.read();
-			pos++;
-		}
-		fuente.seek(--pos);
-		setPosicion(pos);
-		return s;
-	}*/
-
-/*	private String leeNumero(int posicion) throws Exception, IOException {
-		int a;
-		String s = new String();
-		fuente.seek(--posicion);
-		a = fuente.read();
-		posicion++;
-		while((a != -1) && (Character.isDigit((char)a))) {
-			s = s.concat(Character.toString((char)a));
-			a = fuente.read();
-			posicion++;
-		}
-		fuente.seek(--posicion);
-		setPosicion(posicion);
-		if ((s.charAt(0) == '0') && (s.length() > 1))
-			throw new Exception("ERROR en linea "+linea+": No existe ese numero");
-		return s;
-	}*/
-	
-/*private String leeComentario (int posicion)throws Exception, IOException {
-	int a;
-	String s = new String();
-	fuente.seek(--posicion);
-	a = fuente.read();
-	posicion++;
-	while(a != '\n') {
-		s = s.concat(Character.toString((char)a));
-		a = fuente.read();
-		posicion++;
-	}
-	fuente.seek(--posicion);
-	setPosicion(posicion);
-	return s;
-}*/
 
 	/**
 	 * El metodo getNextToken devuelve el siguiente Token para poder realizar el preanalisis. 
@@ -349,11 +324,13 @@ public class LexicoB {
 	 */
 	public Token getNextToken() throws IOException, Exception{
 		int aux = posicion;
+		int auxCol = columna;
 		int auxLinea = linea;
 		Token tk = getToken();
 		fuente.seek(aux);
 		posicion = aux;
 		linea = auxLinea;
+		columna = auxCol;
 		return tk;	
 		
 	}

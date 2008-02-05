@@ -4,11 +4,12 @@ x : integer;
 y : boolean;
 begin
 read(x);
-x:= + 5;
+x := + 5;
 x := -1 * ( - x + 5) * 2 ;
-write(4);
-y := not true; 
-y := (8 = 3);
-y:= y and (false <> false) or (6 >= 4);
+write (4);
+y := not true;
+y := 8 = 3;
+x:=3
+y:= y and (false <> false) or (6 >= 4)
 end.
 
