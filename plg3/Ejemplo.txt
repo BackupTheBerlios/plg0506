@@ -6,6 +6,7 @@ begin
 i := 1;
 j := 12345;
 write(j);
-write(i);
+write(j+i);
+read(j);
 end .
 
