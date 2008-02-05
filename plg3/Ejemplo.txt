@@ -1,5 +1,11 @@
-program deasdf;
-var
-x : integer;
+program prueba1;
+var 
+i : integer;
+j : integer;
 begin
-end.
+i := 1;
+j := 12345;
+write(j);
+write(i);
+end .
+
