@@ -270,7 +270,7 @@ public class MaquinaP {
 	 * @param tam Recibe un entero con el tamao que ha de aumentar.
 	 */
 	private void aumentoMem(int tam){
-		System.out.println("aumentoMem");
+		//System.out.println("aumentoMem");
 		for(int i = Mem.size();i<tam+1;i++){
 			Mem.add(i,null);
 		}

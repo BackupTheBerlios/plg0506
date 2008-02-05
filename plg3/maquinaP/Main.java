@@ -25,7 +25,7 @@ public class Main {
 		}
 		
 		//Para hacer pruebas:
-		new PruebasConMaquinaP(filename);
+		//new PruebasConMaquinaP(filename);
 		
 		Vector<String> prog = deserialize(filename);
 		
