@@ -228,12 +228,13 @@ System.out.println(codigo.getString());
 		//Token tk = lexico.lexer(); //consumo el tipo
 		boolean err0 = false;
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
 		}
 		Token tk = lexico.lexer(); //consumo el iden
 		atrib.setId(tk.getLexema());
+
 		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS )){
-			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea());
+			throw new Exception("Se esperaba \":\" en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
 		}
 		tk = lexico.lexer(); //consumo :
 		
