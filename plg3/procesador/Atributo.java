@@ -25,9 +25,9 @@ package procesador;
 	}
 	
 	/**
-	 * 
-	 * @param tipo
-	 * @param id
+	 * Constructor de la clase en el que se le pasan por parametro valores para los dos atributos.
+	 * @param tipo String con el valor que le le quiere dar a tipo
+	 * @param id String con el valor que le le quiere dar a id
 	 */
 	public Atributo(String tipo, String id) {
 		super();
@@ -36,15 +36,15 @@ package procesador;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, id.
+	 * @return Valor del atributo id
 	 */
 	public String getId() {
 		return id;
 	}
 	
 	/**
-	 * 
+	 * Mutador para el atributo de la clase, id.
 	 * @param id
 	 */
 	public void setId(String id) {
@@ -52,15 +52,15 @@ package procesador;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Accesor para el atributo de la clase, tipo.
+	 * @return Valor del atributo tipo
 	 */
 	public String getTipo() {
 		return tipo;
 	}
 
 	/**
-	 * 
+	 * Mutador para el atributo de la clase, tipo.
 	 * @param tipo
 	 */
 	public void setTipo(String tipo) {
