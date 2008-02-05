@@ -5,6 +5,14 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.Vector;
 
+
+/**
+ * Esta es la clase donde se encuentra el Main del procesador.
+ * 
+ * 
+ * @author usuario_local
+ *
+ */
 public class Main {
 
 	/**
