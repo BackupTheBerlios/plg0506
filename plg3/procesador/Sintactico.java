@@ -103,13 +103,14 @@ System.out.println(codigo.getString());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
 		}
-		else if (lexico.reconoce(CategoriaLexica.TKPAP)){
+/*		else if (lexico.reconoce(CategoriaLexica.TKPAP)){
 			lexico.lexer();
 			err0 = Idens();
 			if (lexico.reconoce(CategoriaLexica.TKPCI))
 				lexico.lexer();
 			else throw new Exception ("Se esperaba \")\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		}
+*/
 		else throw new Exception ("Se esperaba \"(\" o \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		return err0;
 	}
@@ -260,11 +261,7 @@ System.out.println(codigo.getString());
 			atrib.setTipo("bool");
 			return false;
 		}
-		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-			System.out.println("Error Contextual: se esperaba INTEGER o BOOLEAN en "+lexico.getLinea()+","+lexico.getColumna());		
-			lexico.lexer();
-			return true;
-		} else throw new Exception("Se esperaba un Tipo");// incorrecto en linea " + lexico.getLinea());
+		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", los tipos son INTEGER o BOOLEAN");// incorrecto en linea " + lexico.getLinea());
 	}
 	
 	
