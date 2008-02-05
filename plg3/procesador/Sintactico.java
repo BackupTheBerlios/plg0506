@@ -286,6 +286,7 @@ System.out.println(codigo.getString());
 		lexico.lexer();
 		if (!TS.existeID(tk.getLexema())){
 			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
+	lexico.lexer();//FIXME:LImpiar		
 			return true;
 		}
 		String tipoExpRel = ExpRel();
@@ -335,11 +336,6 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean IWrite() throws Exception{
-/*		if (!lexico.reconoce(CategoriaLexica.TKWRITE )){
-			//throw new Exception ("Se esperaba la palabra reservada write");
-			return true;
-		}
-*/
 		lexico.lexer(); //Consumo write
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
@@ -520,8 +516,7 @@ System.out.println(codigo.getString());
 			codigo.emite(op);
 			if (!tipo0.equalsIgnoreCase("bool")){
 					tipo0="error";
-					throw new Exception("Error de tipos en "+lexico.getLinea()+","+lexico.getColumna());		
-			}
+				}
 			else{
 				tipo0="bool";
 			}
@@ -534,7 +529,6 @@ System.out.println(codigo.getString());
 			codigo.emite(op);
 			if (!tipo0.equalsIgnoreCase("int")){
 					//atrFact = "error";
-					throw new Exception("Error de tipos en "+lexico.getLinea()+","+lexico.getColumna());		
 			}
 			else{
 				tipo0 = "int";
