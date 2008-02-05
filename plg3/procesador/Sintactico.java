@@ -65,15 +65,15 @@ public class Sintactico{
 		if (lexico.reconoce(CategoriaLexica.TKVAR)){
 			lexico.lexer();//consumo VAR
 			errProg = errProg || Decs();
-			errProg = errProg || Bloque();
+			errProg = Bloque() || errProg;
 			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 				lexico.lexer();//consumo .
 				codigo.emite("stop");	
 System.out.println(codigo.getString());
 			}
-			else throw new Exception ("Se esperaba \".\"");			
+			else throw new Exception ("Se esperaba \".\" en "+lexico.getLinea()+","+lexico.getColumna());			
 		}
-		else throw new Exception ("Se esperaba \"VAR\"");
+		else throw new Exception ("Se esperaba \"VAR\" en "+lexico.getLinea()+","+lexico.getColumna());			
 		return errProg;		
 	}
 
@@ -87,11 +87,11 @@ System.out.println(codigo.getString());
 				TS.addID(tk.getLexema(),"", 0);
 				err0 = RProgdec();
 			}else{
-				throw new Exception("El Programa tiene que tener un nombre");
+				throw new Exception("El Programa tiene que tener un nombre en "+lexico.getLinea()+","+lexico.getColumna());		
 			}
 	
 		}
-		else throw new Exception ("Se esperaba \"PROGRAM\"");
+		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
 		return err0;
 	}
 
@@ -108,9 +108,9 @@ System.out.println(codigo.getString());
 			err0 = Idens();
 			if (lexico.reconoce(CategoriaLexica.TKPCI))
 				lexico.lexer();
-			else throw new Exception ("Se esperaba \")\"");
+			else throw new Exception ("Se esperaba \")\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		}
-		else throw new Exception ("Se esperaba \"(\" o \";\"");
+		else throw new Exception ("Se esperaba \"(\" o \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		return err0;
 	}
 
@@ -124,11 +124,11 @@ System.out.println(codigo.getString());
 			boolean errh1 = TS.existeID(tk.getLexema());
 			if (errh1)
 				System.out.println("El identificador " +
-						tk.getLexema() + " esta repetido.");
+						tk.getLexema() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
 			else TS.addID(tk.getLexema(),"",0);	
 			err0 = RIdens(errh1);
 		}
-		else throw new Exception("Se esperaba \"iden\"");
+		else throw new Exception("Se esperaba \"iden\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		return err0;
 	}
 	
@@ -143,11 +143,11 @@ System.out.println(codigo.getString());
 				boolean errh1aux = TS.existeID(tk.getLexema());
 				if (errh1aux)
 					System.out.println("El identificador " +
-							tk.getLexema() + " esta repetido.");
+							tk.getLexema() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
 				else TS.addID(tk.getLexema(), "", 0);
 				boolean errh1 = errh0 || errh1aux;
 				err0 = RIdens(errh1);			
-			} else throw new Exception("Se esperaba \"iden\"");
+			} else throw new Exception("Se esperaba \"iden\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		} else {
 			err0 = errh0;
 		}			
@@ -165,7 +165,7 @@ System.out.println(codigo.getString());
 		boolean errh1aux = TS.existeID(atrDec.getId());
 		if (errh1aux)
 			System.out.println("El identificador " +
-					atrDec.getId() + " esta repetido.");
+					atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
 		else TS.addID(atrDec.getId(),atrDec.getTipo(), 0);
 		err0 = err0 || errh1aux;
 		return RDecs(err0,0);		
@@ -185,7 +185,7 @@ System.out.println(codigo.getString());
 			boolean errh1aux = TS.existeID(atrDec.getId());
 			if (errh1aux)
 				System.out.println("El identificador " +
-						atrDec.getId() + " esta repetido.");	
+						atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
 			else TS.addID(atrDec.getId(),atrDec.getTipo(), dirh0+1);
 			err0 = err0 || errh1aux;
 			err0 = err0 || RDecs (err0, dirh0+1);
@@ -239,7 +239,7 @@ System.out.println(codigo.getString());
 		err0 = Tipo(atrib);
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
-		} else throw new Exception("Se esperaba \";\"");
+		} else throw new Exception("Se esperaba \";\" en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
 		return err0;
 	}
 	
@@ -261,7 +261,8 @@ System.out.println(codigo.getString());
 			return false;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-			System.out.println("Error Contextual: se esperaba INTEGER o BOOLEAN");
+			System.out.println("Error Contextual: se esperaba INTEGER o BOOLEAN en "+lexico.getLinea()+","+lexico.getColumna());		
+			lexico.lexer();
 			return true;
 		} else throw new Exception("Se esperaba un Tipo");// incorrecto en linea " + lexico.getLinea());
 	}
@@ -283,7 +284,7 @@ System.out.println(codigo.getString());
 				lexico.lexer();
 			}
 			else
-				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END" + lexico.getLinea());
+				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END, en "+lexico.getLinea()+","+lexico.getColumna());		
 		}
 		else
 			return true;
@@ -301,7 +302,7 @@ System.out.println(codigo.getString());
 		boolean errI = I();
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
-		} else throw new Exception("Se esperaba \";\"");
+		} else throw new Exception("Se esperaba \";\" en la linea "+ lexico.getLinea()+ " columna "+ lexico.getColumna());
 		errI = errI || RIs();
 		return errI;
 	}
@@ -320,7 +321,7 @@ System.out.println(codigo.getString());
 			return false;
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
-		} else throw new Exception("Se esperaba \";\"");
+		} else throw new Exception("Se esperaba \";\" en: linea "+lexico.getLinea()+", columna "+lexico.getColumna());
 		errI = errI || RIs();
 		return errI;
 	}
@@ -354,16 +355,18 @@ System.out.println(codigo.getString());
 		}
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
-			throw new Exception ("Se esperaba \":=\"");
+			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
 		if (!TS.existeID(tk.getLexema())){
-			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
+			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador no ha sido declarado antes");
 			return true;
 		}
 		String tipoExpRel = ExpRel();
 		propiedades idTSProps = TS.getProps(tk.getLexema());
-		if (!tipoExpRel.equals(idTSProps.getTipo()))
+		if (!tipoExpRel.equals(idTSProps.getTipo())){
+			System.out.println("Error de tipo en linea: " + lexico.getLinea() +", columna " + lexico.getColumna());
 			return true;
+		}
 		codigo.emite("desapila-dir", idTSProps.getDir());
 		return false;
 	
@@ -385,11 +388,11 @@ System.out.println(codigo.getString());
 		tk = lexico.lexer();//Consumo (
 		tk = lexico.lexer(); // Consumo iden
 		if (!TS.existeID(tk.getLexema())){
-			System.out.println ("Error en linea: " + lexico.getLinea() + " El identificador no ha sido declarado antes");
+			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+" El identificador no ha sido declarado antes");
 			return true;
 		}
 		if (!lexico.reconoce(CategoriaLexica.TKPCI))
-			throw new Exception ("Se esperaba ')' ");
+			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
 		propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!idTSProps.getTipo().equals("int"))
@@ -416,7 +419,7 @@ System.out.println(codigo.getString());
 		String tipoExpAd = ExpAd();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
-			throw new Exception ("Se esperaba ')' ");
+			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer(); //Consumo )
 		if (!tipoExpAd.equals("int"))
 			return true;
@@ -570,7 +573,7 @@ System.out.println(codigo.getString());
 			lexico.lexer(); //Cosumimos '('
 			tipo0 = ExpRel();
 			if (!lexico.reconoce(CategoriaLexica.TKPCI)){
-				throw new Exception(" Error de parentizacion, en linea: " + lexico.getLinea());
+				throw new Exception(" Error de parentizacion, en linea: " + lexico.getLinea() +", columna "+ lexico.getColumna());
 			}
 			lexico.lexer(); //Cosumimos ')'
 			return tipo0;
@@ -597,7 +600,7 @@ System.out.println(codigo.getString());
 			codigo.emite(op);
 			if (!tipo0.equalsIgnoreCase("bool")){
 					tipo0="error";
-					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
+					throw new Exception("Error de tipos en "+lexico.getLinea()+","+lexico.getColumna());		
 			}
 			else{
 				tipo0="bool";
@@ -611,7 +614,7 @@ System.out.println(codigo.getString());
 			codigo.emite(op);
 			if (!tipo0.equalsIgnoreCase("int")){
 					//atrFact = "error";
-					throw new Exception("Error de tipos en linea: " + lexico.getLinea());
+					throw new Exception("Error de tipos  en "+lexico.getLinea()+","+lexico.getColumna());		
 			}
 			else{
 				tipo0 = "int";
