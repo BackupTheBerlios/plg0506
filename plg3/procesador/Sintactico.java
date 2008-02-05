@@ -607,7 +607,7 @@ System.out.println(codigo.getString());
 	private boolean comparables (String tipo0, String tipo1, String operador){
 		if (operador.equals("igual")|| operador.equals("distinto"))
 			return (tipo0.equals(tipo1) && !tipo0.equals("error"));
-		else return(tipo0.equals(tipo1) && tipo1.equals("integer"));
+		else return(tipo0.equals(tipo1) && tipo1.equals("int"));
 	}
 	
 	/**
