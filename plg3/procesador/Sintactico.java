@@ -28,7 +28,7 @@ public class Sintactico{
  	 * TS: Tabla de Simbolos que vamos a utilizar en el analisis del fichero, para almacenar los simbolos.
  	 * dir: Entero que marca la posicin de la pila con la que estamos trabajando.
 	 */
-	LexicoB lexico;
+	Lexico lexico;
 	tablaSimbolos TS;
 	Codigo codigo;
 	
@@ -39,7 +39,7 @@ public class Sintactico{
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public Sintactico(File f) throws Exception{
-		lexico = new LexicoB(f);		
+		lexico = new Lexico(f);		
 		codigo = new Codigo(f);
 	}
 	
