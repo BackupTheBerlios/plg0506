@@ -55,7 +55,7 @@ public class Sintactico{
 		codigo.inicializaCodigo();
 		boolean tipoProg = Prog();
 		if (tipoProg){
-			throw new Exception("El programa contiene errores de tipo");
+			throw new Exception("El programa contiene errores");
 		}
 	}
 
@@ -64,7 +64,7 @@ public class Sintactico{
 		errProg = ProgDec();
 		if (lexico.reconoce(CategoriaLexica.TKVAR)){
 			lexico.lexer();//consumo VAR
-			errProg = errProg || Decs();
+			errProg = Decs() || errProg;
 			errProg = Bloque() || errProg;
 			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 				lexico.lexer();//consumo .
@@ -125,7 +125,7 @@ System.out.println(codigo.getString());
 			boolean errh1 = TS.existeID(tk.getLexema());
 			if (errh1)
 				System.out.println("El identificador " +
-						tk.getLexema() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
+						tk.getLexema() + " esta repetido en la linea "+lexico.getLinea());		
 			else TS.addID(tk.getLexema(),"",0);	
 			err0 = RIdens(errh1);
 		}
@@ -144,7 +144,7 @@ System.out.println(codigo.getString());
 				boolean errh1aux = TS.existeID(tk.getLexema());
 				if (errh1aux)
 					System.out.println("El identificador " +
-							tk.getLexema() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
+							tk.getLexema() + " esta repetido en la linea "+lexico.getLinea());		
 				else TS.addID(tk.getLexema(), "", 0);
 				boolean errh1 = errh0 || errh1aux;
 				err0 = RIdens(errh1);			
@@ -189,7 +189,7 @@ System.out.println(codigo.getString());
 						atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
 			else TS.addID(atrDec.getId(),atrDec.getTipo(), dirh0+1);
 			err0 = err0 || errh1aux;
-			err0 = err0 || RDecs (err0, dirh0+1);
+			err0 = RDecs (err0, dirh0+1) || err0;
 		}
 		return err0;
 	}
@@ -301,7 +301,7 @@ System.out.println(codigo.getString());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
 		} else throw new Exception("Se esperaba \";\" en la linea "+ lexico.getLinea()+ " columna "+ lexico.getColumna());
-		errI = errI || RIs();
+		errI = RIs() || errI;
 		return errI;
 	}
 	
@@ -311,16 +311,18 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean RIs() throws Exception{
-/*		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			return false;
+		boolean errI = false;
+		if (lexico.reconoce(CategoriaLexica.TKIDEN)||
+			lexico.reconoce(CategoriaLexica.TKBEGIN) || 
+			lexico.reconoce(CategoriaLexica.TKREAD ) ||
+			lexico.reconoce(CategoriaLexica.TKWRITE ))
+		{	
+		    errI = I();
+			if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+				lexico.lexer();
+			} else throw new Exception("Se esperaba \";\" en: linea "+lexico.getLinea()+", columna "+lexico.getColumna());
+			errI = RIs() || errI;
 		}
-*/		boolean errI = I();
-		if (lexico.reconoce(CategoriaLexica.TKEND))
-			return false;
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			lexico.lexer();
-		} else throw new Exception("Se esperaba \";\" en: linea "+lexico.getLinea()+", columna "+lexico.getColumna());
-		errI = errI || RIs();
 		return errI;
 	}
 	
@@ -331,12 +333,13 @@ System.out.println(codigo.getString());
 	 */
 	private boolean I() throws Exception{
 		boolean errI = false;//System.out.println("I");
-		errI = IAsig();
-		if (errI)
+		if (lexico.reconoce(CategoriaLexica.TKIDEN))
+			errI = IAsig();
+		else if (lexico.reconoce(CategoriaLexica.TKBEGIN)) 
 			errI = Bloque();
-		if (errI)
+		else  if (lexico.reconoce(CategoriaLexica.TKREAD ))
 			errI = IRead();
-		if (errI)
+		else if (lexico.reconoce(CategoriaLexica.TKWRITE ))
 			errI = IWrite();
 		return errI;
 	}
@@ -347,16 +350,16 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean IAsig() throws Exception{
-		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+		/*if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			return true;
 			//throw new Exception ("Se esperaba un identificador");
-		}
+		}*/
 		Token tk = lexico.lexer();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
 			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
 		if (!TS.existeID(tk.getLexema())){
-			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador no ha sido declarado antes");
+			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
 			return true;
 		}
 		String tipoExpRel = ExpRel();
@@ -386,7 +389,7 @@ System.out.println(codigo.getString());
 		tk = lexico.lexer();//Consumo (
 		tk = lexico.lexer(); // Consumo iden
 		if (!TS.existeID(tk.getLexema())){
-			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+" El identificador no ha sido declarado antes");
+			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+" El identificador "+tk.getLexema() +" no ha sido declarado antes");
 			return true;
 		}
 		if (!lexico.reconoce(CategoriaLexica.TKPCI))
