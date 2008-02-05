@@ -312,10 +312,12 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean RIs() throws Exception{
-		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+/*		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			return false;
 		}
-		boolean errI = I();
+*/		boolean errI = I();
+		if (lexico.reconoce(CategoriaLexica.TKEND))
+			return false;
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
 		} else throw new Exception("Se esperaba \";\"");
@@ -388,6 +390,7 @@ System.out.println(codigo.getString());
 		}
 		if (!lexico.reconoce(CategoriaLexica.TKPCI))
 			throw new Exception ("Se esperaba ')' ");
+		lexico.lexer();
 		propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!idTSProps.getTipo().equals("int"))
 			return true;
@@ -413,7 +416,7 @@ System.out.println(codigo.getString());
 		String tipoExpAd = ExpAd();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
-			throw new Exception ("Se esperaba '(' ");
+			throw new Exception ("Se esperaba ')' ");
 		lexico.lexer(); //Consumo )
 		if (!tipoExpAd.equals("int"))
 			return true;

@@ -3,9 +3,11 @@ var
 x : integer;
 y : boolean;
 begin
+read(x);
 x:=5;
 x := -1 * (-x + 5) * 2 ;
-y := true; 
+write(4);
+y := not true; 
 y:= y and (false or false);
 end.
 
