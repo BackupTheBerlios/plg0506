@@ -156,22 +156,25 @@ public class LexicoB {
 	private Token getToken() throws IOException, Exception{
 		
 		
-		int error;
+		int error = 0;
 		//boolean compara;
 		Token tk = new Token("error",CategoriaLexica.TKLAMBDA);
 		estado = 0;
+		boolean acabado = false;
 		if (posicion !=0){
 			fuente.seek(posicion-1);
 			posicion--;
 			columna--;
 		}
 		
-		while ((error = fuente.read())!=-1){
-			
+		while (!acabado){
+			error = fuente.read();
 			posicion ++;
 			columna ++;
-			a = "" + ((char)error);
-			//a = Character.toLowerCase(a);
+			if (error!=-1){
+				a = "" + ((char)error);
+				a = a.toLowerCase();
+			}
 			switch (estado) {
 				case 0:
 					buff = "";
@@ -180,7 +183,7 @@ public class LexicoB {
 						columna = 0;
 						transita(0);
 					}
-					else if	((a.matches("\\t")) || 
+					else if	((a.matches("\\t")) ||
 							(a.matches("\\s")) ||
 							(a.matches("\\r")))
 						transita(0);
@@ -240,7 +243,7 @@ public class LexicoB {
 					return new Token (buff.toString(),CategoriaLexica.TKDIF);
 				case 7:
 					if (buff.equals(".")) 
-							return new Token(buff.toString(),CategoriaLexica.TKPUNTO);
+						return new Token(buff.toString(),CategoriaLexica.TKPUNTO);
 					else if (buff.equals(","))
 						return new Token(buff.toString(),CategoriaLexica.TKCOMA);
 					else if (buff.equals(";"))
@@ -295,13 +298,16 @@ public class LexicoB {
 				case 14:
 					return new Token(buff.toString(),CategoriaLexica.TKMENIG);
 			}
+			if (error == -1) acabado = true;
 		}
 		/*
 		 * Si se sale del while es que read detecto un error y lanzamos una excepcion de entrada/salida. 
 		 */
-		if (error != -1)
+		return new Token(buff.toString(),CategoriaLexica.TKFF);
+	/*	if (error != -1)
 			throw new Exception("ERROR en linea "+linea+": Error de entrada/salida");
 		return tk;
+		*/
 	}
 					
 	
@@ -367,8 +373,8 @@ public class LexicoB {
 		LexicoB l = new LexicoB(new File("Ejemplo.txt"));
 		try {
 		Token tk = l.lexer();
-		//while (tk.getCategoriaLexica()!=CategoriaLexica.TKFF){
-		while (tk.getCategoriaLexica()!=CategoriaLexica.TKPUNTO){
+		while (tk.getCategoriaLexica()!=CategoriaLexica.TKFF){
+	//	while (tk.getCategoriaLexica()!=CategoriaLexica.TKPUNTO){
 			System.out.println(tk.getLexema() + " -> " + tk.getCategoriaLexica());
 			tk = l.lexer();
 		}
