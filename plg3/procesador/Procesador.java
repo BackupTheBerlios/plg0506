@@ -1,7 +1,7 @@
 package procesador;
 
 import java.io.File;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 /**
  * La clase <B>Procesador</B> es el procesador del compilador del lenguaje. Se encarga de crear la Tabla de Simbolos,

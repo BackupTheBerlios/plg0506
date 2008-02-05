@@ -3,9 +3,9 @@ package procesador;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
-import java.io.RandomAccessFile;
+import java.io.RandomAccessFile;/*
 import java.lang.Character;
-import java.util.*;
+import java.util.*;*/
 
 
 
