@@ -340,15 +340,15 @@ System.out.println(codigo.getString());
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
 		lexico.lexer(); //Consumo (
-		String tipoExpAd = ExpAd();
+		String tipoExpRel = ExpRel();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer(); //Consumo )
-		if (!tipoExpAd.equals("int"))
-			return true;
+		/*if (!tipoExpRel.equals("int"))
+			return true;*/
 		codigo.emite("write");
-		return false;
+		return tipoExpRel.equals("error");
 	}
 	
 	/**
