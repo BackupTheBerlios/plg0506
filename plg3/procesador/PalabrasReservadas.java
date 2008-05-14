@@ -40,6 +40,18 @@ public class PalabrasReservadas {
 		conjunto.put(s,s);
 		s = "WRITE";
 		conjunto.put(s,s);
+		s = "WHILE";
+		conjunto.put(s,s);
+		s = "DO";
+		conjunto.put(s,s);
+		s = "IF";
+		conjunto.put(s,s);
+		s = "THEN";
+		conjunto.put(s,s);
+		s = "ELSE";
+		conjunto.put(s,s);
+		s = "PROC";
+		conjunto.put(s,s);
 	}
 	
 	public boolean esPalabraReservada(String s){
@@ -83,6 +95,18 @@ public class PalabrasReservadas {
 			tk.setCategoriaLexica(CategoriaLexica.TKREAD);
 		else if (s.equalsIgnoreCase("WRITE"))
 			tk.setCategoriaLexica(CategoriaLexica.TKWRITE);
+		else if (s.equalsIgnoreCase("WHILE"))
+			tk.setCategoriaLexica(CategoriaLexica.TKWHILE);
+		else if (s.equalsIgnoreCase("DO"))
+			tk.setCategoriaLexica(CategoriaLexica.TKDO);
+		else if (s.equalsIgnoreCase("IF"))
+			tk.setCategoriaLexica(CategoriaLexica.TKIF);
+		else if (s.equalsIgnoreCase("THEN"))
+			tk.setCategoriaLexica(CategoriaLexica.TKTHEN);
+		else if (s.equalsIgnoreCase("ELSE"))
+			tk.setCategoriaLexica(CategoriaLexica.TKELSE);
+		else if (s.equalsIgnoreCase("PROC"))
+			tk.setCategoriaLexica(CategoriaLexica.TKPROC);
 		return tk;
 	}
 

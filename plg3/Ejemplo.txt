@@ -2,6 +2,9 @@ program prueba1;
 var 
 i : integer;
 j : integer;
+if then else
+while do
+proc
 begin
 i := 1;
 j := 12345;

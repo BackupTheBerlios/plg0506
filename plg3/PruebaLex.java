@@ -21,7 +21,7 @@ public class PruebaLex {
 			Token tk=lexico.lexer();
 			System.out.println(tk.muestraToken());
 			//while(!tk.equals(new Token("eof",CategoriaLexica.TKFF))){
-			while(!tk.getLexema().equals("eof")){
+			while(!tk.getLexema().equals(".")){
 				tk=lexico.lexer();
 				System.out.println(tk.muestraToken());
 			}
