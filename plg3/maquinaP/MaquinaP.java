@@ -283,7 +283,7 @@ public class MaquinaP {
 	 */
 	private boolean hasInt(String l) {
 		//System.out.println("hasInt");
-		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0);
+		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0) || (l.compareTo("ir-a") == 0)|| (l.compareTo("ir-f") == 0);
 	}
 	
 	/**
@@ -320,8 +320,12 @@ public class MaquinaP {
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("apila-dir")==0)
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("suma")==0){
+				else if (linea[0].compareTo("suma")==0)
 					suma();
+				else if (linea[0].compareTo("ir-a")==0)
+					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
+				else if (linea[0].compareTo("ir-f")==0){
+					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
 				}
 				else if (linea[0].compareTo("resta")==0)
 					resta();
@@ -943,6 +947,10 @@ public class MaquinaP {
 		PC = PC + 1;
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	public void read() throws Exception {
 		if (traza) System.out.println("read");
 		InputStreamReader converter = new InputStreamReader(System.in);
@@ -954,6 +962,10 @@ public class MaquinaP {
 		PC++;
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	public void write() throws Exception {
 		if (traza) System.out.println("write");
 		if (ST < 0) {
@@ -965,6 +977,35 @@ public class MaquinaP {
 		PC++;
 	}
 	
+	/**
+	 * 
+	 * @param i
+	 */
+	public void ir_a(int i) throws Exception {
+		if (traza) System.out.println("ir-a");
+		if (i>(Prog.size()-1)){
+			throw new Exception("ERROR: ir-a. Error en ejecucion. Salto mal realizado.");
+		}
+		PC = i;
+	}
+
+	public void ir_f(int i) throws Exception {
+		if (traza) System.out.println("ir-f");
+		if (ST < 0) {
+			throw new Exception("ERROR: Write. La pila no contiene los datos necesarios.");
+		}
+		if (((Integer)pila.pop()).intValue()==0){
+			if (i>(Prog.size()-1)){
+				throw new Exception("ERROR: ir-f. Error en ejecucion. Salto mal realizado.");
+			}
+			PC = i;
+		}
+		else{
+			PC++;
+			ST--;
+		}
+	}
+
 	/**
 	 * Metodo que obtiene el contenido de la pila en un String para ver su contenido.
 	 * 

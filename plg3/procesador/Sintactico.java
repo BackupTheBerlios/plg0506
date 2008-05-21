@@ -31,6 +31,7 @@ public class Sintactico{
 	Lexico lexico;
 	tablaSimbolos TS;
 	Codigo codigo;
+	int etq;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -41,6 +42,7 @@ public class Sintactico{
 	public Sintactico(File f) throws Exception{
 		lexico = new Lexico(f);		
 		codigo = new Codigo(f);
+		etq = 0;
 	}
 	
 	/**
@@ -73,6 +75,7 @@ public class Sintactico{
 	 */	
 	private boolean Prog() throws Exception{
 		boolean errProg = false;
+		etq=0;
 		ProgDec();
 		if (lexico.reconoce(CategoriaLexica.TKVAR)){
 			lexico.lexer();//consumo VAR
@@ -80,7 +83,8 @@ public class Sintactico{
 			errProg = Bloque() || errProg;
 			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 				lexico.lexer();//consumo .
-				codigo.emite("stop");	
+				codigo.emite("stop");
+				etq++;
 System.out.println(codigo.getString());
 			}
 			else throw new Exception ("Se esperaba \".\" en "+lexico.getLinea()+","+lexico.getColumna());			
@@ -271,6 +275,11 @@ System.out.println(codigo.getString());
 			errI = IRead();
 		else if (lexico.reconoce(CategoriaLexica.TKWRITE ))
 			errI = IWrite();
+		else if (lexico.reconoce(CategoriaLexica.TKIF ))
+			errI = IIf();
+		else if (lexico.reconoce(CategoriaLexica.TKWHILE )){
+			errI = IWhile();
+		}
 		return errI;
 	}
 	
@@ -349,6 +358,75 @@ System.out.println(codigo.getString());
 			return true;*/
 		codigo.emite("write");
 		return tipoExpRel.equals("error");
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean IIf() throws Exception{
+		boolean errIIf, errI, errPElse;
+		int etqaux;
+		lexico.lexer(); //Consumo IF
+		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
+			throw new Exception ("Se esperaba '(' ");
+		lexico.lexer(); //Consumo (
+		String tipoExpRel = ExpRel();
+		
+		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
+			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
+		lexico.lexer(); //Consumo )
+		
+		if (!lexico.reconoce(CategoriaLexica.TKTHEN ))
+			throw new Exception ("Se esperaba 'THEN'  en "+lexico.getLinea()+","+lexico.getColumna());		
+		lexico.lexer(); //Consumo THEN
+		codigo.emite("ir-f");
+		etqaux=etq;
+		etq++;
+		errI = I(); // compilo las instrucciones del IF
+		
+		codigo.parchea(etqaux, etq+1);
+		
+		errPElse = PElse(); //Compilo ELSE
+		
+		errIIf = (!tipoExpRel.equals("bool")) || errI || errPElse; 
+		//FIXME
+		return errIIf;
+	}
+	
+	private boolean PElse() throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKELSE )){
+			return false;
+		}
+		lexico.lexer(); //Consumo ELSE
+		codigo.emite("ir-a");
+		int etqaux=etq;
+		etq++;
+		
+		boolean errI = I();
+		
+		codigo.parchea(etqaux, etq);
+		//FIXME
+		return errI;
+	}
+	
+	/**
+	 * 
+	 */
+	private boolean IWhile() throws Exception{
+		lexico.lexer(); //Consumo WHILE
+		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
+			throw new Exception ("Se esperaba '(' ");
+		lexico.lexer(); //Consumo (
+		String tipoExpRel = ExpRel();
+		
+		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
+			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
+		lexico.lexer(); //Consumo )
+		
+//		FIXME
+		return true;
 	}
 	
 	/**
