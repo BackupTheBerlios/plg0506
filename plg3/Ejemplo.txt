@@ -5,8 +5,13 @@ j : integer;
 begin
 i := 1;
 j := 12345;
+while (i<0) do
+begin
+	j := j * i;
+	i := i -1;
+end;
 write(j);
 write(true);
 read(j);
-end .
+end.
 

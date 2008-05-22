@@ -218,7 +218,7 @@ System.out.println(codigo.getString());
 				lexico.lexer();
 			}
 			else
-				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END, en "+lexico.getLinea()+","+lexico.getColumna());		
+				throw new Exception("Bloque de instrucciones tiene que estar entre BEGIN y END, en ("+lexico.getLinea()+","+lexico.getColumna()+")");		
 		}
 		else
 			return true;
@@ -249,7 +249,9 @@ System.out.println(codigo.getString());
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)||
 			lexico.reconoce(CategoriaLexica.TKBEGIN) || 
 			lexico.reconoce(CategoriaLexica.TKREAD ) ||
-			lexico.reconoce(CategoriaLexica.TKWRITE ))
+			lexico.reconoce(CategoriaLexica.TKWRITE )||
+			lexico.reconoce(CategoriaLexica.TKIF )||
+			lexico.reconoce(CategoriaLexica.TKWHILE ))
 		{	
 		    errI = I();
 			if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
@@ -295,7 +297,7 @@ System.out.println(codigo.getString());
 		lexico.lexer();
 		if (!TS.existeID(tk.getLexema())){
 			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
-	lexico.lexer();//FIXME:LImpiar		
+			lexico.lexer();//FIXME:LImpiar		
 			return true;
 		}
 		String tipoExpRel = ExpRel();
@@ -305,6 +307,7 @@ System.out.println(codigo.getString());
 			return true;
 		}
 		codigo.emite("desapila-dir", idTSProps.getDir());
+		etq++;
 		return false;
 	
 	}
@@ -336,6 +339,7 @@ System.out.println(codigo.getString());
 			return true;
 		codigo.emite("read");
 		codigo.emite("desapila-dir", idTSProps.getDir());
+		etq+=2;
 		return false;
 	}
 	
@@ -357,6 +361,7 @@ System.out.println(codigo.getString());
 		/*if (!tipoExpRel.equals("int"))
 			return true;*/
 		codigo.emite("write");
+		etq++;
 		return tipoExpRel.equals("error");
 	}
 	
@@ -385,13 +390,10 @@ System.out.println(codigo.getString());
 		etqaux=etq;
 		etq++;
 		errI = I(); // compilo las instrucciones del IF
-		
 		codigo.parchea(etqaux, etq+1);
-		
 		errPElse = PElse(); //Compilo ELSE
 		
 		errIIf = (!tipoExpRel.equals("bool")) || errI || errPElse; 
-		//FIXME
 		return errIIf;
 	}
 	
@@ -403,11 +405,8 @@ System.out.println(codigo.getString());
 		codigo.emite("ir-a");
 		int etqaux=etq;
 		etq++;
-		
 		boolean errI = I();
-		
-		codigo.parchea(etqaux, etq);
-		//FIXME
+		codigo.parchea(etqaux, etq); //parcheo el ir_a
 		return errI;
 	}
 	
@@ -415,6 +414,8 @@ System.out.println(codigo.getString());
 	 * 
 	 */
 	private boolean IWhile() throws Exception{
+		boolean errW=false;
+		int etqaux=etq;
 		lexico.lexer(); //Consumo WHILE
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
@@ -425,8 +426,19 @@ System.out.println(codigo.getString());
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer(); //Consumo )
 		
-//		FIXME
-		return true;
+		if (!lexico.reconoce(CategoriaLexica.TKDO ))
+			throw new Exception ("Se esperaba 'DO' en el while ");
+		lexico.lexer(); //Consumo DO
+		
+		codigo.emite("ir-f");
+		int etqaux2 = etq;
+		etq++;
+		boolean errI = I();
+		codigo.emite("ir-a",etqaux);
+		etq++;
+		codigo.parchea(etqaux2, etq);
+		errW = (!tipoExpRel.equals("bool")) || errI;
+		return errW;
 	}
 	
 	/**
@@ -452,6 +464,7 @@ System.out.println(codigo.getString());
 			if (comparables(tipo1,tipoh,cod))
 				tipo = "bool";
 			codigo.emite(cod);
+			etq++;
 			return RExpRel(tipo);
 		}
 		else //lambda
@@ -485,6 +498,7 @@ System.out.println(codigo.getString());
 			if (tipoh.equals("int") && tipo1.equals(tipoh))
 				tipo = "int";
 			codigo.emite(cod);
+			etq++;
 			return RExpAd(tipo);
 		}
 		cod = OpOr();
@@ -493,6 +507,7 @@ System.out.println(codigo.getString());
 			if (tipoh.equals("bool") && tipo1.equals(tipoh))
 				tipo = "bool";
 			codigo.emite(cod);
+			etq++;
 			return RExpAd(tipo);
 		}
 		else //lambda
@@ -525,6 +540,7 @@ System.out.println(codigo.getString());
 			if (tipoh.equals("int") && tipo1.equals(tipoh))
 				tipo = "int";
 			codigo.emite(cod);
+			etq++;
 			return RExpMul(tipo);
 		}
 		cod = OpAnd();
@@ -533,6 +549,7 @@ System.out.println(codigo.getString());
 			if (tipoh.equals("bool") && tipo1.equals(tipoh))
 				tipo = "bool";
 			codigo.emite(cod);
+			etq++;
 			return RExpMul(tipo);
 		}
 		else //lambda
@@ -551,17 +568,20 @@ System.out.println(codigo.getString());
 			tipo0 = "int";
 			lexico.lexer(); //Cosumimos el entero
 			codigo.emite("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
+			etq++;
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
 			tipo0 = "bool";
 			codigo.emite("apila",1);
+			etq++;
 			lexico.lexer(); //Cosumimos 'true'
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
 			tipo0 = "bool";
 			codigo.emite("apila",0);
+			etq++;
 			lexico.lexer(); //Cosumimos 'false'
 			return tipo0;
 		}
@@ -581,6 +601,7 @@ System.out.println(codigo.getString());
 				tipo0 = propsLexema.getTipo();
 				int dir = propsLexema.getDir();
 				codigo.emite("apila-dir", dir);
+				etq++;
 			}
 			else{
 				tipo0="error";
@@ -592,6 +613,7 @@ System.out.println(codigo.getString());
 			String op = OpUnarioLog(); //Consumimos operador unario logico
 			tipo0 = Fact();
 			codigo.emite(op);
+			etq++;
 			if (!tipo0.equalsIgnoreCase("bool")){
 					tipo0="error";
 				}
@@ -605,6 +627,7 @@ System.out.println(codigo.getString());
 			String op = OpUnarioArit(); //Consumimos operador unario aritmetico
 			tipo0 = Fact();
 			codigo.emite(op);
+			etq++;
 			if (!tipo0.equalsIgnoreCase("int")){
 					//atrFact = "error";
 			}
