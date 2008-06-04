@@ -51,20 +51,20 @@ public class Tipo {
 	
 	public String toString(){
 		String toString = t.toString();
-		toString += " "+id;
-		toString += " "+Integer.toString(tam).toString();		
+		toString += " "+ id;
+		toString += " "+ Integer.toString(tam).toString();		
 		switch (t){ 
 			case ref:
-				toString += tBase.toString();
+				toString += " " + tBase.toString();
 				break;
 			case array:
-				toString += Integer.toString(nElems);
-				toString += tBase.toString();
+				toString += " " + Integer.toString(nElems);
+				toString += " " + tBase.toString();
 				break;
 			case rec:
-				toString += Integer.toString(nElems);
-				toString += campos.toString();
-				toString += Integer.toString(desplazamiento);
+				toString += " " + Integer.toString(nElems);
+				toString += " " + campos.toString();
+				toString += " " + Integer.toString(desplazamiento);
 				break;
 		}
 		return toString;
