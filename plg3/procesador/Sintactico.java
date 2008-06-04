@@ -153,7 +153,11 @@ System.out.println(codigo.getString());
 		return err1 || err2; //|| err3;
 	}
 	
-	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean DecsTipo()throws Exception{ 
 		boolean err0 = false;
 		if (lexico.reconoce(CategoriaLexica.TKTYPE)){
@@ -163,14 +167,11 @@ System.out.println(codigo.getString());
 		return err0;
 	}
 
-	/*NDecsTipo ::= DecTipo RDecsTipo 
-	RDecsTipo.tsh = añadeID(NDecsTipo.tsph, DecTipo.id, DecTipo.props 
-		 {nivel:NDecsTipo0.nh})
-	DecTipo.tsph = NDecsTipo.tsph 
-	NDecsTipo.ts = RDecsTipo.ts 
-	RDecsTipo.nh = DecTipo.nh = NDecsTipo.nh
-
-*/
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean NDecsTipo() throws Exception{ 
 		boolean errNDecsTipo, err1, err2;
 		Atributo atrDecTipo = DecTipo ();
@@ -186,17 +187,11 @@ System.out.println(codigo.getString());
 		return errNDecsTipo; 
 	}
 
-	/*RDecsTipo ::= DecTipo RDecsTipo 
-	DecTipo.tsph = RDecsTipo0.tsph
-	RDecsTipo1.tsh = añadeID(RDecsTipo0.tsh, DecTipo.id, DecTipo.props 
-		 {nivel:RDecsTipo0.nh})
-	RDecsTipo0.ts = RDecsTipo1.ts 
-	DecTipo.nh = RDecsTipo1.nh = RDecsTipo0.nh 
-
-RDecsTipo ::= lambda
-	RDecsTipo.ts = RDecsTipo.tsh 
-	RDecsTipo.n = RDecsTipo.nh 
-*/	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean RDecsTipo() throws Exception{
 		if (lexico.reconoce(CategoriaLexica.TKVAR)){
 			return false; //Esto es lambda
@@ -218,13 +213,23 @@ RDecsTipo ::= lambda
 		!(lexico.reconoce(CategoriaLexica.TKBEGIN)))*/
 	}
 	
-	private Atributo DecTipo (){
-		boolean err1 = Tipo();
+	private Atributo DecTipo () throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+			throw new Exception("Se esperaba un identificador en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
+		}
+		Token tk = lexico.lexer(); //consumo iden
+		Atributo tipo = new Atributo();
+		tipo.setId(tk.getLexema());
+		Tipo(tipo);
+		boolean err1 = tipo.getProps().getTipo().getId().equals("error");
 		//iden = Tipo (out err1) ;
-		err0 = err1 || existe();
-		return new Atributo();
+		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(tipo.getProps().getTipo());
+		if (err1 || err0 ){
+			tipo.getProps().getTipo().setId("error");
+		}
+		return tipo;
 	}
-	 
+	
 	private boolean DecsVar(){
 		return false;
 	}
@@ -906,5 +911,14 @@ RDecsTipo ::= lambda
 		}
 		else return "";
 	}
-
+	
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean referenciaErronea (Tipo t) throws Exception{
+		return ((t.getT().equals("ref")) && !(TS.existeID(t.getId())));
+	}
 }
