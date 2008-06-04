@@ -10,7 +10,7 @@ public class Tipo {
 	String t; //BOOLEAN, INTEGER, ref, rec, array, 
 	String id;
 	int tam;
-	int tbase;
+	Tipo tbase;
 	int campos;
 	int desplazamiento;
 	
