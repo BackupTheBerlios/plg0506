@@ -27,6 +27,9 @@ public class Codigo {
 	Vector<String> cod;
 	FileOutputStream fichero;
 	
+	final int longInicio = 4;
+	
+	
 	/**
 	 * El constructor de la clase Codigo no tiene parmetros de entrada ni de salida. Este constructor inicializa el atributo cod con la cadena vaca.
 	 * 
@@ -59,6 +62,26 @@ public class Codigo {
 	public void inicializaCodigo(){
 		cod = new Vector<String>();
 	}
+	
+	/**
+	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin y el nmero de lnea que recibe como parmetro. 
+	 * Adems de modificar el fichero donde se almacena el codigo generado parra que lo ejecute la mquinaP. No devuelve nada.
+	 * 
+	 * @param instr String con la instruccin que ha codificado.
+	 * @param num Entero indica el nmero de lnea.
+	 * 
+	 */
+	public void inicio(){
+		String inicio = "apila";
+		cod.add(inicio);
+		inicio = "desapila-dir 1" ;
+		cod.add(inicio);
+		inicio = "apila";
+		cod.add(inicio);
+		inicio = "desapila-dir 0";
+		cod.add(inicio);
+	}
+	
 	
 	/**
 	 * Mtodo que modifica el contenido del atributo cod agregndole la instruccin y el nmero de lnea que recibe como parmetro. 
