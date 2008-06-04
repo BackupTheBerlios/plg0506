@@ -7,8 +7,11 @@ package tablaSimbolos;
  */
 public class propiedades {
 
-	String tipo;
+	Tipo tipo;
 	int dir;
+	String clase;
+	int tam;
+	int nivel;
 	
 	/**
 	 * Constructor de la clase sin parametros.
@@ -19,20 +22,23 @@ public class propiedades {
 
 	/**
 	 * Constructor de la clase y recibe como parametros los valores de los atributos.
-	 * @param tipo String con el tipo del token.
+	 * @param tipo Tipo del token.
 	 * @param dir Entero con la direccion de memoria de la variable.
 	 */
-	public propiedades(String tipo, int dir) {
+	public propiedades(Tipo tipo, int dir, String clas, int t, int n) {
 		super();
 		this.tipo = tipo;
 		this.dir = dir;
+		this.clase=clas;
+		this.tam = t;
+		this.nivel=n;
 	}
 	
 	/**
 	 * Accesor para el atributo tipo de la clase.
 	 * @return Devuelve el tipo que contiene el atributo.
 	 */
-	public String getTipo() {
+	public Tipo getTipo() {
 		return tipo;
 	}
 
@@ -40,7 +46,7 @@ public class propiedades {
 	 * Mutador el atributo tipo de la clase.
 	 * @param tipo Nuevo valor para el atributo tipo
 	 */
-	public void setTipo(String tipo) {
+	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
 
@@ -68,9 +74,13 @@ public class propiedades {
 		if (this != null){	
 			String aux;
 			aux = "( ";
-			aux = aux.concat(this.tipo);
+			aux = aux.concat(this.tipo.toString());
 			aux = aux.concat(", ");
 			aux = aux.concat(new Integer (this.dir).toString());
+			aux = aux.concat(", ");
+			aux = aux.concat(this.clase);
+			aux = aux.concat(", ");
+			aux = aux.concat(new Integer (this.tam).toString());
 			aux = aux.concat(" )");
 			return aux;
 		}
@@ -86,5 +96,47 @@ public class propiedades {
 	 */
 	public boolean equals(propiedades a){
 		return (this.getTipo() ==a.getTipo());
+	}
+
+	/**
+	 * @return the clase
+	 */
+	public String getClase() {
+		return clase;
+	}
+
+	/**
+	 * @param clase the clase to set
+	 */
+	public void setClase(String clase) {
+		this.clase = clase;
+	}
+
+	/**
+	 * @return the tam
+	 */
+	public int getTam() {
+		return tam;
+	}
+
+	/**
+	 * @param tam the tam to set
+	 */
+	public void setTam(int tam) {
+		this.tam = tam;
+	}
+	
+	/**
+	 * @return the nivel
+	 */
+	public int getNivel() {
+		return nivel;
+	}
+
+	/**
+	 * @param nivel the nivel to set
+	 */
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
 	}
 }

@@ -56,13 +56,13 @@ public class tablaSimbolos {
 	 * @return boolean Se devuelve verdadero si todo ha sido correcto. Falso en caso contrario.
 	 * @throws Exception Excepcion generada si el identificador ya existe, se capturara en otro lugar.
 	 */
-	public boolean addID(String id, String tipo, int dir) throws Exception{
+	public boolean addID(String id, propiedades props) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
 		else{
-			propiedades prop = new propiedades(tipo, dir);
-			this.tabla.put(id,prop);
+			//propiedades prop = new propiedades(tipo, dir, clase);
+			this.tabla.put(id,props);
 			return true;	
 		}	
 	}

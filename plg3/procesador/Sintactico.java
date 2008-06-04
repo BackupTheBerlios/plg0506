@@ -32,6 +32,7 @@ public class Sintactico{
 	tablaSimbolos TS;
 	Codigo codigo;
 	int etq;
+	int dir;
 	
 	/**
 	 * Constructor que inicializa los atributos con los datos que recibe por parametro.
@@ -73,7 +74,7 @@ public class Sintactico{
 	 * @return errProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
-	private boolean Prog() throws Exception{
+	/*private boolean Prog() throws Exception{
 		boolean errProg = false;
 		etq=0;
 		ProgDec();
@@ -91,10 +92,10 @@ System.out.println(codigo.getString());
 		}
 		else throw new Exception ("Se esperaba \"VAR\" en "+lexico.getLinea()+","+lexico.getColumna());			
 		return errProg;		
-	}
+	}*/
 
-	/*
-	 * private boolean Prog() throws Exception{
+	
+	 private boolean Prog() throws Exception{
 		boolean errProg = false;
 		etq=0;
 		dir=0;
@@ -103,6 +104,7 @@ System.out.println(codigo.getString());
 			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 				Token tk = lexico.lexer(); //consumo iden
 				TS = new tablaSimbolos();
+				
 				TS.addID(tk.getLexema(),"", dir);
 				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
 					lexico.lexer();
@@ -161,7 +163,14 @@ System.out.println(codigo.getString());
 		return err0;
 	}
 
+	/*NDecsTipo ::= DecTipo RDecsTipo 
+	RDecsTipo.tsh = añadeID(NDecsTipo.tsph, DecTipo.id, DecTipo.props 
+		 {nivel:NDecsTipo0.nh})
+	DecTipo.tsph = NDecsTipo.tsph 
+	NDecsTipo.ts = RDecsTipo.ts 
+	RDecsTipo.nh = DecTipo.nh = NDecsTipo.nh
 
+*/
 	public boolean NDecsTipo()throws Exception{ 
 		boolean err1, err2;
 		err1= false;
@@ -172,25 +181,35 @@ System.out.println(codigo.getString());
 				!(lexico.reconoce(CategoriaLexica.TKPROC))
 				&&
 				!(lexico.reconoce(CategoriaLexica.TKBEGIN)))
-				err1= err1 || NDecsTipo (); 
+				err1= err1 || RDecsTipo (); 
 		
 		return err1 || err2; 
 	}
 
-		
+	/*RDecsTipo ::= DecTipo RDecsTipo 
+	DecTipo.tsph = RDecsTipo0.tsph
+	RDecsTipo1.tsh = añadeID(RDecsTipo0.tsh, DecTipo.id, DecTipo.props 
+		 {nivel:RDecsTipo0.nh})
+	RDecsTipo0.ts = RDecsTipo1.ts 
+	DecTipo.nh = RDecsTipo1.nh = RDecsTipo0.nh 
+
+RDecsTipo ::= lambda
+	RDecsTipo.ts = RDecsTipo.tsh 
+	RDecsTipo.n = RDecsTipo.nh 
+*/	
 	public boolean DecTipo (){
 		boolean err1 = Tipo();
 		//iden = Tipo (out err1) ;
 		err0 = err1 || existe();
 		return err0;
 	}
-	 */
+	 
 	
 	/**
 	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
 	 * @throws Exception Si sucede algún error en la cabecera del programa.
 	 */
-	private void ProgDec() throws Exception{
+	/*private void ProgDec() throws Exception{
 		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
 			lexico.lexer();
 			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
@@ -211,12 +230,12 @@ System.out.println(codigo.getString());
 
 	
 	
-	/**
+	*//**
 	 * Procesa la seccion de declaraciones de las variables.
 	 * 
 	 * @return errorDecs: Es cierto si ocurre algún error en las declaraciones de variables.
 	 * @throws Exception Si ocurre algún error sintáctico en la declaración de alguna variable.
-	 */
+	 *//*
 	private boolean Decs() throws Exception{
 		Atributo atrDec = new Atributo();
         Dec(atrDec);		
@@ -228,11 +247,11 @@ System.out.println(codigo.getString());
 		return RDecs(err0,0);		
 	}
 	
-	/**
+	*//**
 	 * Método derivado de eliminar la recursión a izquierdas de Decs.
 	 * @return error Devuelve cierto si ocurre algún error en la declaración de variables.
 	 * @throws Exception  Si ocurre algún error sintáctico en la declaración de alguna variable.
-	 */
+	 *//*
 	private boolean RDecs (boolean errh0, int dirh0) throws Exception{
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 			Atributo atrDec = new Atributo();
@@ -251,11 +270,11 @@ System.out.println(codigo.getString());
 	
 
 	
-	/**
+	*//**
 	 * Reconoce una declaración de variable.
 	 * 
 	 * @throws Exception si ocurre algún error sintáctico en la declaración de la variable.
-	 */
+	 *//*
 	private void Dec(Atributo atrib) throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
@@ -272,7 +291,7 @@ System.out.println(codigo.getString());
 		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			lexico.lexer();
 		} else throw new Exception("Se esperaba \";\" en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
-	}
+	}*/
 	
 	/**
 	 * Reconoce el tipo de la variable declarada.
