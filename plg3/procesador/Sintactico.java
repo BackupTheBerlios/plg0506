@@ -93,7 +93,98 @@ System.out.println(codigo.getString());
 		return errProg;		
 	}
 
+	/*
+	 * private boolean Prog() throws Exception{
+		boolean errProg = false;
+		etq=0;
+		dir=0;
+		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
+			lexico.lexer();
+			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+				Token tk = lexico.lexer(); //consumo iden
+				TS = new tablaSimbolos();
+				TS.addID(tk.getLexema(),"", dir);
+				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
+					lexico.lexer();
+				else throw new Exception ("Se esperaba \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
+				
+			}else{
+				throw new Exception("El Programa tiene que tener un nombre en "+lexico.getLinea()+","+lexico.getColumna());		
+			}
 	
+		}
+		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
+
+		codigo.inicio();
+		etq = codigo.longInicio;
+		codigo.emite("ir-a");//TODO: Luego hay que parchearlo
+		int etqaux = etq;
+		etq++;
+		
+		boolean errRProg = RProg();
+		
+		errProg = errRProg;
+		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
+			lexico.lexer();//consumo .
+			codigo.parcheaInicio(0, etq, dir);
+			codigo.parchea(etqaux, etq);
+			codigo.emite("stop");
+			etq++;
+System.out.println(codigo.getString());
+		}
+		else throw new Exception ("Se esperaba \".\" en "+lexico.getLinea()+","+lexico.getColumna());
+		return errProg;
+	}
+	
+	public boolean RProg () throws Exception{ 
+			boolean err1 = BloqueDecs(); 
+			boolean err2 = Bloque();
+			return err1 || err2;
+	}
+		
+	
+
+	public boolean BloqueDecs(){ 
+		boolean err1 = DecsTipo();
+		boolean err2 = DecsVar();
+		boolean err3 = DecsProc(); 
+		return err1 || err2 || err3;
+	}
+	
+	
+	public boolean DecsTipo()throws Exception{ 
+		boolean err0 = false;
+		if (lexico.reconoce(CategoriaLexica.TKTYPE)){
+			lexico.lexer();
+			err0 = NDecsTipo();
+		}
+		return err0;
+	}
+
+
+	public boolean NDecsTipo()throws Exception{ 
+		boolean err1, err2;
+		err1= false;
+		err2 = DecTipo ();
+		if (!err2)
+			while ( !(lexico.reconoce(CategoriaLexica.TKVAR))
+				&& 
+				!(lexico.reconoce(CategoriaLexica.TKPROC))
+				&&
+				!(lexico.reconoce(CategoriaLexica.TKBEGIN)))
+				err1= err1 || NDecsTipo (); 
+		
+		return err1 || err2; 
+	}
+
+		
+	public boolean DecTipo (){
+		boolean err1 = Tipo();
+		//iden = Tipo (out err1) ;
+		err0 = err1 || existe();
+		return err0;
+	}
+	 */
 	
 	/**
 	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
