@@ -138,7 +138,7 @@ System.out.println(codigo.getString());
 		return errProg;
 	}
 	
-	public boolean RProg () throws Exception{ 
+	private boolean RProg () throws Exception{ 
 			boolean err1 = BloqueDecs(); 
 			boolean err2 = Bloque();
 			return err1 || err2;
@@ -146,7 +146,7 @@ System.out.println(codigo.getString());
 		
 	
 
-	public boolean BloqueDecs() throws Exception{ 
+	private boolean BloqueDecs() throws Exception{ 
 		boolean err1 = DecsTipo();
 		boolean err2 = DecsVar();
 		//boolean err3 = DecsProc(); 
@@ -154,10 +154,10 @@ System.out.println(codigo.getString());
 	}
 	
 	
-	public boolean DecsTipo()throws Exception{ 
+	private boolean DecsTipo()throws Exception{ 
 		boolean err0 = false;
 		if (lexico.reconoce(CategoriaLexica.TKTYPE)){
-			lexico.lexer();
+			lexico.lexer(); //Consumo TYPE
 			err0 = NDecsTipo();
 		}
 		return err0;
@@ -171,22 +171,18 @@ System.out.println(codigo.getString());
 	RDecsTipo.nh = DecTipo.nh = NDecsTipo.nh
 
 */
-	public boolean NDecsTipo() throws Exception{ 
+	private boolean NDecsTipo() throws Exception{ 
 		boolean errNDecsTipo, err1, err2;
 		Atributo atrDecTipo = DecTipo ();
-		err1= atrDecTipo.getProps().getTipo().getId().equals("error");
+		if (atrDecTipo != null)
+			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
+		else throw new Exception("La declaracion de tipo no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
 		errNDecsTipo = err1;
 		if (! err1){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
-			Atributo atrRDecsTipo = RDecsTipo();
-			err2 = atrRDecsTipo.getProps().getTipo().getId().equals("error");
+			err2 = RDecsTipo();
 			errNDecsTipo = errNDecsTipo || err2;
 		}
-			/*while ( !(lexico.reconoce(CategoriaLexica.TKVAR))
-				&& 
-				!(lexico.reconoce(CategoriaLexica.TKPROC))
-				&&
-				!(lexico.reconoce(CategoriaLexica.TKBEGIN)))*/
 		return errNDecsTipo; 
 	}
 
@@ -201,19 +197,35 @@ RDecsTipo ::= lambda
 	RDecsTipo.ts = RDecsTipo.tsh 
 	RDecsTipo.n = RDecsTipo.nh 
 */	
-	public Atributo RDecsTipo() throws Exception{
-		
-		return new Atributo();
+	private boolean RDecsTipo() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKVAR)){
+			return false; //Esto es lambda
+		}
+		boolean err1, err2, errRDecsTipo;
+		Atributo atrDecTipo = DecTipo ();
+		if (atrDecTipo != null)
+			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
+		else  throw new Exception("La declaracion de tipo no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
+		errRDecsTipo = err1;
+		if (! err1){
+			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
+			err2 = RDecsTipo();
+			errRDecsTipo = errRDecsTipo || err2;
+		}
+		return errRDecsTipo;
+		/*!(lexico.reconoce(CategoriaLexica.TKPROC))
+		&&
+		!(lexico.reconoce(CategoriaLexica.TKBEGIN)))*/
 	}
 	
-	public Atributo DecTipo (){
+	private Atributo DecTipo (){
 		boolean err1 = Tipo();
 		//iden = Tipo (out err1) ;
 		err0 = err1 || existe();
 		return new Atributo();
 	}
 	 
-	public boolean DecsVar(){
+	private boolean DecsVar(){
 		return false;
 	}
 	/**
@@ -717,7 +729,7 @@ RDecsTipo ::= lambda
 		}
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
 			Token tk = lexico.lexer(); //Consumimos el iden
-			propiedades propsLexema = (propiedades)TS.getTabla().get(tk.getLexema());
+			Propiedades propsLexema = (Propiedades)TS.getTabla().get(tk.getLexema());
 			if (TS.existeID(tk.getLexema())){
 				tipo0 = propsLexema.getTipo();
 				int dir = propsLexema.getDir();
