@@ -218,6 +218,10 @@ System.out.println(codigo.getString());
 			throw new Exception("Se esperaba un identificador en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
 		}
 		Token tk = lexico.lexer(); //consumo iden
+		if (!lexico.reconoce(CategoriaLexica.TKIG)){
+			throw new Exception("Se esperaba un '=' en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
+		}
+		lexico.lexer(); //consumo el "="
 		Atributo tipo = new Atributo();
 		tipo.setId(tk.getLexema());
 		Tipo(tipo);
@@ -230,96 +234,33 @@ System.out.println(codigo.getString());
 		return tipo;
 	}
 	
-	private boolean DecsVar(){
-		return false;
-	}
-	/**
-	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
-	 * @throws Exception Si sucede algún error en la cabecera del programa.
-	 */
-	/*private void ProgDec() throws Exception{
-		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
-			lexico.lexer();
-			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-				Token tk = lexico.lexer(); //consumo iden
-				TS = new tablaSimbolos();
-				TS.addID(tk.getLexema(),"", 0);
-				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
-					lexico.lexer();
-				else throw new Exception ("Se esperaba \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
-				
-			}else{
-				throw new Exception("El Programa tiene que tener un nombre en "+lexico.getLinea()+","+lexico.getColumna());		
-			}
-	
+	private boolean DecsVar() throws Exception{
+		boolean err0 = false;
+		if (lexico.reconoce(CategoriaLexica.TKVAR)){
+			lexico.lexer(); //Consumo VAR
+			err0 = NDecsVar();
 		}
-		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
-	}
-
-	
-	
-	*//**
-	 * Procesa la seccion de declaraciones de las variables.
-	 * 
-	 * @return errorDecs: Es cierto si ocurre algún error en las declaraciones de variables.
-	 * @throws Exception Si ocurre algún error sintáctico en la declaración de alguna variable.
-	 *//*
-	private boolean Decs() throws Exception{
-		Atributo atrDec = new Atributo();
-        Dec(atrDec);		
-		boolean err0 = TS.existeID(atrDec.getId());
-		if (err0)
-			System.out.println("El identificador " +
-					atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
-		else TS.addID(atrDec.getId(),atrDec.getTipo(), 0);
-		return RDecs(err0,0);		
+		return err0;
 	}
 	
-	*//**
-	 * Método derivado de eliminar la recursión a izquierdas de Decs.
-	 * @return error Devuelve cierto si ocurre algún error en la declaración de variables.
-	 * @throws Exception  Si ocurre algún error sintáctico en la declaración de alguna variable.
-	 *//*
-	private boolean RDecs (boolean errh0, int dirh0) throws Exception{
-		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-			Atributo atrDec = new Atributo();
-			Dec(atrDec);
-			boolean errh1aux = TS.existeID(atrDec.getId());
-			if (errh1aux)
-				System.out.println("El identificador " +
-						atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
-			else TS.addID(atrDec.getId(),atrDec.getTipo(), dirh0+1);
-			errh0 = errh0 || errh1aux;
-			errh0 = RDecs (errh0, dirh0+1) || errh0;
+	public boolean NDecsVar() throws Exception{
+		boolean errNDecsVar, err1, err2;
+		Atributo atrDecTipo = DecVar ();
+		if (atrDecTipo != null)
+			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
+		else throw new Exception("La declaracion de tipo no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
+		errNDecsVar = err1;
+		if (! err1){
+			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
+			err2 = RDecsTipo();
+			errNDecsVar = errNDecsVar || err2;
 		}
-		return errh0;
+		return errNDecsVar; 
 	}
-		
 	
-
-	
-	*//**
-	 * Reconoce una declaración de variable.
-	 * 
-	 * @throws Exception si ocurre algún error sintáctico en la declaración de la variable.
-	 *//*
-	private void Dec(Atributo atrib) throws Exception{
-		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
-		}
-		Token tk = lexico.lexer(); //consumo el iden
-		atrib.setId(tk.getLexema());
-
-		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS )){
-			throw new Exception("Se esperaba \":\" en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
-		}
-		tk = lexico.lexer(); //consumo :
-		
-		Tipo(atrib);
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			lexico.lexer();
-		} else throw new Exception("Se esperaba \";\" en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
-	}*/
+	private Atributo DecVar() throws Exception{
+		return new Atributo();
+	}
 	
 	/**
 	 * Reconoce el tipo de la variable declarada.
@@ -921,4 +862,95 @@ System.out.println(codigo.getString());
 	private boolean referenciaErronea (Tipo t) throws Exception{
 		return ((t.getT().equals("ref")) && !(TS.existeID(t.getId())));
 	}
+	
+	
+/************************************VERSION VIEJA******************************************************/
+	/**
+	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
+	 * @throws Exception Si sucede algún error en la cabecera del programa.
+	 */
+	/*private void ProgDec() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
+			lexico.lexer();
+			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+				Token tk = lexico.lexer(); //consumo iden
+				TS = new tablaSimbolos();
+				TS.addID(tk.getLexema(),"", 0);
+				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
+					lexico.lexer();
+				else throw new Exception ("Se esperaba \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
+				
+			}else{
+				throw new Exception("El Programa tiene que tener un nombre en "+lexico.getLinea()+","+lexico.getColumna());		
+			}
+	
+		}
+		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
+	}
+
+	
+	
+	*//**
+	 * Procesa la seccion de declaraciones de las variables.
+	 * 
+	 * @return errorDecs: Es cierto si ocurre algún error en las declaraciones de variables.
+	 * @throws Exception Si ocurre algún error sintáctico en la declaración de alguna variable.
+	 *//*
+	private boolean Decs() throws Exception{
+		Atributo atrDec = new Atributo();
+        Dec(atrDec);		
+		boolean err0 = TS.existeID(atrDec.getId());
+		if (err0)
+			System.out.println("El identificador " +
+					atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
+		else TS.addID(atrDec.getId(),atrDec.getTipo(), 0);
+		return RDecs(err0,0);		
+	}
+	
+	*//**
+	 * Método derivado de eliminar la recursión a izquierdas de Decs.
+	 * @return error Devuelve cierto si ocurre algún error en la declaración de variables.
+	 * @throws Exception  Si ocurre algún error sintáctico en la declaración de alguna variable.
+	 *//*
+	private boolean RDecs (boolean errh0, int dirh0) throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+			Atributo atrDec = new Atributo();
+			Dec(atrDec);
+			boolean errh1aux = TS.existeID(atrDec.getId());
+			if (errh1aux)
+				System.out.println("El identificador " +
+						atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
+			else TS.addID(atrDec.getId(),atrDec.getTipo(), dirh0+1);
+			errh0 = errh0 || errh1aux;
+			errh0 = RDecs (errh0, dirh0+1) || errh0;
+		}
+		return errh0;
+	}
+		
+	
+
+	
+	*//**
+	 * Reconoce una declaración de variable.
+	 * 
+	 * @throws Exception si ocurre algún error sintáctico en la declaración de la variable.
+	 *//*
+	private void Dec(Atributo atrib) throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
+		}
+		Token tk = lexico.lexer(); //consumo el iden
+		atrib.setId(tk.getLexema());
+
+		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS )){
+			throw new Exception("Se esperaba \":\" en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
+		}
+		tk = lexico.lexer(); //consumo :
+		
+		Tipo(atrib);
+		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			lexico.lexer();
+		} else throw new Exception("Se esperaba \";\" en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
+	}*/
+
 }
