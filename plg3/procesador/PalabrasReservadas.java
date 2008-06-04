@@ -52,6 +52,14 @@ public class PalabrasReservadas {
 		conjunto.put(s,s);
 		s = "PROC";
 		conjunto.put(s,s);
+		s = "TYPE";
+		conjunto.put(s,s);
+		s = "ARRAY";
+		conjunto.put(s,s);
+		s = "RECORD";
+		conjunto.put(s,s);
+		s = "OF";
+		conjunto.put(s,s);
 	}
 	
 	public boolean esPalabraReservada(String s){
@@ -107,6 +115,14 @@ public class PalabrasReservadas {
 			tk.setCategoriaLexica(CategoriaLexica.TKELSE);
 		else if (s.equalsIgnoreCase("PROC"))
 			tk.setCategoriaLexica(CategoriaLexica.TKPROC);
+		else if (s.equalsIgnoreCase("TYPE"))
+			tk.setCategoriaLexica(CategoriaLexica.TKTYPE);
+		else if (s.equalsIgnoreCase("ARRAY"))
+			tk.setCategoriaLexica(CategoriaLexica.TKARRAY);
+		else if (s.equalsIgnoreCase("RECORD"))
+			tk.setCategoriaLexica(CategoriaLexica.TKRECORD);
+		else if (s.equalsIgnoreCase("OF"))
+			tk.setCategoriaLexica(CategoriaLexica.TKOF);
 		return tk;
 	}
 

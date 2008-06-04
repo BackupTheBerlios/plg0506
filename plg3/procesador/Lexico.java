@@ -212,6 +212,8 @@ public class Lexico {
 							(a.equals("}")) ||
 							(a.equals("+")) || 
 							(a.equals("-")) ||
+							(a.equals("[")) ||
+							(a.equals("]")) ||
 							(a.equals("*")))
 						transita(7);
 					else if (a.matches("[1-9]*"))
@@ -250,8 +252,13 @@ public class Lexico {
 				case 6:
 					return new Token (buff.toString(),CategoriaLexica.TKDIF);
 				case 7:
-					if (buff.equals(".")) 
-						return new Token(buff.toString(),CategoriaLexica.TKPUNTO);
+					if (buff.equals(".")) {
+						if (a.equals(".")){ 
+							transita (15);
+							break;
+						} 
+						else return new Token(buff.toString(),CategoriaLexica.TKPUNTO);
+					}
 					else if (buff.equals(","))
 						return new Token(buff.toString(),CategoriaLexica.TKCOMA);
 					else if (buff.equals(";"))
@@ -268,6 +275,10 @@ public class Lexico {
 						return new Token (buff.toString(),CategoriaLexica.TKSUMA);
 					else if (buff.equals("-"))
 						return new Token (buff.toString(),CategoriaLexica.TKRESTA); 
+					else if (buff.equals("["))
+						return new Token (buff.toString(),CategoriaLexica.TKCORCHAP); 
+					else if (buff.equals("]"))
+						return new Token (buff.toString(),CategoriaLexica.TKCORCHCI); 
 					else // *
 						return new Token(buff.toString(),CategoriaLexica.TKMULT);
 				case 9:
@@ -305,6 +316,8 @@ public class Lexico {
 					return new Token(buff.toString(),CategoriaLexica.TKMAYIG);
 				case 14:
 					return new Token(buff.toString(),CategoriaLexica.TKMENIG);
+				case 15:
+					return new Token(buff.toString(),CategoriaLexica.TKPUNTOPUNTO);
 			}
 			if (error == -1) acabado = true;
 		}

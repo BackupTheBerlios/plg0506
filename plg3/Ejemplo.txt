@@ -1,8 +1,16 @@
 program prueba1;
 var 
+type
+array
+record
+of
+[]
+..
 i : integer;
 j : integer;
 begin
+Proc
+
 i := 1;
 j := 12345;
 while (i<0) do
