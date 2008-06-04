@@ -56,7 +56,7 @@ public class tablaSimbolos {
 	 * @return boolean Se devuelve verdadero si todo ha sido correcto. Falso en caso contrario.
 	 * @throws Exception Excepcion generada si el identificador ya existe, se capturara en otro lugar.
 	 */
-	public boolean addID(String id, propiedades props) throws Exception{
+	public boolean addID(String id, Propiedades props) throws Exception{
 		if (this.tabla.containsKey(id)){
 			throw new Exception ("No se puede duplicar el identificador");
 		}
@@ -70,13 +70,13 @@ public class tablaSimbolos {
 	/**
 	 * Metodo para Obtener las propiedades de un identificador
 	 */
-	public propiedades getProps(String id) throws Exception{
+	public Propiedades getProps(String id) throws Exception{
 		if (!this.tabla.containsKey(id)){
 			throw new Exception ("El identificador " + id 
 					+ " no esta en la tabla de simbolos.");
 		}
 		else{
-			return (propiedades)this.tabla.get(id);			
+			return (Propiedades)this.tabla.get(id);			
 		}
 	}
 	
@@ -104,12 +104,12 @@ public class tablaSimbolos {
 		Enumeration<Object> e = this.tabla.keys();
 		String aux = new String();
 		String id = new String();
-		propiedades p = new propiedades();
+		Propiedades p = new Propiedades();
 		while (e.hasMoreElements()){
 			id = (String) e.nextElement();
 			aux = aux.concat("( ");
 			aux = aux.concat(id);
-			p = (propiedades)this.tabla.get(id);
+			p = (Propiedades)this.tabla.get(id);
 			aux = aux.concat(", ");
 			aux = aux.concat(p.toString());
 			aux = aux.concat(" )");

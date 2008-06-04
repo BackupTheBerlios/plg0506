@@ -5,7 +5,7 @@ package tablaSimbolos;
  * @author Paloma de la Fuente, Ines Gonzalez, Federico G. Mon Trotti, Nicolas Mon Trotti y Alberto Velazquez
  * 
  */
-public class propiedades {
+public class Propiedades {
 
 	Tipo tipo;
 	int dir;
@@ -16,7 +16,7 @@ public class propiedades {
 	/**
 	 * Constructor de la clase sin parametros.
 	 */
-	public propiedades() {
+	public Propiedades() {
 		super();
 	}
 
@@ -25,7 +25,7 @@ public class propiedades {
 	 * @param tipo Tipo del token.
 	 * @param dir Entero con la direccion de memoria de la variable.
 	 */
-	public propiedades(Tipo tipo, int dir, String clas, int t, int n) {
+	public Propiedades(Tipo tipo, int dir, String clas, int t, int n) {
 		super();
 		this.tipo = tipo;
 		this.dir = dir;
@@ -94,7 +94,7 @@ public class propiedades {
 	 * @param a Atributo con el que queremos comparar la igualdad
 	 * @return booleano con la igual de los atributos
 	 */
-	public boolean equals(propiedades a){
+	public boolean equals(Propiedades a){
 		return (this.getTipo() ==a.getTipo());
 	}
 

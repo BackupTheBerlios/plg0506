@@ -104,8 +104,8 @@ System.out.println(codigo.getString());
 			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
 				Token tk = lexico.lexer(); //consumo iden
 				TS = new tablaSimbolos();
-				
-				TS.addID(tk.getLexema(),"", dir);
+				Propiedades p = new Propiedades();
+				TS.addID(tk.getLexema(),p);
 				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
 					lexico.lexer();
 				else throw new Exception ("Se esperaba \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
@@ -146,11 +146,11 @@ System.out.println(codigo.getString());
 		
 	
 
-	public boolean BloqueDecs(){ 
+	public boolean BloqueDecs() throws Exception{ 
 		boolean err1 = DecsTipo();
 		boolean err2 = DecsVar();
-		boolean err3 = DecsProc(); 
-		return err1 || err2 || err3;
+		//boolean err3 = DecsProc(); 
+		return err1 || err2; //|| err3;
 	}
 	
 	
@@ -171,19 +171,23 @@ System.out.println(codigo.getString());
 	RDecsTipo.nh = DecTipo.nh = NDecsTipo.nh
 
 */
-	public boolean NDecsTipo()throws Exception{ 
-		boolean err1, err2;
-		err1= false;
-		err2 = DecTipo ();
-		if (!err2)
-			while ( !(lexico.reconoce(CategoriaLexica.TKVAR))
+	public boolean NDecsTipo() throws Exception{ 
+		boolean errNDecsTipo, err1, err2;
+		Atributo atrDecTipo = DecTipo ();
+		err1= atrDecTipo.getProps().getTipo().getId().equals("error");
+		errNDecsTipo = err1;
+		if (! err1){
+			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
+			Atributo atrRDecsTipo = RDecsTipo();
+			err2 = atrRDecsTipo.getProps().getTipo().getId().equals("error");
+			errNDecsTipo = errNDecsTipo || err2;
+		}
+			/*while ( !(lexico.reconoce(CategoriaLexica.TKVAR))
 				&& 
 				!(lexico.reconoce(CategoriaLexica.TKPROC))
 				&&
-				!(lexico.reconoce(CategoriaLexica.TKBEGIN)))
-				err1= err1 || RDecsTipo (); 
-		
-		return err1 || err2; 
+				!(lexico.reconoce(CategoriaLexica.TKBEGIN)))*/
+		return errNDecsTipo; 
 	}
 
 	/*RDecsTipo ::= DecTipo RDecsTipo 
@@ -197,14 +201,21 @@ RDecsTipo ::= lambda
 	RDecsTipo.ts = RDecsTipo.tsh 
 	RDecsTipo.n = RDecsTipo.nh 
 */	
-	public boolean DecTipo (){
+	public Atributo RDecsTipo() throws Exception{
+		
+		return new Atributo();
+	}
+	
+	public Atributo DecTipo (){
 		boolean err1 = Tipo();
 		//iden = Tipo (out err1) ;
 		err0 = err1 || existe();
-		return err0;
+		return new Atributo();
 	}
 	 
-	
+	public boolean DecsVar(){
+		return false;
+	}
 	/**
 	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
 	 * @throws Exception Si sucede algún error en la cabecera del programa.

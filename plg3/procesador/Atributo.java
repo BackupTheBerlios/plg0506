@@ -1,5 +1,7 @@
 package procesador;
 
+import tablaSimbolos.Propiedades;
+
 /**
  * La clase <B>Atributos</B> guarda el tipo y el nombre o identificador de un token. Contiene accesores y mutadores
  * de ambos parametros.
@@ -13,7 +15,7 @@ package procesador;
  *
  */public class Atributo {
 
-	String tipo;
+	Propiedades props;
 	String id;
 	
 	/**
@@ -29,9 +31,9 @@ package procesador;
 	 * @param tipo String con el valor que le le quiere dar a tipo
 	 * @param id String con el valor que le le quiere dar a id
 	 */
-	public Atributo(String tipo, String id) {
+	public Atributo(Propiedades p, String id) {
 		super();
-		this.tipo = tipo;
+		this.props = p;
 		this.id = id;
 	}
 	
@@ -55,15 +57,15 @@ package procesador;
 	 * Accesor para el atributo de la clase, tipo.
 	 * @return Valor del atributo tipo
 	 */
-	public String getTipo() {
-		return tipo;
+	public Propiedades getProps() {
+		return props;
 	}
 
 	/**
 	 * Mutador para el atributo de la clase, tipo.
 	 * @param tipo
 	 */
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setProps(Propiedades p) {
+		this.props = p;
 	}
 }
