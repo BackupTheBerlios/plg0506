@@ -83,4 +83,18 @@ public class Tipo {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	/**
+	 * @return the t
+	 */
+	public tipo getT() {
+		return t;
+	}
+
+	/**
+	 * @param t the t to set
+	 */
+	public void setT(tipo t) {
+		this.t = t;
+	}
 }
