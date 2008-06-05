@@ -307,7 +307,8 @@ System.out.println(codigo.getString());
 	 * @throws IOException 
 	 */
 	private void Tipo(Atributo atrib) throws Exception{
-		Propiedades p;
+		//Propiedades p;
+		boolean errC ;
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			lexico.lexer();
 			atrib.getProps().setTam(1);
@@ -338,10 +339,70 @@ System.out.println(codigo.getString());
 			atrib.getProps().getTipo().setDesplazamiento(0);
 			atrib.getProps().getTipo().setId("");
 		}
+		else if(lexico.reconoce(CategoriaLexica.TKRECORD)){
+			lexico.lexer(); // Consumo RECORD
+			//En Campos modifico el tamaño y el desplazamiento de Tipo con el tamaño de los Campos. 
+			//Y meto los Campos en Tipo
+			errC = Campos(atrib.getProps().getTipo()); 
+			atrib.getProps().getTipo().setT(Tipo.tipo.rec);
+			atrib.getProps().getTipo().setTBase(null);
+			atrib.getProps().getTipo().setNElems(0);
+			if (!errC) atrib.getProps().getTipo().setId("");
+			else atrib.getProps().getTipo().setId("error");
+		}
+		else if(lexico.reconoce(CategoriaLexica.TKARRAY)){
+			lexico.lexer(); //Consumo array
+			if(!lexico.reconoce(CategoriaLexica.TKCORCHAP)){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			lexico.lexer(); //Consumo [
+			if(!lexico.reconoce(CategoriaLexica.TKNUM)){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			Token tk = lexico.lexer(); // Consumo el cero
+			int inicio =  Integer.parseInt(tk.getLexema());
+			if (inicio != 0){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			if(!lexico.reconoce(CategoriaLexica.TKPUNTOPUNTO)){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			lexico.lexer(); // Consumo el ".."
+			if(!lexico.reconoce(CategoriaLexica.TKNUM)){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			tk = lexico.lexer(); // Consumo el final del array
+			int fin =  Integer.parseInt(tk.getLexema());
+			if(!lexico.reconoce(CategoriaLexica.TKCORCHCI)){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			lexico.lexer(); //Consumo ]
+			if(!lexico.reconoce(CategoriaLexica.TKOF)){
+				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
+			}
+			lexico.lexer(); //Consumo OF
+			// Ahora tengo que reconocer el tipo de los elementos del array
+			Atributo tbase = new Atributo();
+			Tipo(tbase);
+			errC = tbase.getProps().getTipo().getId().equals("error");
+			if (!errC) atrib.getProps().getTipo().setId("");
+			else atrib.getProps().getTipo().setId("error");
+			atrib.getProps().getTipo().setT(Tipo.tipo.array);
+			atrib.getProps().getTipo().setTBase(tbase.getProps().getTipo());
+			atrib.getProps().getTipo().setNElems(fin);
+			atrib.getProps().getTipo().setTam(tbase.getProps().getTipo().getTam() * fin);
+			atrib.getProps().getTipo().setCampos(null);
+			atrib.getProps().getTipo().setDesplazamiento(0);
+		}
+		else if(lexico.reconoce(CategoriaLexica.TKIDEN)){
+			
+		}
 		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", los tipos son INTEGER o BOOLEAN");// incorrecto en linea " + lexico.getLinea());
 	}
 	
-	
+	private boolean Campos (Tipo t){
+		return false;
+	}
 	
 	/**
 	 * 
