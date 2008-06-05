@@ -10,7 +10,7 @@ public class Propiedades {
 	Tipo tipo;
 	int dir;
 	String clase;
-	int tam;
+	//int tam;
 	int nivel;
 	
 	/**
@@ -30,7 +30,7 @@ public class Propiedades {
 		this.tipo = tipo;
 		this.dir = dir;
 		this.clase=clas;
-		this.tam = t;
+		//this.tam = t;
 		this.nivel=n;
 	}
 	
@@ -79,8 +79,8 @@ public class Propiedades {
 			aux = aux.concat(new Integer (this.dir).toString());
 			aux = aux.concat(", ");
 			aux = aux.concat(this.clase);
-			aux = aux.concat(", ");
-			aux = aux.concat(new Integer (this.tam).toString());
+			//aux = aux.concat(", ");
+			//aux = aux.concat(new Integer (this.tam).toString());
 			aux = aux.concat(" )");
 			return aux;
 		}
@@ -115,16 +115,16 @@ public class Propiedades {
 	/**
 	 * @return the tam
 	 */
-	public int getTam() {
-		return tam;
-	}
+//	public int getTam() {
+//		return tam;
+//	}
 
 	/**
 	 * @param tam the tam to set
 	 */
-	public void setTam(int tam) {
-		this.tam = tam;
-	}
+//	public void setTam(int tam) {
+//		this.tam = tam;
+//	}
 	
 	/**
 	 * @return the nivel
