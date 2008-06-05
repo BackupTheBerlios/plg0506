@@ -355,7 +355,7 @@ System.out.println(codigo.getString());
 			// Ahora tengo que reconocer el tipo de los elementos del array
 			Atributo tbase = new Atributo();
 			tbase = Tipo();
-			atrib.getProps().setTipo(new Tipo(Tipo.tipo.array,"",tbase.getProps().getTipo().getTam()*(fin-inicio)));
+			atrib.getProps().setTipo(new Tipo(Tipo.tipo.array,"",tbase.getProps().getTipo().getTam()*(fin+1)));
 			atrib.getProps().getTipo().setTBase(tbase.getProps().getTipo());
 		}
 		else if(lexico.reconoce(CategoriaLexica.TKIDEN)){
