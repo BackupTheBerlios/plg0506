@@ -193,7 +193,9 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean RDecsTipo() throws Exception{
-		if (lexico.reconoce(CategoriaLexica.TKVAR)){
+		if ((lexico.reconoce(CategoriaLexica.TKVAR)) || 
+				(lexico.reconoce(CategoriaLexica.TKPROC)) || 
+				(lexico.reconoce(CategoriaLexica.TKBEGIN))){
 			return false; //Esto es lambda
 		}
 		boolean err1, err2, errRDecsTipo;
@@ -260,7 +262,8 @@ System.out.println(codigo.getString());
 	}
 	
 	private boolean RDecsVar() throws Exception{
-		if (lexico.reconoce(CategoriaLexica.TKBEGIN)){ //TODO: Ojo cambiar a TKPROC cuando se ponga la declaracion de procedimientos....
+		if ((lexico.reconoce(CategoriaLexica.TKPROC)) ||
+				(lexico.reconoce(CategoriaLexica.TKBEGIN))){ 
 			return false; //Esto es lambda
 		}
 		boolean err1, err2, errRDecsVar;
