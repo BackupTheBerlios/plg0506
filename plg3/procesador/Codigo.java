@@ -187,4 +187,23 @@ public class Codigo {
 		}
 		return ins;
 	}
+	
+	/*fun accesoVar(infoID)
+	  devuelve
+		apila-dir(1+infoID.nivel) ||
+		apila(infoID.dir) ||
+		suma
+		( si infoID.clase = pvar entonces apila-ind
+		si no lambda )
+	ffun */
+	public void accesoVar(int dir){
+		
+	}
+/* fun longAccesoVar(infoID)
+   si infoID.clase = pvar entonces 4
+   si no 3
+ffun*/
+	public int longAccesoVar(int dir){
+		return 0;//TODO
+	}
 }

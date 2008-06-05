@@ -568,19 +568,82 @@ System.out.println(codigo.getString());
 		//return tipoMem, tipoRel in visitadas
 	}
 
-	private Tipo Mem() {
-		
-		
-		if (!TS.existeID(tk.getLexema())){
+	/*Mem (out tipo0) ::= 
+iden 
+{tipoh0 <- si existeID(ts, iden.lex) entonces
+			si ts[iden.lex].clase = var entonces
+				ref!(ts[iden.lex].tipo, ts)
+			si no
+				<t: err>
+si no
+			<t: err>
+emite(accesoVar(ts[iden.lex].dir)
+etq <- etq + longAccesoVar(ts[iden.lex].dir)}
+RMem (in tipoh1, out tipo1)
+{tipo0 <- tipo1}
+
+*/
+	private Tipo Mem() throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " Se esperaba un identificador");
+		}
+		Tipo t;
+		Token tk = lexico.lexer();
+		if (!TS.existeID(tk.getLexema()) || !TS.getProps(tk.getLexema()).getClase().equals("var")){
 			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
 			lexico.lexer();//FIXME:LImpiar		
-			return true;
+			t = new Tipo();
+			t.setId("error");
+			return t;
 		}
-		
+		t = ref(TS.getProps(tk.getLexema()).getTipo() );
+		String cod = accesoVar();
+		codigo.emite("");
 		// TODO Auto-generated method stub
 		return new Tipo();
 	}
 
+	/*fun ref!(exp, ts)
+	  si exp.t = ref entonces
+	    si existeID(ts, exp.id) entonces devuelve ref!(ts[exp.id].tipo, ts)
+	    si no <t: err>
+	  si no devuelve exp
+	ffun*/
+	private Tipo ref(Tipo t) throws Exception{
+		
+		return new Tipo();
+	}
+	
+	/*RMem (in tipoh0, out tipo0) ::= 
+. iden 
+{tipoh1 <- si tipoh0.t = rec entonces
+			si campo?( tipoh0.campos, iden.lex) entonces
+				ref!( tipoh0,campos[iden.lex].tipo, ts)
+si no <t: err>
+	si no <t: err>
+emite(apila(tipoh0.campos[iden.lex].desp))
+emite (suma)
+etq <- etq + 2}
+RMem(in tipoh1, out tipo1)
+{tipo0 <- tipo1}
+
+RMem (in tipoh0, out tipo0) ::= 
+[
+ExpAd (out tipo1)
+] 
+{tipoh2 <- si (tipoh0 = array <- tipo1 = int)
+				ref!( tipoh0.tbase, ts)
+		si no <t: err>
+emite(apila(tipoh0.tam))
+emite(multiplica)
+emite (suma)
+etq <- etq + 3}
+RMem (in tipoh2, out tipo2) 
+{tipo0 <- tipo2}*/
+	private Tipo RMem (Tipo mem) throws Exception{
+		
+		return new Tipo(); //FIXME
+	}
 	
 	/**
 	 * 
