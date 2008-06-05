@@ -18,6 +18,10 @@ public class Tipo {
 	Hashtable<Object,Object> campos;
 	int desplazamiento;
 	
+	public Tipo(tipo nt){
+		this.t = nt;
+	}
+	
 	public Tipo(){
 		this.t = null;
 		this.id = null;
@@ -39,6 +43,13 @@ public class Tipo {
 		this.t = nt;
 		this.id = nid;
 		this.tam = ntam;	
+	}
+	
+	public Tipo(tipo nt, String nid, Tipo ntBase, int nnElems){
+		this.t = nt;
+		this.id = nid;
+		this.tBase = ntBase;
+		this.nElems = nnElems;
 	}
 	
 	public Tipo(tipo nt, String nid, int ntam, int nnElems, Tipo ntBase, Hashtable<Object,Object> ncampos, int ndesplazamiento){
