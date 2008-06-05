@@ -515,16 +515,15 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean IAsig() throws Exception{
-		Token tk = lexico.lexer();
+		//Token tk = lexico.lexer();
+		Tipo tipoMem = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
 			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
-		if (!TS.existeID(tk.getLexema())){
-			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
-			lexico.lexer();//FIXME:LImpiar		
-			return true;
-		}
-		String tipoExpRel = ExpRel();
+		Tipo tipoExpRel = ExpRel();
+		
+		if (compatibles(tipoMem, tipoExpRel)){}
+
 		Propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!tipoExpRel.equals(idTSProps.getTipo())){
 			System.out.println("Error de tipo en linea: " + lexico.getLinea() +", columna " + lexico.getColumna());
@@ -535,6 +534,37 @@ System.out.println(codigo.getString());
 		return false;
 	
 	}
+	
+	private boolean compatibles(Tipo tipoMem, Tipo tipoExpRel) {
+		// TODO Auto-generated method stub
+		ArrayList<Set <Tipo.tipo>> visitadas = new ArrayList();
+		compatibles2(visitadas, tipoMem, tipoExpRel);
+		return false;
+	}
+
+	
+	private void compatibles2(ArrayList<Set <Tipo.tipo>> visitadas, Tipo tipoMem, Tipo tipoExpRel) {
+		// TODO Auto-generated method stub
+		Set <Tipo.tipo> par = Collections.synchronizedSet(EnumSet.noneOf(Tipo.tipo.class));
+		par.add(tipoMem.getT());
+		par.add(tipoExpRel.getT());
+		
+		//return tipoMem, tipoRel in visitadas
+	}
+
+	private Tipo Mem() {
+		
+		
+		if (!TS.existeID(tk.getLexema())){
+			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
+			lexico.lexer();//FIXME:LImpiar		
+			return true;
+		}
+		
+		// TODO Auto-generated method stub
+		return new Tipo();
+	}
+
 	
 	/**
 	 * 
