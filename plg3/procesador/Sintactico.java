@@ -227,7 +227,8 @@ System.out.println(codigo.getString());
 		Atributo tipo = new Atributo();
 		tipo.setId(tk.getLexema());
 		tipo.getProps().setClase("tipo");
-		Tipo(tipo);
+		//Tipo(tipo);
+		tipo = Tipo();
 		boolean err1 = tipo.getProps().getTipo().getId().equals("error");
 		//iden = Tipo (out err1) ;
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(tipo.getProps().getTipo());
@@ -290,10 +291,11 @@ System.out.println(codigo.getString());
 		}
 		lexico.lexer(); //consumo el ":"
 		Atributo var = new Atributo();
+		//var.getProps().setTam(); //El tamaño habrá que ponerlo en Tipo...
+		//Tipo(var);
+		var = Tipo();
 		var.setId(tk.getLexema());
 		var.getProps().setClase("var");
-		//var.getProps().setTam(); El tamaño habrá que ponerlo en Tipo...
-		Tipo(var);
 		boolean err1 = var.getProps().getTipo().getId().equals("error");
 		//iden = Tipo (out err1) ;
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(var.getProps().getTipo());
@@ -309,17 +311,18 @@ System.out.println(codigo.getString());
 	 * @throws Exception 
 	 * @throws IOException 
 	 */
-	private void Tipo(Atributo atrib) throws Exception{
-		//Propiedades p;
+	private Atributo Tipo() throws Exception{
+		Atributo atrib = new Atributo();
 		boolean errC ;
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			lexico.lexer();
-			atrib.getProps().setTam(1);
+			Tipo t = new Tipo();
+			t.setT(Tipo.tipo.integer);
 			//Tipo t = atrib.getProps().getTipo();
-			if (atrib.getProps().getTipo()==null){
+			/*if (atrib.getProps().getTipo()==null){
 				atrib.getProps().setTipo(new Tipo());
-			}
-			atrib.getProps().getTipo().setT(Tipo.tipo.integer);
+			}*/
+			//atrib.getProps().getTipo().setT(Tipo.tipo.integer);
 			atrib.getProps().getTipo().setTam(1);
 			atrib.getProps().getTipo().setCampos(null);
 			atrib.getProps().getTipo().setTBase(null);
@@ -329,7 +332,7 @@ System.out.println(codigo.getString());
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKBOOL)){
 			lexico.lexer();
-			atrib.getProps().setTam(1);
+			//atrib.getProps().setTam(1);
 			//Tipo t = atrib.getProps().getTipo();
 			if (atrib.getProps().getTipo()==null){
 				atrib.getProps().setTipo(new Tipo());
@@ -386,7 +389,7 @@ System.out.println(codigo.getString());
 			lexico.lexer(); //Consumo OF
 			// Ahora tengo que reconocer el tipo de los elementos del array
 			Atributo tbase = new Atributo();
-			Tipo(tbase);
+			tbase = Tipo();
 			errC = tbase.getProps().getTipo().getId().equals("error");
 			if (!errC) atrib.getProps().getTipo().setId("");
 			else atrib.getProps().getTipo().setId("error");
@@ -401,6 +404,7 @@ System.out.println(codigo.getString());
 			
 		}
 		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", los tipos son INTEGER o BOOLEAN");// incorrecto en linea " + lexico.getLinea());
+		return atrib;
 	}
 	
 	private Tipo Campos (Tipo t) throws Exception{
@@ -816,7 +820,8 @@ System.out.println(codigo.getString());
 			Token tk = lexico.lexer(); //Consumimos el iden
 			Propiedades propsLexema = (Propiedades)TS.getTabla().get(tk.getLexema());
 			if (TS.existeID(tk.getLexema())){
-				tipo0 = propsLexema.getTipo();
+				/**QUE QUERRA DECIR ESTO!!**/
+				//tipo0 = propsLexema.getTipo();
 				int dir = propsLexema.getDir();
 				codigo.emite("apila-dir", dir);
 				etq++;
