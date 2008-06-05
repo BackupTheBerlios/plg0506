@@ -2,6 +2,7 @@ package procesador;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 import tablaSimbolos.*;
 
@@ -198,21 +199,19 @@ System.out.println(codigo.getString());
 				(lexico.reconoce(CategoriaLexica.TKBEGIN))){
 			return false; //Esto es lambda
 		}
-		boolean err1, err2, errRDecsTipo;
-		Atributo atrDecTipo = DecTipo ();
-		if (atrDecTipo != null)
-			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
-		else return false;
-		errRDecsTipo = err1;
-		if (! err1){
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			throw new Exception("Se esperaba un ; "+lexico.getLinea()+ " columna" + lexico.getColumna());			
+		}
+		lexico.lexer(); // consumo ;
+		boolean err2, errRDecsTipo;		
+		Atributo atrDecTipo = DecTipo();
+		errRDecsTipo = atrDecTipo.getProps().getTipo().getId().equals("error");
+		if (! errRDecsTipo){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
 			err2 = RDecsTipo();
 			errRDecsTipo = errRDecsTipo || err2;
 		}
 		return errRDecsTipo;
-		/*!(lexico.reconoce(CategoriaLexica.TKPROC))
-		&&
-		!(lexico.reconoce(CategoriaLexica.TKBEGIN)))*/
 	}
 	
 	private Atributo DecTipo () throws Exception{
@@ -224,13 +223,10 @@ System.out.println(codigo.getString());
 			throw new Exception("Se esperaba un '=' en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
 		}
 		lexico.lexer(); //consumo el "="
-		Atributo tipo = new Atributo();
+		Atributo tipo = Tipo();
 		tipo.setId(tk.getLexema());
 		tipo.getProps().setClase("tipo");
-		//Tipo(tipo);
-		tipo = Tipo();
 		boolean err1 = tipo.getProps().getTipo().getId().equals("error");
-		//iden = Tipo (out err1) ;
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(tipo.getProps().getTipo());
 		if (err1 || err0 ){
 			tipo.getProps().getTipo().setId("error");
@@ -248,13 +244,10 @@ System.out.println(codigo.getString());
 	}
 	
 	private boolean NDecsVar() throws Exception{
-		boolean errNDecsVar, err1, err2;
+		boolean errNDecsVar, err2;
 		Atributo atrDecVar = DecVar ();
-		if (atrDecVar != null)
-			err1= atrDecVar.getProps().getTipo().getId().equals("error");
-		else throw new Exception("La declaracion de variables no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
-		errNDecsVar = err1;
-		if (! err1){
+		errNDecsVar = atrDecVar.getProps().getTipo().getId().equals("error");
+		if (! errNDecsVar){
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
 			err2 = RDecsVar();
 			errNDecsVar = errNDecsVar || err2;
@@ -267,13 +260,14 @@ System.out.println(codigo.getString());
 				(lexico.reconoce(CategoriaLexica.TKBEGIN))){ 
 			return false; //Esto es lambda
 		}
-		boolean err1, err2, errRDecsVar;
+		boolean err2, errRDecsVar;
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			throw new Exception("Se esperaba un ; "+lexico.getLinea()+ " columna" + lexico.getColumna());			
+		}	
+		lexico.lexer(); // consumo ;
 		Atributo atrDecVar = DecVar ();
-		if (atrDecVar != null)
-			err1= atrDecVar.getProps().getTipo().getId().equals("error");
-		else return false;
-		errRDecsVar = err1;
-		if (! err1){
+		errRDecsVar = atrDecVar.getProps().getTipo().getId().equals("error");
+		if (! errRDecsVar){
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
 			err2 = RDecsVar();
 			errRDecsVar = errRDecsVar || err2;
@@ -291,13 +285,10 @@ System.out.println(codigo.getString());
 		}
 		lexico.lexer(); //consumo el ":"
 		Atributo var = new Atributo();
-		//var.getProps().setTam(); //El tamaño habrá que ponerlo en Tipo...
-		//Tipo(var);
 		var = Tipo();
 		var.setId(tk.getLexema());
 		var.getProps().setClase("var");
 		boolean err1 = var.getProps().getTipo().getId().equals("error");
-		//iden = Tipo (out err1) ;
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(var.getProps().getTipo());
 		if (err1 || err0 ){
 			var.getProps().getTipo().setId("error");
@@ -313,48 +304,22 @@ System.out.println(codigo.getString());
 	 */
 	private Atributo Tipo() throws Exception{
 		Atributo atrib = new Atributo();
-		boolean errC ;
+		//boolean errC ;
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			lexico.lexer();
-			Tipo t = new Tipo();
-			t.setT(Tipo.tipo.integer);
-			//Tipo t = atrib.getProps().getTipo();
-			/*if (atrib.getProps().getTipo()==null){
-				atrib.getProps().setTipo(new Tipo());
-			}*/
-			//atrib.getProps().getTipo().setT(Tipo.tipo.integer);
-			atrib.getProps().getTipo().setTam(1);
-			atrib.getProps().getTipo().setCampos(null);
-			atrib.getProps().getTipo().setTBase(null);
-			atrib.getProps().getTipo().setNElems(0);
-			atrib.getProps().getTipo().setDesplazamiento(0);
-			atrib.getProps().getTipo().setId("");
+			atrib.getProps().setTipo(new Tipo(Tipo.tipo.integer));
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKBOOL)){
 			lexico.lexer();
-			//atrib.getProps().setTam(1);
-			//Tipo t = atrib.getProps().getTipo();
-			if (atrib.getProps().getTipo()==null){
-				atrib.getProps().setTipo(new Tipo());
-			}
-			atrib.getProps().getTipo().setT(Tipo.tipo.bool);
-			atrib.getProps().getTipo().setTam(1);
-			atrib.getProps().getTipo().setCampos(null);
-			atrib.getProps().getTipo().setTBase(null);
-			atrib.getProps().getTipo().setNElems(0);
-			atrib.getProps().getTipo().setDesplazamiento(0);
-			atrib.getProps().getTipo().setId("");
+			atrib.getProps().setTipo(new Tipo(Tipo.tipo.bool));
 		}
 		else if(lexico.reconoce(CategoriaLexica.TKRECORD)){
 			lexico.lexer(); // Consumo RECORD
 			//En Campos modifico el tamaño y el desplazamiento de Tipo con el tamaño de los Campos. 
 			//Y meto los Campos en Tipo
-			errC = Campos(atrib.getProps().getTipo()); 
+			Tipo t = Campos();
+			atrib.getProps().setTipo(t);
 			atrib.getProps().getTipo().setT(Tipo.tipo.rec);
-			atrib.getProps().getTipo().setTBase(null);
-			atrib.getProps().getTipo().setNElems(0);
-			if (!errC) atrib.getProps().getTipo().setId("");
-			else atrib.getProps().getTipo().setId("error");
 		}
 		else if(lexico.reconoce(CategoriaLexica.TKARRAY)){
 			lexico.lexer(); //Consumo array
@@ -390,15 +355,8 @@ System.out.println(codigo.getString());
 			// Ahora tengo que reconocer el tipo de los elementos del array
 			Atributo tbase = new Atributo();
 			tbase = Tipo();
-			errC = tbase.getProps().getTipo().getId().equals("error");
-			if (!errC) atrib.getProps().getTipo().setId("");
-			else atrib.getProps().getTipo().setId("error");
-			atrib.getProps().getTipo().setT(Tipo.tipo.array);
+			atrib.getProps().setTipo(new Tipo(Tipo.tipo.array,"",tbase.getProps().getTipo().getTam()*(fin-inicio)));
 			atrib.getProps().getTipo().setTBase(tbase.getProps().getTipo());
-			atrib.getProps().getTipo().setNElems(fin);
-			atrib.getProps().getTipo().setTam(tbase.getProps().getTipo().getTam() * fin);
-			atrib.getProps().getTipo().setCampos(null);
-			atrib.getProps().getTipo().setDesplazamiento(0);
 		}
 		else if(lexico.reconoce(CategoriaLexica.TKIDEN)){
 			
@@ -407,22 +365,26 @@ System.out.println(codigo.getString());
 		return atrib;
 	}
 	
-	private Tipo Campos (Tipo t) throws Exception{
+	private Tipo Campos () throws Exception{
+		Tipo tipo = new Tipo(Tipo.tipo.rec);
 		int desp1 = 0;
-		Tipo t1 = new Tipo(); //in desp1
-		Tipo c1 = Campo (t1.getDesplazamiento());
-		Tipo c2 = RCampos (c1);
-		return new Tipo();
+		Atributo c = Campo();
+		Hashtable<Object, Object> campos = new Hashtable<Object, Object>();
+		tipo.setCampos(RCampos(campos,c));
+		return tipo;
 	}
 	
 	
-	private Tipo RCampos(Tipo t0) throws Exception {
-		// TODO Auto-generated method stub
-		return new Tipo();
+	private Hashtable<Object,Object> RCampos(Hashtable<Object,Object> campos,Atributo c) throws Exception {
+		return campos;
 	}
 
-	private Tipo Campo (int desph0) throws Exception{
-		return new Tipo();
+	private Atributo Campo () throws Exception{
+		Atributo campo = new Atributo();
+		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
+			
+		}
+		return new Atributo();
 	}
 	
 	/**

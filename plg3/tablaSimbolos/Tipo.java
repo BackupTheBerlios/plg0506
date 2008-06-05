@@ -20,6 +20,7 @@ public class Tipo {
 	
 	public Tipo(tipo nt){
 		this.t = nt;
+		this.tam = 1;
 	}
 	
 	public Tipo(){
