@@ -35,7 +35,7 @@ public class Procesador {
 				 * se recoge mas abajo.
 				 */
 				sintactico = new Sintactico(f);
-				System.out.println("Inicio del analisis\n");
+//				System.out.println("Inicio del analisis\n");
 				sintactico.startParsing();
 				System.out.println("Fin del analisis");
 			//} 

@@ -24,6 +24,7 @@ import tablaSimbolos.Propiedades;
 	 */
 	public Atributo() {
 		super();
+		id = "";
 		props = new Propiedades();
 	}
 	

@@ -25,7 +25,7 @@ public class Tipo {
 	
 	public Tipo(){
 		this.t = null;
-		this.id = null;
+		this.id = "";
 		this.tam = 1;
 		this.nElems = 0;
 		this.tBase = null;

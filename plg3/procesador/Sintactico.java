@@ -2,7 +2,7 @@ package procesador;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.*;
 
 import tablaSimbolos.*;
 
@@ -176,9 +176,7 @@ System.out.println(codigo.getString());
 	private boolean NDecsTipo() throws Exception{ 
 		boolean errNDecsTipo, err1, err2;
 		Atributo atrDecTipo = DecTipo ();
-		if (atrDecTipo != null)
-			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
-		else throw new Exception("La declaracion de tipo no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
+		err1= atrDecTipo.getProps().getTipo().getId().equals("error");
 		errNDecsTipo = err1;
 		if (! err1){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
@@ -203,9 +201,11 @@ System.out.println(codigo.getString());
 			throw new Exception("Se esperaba un ; "+lexico.getLinea()+ " columna" + lexico.getColumna());			
 		}
 		lexico.lexer(); // consumo ;
-		boolean err2, errRDecsTipo;		
+		boolean err2;
+		boolean errRDecsTipo = false;		
 		Atributo atrDecTipo = DecTipo();
-		errRDecsTipo = atrDecTipo.getProps().getTipo().getId().equals("error");
+		if (atrDecTipo.getProps().getTipo().getId()!= null)
+			errRDecsTipo = atrDecTipo.getProps().getTipo().getId().equals("error");
 		if (! errRDecsTipo){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
 			err2 = RDecsTipo();
@@ -223,11 +223,14 @@ System.out.println(codigo.getString());
 			throw new Exception("Se esperaba un '=' en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
 		}
 		lexico.lexer(); //consumo el "="
-		Atributo tipo = Tipo();
+		Atributo tipo = new Atributo();
+		tipo = Tipo();
 		if (tipo.getId().equals(""))
 			tipo.setId(tk.getLexema());
 		tipo.getProps().setClase("tipo");
-		boolean err1 = tipo.getProps().getTipo().getId().equals("error");
+		boolean err1 = false;
+		if (tipo.getProps().getTipo().getId() != null)
+			err1 = err1 || tipo.getProps().getTipo().getId().equals("error");
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(tipo.getProps().getTipo());
 		if (err1 || err0 ){
 			tipo.getProps().getTipo().setId("error");
@@ -373,14 +376,19 @@ System.out.println(codigo.getString());
 		Atributo c = Campo(desp1);
 		Hashtable<Object, Object> campos = new Hashtable<Object, Object>();
 		boolean err = false;
+		int desph = 0;
 		if (!c.getId().equals("error")){
-			err = true;
-			campos.put(c.getId(),c.getProps());
-			int desph = c.getProps().getTipo().getTam();
-			err = err || (RCampos(desph,campos,c));
+			//campos.put(c.getId(),c.getProps());
+			desph = c.getProps().getTipo().getTam();
+			boolean err1 = RCampos(desph,campos,c); 
+			err = err || err1;
 		}
-		if (!err)
+		if (!err){
+			//int tam1 = c.getProps().getTipo().getTam(); 
 			tipo.setCampos(campos);
+			int tam = ponTamano(campos);
+			tipo.setTam(tam);
+		}
 		else
 			tipo.setId("error");
 		return tipo;
@@ -389,18 +397,22 @@ System.out.println(codigo.getString());
 	
 	private boolean RCampos(int desph,Hashtable<Object,Object> campos,Atributo c) throws Exception {
 		boolean errCampos = false;
-		if (!lexico.reconoce(CategoriaLexica.TKCOMA)){
-			throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion del registro");
-		}
 		if ((!c.getId().equals("error"))||(!campos.containsKey(c.getId()))){
 				campos.put(c.getId(), c.getProps());
 		}else
 				errCampos = true;
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			return errCampos;
+		}
+		lexico.lexer();
+		if (lexico.reconoce(CategoriaLexica.TKEND)){
+			lexico.lexer();
+			return errCampos;
+		}
 		c = Campo(desph);
 		if (!c.getId().equals("error")){
-			errCampos = true;
-			campos.put(c.getId(),c.getProps());
-			desph = c.getProps().getTipo().getTam();
+			//campos.put(c.getId(),c.getProps());
+			desph = desph + c.getProps().getTipo().getTam();
 			errCampos = errCampos || (RCampos(desph,campos,c));
 		}
 		return errCampos;
@@ -409,7 +421,7 @@ System.out.println(codigo.getString());
 	private Atributo Campo (int desp) throws Exception{
 		Atributo campo = new Atributo();
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("Se esperaba un identificador en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
+			throw new Exception("Ses esperaba un identificador en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
 		}
 		Token tk = lexico.lexer(); //consumo iden
 		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS)){
@@ -417,13 +429,17 @@ System.out.println(codigo.getString());
 		}
 		lexico.lexer(); //consumo :
 		campo = Tipo();
-		if (campo.getId().equals(""))
+		if (campo.getId().equals("")){
 			campo.setId(tk.getLexema());
-/*		boolean err1 = campo.getProps().getTipo().getId().equals("error");
+			campo.getProps().getTipo().setDesplazamiento(desp);
+		}
+		boolean err1 = false;
+		if (campo.getProps().getTipo().getId() != null)
+			err1 = campo.getProps().getTipo().getId().equals("error");
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(campo.getProps().getTipo());
 		if (err1 || err0 ){
 			campo.getProps().getTipo().setId("error");
-		}*/
+		}
 		return campo;
 	}
 	
@@ -1037,6 +1053,16 @@ System.out.println(codigo.getString());
 	 */
 	private boolean referenciaErronea (Tipo t) throws Exception{
 		return ((t.getT().equals("ref")) && !(TS.existeID(t.getId())));
+	}
+	
+	private int ponTamano(Hashtable<Object, Object> campos){
+		int t = 0;
+		for (Enumeration<Object> e = campos.keys() ; e.hasMoreElements() ;) {
+	         String key = (String)e.nextElement();
+	         Propiedades value = (Propiedades)(campos.get(key)); 
+	         t += value.getTipo().getTam(); 
+	     }
+		return t;
 	}
 	
 	
