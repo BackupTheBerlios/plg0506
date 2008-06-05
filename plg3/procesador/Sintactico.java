@@ -200,7 +200,7 @@ System.out.println(codigo.getString());
 		Atributo atrDecTipo = DecTipo ();
 		if (atrDecTipo != null)
 			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
-		else  throw new Exception("La declaracion de tipo no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
+		else return false;
 		errRDecsTipo = err1;
 		if (! err1){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
@@ -224,6 +224,7 @@ System.out.println(codigo.getString());
 		lexico.lexer(); //consumo el "="
 		Atributo tipo = new Atributo();
 		tipo.setId(tk.getLexema());
+		tipo.getProps().setClase("tipo");
 		Tipo(tipo);
 		boolean err1 = tipo.getProps().getTipo().getId().equals("error");
 		//iden = Tipo (out err1) ;
@@ -243,23 +244,60 @@ System.out.println(codigo.getString());
 		return err0;
 	}
 	
-	public boolean NDecsVar() throws Exception{
+	private boolean NDecsVar() throws Exception{
 		boolean errNDecsVar, err1, err2;
-		Atributo atrDecTipo = DecVar ();
-		if (atrDecTipo != null)
-			err1= atrDecTipo.getProps().getTipo().getId().equals("error");
-		else throw new Exception("La declaracion de tipo no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
+		Atributo atrDecVar = DecVar ();
+		if (atrDecVar != null)
+			err1= atrDecVar.getProps().getTipo().getId().equals("error");
+		else throw new Exception("La declaracion de variables no es correcta (linea: "+lexico.getLinea()+", columna: "+lexico.getColumna()+")");
 		errNDecsVar = err1;
 		if (! err1){
-			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
-			err2 = RDecsTipo();
+			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
+			err2 = RDecsVar();
 			errNDecsVar = errNDecsVar || err2;
 		}
 		return errNDecsVar; 
 	}
 	
+	private boolean RDecsVar() throws Exception{
+		if (lexico.reconoce(CategoriaLexica.TKBEGIN)){ //TODO: Ojo cambiar a TKPROC cuando se ponga la declaracion de procedimientos....
+			return false; //Esto es lambda
+		}
+		boolean err1, err2, errRDecsVar;
+		Atributo atrDecVar = DecVar ();
+		if (atrDecVar != null)
+			err1= atrDecVar.getProps().getTipo().getId().equals("error");
+		else return false;
+		errRDecsVar = err1;
+		if (! err1){
+			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
+			err2 = RDecsVar();
+			errRDecsVar = errRDecsVar || err2;
+		}
+		return errRDecsVar;
+	}
+	
 	private Atributo DecVar() throws Exception{
-		return new Atributo();
+		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+			throw new Exception("Se esperaba un identificador en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
+		}
+		Token tk = lexico.lexer(); //consumo iden
+		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS)){
+			throw new Exception("Se esperaba ':' en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
+		}
+		lexico.lexer(); //consumo el ":"
+		Atributo var = new Atributo();
+		var.setId(tk.getLexema());
+		var.getProps().setClase("var");
+		//var.getProps().setTam();
+		Tipo(var);
+		boolean err1 = var.getProps().getTipo().getId().equals("error");
+		//iden = Tipo (out err1) ;
+		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(var.getProps().getTipo());
+		if (err1 || err0 ){
+			var.getProps().getTipo().setId("error");
+		}
+		return var;
 	}
 	
 	/**
