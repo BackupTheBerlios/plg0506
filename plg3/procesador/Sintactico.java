@@ -289,7 +289,7 @@ System.out.println(codigo.getString());
 		Atributo var = new Atributo();
 		var.setId(tk.getLexema());
 		var.getProps().setClase("var");
-		//var.getProps().setTam();
+		//var.getProps().setTam(); El tamaño habrá que ponerlo en Tipo...
 		Tipo(var);
 		boolean err1 = var.getProps().getTipo().getId().equals("error");
 		//iden = Tipo (out err1) ;
@@ -307,13 +307,36 @@ System.out.println(codigo.getString());
 	 * @throws IOException 
 	 */
 	private void Tipo(Atributo atrib) throws Exception{
+		Propiedades p;
 		if (lexico.reconoce(CategoriaLexica.TKINT)){
 			lexico.lexer();
-			atrib.setTipo("int");
+			atrib.getProps().setTam(1);
+			//Tipo t = atrib.getProps().getTipo();
+			if (atrib.getProps().getTipo()==null){
+				atrib.getProps().setTipo(new Tipo());
+			}
+			atrib.getProps().getTipo().setT(Tipo.tipo.integer);
+			atrib.getProps().getTipo().setTam(1);
+			atrib.getProps().getTipo().setCampos(null);
+			atrib.getProps().getTipo().setTBase(null);
+			atrib.getProps().getTipo().setNElems(0);
+			atrib.getProps().getTipo().setDesplazamiento(0);
+			atrib.getProps().getTipo().setId("");
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKBOOL)){
 			lexico.lexer();
-			atrib.setTipo("bool");
+			atrib.getProps().setTam(1);
+			//Tipo t = atrib.getProps().getTipo();
+			if (atrib.getProps().getTipo()==null){
+				atrib.getProps().setTipo(new Tipo());
+			}
+			atrib.getProps().getTipo().setT(Tipo.tipo.bool);
+			atrib.getProps().getTipo().setTam(1);
+			atrib.getProps().getTipo().setCampos(null);
+			atrib.getProps().getTipo().setTBase(null);
+			atrib.getProps().getTipo().setNElems(0);
+			atrib.getProps().getTipo().setDesplazamiento(0);
+			atrib.getProps().getTipo().setId("");
 		}
 		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", los tipos son INTEGER o BOOLEAN");// incorrecto en linea " + lexico.getLinea());
 	}
@@ -418,7 +441,7 @@ System.out.println(codigo.getString());
 			return true;
 		}
 		String tipoExpRel = ExpRel();
-		propiedades idTSProps = TS.getProps(tk.getLexema());
+		Propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!tipoExpRel.equals(idTSProps.getTipo())){
 			System.out.println("Error de tipo en linea: " + lexico.getLinea() +", columna " + lexico.getColumna());
 			return true;
@@ -451,7 +474,7 @@ System.out.println(codigo.getString());
 		if (!lexico.reconoce(CategoriaLexica.TKPCI))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
-		propiedades idTSProps = TS.getProps(tk.getLexema());
+		Propiedades idTSProps = TS.getProps(tk.getLexema());
 		if (!idTSProps.getTipo().equals("int"))
 			return true;
 		codigo.emite("read");
