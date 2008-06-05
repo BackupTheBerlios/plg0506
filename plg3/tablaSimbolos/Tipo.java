@@ -9,7 +9,7 @@ import java.util.Hashtable;
  */
 public class Tipo {
 
-	public enum tipo {BOOLEAN, INTEGER, ref, rec, array}
+	public enum tipo {bool, integer, ref, rec, array}
 	tipo t; //BOOLEAN, INTEGER, ref, rec, array, 
 	String id;
 	int tam;
@@ -96,5 +96,75 @@ public class Tipo {
 	 */
 	public void setT(tipo t) {
 		this.t = t;
+	}
+
+	/**
+	 * @return the campos
+	 */
+	public Hashtable<Object, Object> getCampos() {
+		return campos;
+	}
+
+	/**
+	 * @param campos the campos to set
+	 */
+	public void setCampos(Hashtable<Object, Object> campos) {
+		this.campos = campos;
+	}
+
+	/**
+	 * @return the desplazamiento
+	 */
+	public int getDesplazamiento() {
+		return desplazamiento;
+	}
+
+	/**
+	 * @param desplazamiento the desplazamiento to set
+	 */
+	public void setDesplazamiento(int desplazamiento) {
+		this.desplazamiento = desplazamiento;
+	}
+
+	/**
+	 * @return the nElems
+	 */
+	public int getNElems() {
+		return nElems;
+	}
+
+	/**
+	 * @param elems the nElems to set
+	 */
+	public void setNElems(int elems) {
+		nElems = elems;
+	}
+
+	/**
+	 * @return the tam
+	 */
+	public int getTam() {
+		return tam;
+	}
+
+	/**
+	 * @param tam the tam to set
+	 */
+	public void setTam(int tam) {
+		this.tam = tam;
+	}
+
+	/**
+	 * @return the tBase
+	 */
+	public Tipo getTBase() {
+		return tBase;
+	}
+
+	/**
+	 * @param base the tBase to set
+	 */
+	public void setTBase(Tipo base) {
+		tBase = base;
 	}
 }
