@@ -18,6 +18,56 @@ public class Tipo {
 	Hashtable<Object,Object> campos;
 	int desplazamiento;
 	
+	public Tipo(){
+		this.t = null;
+		this.id = null;
+		this.tam = 1;
+		this.nElems = 0;
+		this.tBase = null;
+		this.campos = null;
+		this.desplazamiento = 0;
+	}
+	
+	public Tipo(tipo nt, String nid){
+		this.t = nt;
+		this.id = nid;
+		this.tam = 1;	
+	}
+	
+	
+	public Tipo(tipo nt, String nid, int ntam){
+		this.t = nt;
+		this.id = nid;
+		this.tam = ntam;	
+	}
+	
+	public Tipo(tipo nt, String nid, int ntam, int nnElems, Tipo ntBase, Hashtable<Object,Object> ncampos, int ndesplazamiento){
+		this.t = nt;
+		this.id = nid;
+		this.tam = 1;
+		this.nElems = 0;
+		this.tBase = null;
+		this.campos = null;
+		this.desplazamiento = 0;
+		
+		if (ntam != 1)
+			this.tam = ntam;
+		
+		switch (nt){ 
+		case ref:
+			this.tBase = ntBase;
+			break;
+		case array:
+			this.nElems =nnElems;
+			this.tBase =ntBase;
+			break;
+		case rec:
+			this.nElems = nnElems;
+			this.campos = ncampos;
+			this.desplazamiento = ndesplazamiento;
+			break;
+		}
+	}
 	
 	/**
 	 * Metodo para comprobar si existe ya un identificador declarado en los campos del record. Si es asi
