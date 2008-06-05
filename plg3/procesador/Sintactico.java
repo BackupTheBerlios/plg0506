@@ -403,8 +403,22 @@ System.out.println(codigo.getString());
 		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", los tipos son INTEGER o BOOLEAN");// incorrecto en linea " + lexico.getLinea());
 	}
 	
-	private boolean Campos (Tipo t){
-		return false;
+	private Tipo Campos (Tipo t) throws Exception{
+		int desp1 = 0;
+		Tipo t1 = new Tipo(); //in desp1
+		Tipo c1 = Campo (t1.getDesplazamiento());
+		Tipo c2 = RCampos (c1);
+		return new Tipo();
+	}
+	
+	
+	private Tipo RCampos(Tipo t0) throws Exception {
+		// TODO Auto-generated method stub
+		return new Tipo();
+	}
+
+	private Tipo Campo (int desph0) throws Exception{
+		return new Tipo();
 	}
 	
 	/**
