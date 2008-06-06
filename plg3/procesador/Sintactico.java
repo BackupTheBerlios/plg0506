@@ -651,22 +651,24 @@ RMem (in tipoh1, out tipo1)
 */
 	private Tipo Mem() throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " Se esperaba un identificador");
+			throw new Exception ("Se esperaba un iden en "+lexico.getLinea()+","+lexico.getColumna());
 		}
-		Tipo t;
+		Tipo t, tRMem;
 		Token tk = lexico.lexer();
 		if (!TS.existeID(tk.getLexema()) || !TS.getProps(tk.getLexema()).getClase().equals("var")){
 			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
 			lexico.lexer();//FIXME:LImpiar		
 			t = new Tipo();
-			t.setId("error");
+			t.setT(Tipo.tipo.error);
 			return t;
 		}
 		t = ref(TS.getProps(tk.getLexema()).getTipo() );
-		String cod = accesoVar(t);
-		codigo.emite("");
+		Propiedades p = TS.getProps(tk.getLexema());
+		codigo.accesoVar(p);
+		etq = etq + codigo.longAccesoVar(p);
+		tRMem = RMem(t);
 		// TODO Auto-generated method stub
-		return new Tipo();
+		return tRMem;
 	}
 
 	/*fun ref!(exp, ts)
@@ -698,7 +700,7 @@ RMem (in tipoh0, out tipo0) ::=
 ExpAd (out tipo1)
 ] 
 {tipoh2 <- si (tipoh0 = array <- tipo1 = int)
-				ref!( tipoh0.tBase, ts)
+				ref!( tipoh0.tbase, ts)
 		si no <t: err>
 emite(apila(tipoh0.tam))
 emite(multiplica)
@@ -707,10 +709,40 @@ etq <- etq + 3}
 RMem (in tipoh2, out tipo2) 
 {tipo0 <- tipo2}*/
 	private Tipo RMem (Tipo mem) throws Exception{
-		
+		Tipo tRMem;
+		Token tk;
+		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){ //Ahora reconocere ".iden"
+			lexico.lexer(); // Consumo el "."
+			if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
+				throw new Exception ("Se esperaba un iden en "+lexico.getLinea()+","+lexico.getColumna());
+			}
+			tk = lexico.lexer();
+			if (mem.getT().equals(Tipo.tipo.rec)){
+				if(hascampo(mem.getCampos(), tk.getCategoriaLexica())){
+					ref();
+				}
+				else{
+					
+				}
+			}
+			else{
+				
+			}
+		}
+		else if (lexico.reconoce(CategoriaLexica.TKCORCHAP)){ //Ahora reconocere ".iden"
+			
+		}
+		else{
+			throw new Exception ("Se esperaba '.' o '[' en "+lexico.getLinea()+","+lexico.getColumna());
+		}
 		return new Tipo(); //FIXME
 	}
 	
+	private boolean hascampo(Hashtable<Object, Object> campos, CategoriaLexica categoriaLexica) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	/**
 	 * 
 	 * @return
@@ -752,7 +784,7 @@ RMem (in tipoh2, out tipo2)
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
 		lexico.lexer(); //Consumo (
-		Tipo tipoExpRel = ExpRel();
+		String tipoExpRel = ExpRel();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
@@ -761,7 +793,7 @@ RMem (in tipoh2, out tipo2)
 			return true;*/
 		codigo.emite("write");
 		etq++;
-		return tipoExpRel.getT() == Tipo.tipo.error;
+		return tipoExpRel.equals("error");
 	}
 	
 	/**
@@ -792,7 +824,7 @@ RMem (in tipoh2, out tipo2)
 		codigo.parchea(etqaux, etq+1);
 		errPElse = PElse(); //Compilo ELSE
 		
-		errIIf = (tipoExpRel.getT() != Tipo.tipo.bool) || errI || errPElse; 
+		errIIf = (!tipoExpRel.equals("bool")) || errI || errPElse; 
 		return errIIf;
 	}
 	
@@ -836,7 +868,7 @@ RMem (in tipoh2, out tipo2)
 		codigo.emite("ir-a",etqaux);
 		etq++;
 		codigo.parchea(etqaux2, etq);
-		errW = (tipoExpRel.getT() != Tipo.tipo.bool) || errI;
+		errW = (!tipoExpRel.equals("bool")) || errI;
 		return errW;
 	}
 	
@@ -877,8 +909,9 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private Tipo ExpAd() throws Exception{
-		return RExpAd(ExpMul());
+	private String ExpAd() throws Exception{
+		String tipo1 = ExpMul();
+		return RExpAd(tipo1);
 	}
 
 	
@@ -888,14 +921,14 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private Tipo RExpAd(Tipo tipoh) throws Exception{
-		Tipo tipo = new Tipo(Tipo.tipo.error);
-		Tipo tipo1;
+	private String RExpAd(String tipoh) throws Exception{
+		String tipo = "error";
+		String tipo1 = "";
 		String cod = OpAd();
 		if (cod.length()>0){
 			tipo1 = ExpMul();
-			if (tipoh.getT() == Tipo.tipo.integer && tipo1.getT() == tipoh.getT())
-				tipo.setT(Tipo.tipo.integer);
+			if (tipoh.equals("int") && tipo1.equals(tipoh))
+				tipo = "int";
 			codigo.emite(cod);
 			etq++;
 			return RExpAd(tipo);
@@ -920,8 +953,9 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private Tipo ExpMul() throws Exception{
-		return RExpMul(Fact());
+	private String ExpMul() throws Exception{
+		String tipo1 = Fact();
+		return RExpMul(tipo1);
 	}
 
 
@@ -930,15 +964,14 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private Tipo RExpMul(Tipo tipoh) throws Exception{
-		Tipo tipo = new Tipo(Tipo.tipo.error);
-		Tipo tipo1;
+	private String RExpMul(String tipoh) throws Exception{
+		String tipo = "error";
+		String tipo1 = "";
 		String cod = OpMul(); //Reconoce * y div, etc
 		if (cod.length()>0){
 			tipo1 = Fact();
-			if (tipoh.getT() == Tipo.tipo.integer && tipo1.getT() == tipoh.getT()) {
-				tipo.setT(Tipo.tipo.integer);
-			}
+			if (tipoh.equals("int") && tipo1.equals(tipoh))
+				tipo = "int";
 			codigo.emite(cod);
 			etq++;
 			return RExpMul(tipo);
@@ -946,9 +979,8 @@ RMem (in tipoh2, out tipo2)
 		cod = OpAnd();
 		if (cod.length()>0){
 			tipo1 = Fact();
-			if (tipoh.getT() == Tipo.tipo.bool && tipo1.getT() == tipoh.getT()) {
-				tipo.setT(Tipo.tipo.bool);
-			}
+			if (tipoh.equals("bool") && tipo1.equals(tipoh))
+				tipo = "bool";
 			codigo.emite(cod);
 			etq++;
 			return RExpMul(tipo);
@@ -963,24 +995,24 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private Tipo Fact() throws Exception{
-		Tipo tipo0 = new Tipo(Tipo.tipo.error);
+	private String Fact() throws Exception{
+		String tipo0 = "error";
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
-			tipo0.setT(Tipo.tipo.integer);
+			tipo0 = "int";
 			lexico.lexer(); //Cosumimos el entero
 			codigo.emite("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
 			etq++;
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
-			tipo0.setT(Tipo.tipo.bool);
+			tipo0 = "bool";
 			codigo.emite("apila",1);
 			etq++;
 			lexico.lexer(); //Cosumimos 'true'
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
-			tipo0.setT(Tipo.tipo.bool);
+			tipo0 = "bool";
 			codigo.emite("apila",0);
 			etq++;
 			lexico.lexer(); //Cosumimos 'false'
