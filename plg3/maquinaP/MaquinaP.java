@@ -604,22 +604,59 @@ public class MaquinaP {
 		//Primero comprobamos que la memoria sea suficiente.
 		//Sino lo es aumentamos el tama?o del vector.
 		if (traza) System.out.println("desapila_dir");
-		if (ST<0){
+		if (ST < 0){
 			throw new Exception("ERROR: Desapila_dir. La pila no contiene los datos necesarios.");
 		}
-		if (d<tamMem){
+		if (d < tamMem){
 			if (d >= 0){
 				if (d>=Mem.size()){
 					aumentoMem(d);
-					Mem.set(d,pila.pop());
 				}
-				else{
-					Mem.set(d,pila.pop());
+				Mem.set(d,pila.pop());
+			}
+		}
+		ST--;
+		PC++;
+	}
+	
+	public void apila_ind() throws Exception{
+		if (traza) System.out.println("apila_ind");
+		int c1 = ((Integer)pila.pop()).intValue();
+		if(c1 < tamMem){
+			if (c1 >= 0){
+				if ((Mem.size() >= c1)&&(!Mem.isEmpty())){
+					if (Mem.elementAt(c1) != null)
+						pila.push(Mem.elementAt(c1));
+					else 
+						throw new Exception("ERROR: Variable sin inicializar.");
+					PC++;
+				}else {				
+					throw new Exception("ERROR: Variable sin inicializar.");
 				}
 			}
 		}
-		ST = ST -1;
-		PC = PC + 1;
+		else{
+			throw new Exception("ERROR: Variable sin declarar.");
+		}
+	}
+	
+	public void desapila_ind() throws Exception{
+		if (traza) System.out.println("desapila_ind");
+		if (ST == -1){
+			throw new Exception("ERROR: Desapila_ind. La pila vacia.");
+		}		
+		int c1 = ((Integer)pila.pop()).intValue();
+		int c2 = ((Integer)pila.pop()).intValue();
+		if (c2 < tamMem){
+			if (c2 >= 0){
+				if (c2 >= Mem.size()){
+					aumentoMem(c2);
+				}
+				Mem.set(c2, new Integer(c1));
+			}
+		}
+		ST -= 2;
+		PC++;
 	}
 
 	/**
