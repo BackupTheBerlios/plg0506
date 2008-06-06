@@ -768,7 +768,7 @@ RMem (in tipoh2, out tipo2)
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
 		Propiedades idTSProps = TS.getProps(tk.getLexema());
-		if (!idTSProps.getTipo().equals("int"))
+		if (idTSProps.getTipo().getT() != Tipo.tipo.integer)
 			return true;
 		codigo.emite("read");
 		codigo.emite("desapila-dir", idTSProps.getDir());
@@ -826,7 +826,7 @@ RMem (in tipoh2, out tipo2)
 		codigo.parchea(etqaux, etq+1);
 		errPElse = PElse(); //Compilo ELSE
 		
-		errIIf = (!tipoExpRel.equals("bool")) || errI || errPElse; 
+		errIIf = (tipoExpRel.getT() != Tipo.tipo.bool) || errI || errPElse; 
 		return errIIf;
 	}
 	
@@ -870,7 +870,7 @@ RMem (in tipoh2, out tipo2)
 		codigo.emite("ir-a",etqaux);
 		etq++;
 		codigo.parchea(etqaux2, etq);
-		errW = (!tipoExpRel.equals("bool")) || errI;
+		errW = (tipoExpRel.getT() != Tipo.tipo.bool) || errI;
 		return errW;
 	}
 	
@@ -1139,8 +1139,8 @@ RMem (in tipoh2, out tipo2)
 	
 	private boolean comparables (Tipo tipo0, Tipo tipo1, String operador) {
 		if (operador.equals("igual")|| operador.equals("distinto"))
-			return (tipo0.equals(tipo1) && !tipo0.equals(Tipo.tipo.error));
-		else return(tipo0.equals(tipo1) && tipo1.equals(Tipo.tipo.integer));
+			return (tipo0.getT() == tipo1.getT() && tipo0.getT() != Tipo.tipo.error);
+		else return(tipo0.getT() == tipo1.getT() && tipo1.getT() == Tipo.tipo.integer);
 	}
 	
 	/**
