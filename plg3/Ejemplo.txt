@@ -1,16 +1,11 @@
 program prueba1;
 type 
-	tarray = array[0..2] of integer;
 	trecord = record 
-		b:array[0..3] of boolean;
 		a:integer;
 	end;
-	b = integer;
 var 
-	c:tarray;
-	d:b;
+	pepe:trecord;
 begin
-d := 1;
-c[3]:=3;
-end.
+pepe.a := 7;
+end .
 
