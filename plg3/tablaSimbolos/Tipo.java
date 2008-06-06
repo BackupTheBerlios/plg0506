@@ -10,7 +10,7 @@ import java.util.Hashtable;
 public class Tipo {
 
 	public enum tipo {bool, integer, ref, rec, array, error}
-	tipo t; //BOOLEAN, INTEGER, ref, rec, array, 
+	tipo t; //BOOLEAN, INTEGER, ref, rec, array, error
 	String id;
 	int tam;
 	int nElems;
@@ -150,10 +150,6 @@ public class Tipo {
 	 * @return the t
 	 */
 	public tipo getT() {
-		return t;
-	}
-	
-	public tipo getTipo() {
 		return t;
 	}
 

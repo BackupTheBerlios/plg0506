@@ -3,7 +3,7 @@ type tarray = array[0..2] of integer;
 trecord = record 
 b:array[0..3] of boolean;
 a:integer;
-end
+end;
 var c:tarray;
 begin
 c[0]:=3;
