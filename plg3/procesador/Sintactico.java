@@ -597,7 +597,7 @@ RMem (in tipoh1, out tipo1)
 			return t;
 		}
 		t = ref(TS.getProps(tk.getLexema()).getTipo() );
-		String cod = accesoVar();
+		String cod = accesoVar(t);
 		codigo.emite("");
 		// TODO Auto-generated method stub
 		return new Tipo();

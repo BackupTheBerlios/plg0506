@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import tablaSimbolos.Propiedades;
+
 /** 
  * La clase <B>Codigo</B> se encarga de manejar el cdigo generado por las instrucciones del lenguaje.
  * <P>Tiene dos atributos:
@@ -188,22 +190,28 @@ public class Codigo {
 		return ins;
 	}
 	
-	/*fun accesoVar(infoID)
-	  devuelve
-		apila-dir(1+infoID.nivel) ||
-		apila(infoID.dir) ||
-		suma
-		( si infoID.clase = pvar entonces apila-ind
-		si no lambda )
-	ffun */
-	public void accesoVar(int dir){
-		
+	/**
+	 * 
+	 * @param p
+	 */
+	public void accesoVar(Propiedades p){
+		cod.add("apila-dir" + p.getNivel()+1);
+		cod.add("apila "+p.getDir());
+		cod.add("suma");
+		if (p.getClase().equals("var")) {
+			cod.add("apila-ind");
+		}
 	}
-/* fun longAccesoVar(infoID)
-   si infoID.clase = pvar entonces 4
-   si no 3
-ffun*/
-	public int longAccesoVar(int dir){
-		return 0;//TODO
+
+	/**
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public int longAccesoVar(Propiedades p){
+		if (p.getClase().equals("var")) {
+			return 4;
+		}
+		return 3;
 	}
 }
