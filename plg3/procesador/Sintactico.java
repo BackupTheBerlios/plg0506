@@ -718,7 +718,7 @@ RMem (in tipoh2, out tipo2)
 			}
 			tk = lexico.lexer();
 			if (mem.getT().equals(Tipo.tipo.rec)){
-				if(hascampo(mem.getCampos(), tk.getCategoriaLexica())){
+				if(hasCampo(mem.getCampos(), tk.getLexema())){
 					ref();
 				}
 				else{
@@ -738,9 +738,9 @@ RMem (in tipoh2, out tipo2)
 		return new Tipo(); //FIXME
 	}
 	
-	private boolean hascampo(Hashtable<Object, Object> campos, CategoriaLexica categoriaLexica) {
+	private boolean hasCampo(Hashtable<Object, Object> campos, String lexema) {
 		// TODO Auto-generated method stub
-		return false;
+		return campos.containsKey((String)lexema);
 	}
 
 	/**
