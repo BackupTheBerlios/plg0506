@@ -708,7 +708,7 @@ System.out.println(codigo.getString());
 			tk = lexico.lexer();
 			if (mem.getT().equals(Tipo.tipo.rec)){
 				if(hasCampo(mem.getCampos(), tk.getLexema())){
-					tRMem = ref(((Tipo)mem.getCampos().get(tk.getLexema())));
+					tRMem = ref(((Propiedades)mem.getCampos().get(tk.getLexema())).getTipo());
 				}
 				else{
 					tRMem.setT(Tipo.tipo.error);
@@ -717,7 +717,7 @@ System.out.println(codigo.getString());
 			else{
 				tRMem.setT(Tipo.tipo.error);
 			}
-			codigo.emite("apila", ((Tipo)mem.getCampos().get(tk.getLexema())).getDesplazamiento());
+			codigo.emite("apila", ((Propiedades)mem.getCampos().get(tk.getLexema())).getTipo().getDesplazamiento());
 			codigo.emite("suma");
 			etq = etq + 2;
 			Tipo t = RMem(tRMem);
