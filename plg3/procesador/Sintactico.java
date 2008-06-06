@@ -252,7 +252,9 @@ System.out.println(codigo.getString());
 		Atributo atrDecVar = DecVar ();
 		errNDecsVar = atrDecVar.getProps().getTipo().getT() == Tipo.tipo.error;
 		if (! errNDecsVar){
+			atrDecVar.getProps().setDir(dir);
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
+			dir += atrDecVar.getProps().getTipo().getTam();
 			err2 = RDecsVar();
 			errNDecsVar = errNDecsVar || err2;
 		}
@@ -272,7 +274,9 @@ System.out.println(codigo.getString());
 		Atributo atrDecVar = DecVar ();
 		errRDecsVar = atrDecVar.getProps().getTipo().getT().equals(Tipo.tipo.error);
 		if (! errRDecsVar){
+			atrDecVar.getProps().setDir(dir);
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
+			dir += atrDecVar.getProps().getTipo().getTam();
 			err2 = RDecsVar();
 			errRDecsVar = errRDecsVar || err2;
 		}
