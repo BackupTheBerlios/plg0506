@@ -1,4 +1,4 @@
-program prog
+program prog;
 
 var 
 algo: integer;
@@ -9,8 +9,7 @@ begin
 	otro := false;
 
 	if (otro)
-	begin
+	then
 		algo := -5;
-	end
 end
 .
