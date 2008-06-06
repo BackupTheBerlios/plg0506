@@ -320,6 +320,12 @@ public class MaquinaP {
 					desapila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("apila-dir")==0)
 					apila_dir((new Integer(Integer.parseInt(linea[1]))).intValue());
+				else if (linea[0].compareTo("apila-ind")==0)
+					apila_ind();
+				else if (linea[0].compareTo("desapila-ind")==0)
+						desapila_ind();
+				else if (linea[0].compareTo("apila-dir")==0)
+							mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("suma")==0)
 					suma();
 				else if (linea[0].compareTo("ir-a")==0)
