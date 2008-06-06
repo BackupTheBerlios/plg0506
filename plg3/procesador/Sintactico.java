@@ -176,7 +176,7 @@ System.out.println(codigo.getString());
 	private boolean NDecsTipo() throws Exception{ 
 		boolean errNDecsTipo, err1, err2;
 		Atributo atrDecTipo = DecTipo ();
-		err1= atrDecTipo.getProps().getTipo().getId().equals("error");
+		err1= atrDecTipo.getProps().getTipo().getT().equals(Tipo.tipo.error);
 		errNDecsTipo = err1;
 		if (! err1){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
@@ -192,20 +192,20 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean RDecsTipo() throws Exception{
+		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
+			throw new Exception("Se esperaba un ; "+lexico.getLinea()+ " columna" + lexico.getColumna());			
+		}
+		lexico.lexer(); // consumo ;
 		if ((lexico.reconoce(CategoriaLexica.TKVAR)) || 
 				(lexico.reconoce(CategoriaLexica.TKPROC)) || 
 				(lexico.reconoce(CategoriaLexica.TKBEGIN))){
 			return false; //Esto es lambda
 		}
-		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			throw new Exception("Se esperaba un ; "+lexico.getLinea()+ " columna" + lexico.getColumna());			
-		}
-		lexico.lexer(); // consumo ;
 		boolean err2;
 		boolean errRDecsTipo = false;		
 		Atributo atrDecTipo = DecTipo();
-		if (atrDecTipo.getProps().getTipo().getId()!= null)
-			errRDecsTipo = atrDecTipo.getProps().getTipo().getId().equals("error");
+		if (atrDecTipo.getProps().getTipo().getT()!= null)
+			errRDecsTipo = atrDecTipo.getProps().getTipo().getT().equals(Tipo.tipo.error);
 		if (! errRDecsTipo){
 			TS.addID(atrDecTipo.getId(),atrDecTipo.getProps());
 			err2 = RDecsTipo();
@@ -229,11 +229,11 @@ System.out.println(codigo.getString());
 			tipo.setId(tk.getLexema());
 		tipo.getProps().setClase("tipo");
 		boolean err1 = false;
-		if (tipo.getProps().getTipo().getId() != null)
-			err1 = err1 || tipo.getProps().getTipo().getId().equals("error");
+		if (tipo.getProps().getTipo().getT() != null)
+			err1 = err1 || tipo.getProps().getTipo().getT().equals(Tipo.tipo.error);
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(tipo.getProps().getTipo());
 		if (err1 || err0 ){
-			tipo.getProps().getTipo().setId("error");
+			tipo.getProps().getTipo().setT(Tipo.tipo.error);
 		}
 		return tipo;
 	}
@@ -250,7 +250,7 @@ System.out.println(codigo.getString());
 	private boolean NDecsVar() throws Exception{
 		boolean errNDecsVar, err2;
 		Atributo atrDecVar = DecVar ();
-		errNDecsVar = atrDecVar.getProps().getTipo().getId().equals("error");
+		errNDecsVar = atrDecVar.getProps().getTipo().getT().equals("error");
 		if (! errNDecsVar){
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
 			err2 = RDecsVar();
@@ -260,17 +260,17 @@ System.out.println(codigo.getString());
 	}
 	
 	private boolean RDecsVar() throws Exception{
-		if ((lexico.reconoce(CategoriaLexica.TKPROC)) ||
-				(lexico.reconoce(CategoriaLexica.TKBEGIN))){ 
-			return false; //Esto es lambda
-		}
 		boolean err2, errRDecsVar;
 		if (!lexico.reconoce(CategoriaLexica.TKPYCOMA)){
 			throw new Exception("Se esperaba un ; "+lexico.getLinea()+ " columna" + lexico.getColumna());			
 		}	
 		lexico.lexer(); // consumo ;
+		if ((lexico.reconoce(CategoriaLexica.TKPROC)) ||
+				(lexico.reconoce(CategoriaLexica.TKBEGIN))){ 
+			return false; //Esto es lambda
+		}
 		Atributo atrDecVar = DecVar ();
-		errRDecsVar = atrDecVar.getProps().getTipo().getId().equals("error");
+		errRDecsVar = atrDecVar.getProps().getTipo().getT().equals(Tipo.tipo.error);
 		if (! errRDecsVar){
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
 			err2 = RDecsVar();
@@ -293,10 +293,10 @@ System.out.println(codigo.getString());
 		if (var.getId().equals(""))
 			var.setId(tk.getLexema());
 		var.getProps().setClase("var");
-		boolean err1 = var.getProps().getTipo().getId().equals("error");
+		boolean err1 = var.getProps().getTipo().getT().equals("error");
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(var.getProps().getTipo());
 		if (err1 || err0 ){
-			var.getProps().getTipo().setId("error");
+			var.getProps().getTipo().setT(Tipo.tipo.error);
 		}
 		return var;
 	}
@@ -364,9 +364,11 @@ System.out.println(codigo.getString());
 			atrib.getProps().getTipo().setTBase(tbase.getProps().getTipo());
 		}
 		else if(lexico.reconoce(CategoriaLexica.TKIDEN)){
-			
+			Token tk = lexico.lexer();
+			int tam_ref = TS.getProps(tk.getLexema()).getTipo().getTam();
+			atrib.getProps().setTipo(new Tipo(Tipo.tipo.ref,tk.getLexema(),tam_ref));
 		}
-		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", los tipos son INTEGER o BOOLEAN");// incorrecto en linea " + lexico.getLinea());
+		else throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", el tipo es incorrecto");// incorrecto en linea " + lexico.getLinea());
 		return atrib;
 	}
 	
@@ -390,14 +392,14 @@ System.out.println(codigo.getString());
 			tipo.setTam(tam);
 		}
 		else
-			tipo.setId("error");
+			tipo.setT(Tipo.tipo.error);
 		return tipo;
 	}
 	
 	
 	private boolean RCampos(int desph,Hashtable<Object,Object> campos,Atributo c) throws Exception {
 		boolean errCampos = false;
-		if ((!c.getId().equals("error"))||(!campos.containsKey(c.getId()))){
+		if ((!c.getProps().getTipo().getT().equals(Tipo.tipo.error))||(!campos.containsKey(c.getId()))){
 				campos.put(c.getId(), c.getProps());
 		}else
 				errCampos = true;
@@ -434,11 +436,11 @@ System.out.println(codigo.getString());
 			campo.getProps().getTipo().setDesplazamiento(desp);
 		}
 		boolean err1 = false;
-		if (campo.getProps().getTipo().getId() != null)
-			err1 = campo.getProps().getTipo().getId().equals("error");
+		if (campo.getProps().getTipo().getT() != null)
+			err1 = campo.getProps().getTipo().getT().equals(Tipo.tipo.error);
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(campo.getProps().getTipo());
 		if (err1 || err0 ){
-			campo.getProps().getTipo().setId("error");
+			campo.getProps().getTipo().setT(Tipo.tipo.error);
 		}
 		return campo;
 	}
@@ -535,7 +537,7 @@ System.out.println(codigo.getString());
 		Tipo tipoMem = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
 			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
-		lexico.lexer();
+		Token tk = lexico.lexer();
 		Tipo tipoExpRel = ExpRel();
 		
 		if (compatibles(tipoMem, tipoExpRel)){}
