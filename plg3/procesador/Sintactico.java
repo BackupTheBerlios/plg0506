@@ -625,8 +625,6 @@ System.out.println(codigo.getString());
 	}
 
 
-
-	
 	/*private void compatibles2(ArrayList<Set <Tipo.tipo>> visitadas, Tipo tipoMem, Tipo tipoExpRel) {
 		// TODO Auto-generated method stub
 		Set <Tipo.tipo> par = Collections.synchronizedSet(EnumSet.noneOf(Tipo.tipo.class));
@@ -636,21 +634,9 @@ System.out.println(codigo.getString());
 		//return tipoMem, tipoRel in visitadas
 	}*/
 
-	/*Mem (out tipo0) ::= 
-iden 
-{tipoh0 <- si existeID(ts, iden.lex) entonces
-			si ts[iden.lex].clase = var entonces
-				ref!(ts[iden.lex].tipo, ts)
-			si no
-				<t: err>
-si no
-			<t: err>
-emite(accesoVar(ts[iden.lex].dir)
-etq <- etq + longAccesoVar(ts[iden.lex].dir)}
-RMem (in tipoh1, out tipo1)
-{tipo0 <- tipo1}
-
-*/
+	/**
+	 * 
+	 */
 	private Tipo Mem() throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception ("Se esperaba un iden en "+lexico.getLinea()+","+lexico.getColumna());
@@ -673,12 +659,12 @@ RMem (in tipoh1, out tipo1)
 		return tRMem;
 	}
 
-	/*fun ref!(exp, ts)
-	  si exp.t = ref entonces
-	    si existeID(ts, exp.id) entonces devuelve ref!(ts[exp.id].tipo, ts)
-	    si no <t: err>
-	  si no devuelve exp
-	ffun*/
+	/**
+	 * 
+	 * @param exp
+	 * @return
+	 * @throws Exception
+	 */
 	private Tipo ref(Tipo exp) throws Exception{
 		 if (exp.getT() == Tipo.tipo.ref){
              if (TS.existeID(exp.getId()))
@@ -689,34 +675,14 @@ RMem (in tipoh1, out tipo1)
      else return exp;
 	}
 	
-	/*RMem (in tipoh0, out tipo0) ::= 
-. iden 
-{tipoh1 <- si tipoh0.t = rec entonces
-			si campo?( tipoh0.campos, iden.lex) entonces
-				ref!( tipoh0,campos[iden.lex].tipo, ts)
-si no <t: err>
-	si no <t: err>
-emite(apila(tipoh0.campos[iden.lex].desp))
-emite (suma)
-etq <- etq + 2}
-RMem(in tipoh1, out tipo1)
-{tipo0 <- tipo1}
-
-RMem (in tipoh0, out tipo0) ::= 
-[
-ExpAd (out tipo1)
-] 
-{tipoh2 <- si (tipoh0 = array <- tipo1 = int)
-				ref!( tipoh0.tbase, ts)
-		si no <t: err>
-emite(apila(tipoh0.tam))
-emite(multiplica)
-emite (suma)
-etq <- etq + 3}
-RMem (in tipoh2, out tipo2) 
-{tipo0 <- tipo2}*/
+	/**
+	 * 
+	 * @param mem
+	 * @return
+	 * @throws Exception
+	 */
 	private Tipo RMem (Tipo mem) throws Exception{
-		Tipo tRMem;
+		Tipo tRMem = new Tipo();
 		Token tk;
 		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){ //Ahora reconocere ".iden"
 			lexico.lexer(); // Consumo el "."
@@ -726,23 +692,43 @@ RMem (in tipoh2, out tipo2)
 			tk = lexico.lexer();
 			if (mem.getT().equals(Tipo.tipo.rec)){
 				if(hasCampo(mem.getCampos(), tk.getLexema())){
-					ref(((Tipo)mem.getCampos().get(tk.getLexema())));
+					tRMem = ref(((Tipo)mem.getCampos().get(tk.getLexema())));
 				}
 				else{
-					
+					tRMem.setT(Tipo.tipo.error);
 				}
 			}
 			else{
-				
+				tRMem.setT(Tipo.tipo.error);
 			}
+			codigo.emite("apila", ((Tipo)mem.getCampos().get(tk.getLexema())).getDesplazamiento());
+			codigo.emite("suma");
+			etq = etq + 2;
+			Tipo t = RMem(tRMem);
+			return t;
 		}
 		else if (lexico.reconoce(CategoriaLexica.TKCORCHAP)){ //Ahora reconocere ".iden"
-			
+			lexico.lexer(); //Consumo '['
+			Tipo tExpAd = ExpAd();
+			if (!lexico.reconoce(CategoriaLexica.TKCORCHCI)){ //Ahora reconocere ".iden"
+				throw new Exception ("Se esperaba ']' en "+lexico.getLinea()+","+lexico.getColumna());
+			}
+			lexico.lexer();
+			if (mem.getT().equals(Tipo.tipo.array) && tExpAd.getT().equals(Tipo.tipo.integer)){
+				tRMem = ref(mem.getTBase());
+			}
+			else{
+				tRMem.setT(Tipo.tipo.error);
+			}
+			codigo.emite("apila", mem.getTam());
+			codigo.emite("multiplica");
+			codigo.emite("suma");
+			etq=etq+3;
+			return RMem(tRMem);
 		}
 		else{
 			throw new Exception ("Se esperaba '.' o '[' en "+lexico.getLinea()+","+lexico.getColumna());
 		}
-		return new Tipo(); //FIXME
 	}
 	
 	private boolean hasCampo(Hashtable<Object, Object> campos, String lexema) {
