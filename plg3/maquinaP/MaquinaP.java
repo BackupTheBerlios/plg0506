@@ -1064,4 +1064,18 @@ public class MaquinaP {
 		}
 		return pilas;
 	}
+	
+	public void mueve(int cantidad) throws Exception {
+		if (ST < 2) {
+			throw new Exception("ERROR: Write. La pila no contiene los datos necesarios.");
+		}
+		int cima = ((Integer)pila.pop()).intValue();
+		int subcima = ((Integer)pila.pop()).intValue();
+		for (int i = 0; i < cantidad; i++) {
+			Object elemento = Mem.elementAt(cima + i);
+			Mem.set(subcima + i, elemento);
+		}
+		ST -= 2;
+		PC++;
+	}
 }
