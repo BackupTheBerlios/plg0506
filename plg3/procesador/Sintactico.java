@@ -752,7 +752,7 @@ RMem (in tipoh2, out tipo2)
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
 		lexico.lexer(); //Consumo (
-		String tipoExpRel = ExpRel();
+		Tipo tipoExpRel = ExpRel();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
@@ -761,7 +761,7 @@ RMem (in tipoh2, out tipo2)
 			return true;*/
 		codigo.emite("write");
 		etq++;
-		return tipoExpRel.equals("error");
+		return tipoExpRel.getT() == Tipo.tipo.error;
 	}
 	
 	/**
@@ -776,7 +776,7 @@ RMem (in tipoh2, out tipo2)
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
 		lexico.lexer(); //Consumo (
-		String tipoExpRel = ExpRel();
+		Tipo tipoExpRel = ExpRel();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
@@ -792,7 +792,7 @@ RMem (in tipoh2, out tipo2)
 		codigo.parchea(etqaux, etq+1);
 		errPElse = PElse(); //Compilo ELSE
 		
-		errIIf = (!tipoExpRel.equals("bool")) || errI || errPElse; 
+		errIIf = (tipoExpRel.getT() != Tipo.tipo.bool) || errI || errPElse; 
 		return errIIf;
 	}
 	
@@ -819,7 +819,7 @@ RMem (in tipoh2, out tipo2)
 		if (!lexico.reconoce(CategoriaLexica.TKPAP ))
 			throw new Exception ("Se esperaba '(' ");
 		lexico.lexer(); //Consumo (
-		String tipoExpRel = ExpRel();
+		Tipo tipoExpRel = ExpRel();
 		
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
@@ -836,7 +836,7 @@ RMem (in tipoh2, out tipo2)
 		codigo.emite("ir-a",etqaux);
 		etq++;
 		codigo.parchea(etqaux2, etq);
-		errW = (!tipoExpRel.equals("bool")) || errI;
+		errW = (tipoExpRel.getT() != Tipo.tipo.bool) || errI;
 		return errW;
 	}
 	
@@ -845,9 +845,8 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String ExpRel() throws Exception{
-		String tipo1 = ExpAd();
-		return RExpRel (tipo1);
+	private Tipo ExpRel() throws Exception{
+		return RExpRel(ExpAd());
 	}
 	
 	/**
@@ -855,13 +854,15 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String RExpRel(String tipoh) throws Exception{
-		String tipo = "error";
+	private Tipo RExpRel(Tipo tipoh) throws Exception{
+		//String tipo = "error";
+		Tipo tipo = new Tipo();
+		tipo.setT(Tipo.tipo.error);
 		String cod = OpRel(); //Reconoce menorigual, igual, diferente, etc
 		if (cod.length()>0){
-			String tipo1 = ExpAd();
+			Tipo tipo1 = ExpAd();
 			if (comparables(tipo1,tipoh,cod))
-				tipo = "bool";
+				tipo.setT(Tipo.tipo.bool);
 			codigo.emite(cod);
 			etq++;
 			return RExpRel(tipo);
@@ -876,9 +877,8 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String ExpAd() throws Exception{
-		String tipo1 = ExpMul();
-		return RExpAd(tipo1);
+	private Tipo ExpAd() throws Exception{
+		return RExpAd(ExpMul());
 	}
 
 	
@@ -888,14 +888,14 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String RExpAd(String tipoh) throws Exception{
-		String tipo = "error";
-		String tipo1 = "";
+	private Tipo RExpAd(Tipo tipoh) throws Exception{
+		Tipo tipo = new Tipo(Tipo.tipo.error);
+		Tipo tipo1;
 		String cod = OpAd();
 		if (cod.length()>0){
 			tipo1 = ExpMul();
-			if (tipoh.equals("int") && tipo1.equals(tipoh))
-				tipo = "int";
+			if (tipoh.getT() == Tipo.tipo.integer && tipo1.getT() == tipoh.getT())
+				tipo.setT(Tipo.tipo.integer);
 			codigo.emite(cod);
 			etq++;
 			return RExpAd(tipo);
@@ -903,8 +903,9 @@ RMem (in tipoh2, out tipo2)
 		cod = OpOr();
 		if (cod.length()>0){
 			tipo1 = ExpMul();
-			if (tipoh.equals("bool") && tipo1.equals(tipoh))
-				tipo = "bool";
+			if (tipoh.getT() == Tipo.tipo.bool && tipo1.getT() == tipoh.getT()) {
+				tipo.setT(Tipo.tipo.bool);
+			}
 			codigo.emite(cod);
 			etq++;
 			return RExpAd(tipo);
@@ -919,9 +920,8 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String ExpMul() throws Exception{
-		String tipo1 = Fact();
-		return RExpMul(tipo1);
+	private Tipo ExpMul() throws Exception{
+		return RExpMul(Fact());
 	}
 
 
@@ -930,14 +930,15 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String RExpMul(String tipoh) throws Exception{
-		String tipo = "error";
-		String tipo1 = "";
+	private Tipo RExpMul(Tipo tipoh) throws Exception{
+		Tipo tipo = new Tipo(Tipo.tipo.error);
+		Tipo tipo1;
 		String cod = OpMul(); //Reconoce * y div, etc
 		if (cod.length()>0){
 			tipo1 = Fact();
-			if (tipoh.equals("int") && tipo1.equals(tipoh))
-				tipo = "int";
+			if (tipoh.getT() == Tipo.tipo.integer && tipo1.getT() == tipoh.getT()) {
+				tipo.setT(Tipo.tipo.integer);
+			}
 			codigo.emite(cod);
 			etq++;
 			return RExpMul(tipo);
@@ -945,8 +946,9 @@ RMem (in tipoh2, out tipo2)
 		cod = OpAnd();
 		if (cod.length()>0){
 			tipo1 = Fact();
-			if (tipoh.equals("bool") && tipo1.equals(tipoh))
-				tipo = "bool";
+			if (tipoh.getT() == Tipo.tipo.bool && tipo1.getT() == tipoh.getT()) {
+				tipo.setT(Tipo.tipo.bool);
+			}
 			codigo.emite(cod);
 			etq++;
 			return RExpMul(tipo);
@@ -961,24 +963,24 @@ RMem (in tipoh2, out tipo2)
 	 * @return
 	 * @throws Exception
 	 */
-	private String Fact() throws Exception{
-		String tipo0 = "error";
+	private Tipo Fact() throws Exception{
+		Tipo tipo0 = new Tipo(Tipo.tipo.error);
 		if (lexico.reconoce(CategoriaLexica.TKNUM)){
-			tipo0 = "int";
+			tipo0.setT(Tipo.tipo.integer);
 			lexico.lexer(); //Cosumimos el entero
 			codigo.emite("apila", Integer.parseInt(lexico.getLookahead().getLexema()));
 			etq++;
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKTRUE)) {
-			tipo0 = "bool";
+			tipo0.setT(Tipo.tipo.bool);
 			codigo.emite("apila",1);
 			etq++;
 			lexico.lexer(); //Cosumimos 'true'
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKFALSE)) {
-			tipo0 = "bool";
+			tipo0.setT(Tipo.tipo.bool);
 			codigo.emite("apila",0);
 			etq++;
 			lexico.lexer(); //Cosumimos 'false'
@@ -1004,7 +1006,7 @@ RMem (in tipoh2, out tipo2)
 				etq++;
 			}
 			else{
-				tipo0="error";
+				tipo0.setT(Tipo.tipo.error);
 			}
 			return tipo0;
 		}
@@ -1014,11 +1016,11 @@ RMem (in tipoh2, out tipo2)
 			tipo0 = Fact();
 			codigo.emite(op);
 			etq++;
-			if (!tipo0.equalsIgnoreCase("bool")){
-					tipo0="error";
+			if (tipo0.getT() != Tipo.tipo.bool){
+					tipo0.setT(Tipo.tipo.error);
 				}
 			else{
-				tipo0="bool";
+				tipo0.setT(Tipo.tipo.bool);
 			}
 			return tipo0;
 		}
@@ -1028,16 +1030,16 @@ RMem (in tipoh2, out tipo2)
 			tipo0 = Fact();
 			codigo.emite(op);
 			etq++;
-			if (!tipo0.equalsIgnoreCase("int")){
+			if (tipo0.getT() != Tipo.tipo.integer){
 					//atrFact = "error";
 			}
 			else{
-				tipo0 = "int";
+				tipo0.setT(Tipo.tipo.integer);
 			}
 			return tipo0;
 		}
 		
-		tipo0 = "error";
+		tipo0.setT(Tipo.tipo.error);
 		return tipo0;
 	}
 	
@@ -1105,10 +1107,10 @@ RMem (in tipoh2, out tipo2)
 		else return "";
 	}
 	
-	private boolean comparables (String tipo0, String tipo1, String operador){
+	private boolean comparables (Tipo tipo0, Tipo tipo1, String operador) {
 		if (operador.equals("igual")|| operador.equals("distinto"))
-			return (tipo0.equals(tipo1) && !tipo0.equals("error"));
-		else return(tipo0.equals(tipo1) && tipo1.equals("int"));
+			return (tipo0.equals(tipo1) && !tipo0.equals(Tipo.tipo.error));
+		else return(tipo0.equals(tipo1) && tipo1.equals(Tipo.tipo.integer));
 	}
 	
 	/**
@@ -1181,7 +1183,7 @@ RMem (in tipoh2, out tipo2)
 	 * @throws Exception
 	 */
 	private boolean referenciaErronea (Tipo t) throws Exception{
-		return ((t.getT().equals("ref")) && !(TS.existeID(t.getId())));
+		return ((t.getT() == Tipo.tipo.ref) && !(TS.existeID(t.getId())));
 	}
 	
 	private int ponTamano(Hashtable<Object, Object> campos){

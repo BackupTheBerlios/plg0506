@@ -9,7 +9,7 @@ import java.util.Hashtable;
  */
 public class Tipo {
 
-	public enum tipo {bool, integer, ref, rec, array}
+	public enum tipo {bool, integer, ref, rec, array, error}
 	tipo t; //BOOLEAN, INTEGER, ref, rec, array, 
 	String id;
 	int tam;
