@@ -648,8 +648,6 @@ System.out.println(codigo.getString());
 		Tipo t, tRMem;
 		Token tk = lexico.lexer();
 		if (!TS.existeID(tk.getLexema()) || !TS.getProps(tk.getLexema()).getClase().equals("var")){
-			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+ " El identificador "+tk.getLexema()+  " no ha sido declarado antes");
-			lexico.lexer();//FIXME:LImpiar		
 			t = new Tipo();
 			t.setT(Tipo.tipo.error);
 			return t;
