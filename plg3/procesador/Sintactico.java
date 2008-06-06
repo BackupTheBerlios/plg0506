@@ -740,7 +740,7 @@ RMem (in tipoh2, out tipo2)
 	
 	private boolean hasCampo(Hashtable<Object, Object> campos, String lexema) {
 		// TODO Auto-generated method stub
-		return campos.containsKey((String)lexema);
+		return campos.containsKey(lexema);
 	}
 
 	/**
