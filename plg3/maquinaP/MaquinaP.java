@@ -1066,8 +1066,9 @@ public class MaquinaP {
 	}
 	
 	public void mueve(int cantidad) throws Exception {
+		if (traza) System.out.println("mueve");
 		if (ST < 2) {
-			throw new Exception("ERROR: Write. La pila no contiene los datos necesarios.");
+			throw new Exception("ERROR: mueve. La pila no contiene los datos necesarios.");
 		}
 		int cima = ((Integer)pila.pop()).intValue();
 		int subcima = ((Integer)pila.pop()).intValue();
