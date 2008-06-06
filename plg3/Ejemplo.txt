@@ -1,11 +1,16 @@
 program prueba1;
-type tarray = array[0..2] of integer;
-trecord = record 
-b:array[0..3] of boolean;
-a:integer;
-end;
-var c:tarray;
+type 
+	tarray = array[0..2] of integer;
+	trecord = record 
+		b:array[0..3] of boolean;
+		a:integer;
+	end;
+	b = integer;
+var 
+	c:tarray;
+	d:b;
 begin
-c[0]:=3;
+d := 1;
+c[3]:=3;
 end.
 
