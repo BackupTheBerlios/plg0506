@@ -80,8 +80,6 @@ public class Propiedades {
 			aux = aux.concat(new Integer (this.dir).toString());
 			aux = aux.concat(", ");
 			aux = aux.concat(this.clase);
-			//aux = aux.concat(", ");
-			//aux = aux.concat(new Integer (this.tam).toString());
 			aux = aux.concat(" )");
 			return aux;
 		}
@@ -113,20 +111,6 @@ public class Propiedades {
 		this.clase = clase;
 	}
 
-	/**
-	 * @return the tam
-	 */
-//	public int getTam() {
-//		return tam;
-//	}
-
-	/**
-	 * @param tam the tam to set
-	 */
-//	public void setTam(int tam) {
-//		this.tam = tam;
-//	}
-	
 	/**
 	 * @return the nivel
 	 */
