@@ -20,7 +20,7 @@ public class Main {
 		} else if (args.length == 1) {
 			filename = args[0];
 		} else {
-			System.out.println("Error: falta nombre de archivo o parámetro no reconocido");
+			System.out.println("Error: falta nombre de archivo o parametro no reconocido");
 			System.exit(1);
 		}
 		
