@@ -250,7 +250,7 @@ System.out.println(codigo.getString());
 	private boolean NDecsVar() throws Exception{
 		boolean errNDecsVar, err2;
 		Atributo atrDecVar = DecVar ();
-		errNDecsVar = atrDecVar.getProps().getTipo().getT().equals("error");
+		errNDecsVar = atrDecVar.getProps().getTipo().getT() == Tipo.tipo.error;
 		if (! errNDecsVar){
 			TS.addID(atrDecVar.getId(),atrDecVar.getProps());
 			err2 = RDecsVar();
@@ -293,7 +293,7 @@ System.out.println(codigo.getString());
 		if (var.getId().equals(""))
 			var.setId(tk.getLexema());
 		var.getProps().setClase("var");
-		boolean err1 = var.getProps().getTipo().getT().equals("error");
+		boolean err1 = var.getProps().getTipo().getT() == Tipo.tipo.error;
 		boolean err0 = TS.existeID(tk.getLexema()) || referenciaErronea(var.getProps().getTipo());
 		if (err1 || err0 ){
 			var.getProps().getTipo().setT(Tipo.tipo.error);
