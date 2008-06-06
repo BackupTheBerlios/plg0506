@@ -195,7 +195,7 @@ public class Codigo {
 	 * @param p
 	 */
 	public void accesoVar(Propiedades p){
-		cod.add("apila-dir" + p.getNivel()+1);
+		cod.add("apila-dir " + (p.getNivel()+1));
 		cod.add("apila "+p.getDir());
 		cod.add("suma");
 		if (p.getClase().equals("var")) {

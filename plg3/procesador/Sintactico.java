@@ -118,19 +118,19 @@ System.out.println(codigo.getString());
 		}
 		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
 
-		codigo.inicio();
-		etq = codigo.longInicio;
-		codigo.emite("ir-a");//TODO: Luego hay que parchearlo
+//		codigo.inicio();
+//		etq = codigo.longInicio;
+//		codigo.emite("ir-a");//TODO: Luego hay que parchearlo
 		int etqaux = etq;
-		etq++;
+//		etq++;
 		
 		boolean errRProg = RProg();
 		
 		errProg = errRProg;
 		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
 			lexico.lexer();//consumo .
-			codigo.parcheaInicio(0, etq, dir);
-			codigo.parchea(etqaux, etq);
+//			codigo.parcheaInicio(0, etq, dir);
+//			codigo.parchea(etqaux, etq);
 			codigo.emite("stop");
 			etq++;
 System.out.println(codigo.getString());
@@ -538,20 +538,26 @@ System.out.println(codigo.getString());
 	 */
 	private boolean IAsig() throws Exception{
 		//Token tk = lexico.lexer();
-		Tipo tipoMem = Mem();
+		Atributo tipoMem = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
 			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		Token tk = lexico.lexer();
+		
 		Tipo tipoExpRel = ExpRel();
 		
-		if (compatibles(tipoMem, tipoExpRel)){}
+		Propiedades idTSProps = TS.getProps(tipoMem.getId());		
+		if (!compatibles(idTSProps.getTipo(), tipoExpRel)){
+			return true;
+		}else if (compatibles(idTSProps.getTipo(), new Tipo(Tipo.tipo.integer)) || compatibles(idTSProps.getTipo(),new Tipo(Tipo.tipo.bool)))
+			codigo.emite("desapila-ind");
+		else
+			codigo.emite("mueve");
 
-		Propiedades idTSProps = TS.getProps(tk.getLexema());
-		if (!tipoExpRel.equals(idTSProps.getTipo())){
+		/*if (!tipoExpRel.equals(idTSProps.getTipo())){
 			System.out.println("Error de tipo en linea: " + lexico.getLinea() +", columna " + lexico.getColumna());
 			return true;
 		}
-		codigo.emite("desapila-dir", idTSProps.getDir());
+		codigo.emite("desapila-dir", idTSProps.getDir());*/
 		etq++;
 		return false;
 	
@@ -639,24 +645,25 @@ System.out.println(codigo.getString());
 	}*/
 
 	/**
-	 * 
+	 * bu
 	 */
-	private Tipo Mem() throws Exception{
+	private Atributo Mem() throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 			throw new Exception ("Se esperaba un iden en "+lexico.getLinea()+","+lexico.getColumna());
 		}
-		Tipo t, tRMem;
+		Tipo t;
+		Atributo tRMem = new Atributo();
 		Token tk = lexico.lexer();
 		if (!TS.existeID(tk.getLexema()) || !TS.getProps(tk.getLexema()).getClase().equals("var")){
-			t = new Tipo();
-			t.setT(Tipo.tipo.error);
-			return t;
+			tRMem.getProps().getTipo().setT(Tipo.tipo.error);
+			return tRMem;
 		}
 		t = ref(TS.getProps(tk.getLexema()).getTipo() );
 		Propiedades p = TS.getProps(tk.getLexema());
 		codigo.accesoVar(p);
 		etq = etq + codigo.longAccesoVar(p);
-		tRMem = RMem(t);
+		tRMem.setId(tk.getLexema());
+		tRMem.getProps().setTipo(RMem(t));
 		// TODO Auto-generated method stub
 		return tRMem;
 	}
@@ -729,7 +736,7 @@ System.out.println(codigo.getString());
 			return RMem(tRMem);
 		}
 		else{
-			throw new Exception ("Se esperaba '.' o '[' en "+lexico.getLinea()+","+lexico.getColumna());
+			return mem;
 		}
 	}
 	
@@ -1019,19 +1026,13 @@ System.out.println(codigo.getString());
 			return tipo0;
 		}
 		if (lexico.reconoce(CategoriaLexica.TKIDEN)) {
-			Token tk = lexico.lexer(); //Consumimos el iden
-			Propiedades propsLexema = (Propiedades)TS.getTabla().get(tk.getLexema());
-			if (TS.existeID(tk.getLexema())){
-				/**QUE QUERRA DECIR ESTO!!**/
-				//tipo0 = propsLexema.getTipo();
-				int dir = propsLexema.getDir();
-				codigo.emite("apila-dir", dir);
+			Atributo atrFact = Mem();
+			if (compatibles(atrFact.getProps().getTipo(),new Tipo(Tipo.tipo.integer)) || 
+					compatibles(atrFact.getProps().getTipo(),new Tipo(Tipo.tipo.bool))){
+				codigo.emite("apila-ind");
 				etq++;
 			}
-			else{
-				tipo0.setT(Tipo.tipo.error);
-			}
-			return tipo0;
+			return atrFact.getProps().getTipo();
 		}
 
 		if (lexico.reconoce(CategoriaLexica.TKNOT)){

@@ -18,6 +18,7 @@ public class Propiedades {
 	 */
 	public Propiedades() {
 		super();
+		this.nivel = 0;
 	}
 
 	/**
@@ -31,7 +32,7 @@ public class Propiedades {
 		this.dir = dir;
 		this.clase=clas;
 		//this.tam = t;
-		this.nivel=n;
+		this.nivel=0;
 	}
 	
 	/**
