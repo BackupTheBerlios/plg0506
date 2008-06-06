@@ -721,7 +721,7 @@ RMem (in tipoh2, out tipo2)
 			tk = lexico.lexer();
 			if (mem.getT().equals(Tipo.tipo.rec)){
 				if(hasCampo(mem.getCampos(), tk.getLexema())){
-					ref();
+					ref(((Tipo)mem.getCampos().get(tk.getLexema())));
 				}
 				else{
 					
