@@ -551,22 +551,88 @@ System.out.println(codigo.getString());
 	
 	}
 	
-	private boolean compatibles(Tipo tipoMem, Tipo tipoExpRel) {
-		// TODO Auto-generated method stub
-		ArrayList<Set <Tipo.tipo>> visitadas = new ArrayList();
-		compatibles2(visitadas, tipoMem, tipoExpRel);
-		return false;
+	private boolean compatibles(Tipo t1, Tipo t2){
+		Vector visitados = new Vector();
+		return compatibles2(t1, t2, visitados);
+	}
+	
+	private boolean compatibles2 (Tipo t1, Tipo t2, Vector visitados){
+		Tupla pareja = new Tupla (t1,t2);
+		if (visitados.contains(pareja))
+			return true;
+		else{
+			visitados.add(pareja);
+			if ((t1.getTipo().equals(t2.getTipo())) && 
+					(t1.getTipo().equals("int") || 
+					t1.getTipo().equals("bool")))
+				return true;
+			else if (t1.getTipo().equals("ref")){
+					t1 = (Tipo)((Propiedades)TS.getTabla().get(t1.getId())).getTipo();
+					return compatibles2(t1,t2,visitados);
+			}
+			else if (t2.getTipo().equals("ref")){
+					t2 = (Tipo)((Propiedades)TS.getTabla().get(t2.getId())).getTipo();
+					return compatibles2(t1,t2,visitados);
+			}
+			else if ((t1.getTipo().equals(t2.getTipo())) && 
+						(t1.getTipo().equals("array")) &&
+						(t1.getNElems() == t2.getNElems())){
+					return compatibles2(t1.getTBase(),t2.getTBase(),visitados);				
+			}			
+			else if ((t1.getTipo().equals("array")) &&
+					(!t2.getTipo().equals("array"))) {
+					System.out.println("\n Estoy en linea de codigo "+ lexico.getLinea());
+					System.out.println("Voy a llamar con t2: "+ t2.getTipo());
+					return compatibles2(t1.getTBase(),t2,visitados);
+			}
+			else if ((t2.getTipo().equals("array")) &&
+					(!t1.getTipo().equals("array"))) {
+						return compatibles2(t1,t2.getTBase(),visitados);
+			}
+			else if((t1.getTipo().equals(t2.getTipo())) && 
+						(t1.getTipo().equals("reg")) &&
+						(t1.getCampos().size() == t2.getCampos().size())) {
+					Enumeration e = t1.getCampos().keys();
+					while (e.hasMoreElements()) {
+						Object key = e.nextElement();
+						Tipo tipo1, tipo2;
+						tipo1 = (Tipo)t1.getCampos().get(key);
+						tipo2 = (Tipo)t2.getCampos().get(key);
+						if (!compatibles2(tipo1, tipo2, visitados)) {
+							return false;
+						}
+					}
+					return true;
+			}
+			/*else if ((t1.getTipo().equals(t2.getTipo())) && 
+					(t1.getTipo().equals("proc")) &&
+					(t1.getParams().size() == t2.getParams().size())) {
+				for (int i = 1; i < t1.getParams().size(); i++) {
+					Parametros a1 = (Parametros)t1.getParams().elementAt(i);
+					Parametros a2 = (Parametros)t2.getParams().elementAt(i);
+					if (!compatibles2(a1.getTipo(), a2.getTipo(), visitados)
+							|| (a2.getModo().equals("var") && !a1.getModo().equals("var"))) {
+						return false;
+					}
+				}
+				return true;
+			}*/
+			else
+				return false;
+		}
 	}
 
+
+
 	
-	private void compatibles2(ArrayList<Set <Tipo.tipo>> visitadas, Tipo tipoMem, Tipo tipoExpRel) {
+	/*private void compatibles2(ArrayList<Set <Tipo.tipo>> visitadas, Tipo tipoMem, Tipo tipoExpRel) {
 		// TODO Auto-generated method stub
 		Set <Tipo.tipo> par = Collections.synchronizedSet(EnumSet.noneOf(Tipo.tipo.class));
 		par.add(tipoMem.getT());
 		par.add(tipoExpRel.getT());
 		
 		//return tipoMem, tipoRel in visitadas
-	}
+	}*/
 
 	/*Mem (out tipo0) ::= 
 iden 
@@ -632,7 +698,7 @@ RMem (in tipoh0, out tipo0) ::=
 ExpAd (out tipo1)
 ] 
 {tipoh2 <- si (tipoh0 = array <- tipo1 = int)
-				ref!( tipoh0.tbase, ts)
+				ref!( tipoh0.tBase, ts)
 		si no <t: err>
 emite(apila(tipoh0.tam))
 emite(multiplica)

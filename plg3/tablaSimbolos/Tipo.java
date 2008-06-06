@@ -152,6 +152,10 @@ public class Tipo {
 	public tipo getT() {
 		return t;
 	}
+	
+	public tipo getTipo() {
+		return t;
+	}
 
 	/**
 	 * @param t the t to set
