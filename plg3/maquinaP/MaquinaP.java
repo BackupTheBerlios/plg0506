@@ -323,16 +323,15 @@ public class MaquinaP {
 				else if (linea[0].compareTo("apila-ind")==0)
 					apila_ind();
 				else if (linea[0].compareTo("desapila-ind")==0)
-						desapila_ind();
+					desapila_ind();
 				else if (linea[0].compareTo("apila-dir")==0)
-							mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
+					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("suma")==0)
 					suma();
 				else if (linea[0].compareTo("ir-a")==0)
 					ir_a((new Integer(Integer.parseInt(linea[1]))).intValue());
-				else if (linea[0].compareTo("ir-f")==0){
+				else if (linea[0].compareTo("ir-f")==0)
 					ir_f((new Integer(Integer.parseInt(linea[1]))).intValue());
-				}
 				else if (linea[0].compareTo("resta")==0)
 					resta();
 				else if (linea[0].compareTo("multiplica")==0)
