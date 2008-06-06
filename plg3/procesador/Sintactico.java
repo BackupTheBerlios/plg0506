@@ -593,8 +593,8 @@ System.out.println(codigo.getString());
 			}			
 			else if ((t1.getT() == Tipo.tipo.array) &&
 					(t2.getT() != Tipo.tipo.array)) {
-					System.out.println("\n Estoy en linea de codigo "+ lexico.getLinea());
-					System.out.println("Voy a llamar con t2: "+ t2.getT());
+					//System.out.println("\n Estoy en linea de codigo "+ lexico.getLinea());
+					//System.out.println("Voy a llamar con t2: "+ t2.getT());
 					return compatibles2(t1.getTBase(),t2,visitados);
 			}
 			else if ((t2.getT() == Tipo.tipo.array) &&
@@ -659,9 +659,16 @@ System.out.println(codigo.getString());
 			return tRMem;
 		}
 		t = ref(TS.getProps(tk.getLexema()).getTipo() );
-		Propiedades p = TS.getProps(tk.getLexema());
-		codigo.accesoVar(p);
-		etq = etq + codigo.longAccesoVar(p);
+//////////Codigo para procs
+		//Propiedades p = new Propiedades();
+		//p = TS.getProps(tk.getLexema());
+		if (TS.getProps(tk.getLexema())!=null){
+			codigo.emite("apila", TS.getProps(tk.getLexema()).getDir());
+			etq++;
+		}
+		
+		//codigo.accesoVar(p);
+		//etq = etq + codigo.longAccesoVar(p);
 		tRMem.setId(tk.getLexema());
 		tRMem.getProps().setTipo(RMem(t));
 		// TODO Auto-generated method stub
@@ -729,7 +736,7 @@ System.out.println(codigo.getString());
 			else{
 				tRMem.setT(Tipo.tipo.error);
 			}
-			codigo.emite("apila", mem.getTam());
+			codigo.emite("apila", mem.getTBase().getTam());
 			codigo.emite("multiplica");
 			codigo.emite("suma");
 			etq=etq+3;
