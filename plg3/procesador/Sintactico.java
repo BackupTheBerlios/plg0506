@@ -679,9 +679,14 @@ RMem (in tipoh1, out tipo1)
 	    si no <t: err>
 	  si no devuelve exp
 	ffun*/
-	private Tipo ref(Tipo t) throws Exception{
-		
-		return new Tipo();
+	private Tipo ref(Tipo exp) throws Exception{
+		 if (exp.getT() == Tipo.tipo.ref){
+             if (TS.existeID(exp.getId()))
+                     return ref(TS.getProps(exp.getId()).getTipo());
+             else
+                     return new Tipo(Tipo.tipo.error);
+     }
+     else return exp;
 	}
 	
 	/*RMem (in tipoh0, out tipo0) ::= 
