@@ -165,7 +165,6 @@ public class Lexico {
 		
 		
 		int error = 0;
-		//boolean compara;
 		Token tk = new Token("error",CategoriaLexica.TKLAMBDA);
 		estado = 0;
 		boolean acabado = false;

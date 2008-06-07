@@ -122,20 +122,6 @@ public class Codigo {
 	}
 	
 	/**
-	 * Método que genera el código necesario para hacer ir-f o ir-a
-	 * @param s String contiene el código ir-f o ir-a
-	 */
-/*//FIXME: Esto no hay que hacerlo en esta iteración
-  	public void emite(String s){
-		if (s.startsWith("ir-f")){
-			genIns(s);
-		}
-		if (s.startsWith("ir-a")){
-			genIns(s);
-		}
-	}
-*/
-	/**
 	 * Método que parchea la dirección a sumándole la dirección de b
 	 * @param a int a parchear
 	 * @param b int necesario para hacer el parcheo

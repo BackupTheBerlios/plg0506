@@ -75,27 +75,6 @@ public class Sintactico{
 	 * @return errProg Devuelve un booleano que indica si existio un error al analizar el codigo del Programa. 
 	 * @throws Exception Si sucede algun error en otras funciones se propaga la Excepcion.
 	 */	
-	/*private boolean Prog() throws Exception{
-		boolean errProg = false;
-		etq=0;
-		ProgDec();
-		if (lexico.reconoce(CategoriaLexica.TKVAR)){
-			lexico.lexer();//consumo VAR
-			errProg = Decs();
-			errProg = Bloque() || errProg;
-			if (lexico.reconoce(CategoriaLexica.TKPUNTO)){
-				lexico.lexer();//consumo .
-				codigo.emite("stop");
-				etq++;
-System.out.println(codigo.getString());
-			}
-			else throw new Exception ("Se esperaba \".\" en "+lexico.getLinea()+","+lexico.getColumna());			
-		}
-		else throw new Exception ("Se esperaba \"VAR\" en "+lexico.getLinea()+","+lexico.getColumna());			
-		return errProg;		
-	}*/
-
-	
 	 private boolean Prog() throws Exception{
 		boolean errProg = false;
 		etq=0;
@@ -324,8 +303,6 @@ System.out.println(codigo.getString());
 		}
 		else if(lexico.reconoce(CategoriaLexica.TKRECORD)){
 			lexico.lexer(); // Consumo RECORD
-			//En Campos modifico el tamaño y el desplazamiento de Tipo con el tamaño de los Campos. 
-			//Y meto los Campos en Tipo
 			Tipo t = Campos();
 			atrib.getProps().setTipo(t);
 			atrib.getProps().getTipo().setT(Tipo.tipo.rec);
@@ -361,7 +338,7 @@ System.out.println(codigo.getString());
 				throw new Exception("Error en linea "+lexico.getLinea()+ ", columna "+ lexico.getColumna()+", revise la declaracion de array");
 			}
 			lexico.lexer(); //Consumo OF
-			// Ahora tengo que reconocer el tipo de los elementos del array
+			// Ahora reconocer el tipo de los elementos del array
 			Atributo tbase = new Atributo();
 			tbase = Tipo();
 			atrib.getProps().setTipo(new Tipo(Tipo.tipo.array,"",tbase.getProps().getTipo().getTam()*(fin+1)));
@@ -384,13 +361,11 @@ System.out.println(codigo.getString());
 		boolean err = false;
 		int desph = 0;
 		if (!c.getId().equals("error")){
-			//campos.put(c.getId(),c.getProps());
 			desph = c.getProps().getTipo().getTam();
 			boolean err1 = RCampos(desph,campos,c); 
 			err = err || err1;
 		}
 		if (!err){
-			//int tam1 = c.getProps().getTipo().getTam(); 
 			tipo.setCampos(campos);
 			int tam = ponTamano(campos);
 			tipo.setTam(tam);
@@ -417,7 +392,6 @@ System.out.println(codigo.getString());
 		}
 		c = Campo(desph);
 		if (!c.getId().equals("error")){
-			//campos.put(c.getId(),c.getProps());
 			desph = desph + c.getProps().getTipo().getTam();
 			errCampos = errCampos || (RCampos(desph,campos,c));
 		}
@@ -537,38 +511,17 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean IAsig() throws Exception{
-		//Token tk = lexico.lexer();
-
 		Tipo tipoMem = Mem();
 		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
 			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer();
-		
 		Tipo tipoExpRel = ExpRel();
-		
-		//Propiedades idTSProps = TS.getProps(tipoMem.getId());		
 		if (!compatibles(tipoMem, tipoExpRel)){
 			return true;
 		}else if (compatibles(tipoMem, new Tipo(Tipo.tipo.integer)) || compatibles(tipoMem,new Tipo(Tipo.tipo.bool)))
 			codigo.emite("desapila-ind");
 		else
 			codigo.emite("mueve");
-
-		/*Atributo tipoMem = Mem();
-		if (!lexico.reconoce(CategoriaLexica.TKASIGN))
-			throw new Exception ("Se esperaba \":=\" en "+lexico.getLinea()+","+lexico.getColumna());		
-		lexico.lexer();
-		
-		Tipo tipoExpRel = ExpRel();
-		
-		Propiedades idTSProps = TS.getProps(tipoMem.getId());		
-		if (!compatibles(idTSProps.getTipo(), tipoExpRel)){
-			return true;
-		}else if (compatibles(idTSProps.getTipo(), new Tipo(Tipo.tipo.integer)) || compatibles(idTSProps.getTipo(),new Tipo(Tipo.tipo.bool)))
-			codigo.emite("desapila-ind");
-		else
-			codigo.emite("mueve");
-		*/
 		etq++;
 		return false;
 	
@@ -604,8 +557,6 @@ System.out.println(codigo.getString());
 			}			
 			else if ((t1.getT() == Tipo.tipo.array) &&
 					(t2.getT() != Tipo.tipo.array)) {
-					//System.out.println("\n Estoy en linea de codigo "+ lexico.getLinea());
-					//System.out.println("Voy a llamar con t2: "+ t2.getT());
 					return compatibles2(t1.getTBase(),t2,visitados);
 			}
 			else if ((t2.getT() == Tipo.tipo.array) &&
@@ -645,16 +596,6 @@ System.out.println(codigo.getString());
 		}
 	}
 
-
-	/*private void compatibles2(ArrayList<Set <Tipo.tipo>> visitadas, Tipo tipoMem, Tipo tipoExpRel) {
-		// TODO Auto-generated method stub
-		Set <Tipo.tipo> par = Collections.synchronizedSet(EnumSet.noneOf(Tipo.tipo.class));
-		par.add(tipoMem.getT());
-		par.add(tipoExpRel.getT());
-		
-		//return tipoMem, tipoRel in visitadas
-	}*/
-
 	/**
 	 * bu
 	 */
@@ -670,9 +611,6 @@ System.out.println(codigo.getString());
 			return tRMem;
 		}
 		t = ref(TS.getProps(tk.getLexema()).getTipo() );
-//////////Codigo para procs
-		//Propiedades p = new Propiedades();
-		//p = TS.getProps(tk.getLexema());
 		if (TS.getProps(tk.getLexema())!=null){
 			codigo.emite("apila", TS.getProps(tk.getLexema()).getDir());
 			etq++;
@@ -681,37 +619,8 @@ System.out.println(codigo.getString());
 		//codigo.accesoVar(p);
 		//etq = etq + codigo.longAccesoVar(p);
 		tRMem = RMem(t);
-		// TODO Auto-generated method stub
 		return tRMem;
 	}
-	
-	/*private Atributo Mem() throws Exception{
-		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception ("Se esperaba un iden en "+lexico.getLinea()+","+lexico.getColumna());
-		}
-		Tipo t;
-		Atributo tRMem = new Atributo();
-		Token tk = lexico.lexer();
-		if (!TS.existeID(tk.getLexema()) || !TS.getProps(tk.getLexema()).getClase().equals("var")){
-			tRMem.getProps().getTipo().setT(Tipo.tipo.error);
-			return tRMem;
-		}
-		t = ref(TS.getProps(tk.getLexema()).getTipo() );
-//////////Codigo para procs
-		//Propiedades p = new Propiedades();
-		//p = TS.getProps(tk.getLexema());
-		if (TS.getProps(tk.getLexema())!=null){
-			codigo.emite("apila", TS.getProps(tk.getLexema()).getDir());
-			etq++;
-		}
-		
-		//codigo.accesoVar(p);
-		//etq = etq + codigo.longAccesoVar(p);
-		tRMem.setId(tk.getLexema());
-		tRMem.getProps().setTipo(RMem(t));
-		// TODO Auto-generated method stub
-		return tRMem;
-	}*/
 
 	/**
 	 * 
@@ -738,7 +647,7 @@ System.out.println(codigo.getString());
 	private Tipo RMem (Tipo mem) throws Exception{
 		Tipo tRMem = new Tipo();
 		Token tk;
-		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){ //Ahora reconocere ".iden"
+		if (lexico.reconoce(CategoriaLexica.TKPUNTO)){ 
 			lexico.lexer(); // Consumo el "."
 			if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
 				throw new Exception ("Se esperaba un iden en "+lexico.getLinea()+","+lexico.getColumna());
@@ -761,10 +670,10 @@ System.out.println(codigo.getString());
 			Tipo t = RMem(tRMem);
 			return t;
 		}
-		else if (lexico.reconoce(CategoriaLexica.TKCORCHAP)){ //Ahora reconocere ".iden"
+		else if (lexico.reconoce(CategoriaLexica.TKCORCHAP)){
 			lexico.lexer(); //Consumo '['
 			Tipo tExpAd = ExpAd();
-			if (!lexico.reconoce(CategoriaLexica.TKCORCHCI)){ //Ahora reconocere ".iden"
+			if (!lexico.reconoce(CategoriaLexica.TKCORCHCI)){
 				throw new Exception ("Se esperaba ']' en "+lexico.getLinea()+","+lexico.getColumna());
 			}
 			lexico.lexer();
@@ -796,10 +705,6 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean IRead() throws Exception{
-/*		if (!lexico.reconoce(CategoriaLexica.TKREAD )){
-			return true;
-		}
-	*/
 		Token tk = lexico.lexer(); //Consumo read
 		if (!lexico.reconoce(CategoriaLexica.TKPAP))
 			throw new Exception ("Se esperaba '(' ");
@@ -836,8 +741,6 @@ System.out.println(codigo.getString());
 		if (!lexico.reconoce(CategoriaLexica.TKPCI ))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
 		lexico.lexer(); //Consumo )
-		/*if (!tipoExpRel.equals("int"))
-			return true;*/
 		codigo.emite("write");
 		etq++;
 		return tipoExpRel.getT() == Tipo.tipo.error;
@@ -867,9 +770,9 @@ System.out.println(codigo.getString());
 		codigo.emite("ir-f");
 		etqaux=etq;
 		etq++;
-		errI = I(); // compilo las instrucciones del IF
+		errI = I();
 		codigo.parchea(etqaux, etq+1);
-		errPElse = PElse(); //Compilo ELSE
+		errPElse = PElse();
 		
 		errIIf = (tipoExpRel.getT() != Tipo.tipo.bool) || errI || errPElse; 
 		return errIIf;
@@ -934,7 +837,6 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private Tipo RExpRel(Tipo tipoh) throws Exception{
-		//String tipo = "error";
 		Tipo tipo = new Tipo();
 		tipo.setT(Tipo.tipo.error);
 		String cod = OpRel(); //Reconoce menorigual, igual, diferente, etc
@@ -1265,94 +1167,5 @@ System.out.println(codigo.getString());
 		return t;
 	}
 	
-	
-/************************************VERSION VIEJA******************************************************/
-	/**
-	 * Reconoce los tokens de inicio de programa, leyendo seguidamente el nombre del programa.
-	 * @throws Exception Si sucede algún error en la cabecera del programa.
-	 */
-	/*private void ProgDec() throws Exception{
-		if (lexico.reconoce(CategoriaLexica.TKPROGRAM)){
-			lexico.lexer();
-			if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-				Token tk = lexico.lexer(); //consumo iden
-				TS = new tablaSimbolos();
-				TS.addID(tk.getLexema(),"", 0);
-				if (lexico.reconoce(CategoriaLexica.TKPYCOMA))
-					lexico.lexer();
-				else throw new Exception ("Se esperaba \";\" en "+lexico.getLinea()+","+lexico.getColumna());		
-				
-			}else{
-				throw new Exception("El Programa tiene que tener un nombre en "+lexico.getLinea()+","+lexico.getColumna());		
-			}
-	
-		}
-		else throw new Exception ("Se esperaba \"PROGRAM\" en "+lexico.getLinea()+","+lexico.getColumna());			
-	}
-
-	
-	
-	*//**
-	 * Procesa la seccion de declaraciones de las variables.
-	 * 
-	 * @return errorDecs: Es cierto si ocurre algún error en las declaraciones de variables.
-	 * @throws Exception Si ocurre algún error sintáctico en la declaración de alguna variable.
-	 *//*
-	private boolean Decs() throws Exception{
-		Atributo atrDec = new Atributo();
-        Dec(atrDec);		
-		boolean err0 = TS.existeID(atrDec.getId());
-		if (err0)
-			System.out.println("El identificador " +
-					atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
-		else TS.addID(atrDec.getId(),atrDec.getTipo(), 0);
-		return RDecs(err0,0);		
-	}
-	
-	*//**
-	 * Método derivado de eliminar la recursión a izquierdas de Decs.
-	 * @return error Devuelve cierto si ocurre algún error en la declaración de variables.
-	 * @throws Exception  Si ocurre algún error sintáctico en la declaración de alguna variable.
-	 *//*
-	private boolean RDecs (boolean errh0, int dirh0) throws Exception{
-		if (lexico.reconoce(CategoriaLexica.TKIDEN)){
-			Atributo atrDec = new Atributo();
-			Dec(atrDec);
-			boolean errh1aux = TS.existeID(atrDec.getId());
-			if (errh1aux)
-				System.out.println("El identificador " +
-						atrDec.getId() + " esta repetido en "+lexico.getLinea()+","+lexico.getColumna());		
-			else TS.addID(atrDec.getId(),atrDec.getTipo(), dirh0+1);
-			errh0 = errh0 || errh1aux;
-			errh0 = RDecs (errh0, dirh0+1) || errh0;
-		}
-		return errh0;
-	}
-		
-	
-
-	
-	*//**
-	 * Reconoce una declaración de variable.
-	 * 
-	 * @throws Exception si ocurre algún error sintáctico en la declaración de la variable.
-	 *//*
-	private void Dec(Atributo atrib) throws Exception{
-		if (!lexico.reconoce(CategoriaLexica.TKIDEN)){
-			throw new Exception("Declaracion incorrecta en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
-		}
-		Token tk = lexico.lexer(); //consumo el iden
-		atrib.setId(tk.getLexema());
-
-		if (!lexico.reconoce(CategoriaLexica.TKDOSPUNTOS )){
-			throw new Exception("Se esperaba \":\" en linea " + lexico.getLinea()+ " columna" + lexico.getColumna());
-		}
-		tk = lexico.lexer(); //consumo :
-		
-		Tipo(atrib);
-		if (lexico.reconoce(CategoriaLexica.TKPYCOMA)){
-			lexico.lexer();
-		} else throw new Exception("Se esperaba \";\" en la linea "+lexico.getLinea()+ " columna" + lexico.getColumna());
-	}*/
 
 }

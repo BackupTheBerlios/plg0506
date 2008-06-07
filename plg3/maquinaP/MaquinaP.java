@@ -43,18 +43,6 @@ public class MaquinaP {
 	 * pasos: String con todos los pasos que ejecuta la MaquinaP.
 	 */
 	
-	/*
-	private Stack pila;
-	private int PC;
-	private int H;
-	private int ST;
-	private Vector Prog;
-	private Vector Mem;
-	private FileReader fichero;
-	private String pasos;
-	private int tamMem;
-	*/
-	
 	private Stack<Object> pila = new Stack<Object>();
 	private int PC = 0;
 	private int H = 0;
@@ -70,35 +58,6 @@ public class MaquinaP {
 		Prog = p;
 		traza = t;
 	}
-	
-	/**
-	 * El constructor de la clase MaquinaP que solo tiene el buffer de lectura del fichero como parametro de entrada.
-	 * @param file Recibe como parametro el fichero a ejecutar para poder inicializar todo.
-	 *
-	 */	
-	/*public MaquinaP(File file) {
-		super();
-		System.out.println("Constructor Maquina P");
-		String f = file.toString();
-		pila = new Stack();
-		PC = 0;
-		H = 0;
-		tamMem= Integer.MAX_VALUE;
-		ST = -1;
-		Mem= new Vector<Object>();
-		int i= f.length();
-		String fcod = new String(f.substring( 0,i-3));
-		fcod = fcod.concat("obj");
-		File fich= new File(fcod);
-		try{
-			fichero = new FileReader(fich);
-		}
-		catch(java.io.FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + fcod,"Error",JOptionPane.ERROR_MESSAGE);
-		}
-		Prog = damePrograma(fichero);
-		pasos="";
-	}*/
 	
 	/**
 	 * Accesor para el atributo de la clase, pasos. 
@@ -236,41 +195,11 @@ public class MaquinaP {
 	}
 
 	/**
-	 * Obtiene el programa del fichero que recibe por parametro. Guarda cada instruccion del programa en una posicion del 
-	 * vector Prog. Para obtener el programa crea un BufferReader y se lanzan y capturan excepciones al respecto. 
-	 * 
-	 * @param f Recibe por parametro el fichero del cual obtiene el programa. Ha de ser un FileReader para luego trabajar con el.
-	 * @return Devuelve el Vector con el programa. Cada posicion es una instruccion de la maquina P.
-	 * @exception java.io.FileNotFoundException Se lanza y se captura en este mismo metodo.
-	 * @exception java.io.IOException Se lanza y se captura en este mismo metodo.
-	 */
-	private Vector<String> damePrograma(FileReader f){
-		System.out.println("damePrograma");
-		Vector<String> v=new Vector<String>();
-		BufferedReader entrada = null;
-	    try {
-	      entrada = new BufferedReader(f);
-	      String linea = null;
-	      while ((linea = entrada.readLine()) != null){
-	    	  v.add(linea.trim());
-	      }
-	    }
-	    catch (FileNotFoundException ex) {
-		      JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}
-		catch (IOException ex){
-			JOptionPane.showMessageDialog(null,"Archivo no encontrado: " + ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}
-		return v;
-	}
-	
-	/**
 	 * Aumenta el tamaño del vector memoria segun las necesidades del programa que va a ejecutar.
 	 * 
 	 * @param tam Recibe un entero con el tamao que ha de aumentar.
 	 */
 	private void aumentoMem(int tam){
-		//System.out.println("aumentoMem");
 		for(int i = Mem.size();i<tam+1;i++){
 			Mem.add(i,null);
 		}
@@ -282,7 +211,6 @@ public class MaquinaP {
 	 * @param l Instruccion que se esta ejecutando.
 	 */
 	private boolean hasInt(String l) {
-		//System.out.println("hasInt");
 		return (l.compareTo("apila") == 0) || (l.compareTo("desapila") == 0) || (l.compareTo("apila-dir") == 0) || (l.compareTo("desapila-dir") == 0) || (l.compareTo("ir-a") == 0)|| (l.compareTo("ir-f") == 0);
 	}
 	
@@ -295,7 +223,6 @@ public class MaquinaP {
 	 * @throws Exception Propaga una excepcion que haya sucedido en otro lugar.
 	 */
 	public String ejecuta() throws Exception{
-		//System.out.println("ejecuta");
 		String i;
 		String[] linea;
 		pasos=pasos.concat("Comenzamos con la ejecucion de la pila. \n\n");
@@ -303,12 +230,6 @@ public class MaquinaP {
 			if(PC<Prog.size()){
 				i= (String)Prog.get(PC);
 				linea = i.split(" ");
-				/*if (hasInt(linea[0])){
-					System.out.println(linea[0] + "  " + linea[1]);
-				}
-				else{
-					System.out.println(linea[0] + "  ");
-				}*/
 				pasos = pasos.concat("Num. de instr.: (" + PC + ") - " + linea[0] + "  ");
 
 				if (hasInt(linea[0]))
@@ -399,7 +320,6 @@ public class MaquinaP {
 	 * @return String con el contenido del vector Memoria.
 	 */
 	public String resultadoMem(){
-		//System.out.println("resultadoMem");
 		String s="\n"+"Memoria :"+"\n";
 		for (int i=0;i<Mem.size();i++){
 			if(Mem.elementAt(i)!=null){
@@ -574,7 +494,6 @@ public class MaquinaP {
 	public void apila_dir (int d) throws Exception{
 		if (traza) System.out.println("apila-dir");
 		ST = ST + 1; 
-		//System.out.println("Con valor de dir " + d);
 		if(d<tamMem){
 			if (d >= 0){
 				if ((Mem.size()>=d)&&(!Mem.isEmpty())){ 
@@ -1054,7 +973,6 @@ public class MaquinaP {
 	 * @return String con el contenido de la Pila
 	 */
 	public String muestraPila(){
-		//System.out.println("muestraPila");
 		Stack<Object> aux = new Stack<Object>();
 		String pilas="El contenido de la pila es: \n";
 		while(!pila.isEmpty()){

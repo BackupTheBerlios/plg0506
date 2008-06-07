@@ -1,7 +1,7 @@
 package procesador;
 
 import java.io.File;
-//import javax.swing.JOptionPane;
+import javax.swing.JOptionPane;
 
 /**
  * La clase <B>Procesador</B> es el procesador del compilador del lenguaje. Se encarga de crear la Tabla de Simbolos,
@@ -28,20 +28,14 @@ public class Procesador {
 	 * 
 	 */
 	public void procesa(File f) throws Exception{
-		
-			//try {
-				/*
-				 * Tratamos de realizar todas las operaciones, si alguna falla y genera excepcion
-				 * se recoge mas abajo.
-				 */
-				sintactico = new Sintactico(f);
-//				System.out.println("Inicio del analisis\n");
-				sintactico.startParsing();
-				System.out.println("Fin del analisis");
-			//} 
-			/*catch (Exception e) {
+		try{
+			sintactico = new Sintactico(f);
+			System.out.println("Inicio del analisis\n");
+			sintactico.startParsing();
+			System.out.println("Fin del analisis");
+		}catch (Exception e) {
 				JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-			}*/
+		}
 	}
 	
 	/**

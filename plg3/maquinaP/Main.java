@@ -23,10 +23,6 @@ public class Main {
 			System.out.println("Error: falta nombre de archivo o parametro no reconocido");
 			System.exit(1);
 		}
-		
-		//Para hacer pruebas:
-		//new PruebasConMaquinaP(filename);
-		
 		Vector<String> prog = deserialize(filename);
 		
 		MaquinaP mp = new MaquinaP(prog, traza);
@@ -38,9 +34,6 @@ public class Main {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-		//System.out.println("=== RESULTADO FINAL DE LA EJECUCION ===");
-		//System.out.println(resultado);
-
 	}
 
 	
