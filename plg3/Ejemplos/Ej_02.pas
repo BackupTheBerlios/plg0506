@@ -25,7 +25,7 @@ begin
 
 	arrBool[0] := true;
 
-	if (not arrBool[1])
+	if (not arrBool[1]) then
 		 regComp.campo1 := 5;
 end
 .

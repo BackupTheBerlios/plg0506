@@ -1,11 +1,16 @@
 program prueba1;
 type 
-	trecord = record 
-		a:integer;
+	b=integer;
+	trecord=record
+		d:boolean;
 	end;
 var 
-	pepe:trecord;
+	a:b;
+	c:integer;
+	f:trecord;
 begin
-pepe.a := 7;
+a := 9;
+f.d := false;
+c := a + f.d;
 end .
 

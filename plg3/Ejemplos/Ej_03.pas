@@ -1,29 +1,30 @@
-program prog
+program prog;
 
 type
 array0 = array [0..9] of integer;
 
 var 
 arrInt: array0;
-i: integer:
+i: integer;
 
 
 begin
 	i := 2;
 	arrInt[0] := 1;
 	arrInt[1] := 1;
-	while (i < 10)
+	while (i < 10) do
 	begin
 		arrInt[i] := arrInt[i-1] + arrInt[i-2];
 		i := i+1;
 	end;
 
 	i := 0;
-	while (i < 10)
+	while (i < 10) do
 	begin
 		write(arrInt[i]);
 		i := i+1;
 	end;
 	
+	write(true);
 end
 .
