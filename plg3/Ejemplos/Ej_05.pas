@@ -1,24 +1,18 @@
 program prog;
 
-type
-	unrecord = record
-			a:boolean;
-			b:integer;
-		end;
 var 
-	unarray : array [0..9] of unrecord;
-	otroarray : array [0..9] of unrecord;
+	yotro : array  [0..1] of boolean;
+	unomas : array  [0..1] of boolean;
 	i : integer;
 begin
 	i := 0;
-
-	unarray[0].a := true;
-
-	while (i < 10) do
+	unomas[0] := true;
+	while (i < 2) do
 	begin
-		otroarray[i].a := not unarray[0].a;
+		yotro[i] := not unomas[0];
+
 		if (i > 0) then
-			unarray[i].a := unarray[i-1].a or otroarray[i].a;
+			unomas[i] := unomas[(i-1)] or yotro[i];
 		i := i+1;
 	end;
 
