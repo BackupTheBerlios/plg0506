@@ -517,11 +517,12 @@ System.out.println(codigo.getString());
 		lexico.lexer();
 		Tipo tipoExpRel = ExpRel();
 		if (!compatibles(tipoMem, tipoExpRel)){
-			return true;
+			throw new Exception("Los tipos asignados no son comparibles.");
+			//return true;
 		}else if (compatibles(tipoMem, new Tipo(Tipo.tipo.integer)) || compatibles(tipoMem,new Tipo(Tipo.tipo.bool)))
 			codigo.emite("desapila-ind");
 		else
-			codigo.emite("mueve");
+			codigo.emite("mueve " + tipoMem.getTam());
 		etq++;
 		return false;
 	
@@ -555,14 +556,6 @@ System.out.println(codigo.getString());
 						(t1.getNElems() == t2.getNElems())){
 					return compatibles2(t1.getTBase(),t2.getTBase(),visitados);				
 			}			
-			else if ((t1.getT() == Tipo.tipo.array) &&
-					(t2.getT() != Tipo.tipo.array)) {
-					return compatibles2(t1.getTBase(),t2,visitados);
-			}
-			else if ((t2.getT() == Tipo.tipo.array) &&
-					(t1.getT() != Tipo.tipo.array)) {
-						return compatibles2(t1,t2.getTBase(),visitados);
-			}
 			else if((t1.getT() == t2.getT()) && 
 						(t1.getT() == Tipo.tipo.rec) &&
 						(t1.getCampos().size() == t2.getCampos().size())) {
