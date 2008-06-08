@@ -698,23 +698,23 @@ System.out.println(codigo.getString());
 	 * @throws Exception
 	 */
 	private boolean IRead() throws Exception{
-		Token tk = lexico.lexer(); //Consumo read
+		lexico.lexer(); //Consumo read
 		if (!lexico.reconoce(CategoriaLexica.TKPAP))
 			throw new Exception ("Se esperaba '(' ");
-		tk = lexico.lexer();//Consumo (
-		tk = lexico.lexer(); // Consumo iden
-		if (!TS.existeID(tk.getLexema())){
+		lexico.lexer();//Consumo (
+		//tk = lexico.lexer(); // Consumo iden
+		Tipo tipoMem = Mem();
+		/*if (!TS.existeID(tk.getLexema())){
 			System.out.println ("Error en linea: " + lexico.getLinea() +","+lexico.getColumna()+" El identificador "+tk.getLexema() +" no ha sido declarado antes");
 			return true;
-		}
+		}*/
 		if (!lexico.reconoce(CategoriaLexica.TKPCI))
 			throw new Exception ("Se esperaba ')'  en "+lexico.getLinea()+","+lexico.getColumna());		
-		lexico.lexer();
-		Propiedades idTSProps = TS.getProps(tk.getLexema());
-		if (idTSProps.getTipo().getT() != Tipo.tipo.integer)
+		lexico.lexer(); // Consumo )
+		if (tipoMem.getT() != Tipo.tipo.integer)
 			return true;
 		codigo.emite("read");
-		codigo.emite("desapila-dir", idTSProps.getDir());
+		codigo.emite("desapila-ind");
 		etq+=2;
 		return false;
 	}
