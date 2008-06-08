@@ -245,7 +245,7 @@ public class MaquinaP {
 					apila_ind();
 				else if (linea[0].compareTo("desapila-ind")==0)
 					desapila_ind();
-				else if (linea[0].compareTo("apila-dir")==0)
+				else if (linea[0].compareTo("mueve")==0)
 					mueve((new Integer(Integer.parseInt(linea[1]))).intValue());
 				else if (linea[0].compareTo("suma")==0)
 					suma();
@@ -289,7 +289,7 @@ public class MaquinaP {
 					write();
 				else if (linea[0].compareTo("stop")==0)
 					H=1;
-				else{
+				else {
 					error();
 				}
 				if (pila.empty())
