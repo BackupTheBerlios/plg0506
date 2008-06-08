@@ -770,22 +770,26 @@ System.out.println(codigo.getString());
 		codigo.emite("ir-f");
 		etqaux=etq;
 		etq++;
-		errI = I();
-		codigo.parchea(etqaux, etq+1);
-		errPElse = PElse();
-		
+		errI = I();		
+		Atributo etqi = new Atributo();
+		errPElse = PElse(etqi);
+		codigo.parchea(etqaux, etqi.getProps().getDir());
 		errIIf = (tipoExpRel.getT() != Tipo.tipo.bool) || errI || errPElse; 
 		return errIIf;
 	}
 	
-	private boolean PElse() throws Exception{
+	private boolean PElse(Atributo etqi) throws Exception{
 		if (!lexico.reconoce(CategoriaLexica.TKELSE )){
+			etqi.setProps(new Propiedades());
+			etqi.getProps().setDir(etq);
 			return false;
 		}
 		lexico.lexer(); //Consumo ELSE
 		codigo.emite("ir-a");
 		int etqaux=etq;
 		etq++;
+		etqi.setProps(new Propiedades());
+		etqi.getProps().setDir(etq);	
 		boolean errI = I();
 		codigo.parchea(etqaux, etq); //parcheo el ir_a
 		return errI;
